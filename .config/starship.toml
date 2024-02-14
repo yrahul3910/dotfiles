@@ -1,0 +1,35 @@
+[battery]
+full_symbol = "🔋"
+charging_symbol = "⚡️"
+discharging_symbol = "💀"
+
+[[battery.display]]
+threshold = 20
+style = "bold red"
+
+[cmd_duration]
+min_time = 2000
+disabled = false
+prefix = "last cmd: "
+style = "bold purple"
+
+[directory]
+suffix = "|"
+truncation_length = 3
+truncate_to_repo = false
+
+[memory_usage]
+prefix = "|"
+threshold = 50
+disabled = false
+style = "bold blue"
+symbol = " "
+
+[aws]
+disabled = true
+
+[conda]
+disabled = true
+
+[python]
+disabled = [true]
