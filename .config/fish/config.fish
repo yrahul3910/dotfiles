@@ -31,3 +31,4 @@ alias python3="python3.12"
 
 starship init fish | source
 
+zoxide init --cmd cd fish | source
