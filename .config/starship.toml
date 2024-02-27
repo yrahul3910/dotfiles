@@ -10,16 +10,14 @@ style = "bold red"
 [cmd_duration]
 min_time = 2000
 disabled = false
-prefix = "last cmd: "
+format = 'last cmd took [$duration]($style) '
 style = "bold purple"
 
 [directory]
-suffix = "|"
 truncation_length = 3
 truncate_to_repo = false
 
 [memory_usage]
-prefix = "|"
 threshold = 50
 disabled = false
 style = "bold blue"
@@ -32,4 +30,4 @@ disabled = true
 disabled = true
 
 [python]
-disabled = [true]
+disabled = true
