@@ -20,6 +20,12 @@ export PATH=$PATH:/opt/local/bin
 # ANTLR-specific stuff
 export CLASSPATH=".:/usr/local/lib/antlr-4.9.2-complete.jar:$CLASSPATH"
 export MSBuildSDKsPath="/usr/local/share/dotnet/sdk/7.0.102/Sdks"
+
+function mkcd () {
+  mkdir -p $1  # Create the directory structure 
+  cd $1        # Change into the new directory
+}
+
 alias antlr4='java -Xmx500M -cp "/usr/local/lib/antlr-4.9-complete.jar:$CLASSPATH" org.antlr.v4.Tool'
 alias grun='java -Xmx500M -cp "/usr/local/lib/antlr-4.9-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'
 
