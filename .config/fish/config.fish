@@ -22,6 +22,11 @@ set -g fish_color_selection 'white'  '--bold'  '--background=brblack'
 set -g fish_color_user brgreen
 set -g fish_color_valid_path --underline
 
+function mkcd
+  mkdir -p $argv  # Create the directory (and parent directories if needed)
+  cd $argv         # Change directory into the newly created one
+end
+
 alias gcloud=/Users/ryedida/Downloads/google-cloud-sdk/bin/gcloud
 alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
 alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
