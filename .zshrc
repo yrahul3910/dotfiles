@@ -15,7 +15,7 @@ export PATH="/usr/local/monit/bin:$PATH"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export VCPKG_ROOT=/Users/ryedida/Documents/vcpkg
 export PATH=$VCPKG_ROOT:$PATH
-export PATH=$PATH:/opt/local/bin
+export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin
 
 # ANTLR-specific stuff
 export CLASSPATH=".:/usr/local/lib/antlr-4.9.2-complete.jar:$CLASSPATH"
@@ -31,6 +31,8 @@ alias grun='java -Xmx500M -cp "/usr/local/lib/antlr-4.9-complete.jar:$CLASSPATH"
 
 alias mongod="mongod --dbpath=~/data/db"
 alias python3="python3.12"
+alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
+alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
 alias pip3="python3.12 -m pip"
 alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
 alias arc-scp="scp -i ~/.ssh/ryedida"
@@ -164,3 +166,5 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
+export MODULAR_HOME="/Users/ryedida/.modular"
+export PATH="/Users/ryedida/.modular/pkg/packages.modular.com_mojo/bin:$PATH"

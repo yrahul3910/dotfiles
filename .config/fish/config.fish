@@ -22,6 +22,8 @@ set -g fish_color_selection 'white'  '--bold'  '--background=brblack'
 set -g fish_color_user brgreen
 set -g fish_color_valid_path --underline
 
+set -x PATH $PATH /opt/homebrew/bin
+
 function mkcd
   mkdir -p $argv  # Create the directory (and parent directories if needed)
   cd $argv         # Change directory into the newly created one
@@ -33,7 +35,11 @@ alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
 alias arc-scp="scp -i ~/.ssh/ryedida"
 alias moss="~/moss.pl"
 alias python3="python3.12"
+alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
+alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
 
 starship init fish | source
 
 zoxide init --cmd cd fish | source
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
