@@ -1,5 +1,13 @@
 local plugins = {
   {
+    "yorik1984/newpaper.nvim",
+    config = function()
+      require("newpaper").setup({
+        style = "light"
+      })
+    end
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require "plugins.configs.lspconfig"
