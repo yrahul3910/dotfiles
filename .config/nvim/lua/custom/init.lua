@@ -13,3 +13,4 @@ end
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 vim.api.nvim_set_keymap('v', '<leader>cc', '"*y', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>tl', ':colorscheme newpaper<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>o', ':put _<CR>', { noremap = true, silent = true })
