@@ -34,6 +34,15 @@ local plugins = {
     }
   },
   {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    lazy = false,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function(_, opts)
+      require("custom.configs.harpoon")
+    end,
+  },
+  {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     build = ":Copilot auth",
