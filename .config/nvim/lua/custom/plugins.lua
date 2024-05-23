@@ -8,6 +8,54 @@ local plugins = {
     end
   },
   {
+    "ahmedkhalf/project.nvim",
+    lazy = false,
+    config = function()
+      require("telescope").load_extension("projects")
+      require("nvim-tree").setup({
+        sync_root_with_cwd = true,
+        respect_buf_cwd = true,
+        update_focused_file = {
+          enable = true,
+          update_root = true
+        },
+      })
+      require("project_nvim").setup()
+      require("project_nvim.project").init()
+    end,
+    keys = {
+      { "<leader>fp", "<Cmd>Telescope projects<CR>", desc = "Projects" },
+    }
+  },
+  {
+      "goolord/alpha-nvim",
+      event = "VimEnter",
+      config = function ()
+        local alpha = require("alpha")
+        local dashboard = require("alpha.themes.dashboard")
+
+        dashboard.section.buttons.val = {
+          dashboard.button("t", "Show file tree", ":NvimTreeToggle<CR>"),
+          dashboard.button("p", " " .. "  Projects", ":Telescope projects <CR>"),
+          dashboard.button("SPC j", "󰈚   Restore Session", ":SessionRestore<cr>"),
+          dashboard.button("e", "   New file", ":ene <BAR> startinsert <CR>"),
+          dashboard.button("f", "   Find file", ":cd $HOME/dotfiles | Telescope find_files<CR>"),
+          dashboard.button("g", "󰱼   Find word", ":Telescope live_grep<CR>"),
+          dashboard.button("r", "   Recent", ":Telescope oldfiles<CR>"),
+          dashboard.button("c", "   Config", ":e $MYVIMRC <CR>"),
+          dashboard.button("m", "󱌣   Mason", ":Mason<CR>"),
+          dashboard.button("l", "󰒲   Lazy", ":Lazy<CR>"),
+          dashboard.button("u", "󰂖   Update plugins", "<cmd>lua require('lazy').sync()<CR>"),
+          dashboard.button("q", "   Quit NVIM", ":qa<CR>"),
+        }
+
+        dashboard.opts.opts.noautocmd = true
+
+        alpha.setup(dashboard.opts)
+        require("alpha").setup(dashboard.opts)
+      end,
+  };
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require "plugins.configs.lspconfig"
