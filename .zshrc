@@ -33,6 +33,8 @@ alias mongod="mongod --dbpath=~/data/db"
 alias python3="python3.12"
 alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
 alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
+alias brewarm="/opt/homebrew/bin/brew"
+alias condaarm="/opt/homebrew/bin/conda"
 alias pip3="python3.12 -m pip"
 alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
 alias arc-scp="scp -i ~/.ssh/ryedida"
@@ -144,21 +146,17 @@ export PATH="$PATH:~/.config/emacs/bin"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/ryedida/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/usr/local/Caskroom/miniforge/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/ryedida/mambaforge/etc/profile.d/conda.sh" ]; then
-        . "/Users/ryedida/mambaforge/etc/profile.d/conda.sh"
+    if [ -f "/usr/local/Caskroom/miniforge/base/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/Caskroom/miniforge/base/etc/profile.d/conda.sh"
     else
-        export PATH="/Users/ryedida/mambaforge/bin:$PATH"
+        export PATH="/usr/local/Caskroom/miniforge/base/bin:$PATH"
     fi
 fi
 unset __conda_setup
-
-if [ -f "/Users/ryedida/mambaforge/etc/profile.d/mamba.sh" ]; then
-    . "/Users/ryedida/mambaforge/etc/profile.d/mamba.sh"
-fi
 # <<< conda initialize <<<
 
 autoload -U +X bashcompinit && bashcompinit
