@@ -15,3 +15,11 @@ vim.api.nvim_set_keymap('v', '<leader>cc', '"*y', { noremap = true, silent = tru
 vim.api.nvim_set_keymap('n', '<leader>tl', ':colorscheme newpaper<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>o', ':put _<CR>', { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+
+function _G.set_terminal_keymaps()
+  local opts = {buffer = 0}
+  vim.keymap.set('t', '<esc>', [[<C-\><C-n><C-w>j]], opts)
+end
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')

@@ -1,5 +1,29 @@
 local plugins = {
   {
+    'akinsho/toggleterm.nvim',
+    lazy = false,
+    config = function()
+      require("toggleterm").setup{
+        size = 20,
+        open_mapping = [[<C-\>]],
+        hide_numbers = false,
+        autochdir = true,
+        insert_mappings = true,
+        terminal_mappings = false,
+        persist_size = true,
+        persist_mode = true,
+        direction = 'float',
+        close_on_exit = true,
+        shell = 'zsh',
+        auto_scroll = true,
+        float_opts = {
+          border = 'single',
+          title_pos = 'left'
+        }
+      }
+    end
+  },
+  {
     'stevearc/aerial.nvim',
     opts = {},
     -- Optional dependencies
@@ -52,38 +76,6 @@ local plugins = {
         }
       })
     end
-  },
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    build = ":Copilot auth",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        panel = {
-          enabled = true,
-          auto_refresh = true,
-        },
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          accept = false, -- disable built-in keymapping
-        },
-      })
-
-      -- hide copilot suggestions when cmp menu is open
-      -- to prevent odd behavior/garbled up suggestions
-      local cmp_status_ok, cmp = pcall(require, "cmp")
-      if cmp_status_ok then
-        cmp.event:on("menu_opened", function()
-          vim.b.copilot_suggestion_hidden = true
-        end)
-
-        cmp.event:on("menu_closed", function()
-          vim.b.copilot_suggestion_hidden = false
-        end)
-      end
-    end,
   },
   {
     "yorik1984/newpaper.nvim",
