@@ -11,12 +11,12 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 
     # Install stuff
     echo "Installing software..."
-    brew install zsh vim stow fish neovim silicon
+    brew install zsh vim stow fish neovim silicon ripgrep fzf
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
     echo "(1/5) Detected Red Hat-based system, installing software..."
-    sudo dnf install zsh vim stow fish neovim python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz
+    sudo dnf install zsh vim stow fish neovim python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
     cargo install silicon
 
 
@@ -28,8 +28,10 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt update
 
     # Needed for silicon, the code screenshot tool
-    sudo apt install -y expat libxml2-dev pkg-config libasound2-dev libssl-dev cmake libfreetype6-dev libexpat1-dev libxcb-composite0-dev libharfbuzz-dev
+    sudo apt install -y expat libxml2-dev pkg-config libasound2-dev libssl-dev cmake libfreetype6-dev libexpat1-dev libxcb-composite0-dev libharfbuzz-dev fzf
 
+    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
+    sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
 
     sudo apt install -y zsh vim build-essential git stow neovim
     cargo install silicon
