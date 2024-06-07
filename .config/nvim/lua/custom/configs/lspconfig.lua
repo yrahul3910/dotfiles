@@ -1,11 +1,26 @@
 -- Setup language servers.
 local lspconfig = require('lspconfig')
--- lspconfig.pyright.setup {
---   filetypes = { 'python', 'pysh' },
---   root_dir = function()
---     return vim.fn.getcwd()
---   end
--- }
+local util = require('lspconfig.util')
+
+lspconfig.pyright.setup {
+  filetypes = { 'python', 'pysh' },
+  root_dir = function(fname)
+    return util.root_pattern("pyrightconfig.json")(fname) or
+      util.path.dirname(fname)
+  end,
+  settings = {
+    pyright = {
+      autoImportCompletion = true
+    },
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = 'openFilesOnly',
+        useLibraryForCodeTypes = true
+      }
+    }
+  }
+}
 lspconfig.tsserver.setup {}
 lspconfig.rust_analyzer.setup {
   -- Server-specific settings. See `:help lspconfig-setup`
@@ -17,5 +32,4 @@ lspconfig.rust_analyzer.setup {
     },
   },
 }
-lspconfig.ruff_lsp.setup {}
 lspconfig.sourcekit.setup {}

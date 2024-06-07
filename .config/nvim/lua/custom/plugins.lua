@@ -91,11 +91,11 @@ local plugins = {
     config = function()
       require("telescope").load_extension("projects")
       require("nvim-tree").setup({
-        sync_root_with_cwd = true,
+        sync_root_with_cwd = false,
         respect_buf_cwd = true,
         update_focused_file = {
           enable = true,
-          update_root = true
+          update_root = false
         },
       })
       require("project_nvim").setup()
