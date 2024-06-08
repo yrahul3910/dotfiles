@@ -19,7 +19,8 @@ lspconfig.pyright.setup {
         useLibraryForCodeTypes = true
       }
     }
-  }
+  },
+  single_file_support = true
 }
 lspconfig.tsserver.setup {}
 lspconfig.rust_analyzer.setup {
