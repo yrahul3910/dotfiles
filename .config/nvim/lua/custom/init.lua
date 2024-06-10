@@ -17,6 +17,9 @@ vim.api.nvim_set_keymap('n', '<leader>o', ':put _<CR>', { noremap = true, silent
 vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').lsp_references() end, { noremap = true, silent = true, desc = "Find references" })
 vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 
+-- Needed for auto-session
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 function _G.set_terminal_keymaps()
   local opts = {buffer = 0}
   vim.keymap.set('t', '<esc>', [[<C-\><C-n><C-w>j]], opts)
