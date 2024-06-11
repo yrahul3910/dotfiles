@@ -20,6 +20,10 @@ vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 -- Needed for auto-session
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
+-- Keymaps for tests
+vim.keymap.set("n", "<leader>tr", function() require("neotest").run.run() end, { noremap = true, silent = true, desc = "Run nearest test" })
+vim.keymap.set("n", "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, { noremap = true, silent = true, desc = "Run nearest test" })
+
 function _G.set_terminal_keymaps()
   local opts = {buffer = 0}
   vim.keymap.set('t', '<esc>', [[<C-\><C-n><C-w>j]], opts)
