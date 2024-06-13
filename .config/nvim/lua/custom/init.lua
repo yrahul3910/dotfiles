@@ -21,8 +21,10 @@ vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- Keymaps for tests
-vim.keymap.set("n", "<leader>tr", function() require("neotest").run.run() end, { noremap = true, silent = true, desc = "Run nearest test" })
-vim.keymap.set("n", "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, { noremap = true, silent = true, desc = "Run nearest test" })
+vim.keymap.set("n", "<leader>tr", function() require("neotest").run.run() end, { noremap = true, silent = true, desc = "neotest: Run nearest test" })
+vim.keymap.set("n", "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, { noremap = true, silent = true, desc = "neotest: Test current file" })
+vim.keymap.set("n", "<leader>to", function() require("neotest").output.open() end, { noremap = true, silent = true, desc = "neotest: Open test output" })
+vim.keymap.set("n", "<leader>ts", function() require("neotest").summary.toggle() end, { noremap = true, silent = true, desc = "neotest: Toggle summary" })
 
 function _G.set_terminal_keymaps()
   local opts = {buffer = 0}

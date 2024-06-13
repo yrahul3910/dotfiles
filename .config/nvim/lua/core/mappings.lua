@@ -188,7 +188,7 @@ M.lspconfig = {
       "LSP code action",
     },
 
-    ["gr"] = {
+    ["<leader>gr"] = {
       function()
         vim.lsp.buf.references()
       end,
