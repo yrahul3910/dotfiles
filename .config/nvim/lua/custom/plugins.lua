@@ -50,6 +50,19 @@ local plugins = {
     end
   },
   {
+    "rmagatti/goto-preview",
+    config = function()
+      require("goto-preview").setup{}
+    end
+  },
+  { 
+    'wiliamks/nice-reference.nvim', 
+    requires = {
+        'kyazdani42/nvim-web-devicons',
+        { 'rmagatti/goto-preview', config = function() require('goto-preview').setup {} end } --optional
+    }
+  },
+  {
     'stevearc/aerial.nvim',
     opts = {},
     -- Optional dependencies

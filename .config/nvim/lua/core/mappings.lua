@@ -139,13 +139,6 @@ M.lspconfig = {
       "LSP declaration",
     },
 
-    ["gd"] = {
-      function()
-        vim.lsp.buf.definition()
-      end,
-      "LSP definition",
-    },
-
     ["K"] = {
       function()
         vim.lsp.buf.hover()
@@ -186,13 +179,6 @@ M.lspconfig = {
         vim.lsp.buf.code_action()
       end,
       "LSP code action",
-    },
-
-    ["<leader>gr"] = {
-      function()
-        vim.lsp.buf.references()
-      end,
-      "LSP references",
     },
 
     ["<leader>lf"] = {

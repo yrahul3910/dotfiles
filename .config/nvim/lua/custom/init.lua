@@ -26,6 +26,9 @@ vim.keymap.set("n", "<leader>tf", function() require("neotest").run.run(vim.fn.e
 vim.keymap.set("n", "<leader>to", function() require("neotest").output.open() end, { noremap = true, silent = true, desc = "neotest: Open test output" })
 vim.keymap.set("n", "<leader>ts", function() require("neotest").summary.toggle() end, { noremap = true, silent = true, desc = "neotest: Toggle summary" })
 
+-- vim.api.nvim_set_keymap("n", "gr", "<cmd>lua require('nice-reference').references()<CR>", { noremap = true, silent = true, desc = "Nice reference: Show references" })
+vim.api.nvim_set_keymap("n", "<leader>gr", "<cmd>Telescope lsp_references<CR>", { noremap = true, silent = true, desc = "Show references" })
+
 function _G.set_terminal_keymaps()
   local opts = {buffer = 0}
   vim.keymap.set('t', '<esc>', [[<C-\><C-n><C-w>j]], opts)
