@@ -301,6 +301,8 @@ local plugins = {
     end,
     config = function()
       require("silicon").setup({
+        pad_horiz = 0,
+        pad_vert = 0,
         font = "FiraCode Nerd Font Mono=16",
         theme = "TwoDark",
         window_title = function()
