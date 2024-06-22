@@ -7,6 +7,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 echo "(2 / 8) Installing zoxide"
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+export PATH="$PATH:~/.local/bin"
 
 echo "(3 / 8) Installing neovim"
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
@@ -72,6 +73,9 @@ stow .
 
 if [ "$(uname)" = "Linux" ]; then
     echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.zshrc
+    echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.config/fish/config.fish
 fi
+echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
+echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.config/fish/config.fish
 
 echo "Done! Please restart your terminal."
