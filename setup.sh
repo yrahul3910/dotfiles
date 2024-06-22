@@ -4,6 +4,11 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
 
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+sudo rm -rf /opt/nvim
+sudo tar -C /opt -xzf nvim-linux64.tar.gz
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
 if [[ "$(uname -s)" == "Darwin" ]]; then
     # macOS
     echo "(1/5) Detected macOS, installing Homebrew..."
@@ -17,7 +22,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
     echo "(1/5) Detected Red Hat-based system, installing software..."
-    sudo dnf install zsh vim stow fish neovim python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
+    sudo dnf install zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
     cargo install silicon
 
 
@@ -34,7 +39,7 @@ elif [[ -f /etc/debian_version ]]; then
     curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
     sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
 
-    sudo apt install -y zsh vim build-essential git stow neovim
+    sudo apt install -y zsh vim build-essential git stow
     cargo install silicon
     
     # Install fish
@@ -60,5 +65,9 @@ echo "(5/5) Setting up dotfiles..."
 mv ~/.zshrc ~/.zshrc.bak
 rm ~/.config/nvim/.stylua.toml
 stow .
+
+if [ "$(uname)" = "Linux" ]; then
+    echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.zshrc
+fi
 
 echo "Done! Please restart your terminal."
