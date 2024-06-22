@@ -2,43 +2,30 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/ryedida/.oh-my-zsh"
-export PATH="/Users/ryedida/Downloads/mongodb-macos-x86_64-4.4.0/bin":$PATH
-export PATH="/Users/ryedida/Documents/apache-maven-3.6.3/bin":$PATH
-export PATH="/Users/ryedida/Downloads/clangd_10.0.0/bin":$PATH
-export PATH="/Library/PostgreSQL/13/bin":$PATH
-export PATH="/Users/ryedida/Downloads/google-cloud-sdk/bin":$PATH
-export PATH="/usr/local/mysql-8.0.26-macos11-arm64/bin":$PATH
+export ZSH="~/.oh-my-zsh"
 export PATH="$HOME/.cargo/bin":$PATH
-export PATH="/usr/local/monit/bin:$PATH"
 
-export HOMEBREW_NO_AUTO_UPDATE=1
-export VCPKG_ROOT=/Users/ryedida/Documents/vcpkg
-export PATH=$VCPKG_ROOT:$PATH
-export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin
-
-# ANTLR-specific stuff
-export CLASSPATH=".:/usr/local/lib/antlr-4.9.2-complete.jar:$CLASSPATH"
-export MSBuildSDKsPath="/usr/local/share/dotnet/sdk/7.0.102/Sdks"
+if [ "$(uname)" = "Darwin" ]; then
+    export HOMEBREW_NO_AUTO_UPDATE=1
+    export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin
+fi
 
 function mkcd () {
   mkdir -p $1  # Create the directory structure 
   cd $1        # Change into the new directory
 }
 
-alias antlr4='java -Xmx500M -cp "/usr/local/lib/antlr-4.9-complete.jar:$CLASSPATH" org.antlr.v4.Tool'
-alias grun='java -Xmx500M -cp "/usr/local/lib/antlr-4.9-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'
-
 alias mongod="mongod --dbpath=~/data/db"
-alias python3="python3.12"
-alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
-alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
-alias brewarm="/opt/homebrew/bin/brew"
-alias condaarm="/opt/homebrew/bin/conda"
-alias pip3="python3.12 -m pip"
-alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
-alias arc-scp="scp -i ~/.ssh/ryedida"
-alias moss="~/moss.pl"
+
+if [ "$(uname)" = "Darwin" ]; then
+    alias python3="python3.12"
+    alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
+    alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
+    alias brewarm="/opt/homebrew/bin/brew"
+    alias condaarm="/opt/homebrew/bin/conda"
+    alias pip3="python3.12 -m pip"
+fi
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -133,15 +120,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias ngrok=/Users/ryedida/Documents/ngrok
-
-PATH="/Users/ryedida/perl5/bin${PATH:+:${PATH}}:i/Users/ryedida/Downloads/clangd_10.0.0/bin:/Users/ryedida/git-cinnabar"; export PATH;
-PERL5LIB="/Users/ryedida/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/ryedida/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/ryedida/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/ryedida/perl5"; export PERL_MM_OPT;
 export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
-export PATH="$PATH:/Users/ryedida/Desktop/menzies/mono2micro/mono2micro/our-approach/snap/examples/node2vec/"
 export PATH="$PATH:~/.config/emacs/bin"
 
 # >>> conda initialize >>>
@@ -164,5 +143,3 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
-export MODULAR_HOME="/Users/ryedida/.modular"
-export PATH="/Users/ryedida/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
