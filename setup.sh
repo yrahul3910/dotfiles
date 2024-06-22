@@ -1,9 +1,14 @@
 #!/bin/bash
 
 # Install Rust
+echo "(1 / 8) Installing Rust"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
 
+echo "(2 / 8) Installing zoxide"
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+echo "(3 / 8) Installing neovim"
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
 sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux64.tar.gz
@@ -11,7 +16,7 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     # macOS
-    echo "(1/5) Detected macOS, installing Homebrew..."
+    echo "(4 / 8) Detected macOS, installing Homebrew..."
     # Install Homebrew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
@@ -21,14 +26,13 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
-    echo "(1/5) Detected Red Hat-based system, installing software..."
+    echo "(4 / 8) Detected Red Hat-based system, installing software..."
     sudo dnf install zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
     cargo install silicon
 
-
 elif [[ -f /etc/debian_version ]]; then
     # Debian
-    echo "(1/5) Detected Debian-based system, installing software..."
+    echo "(4 / 8) Detected Debian-based system, installing software..."
 
     # Install zsh
     sudo apt update
@@ -49,19 +53,19 @@ elif [[ -f /etc/debian_version ]]; then
 fi
 
 # Install Starship
-echo "(2/5) Installing Starship..."
+echo "(5 / 8) Installing Starship..."
 curl -sS https://starship.rs/install.sh | sh
 
 # Install Oh-My-Zsh
-echo "(3/5) Installing Oh-My-Zsh..."
+echo "(6 / 8) Installing Oh-My-Zsh..."
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Set up NvChad
-echo "(4/5) Setting up NvChad..."
+echo "(7 / 8) Setting up NvChad..."
 git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
 
 # Set up dotfiles
-echo "(5/5) Setting up dotfiles..."
+echo "(8 / 8) Setting up dotfiles..."
 mv ~/.zshrc ~/.zshrc.bak
 rm ~/.config/nvim/.stylua.toml
 stow .
