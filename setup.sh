@@ -2,6 +2,7 @@
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+. "$HOME/.cargo/env"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     # macOS
@@ -39,7 +40,7 @@ elif [[ -f /etc/debian_version ]]; then
     # Install fish
     sudo apt-add-repository ppa:fish-shell/release-3
     sudo apt update
-    sudo apt install fish
+    sudo apt install -y fish
 fi
 
 # Install Starship
@@ -52,10 +53,12 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 # Set up NvChad
 echo "(4/5) Setting up NvChad..."
-git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
 
 # Set up dotfiles
 echo "(5/5) Setting up dotfiles..."
+mv ~/.zshrc ~/.zshrc.bak
+rm ~/.config/nvim/.stylua.toml
 stow .
 
 echo "Done! Please restart your terminal."
