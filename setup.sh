@@ -17,7 +17,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 
     # Install stuff
     echo "Installing software..."
-    brew install zsh vim stow fish neovim silicon ripgrep fzf
+    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
