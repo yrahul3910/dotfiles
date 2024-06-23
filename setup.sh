@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # Install Rust
-echo "(1 / 8) Installing Rust"
+echo "(1 / 8) Installing common languages"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+nvm install 20
 
 echo "(2 / 8) Installing zoxide"
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
