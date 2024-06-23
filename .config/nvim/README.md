@@ -13,3 +13,4 @@ This document goes over how this neovim config is set up. Briefly, this is a mod
 * `<leader>th` shows all available themes, and `<leader>tl` switches to a light theme.
 * `<leader>xx` shows the [trouble](https://github.com/folke/trouble.nvim) window.
 * `<C-n>` opens up `nvim-tree`.
+* `<leader>ll` tries to make sure at least 20 lines below your cursor are visible, so that your cursor isn't at the bottom.

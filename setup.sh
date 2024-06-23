@@ -6,6 +6,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
 nvm install 20
 
 echo "(2 / 8) Installing zoxide"
@@ -46,6 +47,7 @@ elif [[ -f /etc/debian_version ]]; then
 
     curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
     sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
+    rm ripgrep*.deb
 
     sudo apt install -y zsh vim build-essential git stow
     cargo install silicon
@@ -81,4 +83,4 @@ fi
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
 echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.config/fish/config.fish
 
-echo "Done! Please restart your terminal."
+echo "\n\n===================\nDone! Please restart your terminal.\n===================="

@@ -53,3 +53,7 @@ stow .
 * 24-bit color when outside tmux
 * 4-width spaces for indent
 * Code folding enabled
+
+## Neovim configuration
+
+See `.config/nvim/README.md`
