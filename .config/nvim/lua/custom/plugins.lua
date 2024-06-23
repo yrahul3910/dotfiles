@@ -198,6 +198,18 @@ local plugins = {
     }
   },
   {
+    "neoclide/coc-tsserver",
+    dependencies = {
+      "neoclide/coc.nvim"
+    }
+  },
+  {
+    "fannheyward/coc-pyright",
+    dependencies = {
+      "neoclide/coc.nvim"
+    }
+  },
+  {
     "folke/trouble.nvim",
      dependencies = { "nvim-tree/nvim-web-devicons" },
      opts = {
