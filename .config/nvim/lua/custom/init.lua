@@ -37,17 +37,20 @@ end
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 
-function EnsureTenLinesBelow()
+local num_lines_padding = 20
+
+function EnsurePaddingBelow()
     local current_line = vim.fn.line('.')
     local total_lines = vim.fn.line('$')
     local lines_below = total_lines - current_line
-    local lines_to_scroll = math.min(20, lines_below)
+    local lines_to_scroll = math.min(num_lines_padding, lines_below)
 
     if lines_to_scroll > 0 then
         vim.cmd('normal! ' .. lines_to_scroll .. 'j' .. lines_to_scroll .. 'k')
     end
 end
 -- Map <leader>a to the ensure_lines_below function
-vim.api.nvim_set_keymap('n', '<leader>ll', ':lua EnsureTenLinesBelow()<CR>', { noremap = true, silent = true, desc = "Ensure 10 lines below" })
+vim.api.nvim_set_keymap('n', '<leader>ll', ':lua EnsurePaddingBelow()<CR>',
+  { noremap = true, silent = true, desc = "Ensure " .. num_lines_padding .. " lines below" })
 
 
