@@ -2,7 +2,7 @@ vim.opt.colorcolumn = "120"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
 
-vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end)
+vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end, { silent = true, noremap = true, desc = "Trouble: Toggle" })
 vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end)
 
 local function open_nvim_tree()
@@ -39,7 +39,7 @@ vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 
 local num_lines_padding = 20
 
-function EnsurePaddingBelow()
+function EnsurePadding()
     local current_line = vim.fn.line('.')
     local total_lines = vim.fn.line('$')
     local lines_below = total_lines - current_line
@@ -48,9 +48,16 @@ function EnsurePaddingBelow()
     if lines_to_scroll > 0 then
         vim.cmd('normal! ' .. lines_to_scroll .. 'j' .. lines_to_scroll .. 'k')
     end
+
+    local lines_above = vim.fn.line('w0')
+    local lines_to_scroll_above = math.min(num_lines_padding, lines_above)
+
+    if lines_to_scroll_above > 0 then
+        vim.cmd('normal! ' .. lines_to_scroll_above .. 'k' .. lines_to_scroll_above .. 'j')
+    end
 end
 -- Map <leader>a to the ensure_lines_below function
-vim.api.nvim_set_keymap('n', '<leader>ll', ':lua EnsurePaddingBelow()<CR>',
-  { noremap = true, silent = true, desc = "Ensure " .. num_lines_padding .. " lines below" })
+vim.api.nvim_set_keymap('n', '<leader>ll', ':lua EnsurePadding()<CR>',
+  { noremap = true, silent = true, desc = "Ensure " .. num_lines_padding .. " lines of padding" })
 
 
