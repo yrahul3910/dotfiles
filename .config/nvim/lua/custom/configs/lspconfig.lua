@@ -6,7 +6,7 @@ lspconfig.pyright.setup {
   filetypes = { 'python', 'pysh' },
   root_dir = function(fname)
     return util.root_pattern("pyrightconfig.json")(fname) or
-      util.path.dirname(fname)
+        util.path.dirname(fname)
   end,
   settings = {
     pyright = {

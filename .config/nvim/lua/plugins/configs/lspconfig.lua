@@ -42,7 +42,11 @@ M.capabilities.textDocument.completion.completionItem = {
 }
 
 require("lspconfig").lua_ls.setup {
-  on_attach = M.on_attach,
+  on_attach = function(client, bufnr)
+    M.on_attach(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = true
+    client.server_capabilities.documentRangeFormattingProvider = true
+  end,
   capabilities = M.capabilities,
 
   settings = {

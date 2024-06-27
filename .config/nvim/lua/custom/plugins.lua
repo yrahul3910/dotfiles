@@ -3,7 +3,7 @@ local plugins = {
     'akinsho/toggleterm.nvim',
     lazy = false,
     config = function()
-      require("toggleterm").setup{
+      require("toggleterm").setup {
         size = 20,
         open_mapping = [[<C-\>]],
         hide_numbers = false,
@@ -52,14 +52,14 @@ local plugins = {
   {
     "rmagatti/goto-preview",
     config = function()
-      require("goto-preview").setup{}
+      require("goto-preview").setup {}
     end
   },
-  { 
-    'wiliamks/nice-reference.nvim', 
+  {
+    'wiliamks/nice-reference.nvim',
     requires = {
-        'kyazdani42/nvim-web-devicons',
-        { 'rmagatti/goto-preview', config = function() require('goto-preview').setup {} end } --optional
+      'kyazdani42/nvim-web-devicons',
+      { 'rmagatti/goto-preview', config = function() require('goto-preview').setup {} end }   --optional
     }
   },
   {
@@ -67,8 +67,8 @@ local plugins = {
     opts = {},
     -- Optional dependencies
     dependencies = {
-       "nvim-treesitter/nvim-treesitter",
-       "nvim-tree/nvim-web-devicons"
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
     },
     lazy = false,
     config = function()
@@ -122,7 +122,7 @@ local plugins = {
     config = function()
       require("auto-session").setup {
         log_level = "error",
-        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/"},
+        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
         auto_session_enable_last_session = false,
       }
     end
@@ -157,33 +157,33 @@ local plugins = {
     }
   },
   {
-      "goolord/alpha-nvim",
-      event = "VimEnter",
-      config = function ()
-        local alpha = require("alpha")
-        local dashboard = require("alpha.themes.dashboard")
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    config = function()
+      local alpha = require("alpha")
+      local dashboard = require("alpha.themes.dashboard")
 
-        dashboard.section.buttons.val = {
-          dashboard.button("t", "Show file tree", ":NvimTreeToggle<CR>"),
-          dashboard.button("p", " " .. "  Projects", ":Telescope projects <CR>"),
-          dashboard.button("SPC j", "󰈚   Restore Session", ":SessionRestore<cr>"),
-          dashboard.button("e", "   New file", ":ene <BAR> startinsert <CR>"),
-          dashboard.button("f", "   Find file", ":cd $HOME/dotfiles | Telescope find_files<CR>"),
-          dashboard.button("g", "󰱼   Find word", ":Telescope live_grep<CR>"),
-          dashboard.button("r", "   Recent", ":Telescope oldfiles<CR>"),
-          dashboard.button("c", "   Config", ":e $MYVIMRC <CR>"),
-          dashboard.button("m", "󱌣   Mason", ":Mason<CR>"),
-          dashboard.button("l", "󰒲   Lazy", ":Lazy<CR>"),
-          dashboard.button("u", "󰂖   Update plugins", "<cmd>lua require('lazy').sync()<CR>"),
-          dashboard.button("q", "   Quit NVIM", ":qa<CR>"),
-        }
+      dashboard.section.buttons.val = {
+        dashboard.button("t", "Show file tree", ":NvimTreeToggle<CR>"),
+        dashboard.button("p", " " .. "  Projects", ":Telescope projects <CR>"),
+        dashboard.button("SPC j", "󰈚   Restore Session", ":SessionRestore<cr>"),
+        dashboard.button("e", "   New file", ":ene <BAR> startinsert <CR>"),
+        dashboard.button("f", "   Find file", ":cd $HOME/dotfiles | Telescope find_files<CR>"),
+        dashboard.button("g", "󰱼   Find word", ":Telescope live_grep<CR>"),
+        dashboard.button("r", "   Recent", ":Telescope oldfiles<CR>"),
+        dashboard.button("c", "   Config", ":e $MYVIMRC <CR>"),
+        dashboard.button("m", "󱌣   Mason", ":Mason<CR>"),
+        dashboard.button("l", "󰒲   Lazy", ":Lazy<CR>"),
+        dashboard.button("u", "󰂖   Update plugins", "<cmd>lua require('lazy').sync()<CR>"),
+        dashboard.button("q", "   Quit NVIM", ":qa<CR>"),
+      }
 
-        dashboard.opts.opts.noautocmd = true
+      dashboard.opts.opts.noautocmd = true
 
-        alpha.setup(dashboard.opts)
-        require("alpha").setup(dashboard.opts)
-      end,
-  };
+      alpha.setup(dashboard.opts)
+      require("alpha").setup(dashboard.opts)
+    end,
+  },
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -211,8 +211,8 @@ local plugins = {
   },
   {
     "folke/trouble.nvim",
-     dependencies = { "nvim-tree/nvim-web-devicons" },
-     opts = {
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
       action_keys = {
         close = "q",
         refresh = "r",
@@ -309,7 +309,7 @@ local plugins = {
       local wk = require("which-key")
       wk.register({
         ["<leader>sc"] = { ":Silicon<CR>", "Screenshot Code" }
-      }, { mode = "v"})
+      }, { mode = "v" })
     end,
     config = function()
       require("silicon").setup({
