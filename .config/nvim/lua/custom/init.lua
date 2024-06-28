@@ -8,6 +8,7 @@ vim.opt.relativenumber = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.scrolloff = 20
+vim.opt.updatetime = 50
 
 vim.keymap.set("v", "K", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set("v", "J", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
