@@ -2,9 +2,28 @@ vim.opt.colorcolumn = "120"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
 
+-- Thanks to ThePrimeagen for these ideas!
+-- See https://www.youtube.com/watch?v=w7i4amO_zaE
+vim.opt.relativenumber = true
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+vim.opt.scrolloff = 20
+
+vim.keymap.set("v", "K", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+vim.keymap.set("v", "J", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+
+vim.keymap.set("n", "Q", "<nop>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>xc", "<cmd>!chmod +x %<CR>",
+  { noremap = true, silent = true, desc = "Make executable" })
+-- End ThePrimagen ideas
+
 vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end,
   { silent = true, noremap = true, desc = "Trouble: Toggle" })
-vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end)
+vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end,
+  { silent = true, noremap = true, desc = "Trouble: Quickfix" })
 
 local function open_nvim_tree()
   -- open the tree
@@ -44,27 +63,3 @@ end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
-
-local num_lines_padding = 20
-
-function EnsurePadding()
-  local current_line = vim.fn.line('.')
-  local total_lines = vim.fn.line('$')
-  local lines_below = total_lines - current_line
-  local lines_to_scroll = math.min(num_lines_padding, lines_below)
-
-  if lines_to_scroll > 0 then
-    vim.cmd('normal! ' .. lines_to_scroll .. 'j' .. lines_to_scroll .. 'k')
-  end
-
-  local lines_above = vim.fn.line('w0')
-  local lines_to_scroll_above = math.min(num_lines_padding, lines_above)
-
-  if lines_to_scroll_above > 0 then
-    vim.cmd('normal! ' .. lines_to_scroll_above .. 'k' .. lines_to_scroll_above .. 'j')
-  end
-end
-
--- Map <leader>a to the ensure_lines_below function
-vim.api.nvim_set_keymap('n', '<leader>ll', ':lua EnsurePadding()<CR>',
-  { noremap = true, silent = true, desc = "Ensure " .. num_lines_padding .. " lines of padding" })

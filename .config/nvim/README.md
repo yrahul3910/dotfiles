@@ -15,8 +15,12 @@ This document goes over how this neovim config is set up. Briefly, this is a mod
 * `<leader>xx` shows the [trouble](https://github.com/folke/trouble.nvim) window.
 * `<C-n>` opens up `nvim-tree`.
 * `<leader>ll` tries to make sure at least 20 lines around your cursor are visible, so that your cursor isn't at the bottom.
+* In visual mode (ideally using `V`), using J/K will move the selected lines up or down, indenting as needed.
+* In normal mode, `<C-d>` goes down half a page, and `<C-u>` goes up half a page
+* `<leader>xc` makes the current file executable.
 
 ## Unchanged but good to know
 
+* `V` (capital) will select the current line in visual mode. You can then use j/k to go up and down and select those lines too.
 * `:NvimTreeResize +/-x` is nice for resizing `nvim-tree`.
 * You can use `m[char]` to mark a line, and `<leader>ma` will show you all the marks in Telescope.
