@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Define the Git repository URL
 REPO_URL="https://github.com/yrahul3910/configs/"
