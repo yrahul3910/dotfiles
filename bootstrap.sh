@@ -37,6 +37,7 @@ fi
 # Clone the repository
 if [ -d "$CLONE_DIR" ]; then
     rm -rf "$CLONE_DIR"
+fi
 
 echo "Cloning the repository..."
 git clone "$REPO_URL" "$CLONE_DIR"
