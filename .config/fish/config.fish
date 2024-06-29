@@ -35,21 +35,16 @@ alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
 alias arc-scp="scp -i ~/.ssh/ryedida"
 alias moss="~/moss.pl"
 alias python3="python3.12"
-alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
-alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
-alias brewarm="/opt/homebrew/bin/brew"
-alias condaarm="/opt/homebrew/bin/conda"
+
+if string match -q "Darwin" -- (uname)
+    alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
+    alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
+    alias brewarm="/opt/homebrew/bin/brew"
+    alias condaarm="/opt/homebrew/bin/conda"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+end
 
 starship init fish | source
 
 zoxide init --cmd cd fish | source
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f /usr/local/Caskroom/miniforge/base/bin/conda
-    eval /usr/local/Caskroom/miniforge/base/bin/conda "shell.fish" "hook" $argv | source
-end
-# <<< conda initialize <<<
 
