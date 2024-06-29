@@ -14,8 +14,8 @@ echo ">>> Installing Node, nvm, pnpm, and bun..."
 echo ""
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 nvm install 20
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 
@@ -48,7 +48,8 @@ elif [[ -f /etc/redhat-release ]]; then
     echo ""
     echo "(3 / 6) Detected Red Hat-based system, installing software..."
     echo ""
-    sudo dnf install zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
+    sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
+    sudo dnf install -y gcc gcc-c++ kernel-devel
     cargo install silicon
 
     echo ""
@@ -86,7 +87,7 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt install -y zsh vim build-essential stow
     cargo install silicon
 
-    sudo apt install -y python3-pip
+    sudo apt install -y python3-pip nala
     
     sudo apt install software-properties-common python3-launchpadlib
     sudo apt-add-repository ppa:fish-shell/release-3
