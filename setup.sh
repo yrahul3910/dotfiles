@@ -59,6 +59,14 @@ elif [[ -f /etc/redhat-release ]]; then
     sudo tar -C /opt -xzf nvim-linux64.tar.gz
     export PATH="$PATH:/opt/nvim-linux64/bin"
 
+elif [[ -f /etc/arch-release ]]; then
+    # Arch Linux
+    echo ""
+    echo "(4 / 6) Detected Arch-based system, installing software..."
+    echo ""
+    sudo pacman -Syu
+    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf
+
 elif [[ -f /etc/debian_version ]]; then
     # Debian
     echo ""
@@ -85,13 +93,6 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt update
     sudo apt install -y fish
 
-    echo ""
-    echo ">>> Installing neovim"
-    echo ""
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-    sudo rm -rf /opt/nvim
-    sudo tar -C /opt -xzf nvim-linux64.tar.gz
-    export PATH="$PATH:/opt/nvim-linux64/bin"
 fi
 
 echo ""
@@ -115,6 +116,13 @@ fi
 cd ~/configs && stow .
 
 if [[ "$(uname)" == "Linux" ]]; then
+  echo ""
+  echo ">>> Installing neovim"
+  echo ""
+  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+  sudo rm -rf /opt/nvim
+  sudo tar -C /opt -xzf nvim-linux64.tar.gz
+  export PATH="$PATH:/opt/nvim-linux64/bin"
   echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.zshrc
   echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.config/fish/config.fish
 fi

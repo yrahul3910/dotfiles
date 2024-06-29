@@ -17,6 +17,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     elif command -v yum >/dev/null; then
         sudo yum update
         sudo yum install -y git
+    elif command -v pacman >/dev/null; then
+        sudo pacman-key --init
+        sudo pacman-key --populate archlinux
+        sudo pacman -Syu
+        sudo pacman -Syu git
     else
         echo "Package manager not recognized. Install git manually."
         exit 1
