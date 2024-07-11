@@ -21,6 +21,9 @@ vim.keymap.set("n", "<leader>xc", "<cmd>!chmod +x %<CR>",
   { noremap = true, silent = true, desc = "Make executable" })
 -- End ThePrimagen ideas
 
+vim.keymap.set("n", "d", '"_d', { noremap = true, silent = true })
+vim.keymap.set({"n", "v"}, "c", '"_c', { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end,
   { silent = true, noremap = true, desc = "Trouble: Toggle" })
 vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end,
