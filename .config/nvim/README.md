@@ -18,6 +18,7 @@ This document goes over how this neovim config is set up. Briefly, this is a mod
 * In visual mode (ideally using `V`), using J/K will move the selected lines up or down, indenting as needed.
 * In normal mode, `<C-d>` goes down half a page, and `<C-u>` goes up half a page
 * `<leader>xc` makes the current file executable.
+* `d` and `c` in normal mode are mapped to `"_d` and `"_c` respectively so that it doesn't overwrite your clipboard. As a side-effect, you can't use these letters as marks or macros.
 
 ## Unchanged but good to know
 
