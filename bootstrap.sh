@@ -7,6 +7,15 @@ REPO_URL="https://github.com/yrahul3910/configs/"
 # Define the directory where the repository will be cloned
 CLONE_DIR="$HOME/configs"
 
+if [ -z "$OSTYPE" ]; then
+  # Try to detect the OS using uname if OSTYPE is not set
+  case "$(uname -s)" in
+    Linux*)     OSTYPE=linux;;
+    Darwin*)    OSTYPE=darwin;;
+    *)          echo "Unknown operating system"; exit 1;;
+  esac
+fi
+
 # Check for OS type and install git if it is not already installed
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # For Debian/Ubuntu-based systems
