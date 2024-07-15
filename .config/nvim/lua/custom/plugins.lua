@@ -295,7 +295,7 @@ local plugins = {
       require("silicon").setup({
         pad_horiz = 0,
         pad_vert = 0,
-        font = "FiraCode Nerd Font Mono=16",
+        font = "FiraCode Nerd Font Mono=32",
         theme = "TwoDark",
         window_title = function()
           return vim.fn.fnamemodify(
