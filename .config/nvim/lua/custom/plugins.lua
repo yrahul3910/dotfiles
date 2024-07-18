@@ -117,6 +117,8 @@ local plugins = {
     end
   },
   {
+    -- If you came here because some auto-session is broken, they're probably in 
+    -- ~/.local/share/nvim/sessions/
     "rmagatti/auto-session",
     lazy = false,
     config = function()
