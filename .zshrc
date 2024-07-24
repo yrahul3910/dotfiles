@@ -16,6 +16,7 @@ function mkcd () {
 }
 
 alias mongod="mongod --dbpath=~/data/db"
+alias ls="ls --color=auto"
 
 if [ "$(uname)" = "Darwin" ]; then
     alias python3="python3.12"

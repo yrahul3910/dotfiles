@@ -35,6 +35,7 @@ alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
 alias arc-scp="scp -i ~/.ssh/ryedida"
 alias moss="~/moss.pl"
 alias python3="python3.12"
+alias ls="ls --color=auto"
 
 if string match -q "Darwin" -- (uname)
     alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
