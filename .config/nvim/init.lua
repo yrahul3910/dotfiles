@@ -656,6 +656,9 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua',
         'ruff',
+        'biome',
+        'prettier',
+        'black'
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -702,6 +705,8 @@ require('lazy').setup({
       -- TODO: Add stuff here
       formatters_by_ft = {
         lua = { 'stylua' },
+        javascript = { { 'biome', 'prettier' } },
+        python = { { 'ruff', 'black' } }
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
