@@ -314,14 +314,16 @@ require('lazy').setup({
       require('which-key').setup()
 
       -- Document existing key chains
-      require('which-key').add {
-        { '<leader>p', group = '[P]lugins' },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
-        { '<leader>f', group = '[F]ind' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+      require('which-key').register {
+        ['<leader>'] = {
+          p = { name = '[P]lugins' },
+          d = { name = '[D]ocument' },
+          r = { name = '[R]ename' },
+          f = { name = '[F]ind' },
+          w = { name = '[W]orkspace' },
+          t = { name = '[T]oggle' },
+          h = { name = 'Git [H]unk', mode = { 'n', 'v' } },
+        },
       }
     end,
   },
@@ -658,7 +660,7 @@ require('lazy').setup({
         'ruff',
         'biome',
         'prettier',
-        'black'
+        'black',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -706,7 +708,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         javascript = { { 'biome', 'prettier' } },
-        python = { { 'ruff', 'black' } }
+        python = { { 'ruff', 'black' } },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
