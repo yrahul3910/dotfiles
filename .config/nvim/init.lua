@@ -187,6 +187,8 @@ vim.keymap.set('n', '<leader>xc', '<cmd>!chmod +x %<CR>', { noremap = true, sile
 -- Swap j and k
 vim.api.nvim_set_keymap('n', 'j', 'k', { noremap = true })
 vim.api.nvim_set_keymap('n', 'k', 'j', { noremap = true })
+vim.api.nvim_set_keymap('n', 'gj', 'gk', { noremap = true })
+vim.api.nvim_set_keymap('n', 'gk', 'gj', { noremap = true })
 vim.api.nvim_set_keymap('v', 'j', 'k', { noremap = true })
 vim.api.nvim_set_keymap('v', 'k', 'j', { noremap = true })
 
