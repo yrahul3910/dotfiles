@@ -104,6 +104,9 @@ vim.opt.number = true
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
 
+-- Based on https://stackoverflow.com/a/8292950
+vim.opt_global.sol = false
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
@@ -314,16 +317,14 @@ require('lazy').setup({
       require('which-key').setup()
 
       -- Document existing key chains
-      require('which-key').register {
-        ['<leader>'] = {
-          p = { name = '[P]lugins' },
-          d = { name = '[D]ocument' },
-          r = { name = '[R]ename' },
-          f = { name = '[F]ind' },
-          w = { name = '[W]orkspace' },
-          t = { name = '[T]oggle' },
-          h = { name = 'Git [H]unk', mode = { 'n', 'v' } },
-        },
+      require('which-key').add {
+        { '<leader>p', group = '[P]lugins' },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>f', group = '[F]ind' },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       }
     end,
   },
