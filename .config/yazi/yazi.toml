@@ -10,8 +10,10 @@ scrolloff = 10
 
 [preview]
 tab_size = 2
-image_filter = "catmull-rom"
-image_quality = 75
+max_width = 800
+max_height = 1200
+image_filter = "lanczos3"
+image_quality = 90
 
 [opener]
 edit = [{ run = 'nvim "$@"', block = true }]
