@@ -29,6 +29,15 @@ function mkcd
   cd $argv         # Change directory into the newly created one
 end
 
+function yy
+  set tmp (mktemp -t "yazi-cwd.XXXXXX")
+  yazi $argv --cwd-file="$tmp"
+  if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+    cd -- "$cwd"
+  end
+  rm -f -- "$tmp"
+end
+
 alias gcloud=/Users/ryedida/Downloads/google-cloud-sdk/bin/gcloud
 alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
 alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"

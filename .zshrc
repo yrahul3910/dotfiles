@@ -15,6 +15,15 @@ function mkcd () {
   cd $1        # Change into the new directory
 }
 
+function yy() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+	builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
 alias mongod="mongod --dbpath=~/data/db"
 alias ls="ls --color=auto"
 
