@@ -48,7 +48,7 @@ end, '[P]lugin: trouble fix')
 
 -- theme
 map_normal('<leader>cl', function()
-  require('colorscheme-picker').change 'newpaper'
+  require('colorscheme-picker').change 'catppuccin'
 end, '[C]olorscheme [L]ight')
 map_normal('<leader>cd', function()
   require('colorscheme-picker').change 'tokyodark'
