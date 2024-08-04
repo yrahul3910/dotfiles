@@ -6,6 +6,7 @@
 	bl = branch-list
 
 	d = diff
+	l = log --oneline
 	p = push
 	n = switch -c
 	unfck = reset --hard HEAD
@@ -39,6 +40,7 @@
 	rebase = true
 
 [push]
+	autosetupremote = true
 	default = simple
 
 [rebase]
