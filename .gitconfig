@@ -1,0 +1,53 @@
+[user]
+	name = "Rahul Yedida"
+	email = "yrahul3910@gmail.com"
+
+[alias]
+	bl = branch-list
+
+	d = diff
+	l = log --oneline
+	p = push
+	n = switch -c
+	unfck = reset --hard HEAD
+
+[diff]
+	algorithm = histogram
+
+[commit]
+	verbose = true
+
+[core]
+	autocrlf = false
+
+[diff]
+	algorithm = histogram
+
+[gc]
+	pruneexpire = now
+
+[grep]
+	linenumber = true
+
+[help]
+	autocorrect = prompt
+
+[merge]
+	conflictstyle = diff3
+	autostash = true
+
+[pull]
+	rebase = true
+
+[push]
+	autosetupremote = true
+	default = simple
+
+[rebase]
+	autostash = true
+
+[rerere]
+	autosquash = true
+	enabled = true
+	autoupdate = true
+
