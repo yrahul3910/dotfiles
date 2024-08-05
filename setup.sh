@@ -133,4 +133,7 @@ if [[ "$(uname)" == "Linux" ]]; then
 fi
 
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
+
+./setup-macos-defaults.sh
+
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
