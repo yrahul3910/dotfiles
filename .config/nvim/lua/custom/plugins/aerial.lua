@@ -27,6 +27,7 @@ return {
       },
 
       attach_mode = 'window',
+      disable_max_lines = 50000,
 
       keymaps = {
         ['?'] = 'actions.show_help',
