@@ -36,6 +36,9 @@ if [ "$(uname)" = "Darwin" ]; then
     alias pip3="python3.12 -m pip"
 fi
 
+alias tl="sed -i .bak s/ayu.conf/ayu_light.conf/g ~/.config/kitty/kitty.conf"
+alias td="sed -i .bak s/ayu_light.conf/ayu.conf/g ~/.config/kitty/kitty.conf"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -151,3 +154,11 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
+
+# bun completions
+[ -s "/Users/yedidar/.bun/_bun" ] && source "/Users/yedidar/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
