@@ -1,9 +1,6 @@
-plugin
-spell
-ftplugin
-syntax
-coc-settings.json
+tags
+test.sh
 .luarc.json
-lazy-lock.json
-after
-**/.DS_Store
+nvim
+
+spell/

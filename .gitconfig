@@ -1,14 +1,28 @@
 [user]
-	name = "Rahul Yedida"
-	email = "yrahul3910@gmail.com"
-
+	name = Rahul Yedida
+	email = yedidar@legal.regn.net
+[core]
+	editor = nvim
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/local/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/local/bin/gh auth git-credential
 [alias]
-	bl = branch-list
+	b = branch
 
+	c = checkout
 	d = diff
 	l = log --oneline
 	p = push
+	pu = !git pull $(git remote) $(git branch --show-current)
 	n = switch -c
+	rs = restore --staged
+	s = status
+	sp = stash push
+	spo = stash pop
+	ss = stash push -S
 	unfck = reset --hard HEAD
 
 [diff]

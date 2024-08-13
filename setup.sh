@@ -41,14 +41,14 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo ""
     echo "(2 / 6) Detected macOS, installing software..."
     echo ""
-    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12
+    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
     echo ""
     echo "(3 / 6) Detected Red Hat-based system, installing software..."
     echo ""
-    sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf
+    sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf poppler yazi rust-bat
     sudo dnf install -y gcc gcc-c++ kernel-devel
     cargo install silicon
 
@@ -66,7 +66,7 @@ elif [[ -f /etc/arch-release ]]; then
     echo "(4 / 6) Detected Arch-based system, installing software..."
     echo ""
     sudo pacman -Syu
-    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf
+    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat
 
 elif [[ -f /etc/debian_version ]]; then
     # Debian
@@ -77,14 +77,18 @@ elif [[ -f /etc/debian_version ]]; then
     # Install zsh
     sudo apt update
 
+    cargo install --locked yazi-fm yazi-cli
+
     # Needed for silicon, the code screenshot tool
     sudo apt install -y expat libxml2-dev pkg-config libasound2-dev libssl-dev cmake libfreetype6-dev libexpat1-dev libxcb-composite0-dev libharfbuzz-dev fzf fontconfig
+
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
     curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
     sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
     rm ripgrep*.deb
 
-    sudo apt install -y zsh vim build-essential stow
+    sudo apt install -y zsh vim build-essential stow poppler rust-bat
     cargo install silicon
 
     sudo apt install -y python3-pip nala
@@ -129,4 +133,7 @@ if [[ "$(uname)" == "Linux" ]]; then
 fi
 
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
+
+./setup-macos-defaults.sh
+
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
