@@ -18,11 +18,15 @@ Most important is probably the neovim config, which mostly works on macOS and Ub
 
 ## Included configs
 
-* Plain ViM
-* Neovim/NVChad
+* Neovim
 * Firefox `user.js` (move this to the right folder)
 * fish
 * zsh
+* kitty
+* Karabiner
+* yazi
+* git
+* pip
 * starship.rs
 
 ## Installation
@@ -39,20 +43,6 @@ Then, use GNU Stow to create symlinks to your configs:
 ```sh
 stow .
 ```
-
-## (Plain) ViM features
-
-* Mouse enabled
-* Terminal splits at bottom (use `:term zsh`)
-* Code completion (using `YouCompleteMe`)
-* PEP8/Flake8 checking and auto-correcting
-* Buffer tabs (via `vim-buftabline`)
-* File explorer (using `NERDTree`)
-* Status bar with errors (using `vim-airline`)
-* `Shift-D` to go to definition; `Shift-t` to get the type, `Shift-?` to get documentation (using `YouCompleteMe`)
-* 24-bit color when outside tmux
-* 4-width spaces for indent
-* Code folding enabled
 
 ## Neovim configuration
 
