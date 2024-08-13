@@ -1,5 +1,7 @@
 # kickstart.nvim
 
+[See the keybinding descriptions here](./KEYMAPS.md)
+
 ## Introduction
 
 A starting point for Neovim that is:
