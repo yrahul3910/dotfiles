@@ -39,9 +39,8 @@ function yy
 end
 
 alias gcloud=/Users/ryedida/Downloads/google-cloud-sdk/bin/gcloud
+alias gsutil=/Users/ryedida/Downloads/google-cloud-sdk/bin/gcloud
 alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
-alias arc-ssh="ssh -i ~/.ssh/ryedida arc.csc.ncsu.edu"
-alias arc-scp="scp -i ~/.ssh/ryedida"
 alias moss="~/moss.pl"
 alias python3="python3.12"
 alias ls="ls --color=auto"
