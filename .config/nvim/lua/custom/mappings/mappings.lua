@@ -3,7 +3,7 @@ local function map_normal(keys, mapping, desc)
 end
 
 -- Custom
-map_normal('<leader>o', ':put _<CR>j', 'New empty line below')
+map_normal('<leader>o', ':put _<CR>k', 'New empty line below')
 
 -- nvim-tree
 map_normal('<C-n>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')

@@ -36,8 +36,8 @@ if [ "$(uname)" = "Darwin" ]; then
     alias pip3="python3.12 -m pip"
 fi
 
-alias tl="sed -i .bak s/ayu.conf/ayu_light.conf/g ~/.config/kitty/kitty.conf"
-alias td="sed -i .bak s/ayu_light.conf/ayu.conf/g ~/.config/kitty/kitty.conf"
+alias tl="sed -i .bak s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
+alias td="sed -i .bak s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
