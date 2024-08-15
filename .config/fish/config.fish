@@ -44,14 +44,15 @@ alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
 alias moss="~/moss.pl"
 alias python3="python3.12"
 alias ls="ls --color=auto"
-alias tl="sed -i .bak s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
-alias td="sed -i .bak s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
+alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
+alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
 
 if string match -q "Darwin" -- (uname)
     alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
     alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
     alias brewarm="/opt/homebrew/bin/brew"
     alias condaarm="/opt/homebrew/bin/conda"
+    alias sed="gsed"
     eval "$(/opt/homebrew/bin/brew shellenv)"
 end
 

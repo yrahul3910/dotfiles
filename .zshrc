@@ -34,10 +34,11 @@ if [ "$(uname)" = "Darwin" ]; then
     alias brewarm="/opt/homebrew/bin/brew"
     alias condaarm="/opt/homebrew/bin/conda"
     alias pip3="python3.12 -m pip"
+    alias sed="gsed"
 fi
 
-alias tl="sed -i .bak s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
-alias td="sed -i .bak s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
+alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
+alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

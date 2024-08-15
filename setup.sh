@@ -41,7 +41,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo ""
     echo "(2 / 6) Detected macOS, installing software..."
     echo ""
-    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat
+    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
