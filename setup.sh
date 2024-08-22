@@ -42,6 +42,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo "(2 / 6) Detected macOS, installing software..."
     echo ""
     brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed git-delta
+    brew install jesseduffield/lazygit/lazygit
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
@@ -51,6 +52,9 @@ elif [[ -f /etc/redhat-release ]]; then
     sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
     sudo dnf install -y gcc gcc-c++ kernel-devel
     cargo install silicon
+
+    sudo dnf copr enable atim/lazygit -y
+    sudo dnf install -y lazygit
 
     echo ""
     echo ">>> Installing neovim"
@@ -66,7 +70,7 @@ elif [[ -f /etc/arch-release ]]; then
     echo "(4 / 6) Detected Arch-based system, installing software..."
     echo ""
     sudo pacman -Syu
-    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat git-delta
+    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat git-delta lazygit
 
 elif [[ -f /etc/debian_version ]]; then
     # Debian
@@ -92,6 +96,11 @@ elif [[ -f /etc/debian_version ]]; then
     cargo install silicon
 
     sudo apt install -y python3-pip nala git-delta
+
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    sudo install lazygit /usr/local/bin
     
     sudo apt install software-properties-common python3-launchpadlib
     sudo apt-add-repository ppa:fish-shell/release-3
