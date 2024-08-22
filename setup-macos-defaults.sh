@@ -69,4 +69,4 @@ if defaults read com.apple.finder &>/dev/null; then
 
     # Spotlight: Don't index mounted volumes
     sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array /Volumes
-
+fi
