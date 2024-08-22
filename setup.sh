@@ -41,14 +41,14 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo ""
     echo "(2 / 6) Detected macOS, installing software..."
     echo ""
-    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed
+    brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed git-delta
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
     echo ""
     echo "(3 / 6) Detected Red Hat-based system, installing software..."
     echo ""
-    sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf poppler yazi rust-bat
+    sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
     sudo dnf install -y gcc gcc-c++ kernel-devel
     cargo install silicon
 
@@ -66,7 +66,7 @@ elif [[ -f /etc/arch-release ]]; then
     echo "(4 / 6) Detected Arch-based system, installing software..."
     echo ""
     sudo pacman -Syu
-    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat
+    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat git-delta
 
 elif [[ -f /etc/debian_version ]]; then
     # Debian
@@ -91,7 +91,7 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt install -y zsh vim build-essential stow poppler rust-bat
     cargo install silicon
 
-    sudo apt install -y python3-pip nala
+    sudo apt install -y python3-pip nala git-delta
     
     sudo apt install software-properties-common python3-launchpadlib
     sudo apt-add-repository ppa:fish-shell/release-3
@@ -104,6 +104,11 @@ echo ""
 echo ">>> Installing Poetry..."
 echo ""
 curl -sSL https://install.python-poetry.org | python3 -
+
+echo ""
+echo ">>> Installing uv..."
+echo ""
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Set up dotfiles
 echo ""
