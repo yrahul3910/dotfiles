@@ -148,6 +148,7 @@ fi
 
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
 
+cp tmux-sessionizer /usr/local/bin
 ./setup-macos-defaults.sh
 
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
