@@ -27,6 +27,7 @@ function yy() {
 alias mongod="mongod --dbpath=~/data/db"
 alias ls="ls --color=auto"
 alias lg="lazygit"
+alias diff="delta"
 
 if [ "$(uname)" = "Darwin" ]; then
     alias python3="python3.12"

@@ -25,6 +25,9 @@
 	ss = stash push -S
 	unfck = reset --hard HEAD
 
+[delta]
+	side-by-side = true
+
 [diff]
 	algorithm = histogram
 
