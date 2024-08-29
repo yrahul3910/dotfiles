@@ -1,0 +1,13 @@
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
+
+[window]
+opacity = 0.8
+blur = true
+
+[font]
+normal = { family = "FiraCode Nerd Font", style = "Regular" }
+size = 14.0
+
+[cursor]
+style = { shape = "Beam", blinking = "Off" }
+vi_mode_style = { shape = "Block", blinking = "Off" }
