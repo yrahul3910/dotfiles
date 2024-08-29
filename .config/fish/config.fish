@@ -41,6 +41,7 @@ end
 alias gcloud=/Users/ryedida/Downloads/google-cloud-sdk/bin/gcloud
 alias gsutil=/Users/ryedida/Downloads/google-cloud-sdk/bin/gcloud
 alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
+alias lg=lazygit
 alias moss="~/moss.pl"
 alias python3="python3.12"
 alias ls="ls --color=auto"
