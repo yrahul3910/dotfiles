@@ -53,3 +53,17 @@ end, '[C]olorscheme [L]ight')
 map_normal('<leader>cd', function()
   require('colorscheme-picker').change 'tokyodark'
 end, '[C]olorscheme [D]ark')
+
+-- function totally_harmless_dont_worry()
+--   local click_pos = vim.fn.getmousepos()
+--   local target_win = click_pos.winid
+--   vim.fn.win_gotoid(target_win)
+--
+--   local row = click_pos.line - 1
+--   local col = click_pos.column - 1
+--
+--   vim.api.nvim_win_set_cursor(0, { row + 1, col })
+--   vim.cmd 'normal! x'
+-- end
+--
+-- map_normal('<LeftMouse>', '<cmd>lua totally_harmless_dont_worry()<CR>')
