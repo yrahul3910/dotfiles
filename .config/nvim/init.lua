@@ -599,6 +599,7 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         pyright = {
+          filetypes = { 'python', 'pysh' },
           settings = {
             pyright = {
               autoImportCompletion = true,
@@ -1000,5 +1001,17 @@ vim.api.nvim_create_autocmd('VimEnter', {
 require 'custom.mappings'
 vim.cmd 'colorscheme onedark'
 
+vim.filetype.add {
+  extension = {
+    pysh = 'python',
+  },
+}
+
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*.pysh',
+  callback = function()
+    vim.bo.filetype = 'python'
+  end,
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
