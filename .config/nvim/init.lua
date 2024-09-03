@@ -173,30 +173,6 @@ vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Lets you move selected block around in visual mode
-vim.keymap.set('v', 'K', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
-vim.keymap.set('v', 'J', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-
--- Keeps your cursor steady when moving up and down half-pages
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
-
-vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>xc', '<cmd>!chmod +x %<CR>', { noremap = true, silent = true, desc = 'Make executable' })
-
--- Swap j and k
-vim.api.nvim_set_keymap('n', 'j', 'k', { noremap = true })
-vim.api.nvim_set_keymap('n', 'k', 'j', { noremap = true })
-vim.api.nvim_set_keymap('n', 'gj', 'gk', { noremap = true })
-vim.api.nvim_set_keymap('n', 'gk', 'gj', { noremap = true })
-vim.api.nvim_set_keymap('v', 'j', 'k', { noremap = true })
-vim.api.nvim_set_keymap('v', 'k', 'j', { noremap = true })
-
--- Delete without copying
-vim.keymap.set('n', '<leader>d', '"_d', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'v' }, '<leader>c', '"_c', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<leader>yc', '"*y', { noremap = true, silent = true, desc = '[Y]ank to [C]lipboard' })
-
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
