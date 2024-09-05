@@ -24,5 +24,13 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
   * `tf` runs all tests in the current file.
   * `to` shows the test output.
 * `<leader>xc` makes the file executable.methods 
-* `<leader>ph` leads to Harpoon2 keybindings.
+* Generally, the prefix `<leader>p` is used for plugin actions.
+* As an example, `<leader>ph` leads to Harpoon2 keybindings. After this prefix, `a` adds the current file, `d` deletes the current file, and `o` opens the list of files in Telescope.
+* `<leader>pt` leads to Trouble keybindings. Use `t` to toggle the window and `f` to fix.
+* `<leader>cl` changes the colorscheme to light. Of course, `<leader>cd` changes to dark.
+* `<leader>xc` makes the current file executable.
 * `<leader>fm` formats the current buffer (or at least, attempts to).
+* `<leader>yc` yanks to clipboard.
+* `K` previews declaration, so I mapped `<leader>kf` to peek at definition, using `nvim-treesitter-textobjects`. Use the keybinding twice to enter the peek window. There's also the less useful `<leader>kF`.
+* `<C-n>` toggles treesitter. Use `<leader>pr` to refresh it.
+* `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
