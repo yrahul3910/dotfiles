@@ -27,11 +27,15 @@ end
 
 map_normal('<leader>pha', function()
   harpoon:list():add()
-end, 'Harpoon: add')
+end, 'Harpoon2: add')
+
+map_normal('<leader>phd', function()
+  harpoon:list():remove()
+end, 'Harpoon2: remove')
 
 map_normal('<leader>pho', function()
   toggle_telescope(harpoon:list())
-end, 'Harpoon: open')
+end, 'Harpoon2: open')
 
 map_normal('<S-u>', function()
   harpoon:list():select(1)

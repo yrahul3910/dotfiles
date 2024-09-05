@@ -621,6 +621,7 @@ require('lazy').setup({
             },
           },
         },
+        tailwindcss = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -912,7 +913,19 @@ require('lazy').setup({
       -- Prefer git instead of curl in order to improve connectivity in some environments
       require('nvim-treesitter.install').prefer_git = true
       ---@diagnostic disable-next-line: missing-fields
-      require('nvim-treesitter.configs').setup(opts)
+      require('nvim-treesitter.configs').setup(vim.tbl_extend('force', opts, {
+        textobjects = {
+          lsp_interop = {
+            enable = true,
+            border = 'none',
+            floating_preview_opts = {},
+            peek_definition_code = {
+              ['<leader>kf'] = '@function.outer',
+              ['<leader>KF'] = '@class.outer',
+            },
+          },
+        },
+      }))
 
       -- There are additional nvim-treesitter modules that you can use to interact
       -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -975,6 +988,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
 })
 
 require 'custom.mappings'
+
 vim.cmd 'colorscheme onedark'
 
 vim.filetype.add {
