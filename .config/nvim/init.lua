@@ -103,6 +103,7 @@ vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
+vim.opt.tabstop = 4
 
 -- Based on https://stackoverflow.com/a/8292950
 vim.opt_global.sol = false
@@ -599,6 +600,7 @@ require('lazy').setup({
             },
           },
         },
+        gopls = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
