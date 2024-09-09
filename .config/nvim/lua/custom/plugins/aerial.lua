@@ -17,13 +17,13 @@ return {
 
       backends = { 'treesitter', 'lsp', 'markdown', 'asciidoc', 'man' },
       layout = {
-        max_width = { 40, 0.2 },
-        width = nil,
+        max_width = { 25, 0.15 },
         min_width = 10,
 
         default_direction = 'right',
-        placement = 'window',
+        placement = 'edge',
         resize_to_content = true,
+        preserve_equality = true,
       },
 
       attach_mode = 'window',
