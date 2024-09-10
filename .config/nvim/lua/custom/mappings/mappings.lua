@@ -12,6 +12,9 @@ map_normal('gh', '^', 'Move to first word') -- Somewhat different from helix
 map_normal('gl', '$', 'Move to end of line')
 map_normal('ge', 'G', 'Move to end of file')
 
+-- Convenience mappings
+map_normal('gb', '_d0i<Backspace> ', 'Go back (to prev line)')
+
 -- Mappings from ThePrimeagen
 -- Lets you move selected block around in visual mode
 vim.keymap.set('v', 'K', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
