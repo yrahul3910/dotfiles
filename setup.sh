@@ -3,7 +3,6 @@ set -x
 
 # Install Rust
 echo ""
-echo "(1 / 6) Installing common utilities"
 echo ">>> Installing Rust..."
 echo ""
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -18,6 +17,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 nvm install 20
 curl -fsSL https://get.pnpm.io/install.sh | sh -
+curl -fsSL https://bun.sh/install | bash
 
 echo ""
 echo ">>> Installing Kitty..."
@@ -39,7 +39,7 @@ export PATH="$PATH:~/.local/bin"
 if [[ "$(uname -s)" == "Darwin" ]]; then
     # macOS
     echo ""
-    echo "(2 / 6) Detected macOS, installing software..."
+    echo ">>> Detected macOS, installing software..."
     echo ""
     brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed git-delta
     brew install jesseduffield/lazygit/lazygit
@@ -47,7 +47,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
     echo ""
-    echo "(3 / 6) Detected Red Hat-based system, installing software..."
+    echo ">>> Detected Red Hat-based system, installing software..."
     echo ""
     sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
     sudo dnf install -y gcc gcc-c++ kernel-devel
@@ -56,18 +56,10 @@ elif [[ -f /etc/redhat-release ]]; then
     sudo dnf copr enable atim/lazygit -y
     sudo dnf install -y lazygit
 
-    echo ""
-    echo ">>> Installing neovim"
-    echo ""
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-    sudo rm -rf /opt/nvim
-    sudo tar -C /opt -xzf nvim-linux64.tar.gz
-    export PATH="$PATH:/opt/nvim-linux64/bin"
-
 elif [[ -f /etc/arch-release ]]; then
     # Arch Linux
     echo ""
-    echo "(4 / 6) Detected Arch-based system, installing software..."
+    echo ">>> Detected Arch-based system, installing software..."
     echo ""
     sudo pacman -Syu
     sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat git-delta lazygit
@@ -75,7 +67,7 @@ elif [[ -f /etc/arch-release ]]; then
 elif [[ -f /etc/debian_version ]]; then
     # Debian
     echo ""
-    echo "(4 / 6) Detected Debian-based system, installing software..."
+    echo ">>> Detected Debian-based system, installing software..."
     echo ""
 
     # Install zsh
@@ -106,7 +98,6 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt-add-repository ppa:fish-shell/release-3
     sudo apt update
     sudo apt install -y fish
-
 fi
 
 echo ""
@@ -121,7 +112,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Set up dotfiles
 echo ""
-echo "(5 / 5) Setting up dotfiles..."
+echo ">>> Setting up dotfiles..."
 echo ""
 
 if [ -f ~/.zshrc ]; then
