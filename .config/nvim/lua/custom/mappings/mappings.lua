@@ -13,7 +13,7 @@ map_normal('gl', '$', 'Move to end of line')
 map_normal('ge', 'G', 'Move to end of file')
 
 -- Convenience mappings
-map_normal('gb', '_d0i<Backspace> ', 'Go back (to prev line)')
+map_normal('gb', 'kJi', 'Go back (to prev line)')
 
 -- Mappings from ThePrimeagen
 -- Lets you move selected block around in visual mode
@@ -42,7 +42,9 @@ vim.api.nvim_set_keymap('v', '<leader>yc', '"*y', { noremap = true, silent = tru
 
 -- nvim-tree
 map_normal('<C-n>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
-map_normal('<leader>pr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
+map_normal('<leader>pTr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
+map_normal('<leader>pTm', '<cmd>NvimTreeResize -10<CR>', 'nvim-tree [m]inus')
+map_normal('<leader>pTp', '<cmd>NvimTreeResize +10<CR>', 'nvim-tree [p]lus')
 
 -- aerial
 map_normal('<leader>a', '<cmd>AerialToggle!<CR>', 'Toggle Aerial window')

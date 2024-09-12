@@ -23,6 +23,7 @@ set -g fish_color_user brgreen
 set -g fish_color_valid_path --underline
 
 set -x PATH $PATH /opt/homebrew/bin
+set -x PATH $PATH /usr/local/go/bin
 
 function mkcd
   mkdir -p $argv  # Create the directory (and parent directories if needed)

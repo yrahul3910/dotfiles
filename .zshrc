@@ -136,6 +136,7 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
 export PATH="$PATH:~/.config/emacs/bin"
+export PATH="$PATH:/usr/local/go/bin"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
