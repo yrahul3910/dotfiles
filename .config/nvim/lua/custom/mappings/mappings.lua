@@ -120,15 +120,6 @@ map_normal('<tab>', '<cmd>bnext<CR>', 'Next buffer')
 map_normal('<S-tab>', '<cmd>bprev<CR>', 'Previous buffer')
 map_normal('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
 
--- trouble
-map_normal('<leader>ptt', function()
-  require('trouble').toggle()
-end, '[P]lugin: trouble')
-
-map_normal('<leader>ptf', function()
-  require('trouble').toggle 'quickfix'
-end, '[P]lugin: trouble fix')
-
 -- theme
 map_normal('<leader>cl', function()
   require('colorscheme-picker').change 'catppuccin'

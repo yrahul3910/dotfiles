@@ -10,7 +10,7 @@ return {
       return
     end
     colorscheme.setup {
-      default_colorscheme = 'tokyodark',
+      default_colorscheme = 'onedark',
       keymapping = '<leader>cs',
     }
     colorscheme.set_default_colorscheme()
