@@ -40,8 +40,54 @@ vim.keymap.set('n', '<leader>d', '"_d', { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>c', '"_c', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>yc', '"*y', { noremap = true, silent = true, desc = '[Y]ank to [C]lipboard' })
 
+-- fzf-lua
+local fzf = require 'fzf-lua'
+map_normal('<leader>ff', function()
+  fzf.files()
+end, '[F]ind [F]iles')
+
+map_normal('<leader>fg', function()
+  fzf.grep_project()
+end, '[F]ind by [G]rep')
+
+map_normal('<leader>fr', function()
+  fzf.grep_last()
+end, '[F]ind [R]esume')
+
+map_normal('<leader>fG', function()
+  fzf.live_grep_glob()
+end, '[F]ind by grep with [G]lob')
+
+map_normal('<leader>fh', function()
+  fzf.helptags()
+end, '[F]ind [H]elp')
+
+map_normal('<leader>fd', function()
+  fzf.diagnostics_document()
+end, '[F]ind [D]iagnostics')
+
+map_normal('<leader>ca', function()
+  fzf.lsp_code_actions()
+end, '[C]ode [A]ctions')
+
+map_normal('<leader>ws', function()
+  fzf.lsp_workspace_symbols()
+end, '[W]orkspace [S]ymbols')
+
+map_normal('<leader>gr', function()
+  fzf.lsp_incoming_calls()
+end, '[G]o to [R]eferences')
+
+map_normal('<leader>gd', function()
+  fzf.lsp_definitions()
+end, '[G]o to [D]efinition')
+
+map_normal('<leader>ds', function()
+  fzf.lsp_document_symbols()
+end, '[D]ocument [S]ymbols')
+
 -- nvim-tree
-map_normal('<C-n>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
+map_normal('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
 map_normal('<leader>pTr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
 map_normal('<leader>pTm', '<cmd>NvimTreeResize -10<CR>', 'nvim-tree [m]inus')
 map_normal('<leader>pTp', '<cmd>NvimTreeResize +10<CR>', 'nvim-tree [p]lus')

@@ -13,7 +13,6 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
   * `ff` searches file names (except those in gitignore).
   * `fh` searches the help sections.
   * `fr` resumes the previous search.
-  * `fw` searches for the current word.
   * `f/` searches in open buffers.
 * `<leader>a` toggles the Aerial window (which shows a list of classes, functions, etc.)
 * `<leader>d` and `<leader>c` are mapped to `"_d` and `"_c`. This makes sure it doesn't overwrite your clipboard when you delete or change text.
@@ -34,3 +33,5 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
 * `K` previews declaration, so I mapped `<leader>kf` to peek at definition, using `nvim-treesitter-textobjects`. Use the keybinding twice to enter the peek window. There's also the less useful `<leader>kF`.
 * `<C-n>` toggles treesitter. Use `<leader>pr` to refresh it.
 * `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
+* `<leader>pha` adds the current file to Harpoon. `<leader>phd` removes it, and `<leader>pho` shows the Harpoon window
+* `<C-m>`, `<C-,>`, `<C-.>`, `<C-/>` switch between Harpoon buffers.
