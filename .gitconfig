@@ -37,9 +37,6 @@
 [core]
 	autocrlf = false
 
-[diff]
-	algorithm = histogram
-
 [gc]
 	pruneexpire = now
 

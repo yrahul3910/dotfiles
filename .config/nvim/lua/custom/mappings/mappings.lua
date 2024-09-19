@@ -47,11 +47,11 @@ map_normal('<leader>ff', function()
 end, '[F]ind [F]iles')
 
 map_normal('<leader>fg', function()
-  fzf.grep_project()
+  fzf.live_grep_native { multiprocess = true }
 end, '[F]ind by [G]rep')
 
 map_normal('<leader>fr', function()
-  fzf.grep_last()
+  fzf.live_grep_resume()
 end, '[F]ind [R]esume')
 
 map_normal('<leader>fG', function()
@@ -69,10 +69,6 @@ end, '[F]ind [D]iagnostics')
 map_normal('<leader>ca', function()
   fzf.lsp_code_actions()
 end, '[C]ode [A]ctions')
-
-map_normal('<leader>ws', function()
-  fzf.lsp_workspace_symbols()
-end, '[W]orkspace [S]ymbols')
 
 map_normal('<leader>gr', function()
   fzf.lsp_incoming_calls()
