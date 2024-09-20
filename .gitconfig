@@ -16,6 +16,7 @@
 	d = diff
 	l = log --oneline
 	p = push
+	pushf = push --force-with-lease --force-if-includes
 	pu = !git pull $(git remote) $(git branch --show-current)
 	n = switch -c
 	rs = restore --staged
