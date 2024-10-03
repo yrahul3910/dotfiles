@@ -42,45 +42,18 @@ vim.api.nvim_set_keymap('v', '<leader>yc', '"*y', { noremap = true, silent = tru
 
 -- fzf-lua
 local fzf = require 'fzf-lua'
-map_normal('<leader>ff', function()
-  fzf.files()
-end, '[F]ind [F]iles')
+map_normal('<leader>ff', fzf.files, '[F]ind [F]iles')
 
-map_normal('<leader>fg', function()
-  fzf.live_grep_native { multiprocess = true }
-end, '[F]ind by [G]rep')
-
-map_normal('<leader>fr', function()
-  fzf.live_grep_resume()
-end, '[F]ind [R]esume')
-
-map_normal('<leader>fG', function()
-  fzf.live_grep_glob()
-end, '[F]ind by grep with [G]lob')
-
-map_normal('<leader>fh', function()
-  fzf.helptags()
-end, '[F]ind [H]elp')
-
-map_normal('<leader>fd', function()
-  fzf.diagnostics_document()
-end, '[F]ind [D]iagnostics')
-
-map_normal('<leader>ca', function()
-  fzf.lsp_code_actions()
-end, '[C]ode [A]ctions')
-
-map_normal('<leader>gr', function()
-  fzf.lsp_incoming_calls()
-end, '[G]o to [R]eferences')
-
-map_normal('<leader>gd', function()
-  fzf.lsp_definitions()
-end, '[G]o to [D]efinition')
-
-map_normal('<leader>ds', function()
-  fzf.lsp_document_symbols()
-end, '[D]ocument [S]ymbols')
+map_normal('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
+map_normal('<leader>fg', fzf.grep, '[F]ind by [G]rep')
+map_normal('<leader>fr', fzf.live_grep_resume, '[F]ind [R]esume')
+map_normal('<leader>fG', fzf.live_grep_glob, '[F]ind by grep with [G]lob')
+map_normal('<leader>fh', fzf.helptags, '[F]ind [H]elp')
+map_normal('<leader>fd', fzf.diagnostics_document, '[F]ind [D]iagnostics')
+map_normal('<leader>fs', fzf.lsp_document_symbols, '[F]ind [S]ymbols')
+map_normal('<leader>ca', fzf.lsp_code_actions, '[C]ode [A]ctions')
+map_normal('<leader>gr', fzf.lsp_incoming_calls, '[G]o to [R]eferences')
+map_normal('<leader>gd', fzf.lsp_definitions, '[G]o to [D]efinition')
 
 -- nvim-tree
 map_normal('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
@@ -115,6 +88,11 @@ vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 map_normal('<tab>', '<cmd>bnext<CR>', 'Next buffer')
 map_normal('<S-tab>', '<cmd>bprev<CR>', 'Previous buffer')
 map_normal('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
+
+-- nvim-spider
+vim.keymap.set({ 'n', 'o', 'x' }, 'W', '<cmd>lua require("spider").motion("w")<CR>', { desc = 'Spider-w' })
+vim.keymap.set({ 'n', 'o', 'x' }, 'E', '<cmd>lua require("spider").motion("e")<CR>', { desc = 'Spider-e' })
+vim.keymap.set({ 'n', 'o', 'x' }, 'B', '<cmd>lua require("spider").motion("b")<CR>', { desc = 'Spider-b' })
 
 -- theme
 map_normal('<leader>cl', function()
