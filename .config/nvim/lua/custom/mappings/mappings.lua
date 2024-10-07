@@ -5,7 +5,6 @@ end
 -- Custom
 map_normal('<leader>o', 'o<Esc>k', 'New empty line below')
 map_normal('<leader>O', 'O<Esc>j', 'New empty line above')
-map_normal('<leader>i', 'O', 'New empty line above (and stay)')
 
 -- Some mappings inspired by Helix (Kakoune mappings)
 map_normal('gh', '^', 'Move to first word') -- Somewhat different from helix

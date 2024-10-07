@@ -18,7 +18,7 @@ return {
       require('neotest').setup {
         adapters = {
           require 'neotest-python' {
-            args = { '-vv', '-s' },
+            args = { '-vv' },
           },
           require 'neotest-plenary',
         },
