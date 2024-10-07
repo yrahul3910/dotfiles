@@ -946,8 +946,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
 
 require 'custom.mappings'
 
-vim.cmd 'colorscheme onedark'
-
 vim.filetype.add {
   extension = {
     pysh = 'python',
