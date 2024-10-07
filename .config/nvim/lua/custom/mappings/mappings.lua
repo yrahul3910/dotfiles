@@ -24,8 +24,8 @@ vim.keymap.set('v', 'J', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
 
-map_normal('Q', '<nop>', { noremap = true, silent = true })
-map_normal('<leader>xc', '<cmd>!chmod +x %<CR>', { noremap = true, silent = true, desc = 'Make executable' })
+vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>xc', '<cmd>!chmod +x %<CR>', { noremap = true, silent = true, desc = 'Make executable' })
 -- End Primeagen mappings
 
 -- Swap j and k
