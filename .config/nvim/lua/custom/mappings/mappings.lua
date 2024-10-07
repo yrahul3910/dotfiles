@@ -3,8 +3,8 @@ local function map_normal(keys, mapping, desc)
 end
 
 -- Custom
-map_normal('<leader>o', 'o<Esc>k', 'New empty line below')
-map_normal('<leader>O', 'O<Esc>j', 'New empty line above')
+map_normal('<leader>o', 'o<Esc>S<Esc>k', 'New empty line below')
+map_normal('<leader>O', 'O<Esc>S<Esc>j', 'New empty line above')
 map_normal('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 
 -- Some mappings inspired by Helix (Kakoune mappings)
@@ -26,6 +26,7 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
 
 vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>xc', '<cmd>!chmod +x %<CR>', { noremap = true, silent = true, desc = 'Make executable' })
+-- End Primeagen mappings
 
 -- Swap j and k
 vim.api.nvim_set_keymap('n', 'j', 'k', { noremap = true })
@@ -34,6 +35,10 @@ vim.api.nvim_set_keymap('n', 'gj', 'gk', { noremap = true })
 vim.api.nvim_set_keymap('n', 'gk', 'gj', { noremap = true })
 vim.api.nvim_set_keymap('v', 'j', 'k', { noremap = true })
 vim.api.nvim_set_keymap('v', 'k', 'j', { noremap = true })
+
+-- Optional, but nice-to-haves
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gj' : 'j'", { expr = true, noremap = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gk' : 'k'", { expr = true, noremap = true })
 
 -- Delete without copying
 vim.keymap.set('n', '<leader>d', '"_d', { noremap = true, silent = true })
