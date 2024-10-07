@@ -45,7 +45,7 @@ local fzf = require 'fzf-lua'
 map_normal('<leader>ff', fzf.files, '[F]ind [F]iles')
 
 map_normal('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
-map_normal('<leader>fg', fzf.grep, '[F]ind by [G]rep')
+map_normal('<leader>fg', fzf.live_grep_native, '[F]ind by [G]rep')
 map_normal('<leader>fr', fzf.live_grep_resume, '[F]ind [R]esume')
 map_normal('<leader>fG', fzf.live_grep_glob, '[F]ind by grep with [G]lob')
 map_normal('<leader>fh', fzf.helptags, '[F]ind [H]elp')
