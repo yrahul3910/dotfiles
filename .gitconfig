@@ -16,8 +16,8 @@
 	d = diff
 	l = log --oneline
 	p = push
-	pushf = push --force-with-lease --force-if-includes
 	pu = !git pull $(git remote) $(git branch --show-current)
+	pushf = !git push --force-with-lease --force-if-includes
 	n = switch -c
 	rs = restore --staged
 	s = status
@@ -37,6 +37,9 @@
 
 [core]
 	autocrlf = false
+
+[diff]
+	algorithm = histogram
 
 [gc]
 	pruneexpire = now

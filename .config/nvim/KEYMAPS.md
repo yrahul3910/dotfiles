@@ -34,4 +34,4 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
 * `<C-n>` toggles treesitter. Use `<leader>pr` to refresh it.
 * `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
 * `<leader>pha` adds the current file to Harpoon. `<leader>phd` removes it, and `<leader>pho` shows the Harpoon window
-* `<C-m>`, `<C-,>`, `<C-.>`, `<C-/>` switch between Harpoon buffers.
+* `<C-v>`, `<C-b>`, `<C-n>`, `<C-m>` switch between Harpoon buffers.

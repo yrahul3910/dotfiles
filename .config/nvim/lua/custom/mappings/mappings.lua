@@ -14,6 +14,7 @@ map_normal('ge', 'G', 'Move to end of file')
 
 -- Convenience mappings
 map_normal('gb', 'kJi', 'Go back (to prev line)')
+map_normal('<leader>lr', ':LspRestart<CR>', '[L]SP [R]estart')
 
 -- Mappings from ThePrimeagen
 -- Lets you move selected block around in visual mode
@@ -57,7 +58,6 @@ map_normal('<leader>fh', fzf.helptags, '[F]ind [H]elp')
 map_normal('<leader>fd', fzf.diagnostics_document, '[F]ind [D]iagnostics')
 map_normal('<leader>fs', fzf.lsp_document_symbols, '[F]ind [S]ymbols')
 map_normal('<leader>ca', fzf.lsp_code_actions, '[C]ode [A]ctions')
-map_normal('<leader>gr', fzf.lsp_incoming_calls, '[G]o to [R]eferences')
 map_normal('<leader>gd', fzf.lsp_definitions, '[G]o to [D]efinition')
 
 -- nvim-tree
