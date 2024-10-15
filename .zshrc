@@ -25,6 +25,8 @@ function yy() {
 }
 
 alias mongod="mongod --dbpath=~/data/db"
+alias l="ls --color=auto"
+alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
 alias lg="lazygit"
 alias diff="delta"

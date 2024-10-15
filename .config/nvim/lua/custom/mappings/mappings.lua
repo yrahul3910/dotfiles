@@ -9,7 +9,7 @@ map_normal('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumpi
 
 -- Some mappings inspired by Helix (Kakoune mappings)
 map_normal('gh', '^', 'Move to first word') -- Somewhat different from helix
-map_normal('gl', '$', 'Move to end of line')
+map_normal('gl', '$b', 'Move to end of line')
 map_normal('ge', 'G', 'Move to end of file')
 
 -- Convenience mappings
@@ -49,7 +49,7 @@ vim.api.nvim_set_keymap('v', '<leader>yc', '"*y', { noremap = true, silent = tru
 -- fzf-lua
 local fzf = require 'fzf-lua'
 map_normal('<leader>ff', fzf.files, '[F]ind [F]iles')
-
+map_normal('<leader>fb', fzf.buffers, '[F]ind [B]uffers')
 map_normal('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
 map_normal('<leader>fg', fzf.live_grep_native, '[F]ind by [G]rep')
 map_normal('<leader>fr', fzf.live_grep_resume, '[F]ind [R]esume')

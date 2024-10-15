@@ -9,6 +9,7 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
 * Finding uses the following keymaps (all preceded by a space, which is the leader key):
   * Space finds open file names.
   * `/` searches in the current buffer.
+  * `fb` finds across open buffers.
   * `fg` finds across all files (except those in gitignore).
   * `ff` searches file names (except those in gitignore).
   * `fh` searches the help sections.

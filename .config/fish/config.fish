@@ -46,6 +46,8 @@ alias lg=lazygit
 alias diff=delta
 alias moss="~/moss.pl"
 alias python3="python3.12"
+alias l="ls --color=auto"
+alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
 alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
 alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
