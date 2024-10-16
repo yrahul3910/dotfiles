@@ -6,6 +6,9 @@ end
 map_normal('<leader>o', 'o<Esc>S<Esc>k', 'New empty line below')
 map_normal('<leader>O', 'O<Esc>S<Esc>j', 'New empty line above')
 map_normal('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
+map_normal('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream')
+map_normal('<leader>gcb', '0v/|||<CR>$x/===<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase')
+map_normal('<leader>gcs', '0v/===<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed')
 
 -- Some mappings inspired by Helix (Kakoune mappings)
 map_normal('gh', '^', 'Move to first word') -- Somewhat different from helix
@@ -48,10 +51,15 @@ vim.api.nvim_set_keymap('v', '<leader>yc', '"*y', { noremap = true, silent = tru
 
 -- fzf-lua
 local fzf = require 'fzf-lua'
-map_normal('<leader>ff', fzf.files, '[F]ind [F]iles')
+map_normal('<leader>ff', function()
+  fzf.files { fzf_opts = { ['--keep-right'] = '' } }
+end, '[F]ind [F]iles')
+map_normal('<leader>fg', function()
+  fzf.live_grep_native { fzf_opts = { ['--keep-right'] = '' } }
+end, '[F]ind by [G]rep')
+
 map_normal('<leader>fb', fzf.buffers, '[F]ind [B]uffers')
 map_normal('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
-map_normal('<leader>fg', fzf.live_grep_native, '[F]ind by [G]rep')
 map_normal('<leader>fr', fzf.live_grep_resume, '[F]ind [R]esume')
 map_normal('<leader>fG', fzf.live_grep_glob, '[F]ind by grep with [G]lob')
 map_normal('<leader>fh', fzf.helptags, '[F]ind [H]elp')
