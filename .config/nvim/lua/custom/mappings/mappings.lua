@@ -109,10 +109,10 @@ vim.keymap.set({ 'n', 'o', 'x' }, 'B', '<cmd>lua require("spider").motion("b")<C
 
 -- theme
 map_normal('<leader>cl', function()
-  require('colorscheme-picker').change 'catppuccin'
+  vim.cmd 'colorscheme catppuccin'
 end, '[C]olorscheme [L]ight')
 map_normal('<leader>cd', function()
-  require('colorscheme-picker').change 'onedark'
+  vim.cmd 'colorscheme arctic'
 end, '[C]olorscheme [D]ark')
 
 -- function totally_harmless_dont_worry()

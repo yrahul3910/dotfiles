@@ -947,12 +947,7 @@ require('lazy').setup({
   },
 })
 
-vim.api.nvim_create_autocmd('VimEnter', {
-  pattern = '*',
-  callback = function()
-    require('nvim-tree.api').tree.open()
-  end,
-})
+vim.cmd 'colorscheme arctic'
 
 require 'custom.mappings'
 
