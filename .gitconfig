@@ -53,6 +53,10 @@
 [merge]
 	conflictstyle = diff3
 	autostash = true
+	tool = vimdiff
+
+[mergetool]
+	prompt = false
 
 [pull]
 	rebase = true
