@@ -1,7 +1,12 @@
 local harpoon = require 'harpoon'
 local conf = require('telescope.config').values
 
-harpoon:setup {}
+harpoon:setup {
+  settings = {
+    sync_on_ui_close = true,
+    save_on_toggle = true,
+  },
+}
 
 local function map_normal(keys, mapping, desc)
   vim.keymap.set('n', keys, mapping, { desc = desc, noremap = true, silent = true })

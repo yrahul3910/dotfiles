@@ -7,8 +7,8 @@ map_normal('<leader>o', 'o<Esc>S<Esc>k', 'New empty line below')
 map_normal('<leader>O', 'O<Esc>S<Esc>j', 'New empty line above')
 map_normal('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 map_normal('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream')
-map_normal('<leader>gcb', '0v/|||<CR>$x/===<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase')
-map_normal('<leader>gcs', '0v/===<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed')
+map_normal('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase')
+map_normal('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed')
 
 -- Some mappings inspired by Helix (Kakoune mappings)
 map_normal('gh', '^', 'Move to first word') -- Somewhat different from helix
