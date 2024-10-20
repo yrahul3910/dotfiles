@@ -1,9 +1,14 @@
+if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
+    builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="~/.oh-my-zsh"
 export PATH="$HOME/.cargo/bin":$PATH
+export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
 
 if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW_NO_AUTO_UPDATE=1
@@ -41,8 +46,10 @@ if [ "$(uname)" = "Darwin" ]; then
     alias sed="gsed"
 fi
 
-alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
-alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
+alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf && \
+    sed -i --follow-symlinks -e s/MaterialDarker/AtomOneLight/g ~/.config/ghostty/config"
+alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf && \
+    sed -i --follow-symlinks -e s/AtomOneLight/MaterialDarker/g ~/.config/ghostty/config"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

@@ -1,3 +1,7 @@
+if test -n "$GHOSTTY_RESOURCES_DIR"
+    source "$GHOSTTY_RESOURCES_DIR/shell-integration/fish/vendor_conf.d/ghostty-shell-integration.fish"
+end
+
 # Fish syntax highlighting
 set -g fish_color_autosuggestion '555'  'brblack'
 set -g fish_color_cancel -r
@@ -24,6 +28,7 @@ set -g fish_color_valid_path --underline
 
 set -x PATH $PATH /opt/homebrew/bin
 set -x PATH $PATH /usr/local/go/bin
+set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
 function mkcd
   mkdir -p $argv  # Create the directory (and parent directories if needed)
@@ -49,8 +54,10 @@ alias python3="python3.12"
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
-alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf"
-alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf"
+alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf && \
+    sed -i --follow-symlinks -e s/MaterialDarker/AtomOneLight/g ~/.config/ghostty/config"
+alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf && \
+    sed -i --follow-symlinks -e s/AtomOneLight/MaterialDarker/g ~/.config/ghostty/config"
 
 if string match -q "Darwin" -- (uname)
     alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
