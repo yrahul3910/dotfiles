@@ -54,6 +54,8 @@ nmap('gj', 'gk')
 nmap('gk', 'gj')
 nmap('j', 'k')
 nmap('k', 'j')
+vmap('j', 'k')
+vmap('k', 'j')
 
 -- Optional, but nice-to-haves
 nmap('k', "v:count == 0 ? 'gj' : 'j'", 'Go down', { expr = true })
