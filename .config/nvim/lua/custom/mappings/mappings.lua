@@ -68,23 +68,23 @@ vmap('<leader>c', '"_c')
 vmap('<leader>yc', '"*y', '[Y]ank to [C]lipboard')
 
 -- fzf-lua
-local fzf = require 'fzf-lua'
-nmap('<leader>ff', function()
-  fzf.files { fzf_opts = { ['--keep-right'] = '' } }
-end, '[F]ind [F]iles')
-nmap('<leader>fg', function()
-  fzf.live_grep_native { fzf_opts = { ['--keep-right'] = '' } }
-end, '[F]ind by [G]rep')
-
-nmap('<leader>fb', fzf.buffers, '[F]ind [B]uffers')
-nmap('<leader>fr', fzf.live_grep_resume, '[F]ind [R]esume')
-nmap('<leader>fG', fzf.live_grep_glob, '[F]ind by grep with [G]lob')
-nmap('<leader>fh', fzf.helptags, '[F]ind [H]elp')
-nmap('<leader>fd', fzf.diagnostics_document, '[F]ind [D]iagnostics')
-nmap('<leader>fs', fzf.lsp_document_symbols, '[F]ind [S]ymbols')
-nmap('<leader>ca', fzf.lsp_code_actions, '[C]ode [A]ctions')
-nmap('<leader>gd', fzf.lsp_definitions, '[G]o to [D]efinition')
-
+-- local fzf = require 'fzf-lua'
+-- nmap('<leader>ff', function()
+--   fzf.files { fzf_opts = { ['--keep-right'] = '' } }
+-- end, '[F]ind [F]iles')
+-- nmap('<leader>fg', function()
+--   fzf.live_grep_native { fzf_opts = { ['--keep-right'] = '' } }
+-- end, '[F]ind by [G]rep')
+--
+-- nmap('<leader>fb', fzf.buffers, '[F]ind [B]uffers')
+-- nmap('<leader>fr', fzf.live_grep_resume, '[F]ind [R]esume')
+-- nmap('<leader>fG', fzf.live_grep_glob, '[F]ind by grep with [G]lob')
+-- nmap('<leader>fh', fzf.helptags, '[F]ind [H]elp')
+-- nmap('<leader>fd', fzf.diagnostics_document, '[F]ind [D]iagnostics')
+-- nmap('<leader>fs', fzf.lsp_document_symbols, '[F]ind [S]ymbols')
+-- nmap('<leader>ca', fzf.lsp_code_actions, '[C]ode [A]ctions')
+-- nmap('<leader>gd', fzf.lsp_definitions, '[G]o to [D]efinition')
+--
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
 nmap('<leader>ptr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
