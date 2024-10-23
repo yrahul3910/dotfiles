@@ -47,3 +47,15 @@ stow .
 ## Neovim configuration
 
 See `.config/nvim/README.md`
+
+## tmux config
+
+Here are the keybindings in tmux/tmux-sessionizer:
+
+* `<C-a>` is the leader.
+* `<C-a>f` opens a fuzzy-finder within the directories specified in `tmux-sessionizer`, with the depth specified there. It either creates or switches to the session you select.
+* `<C-a>w` shows a list of tmux windows and sessions in those windows.
+* `<C-a>L` goes back and forth between your current and most recently used window.
+* `<C-a>,` lets you rename windows.
+* `<C-a>.` lets you re-number windows.
+* `<C-a>x` lets you delete a window.
