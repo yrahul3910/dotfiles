@@ -25,6 +25,11 @@ nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstrea
 nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase')
 nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed')
 
+-- Diffview
+nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')
+nmap('<leader>Gh', '<cmd>DiffviewFileHistory %<CR>', 'Open Diffview for file history')
+nmap('<leader>tc', '<cmd>tabclose<CR>', '[T]ab [C]lose')
+
 -- Some mappings inspired by Helix (Kakoune mappings)
 nmap('gh', '^', 'Move to first word') -- Somewhat different from helix
 nmap('gl', '$b', 'Move to end of line')

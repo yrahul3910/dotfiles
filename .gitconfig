@@ -21,9 +21,12 @@
 	n = switch -c
 	rs = restore --staged
 	s = status
+	sd = stash drop
+	sl = stash list
 	sp = stash push
 	spo = stash pop
 	ss = stash push -S
+	ssh = stash show
 	unfck = reset --hard HEAD
 
 [delta]

@@ -1,0 +1,40 @@
+local actions = require 'diffview.actions'
+
+require('diffview').setup {
+  keymaps = {
+    disable_defaults = true,
+    view = {
+      { 'n', '<C-n>', actions.select_next_entry, { desc = 'Open the diff for the next file' } },
+      { 'n', '<C-p>', actions.select_prev_entry, { desc = 'Open the diff for the previous file' } },
+      { 'n', '<Enter>', actions.goto_file_split, { desc = 'Open the file in a new split' } },
+      { 'n', '<leader>f', actions.focus_files, { desc = 'Focus the files panel' } },
+      { 'n', '<leader>t', actions.toggle_files, { desc = 'Toggle the files panel' } },
+      { 'n', '[c', actions.prev_conflict, { desc = 'Go to previous conflict marker' } },
+      { 'n', ']c', actions.next_conflict, { desc = 'Go to next conflict marker' } },
+      { 'n', '<leader>co', actions.conflict_choose 'ours', { desc = 'Choose the OURS version of a conflict' } },
+      { 'n', '<leader>ct', actions.conflict_choose 'theirs', { desc = 'Choose the THEIRS version of a conflict' } },
+      { 'n', '<leader>cb', actions.conflict_choose 'base', { desc = 'Choose the BASE version of a conflict' } },
+      { 'n', '<leader>ca', actions.conflict_choose 'all', { desc = 'Choose all the versions of a conflict' } },
+      { 'n', '<leader>cO', actions.conflict_choose_all 'ours', { desc = 'Choose the OURS version of a conflict for the whole file' } },
+      { 'n', '<leader>cT', actions.conflict_choose_all 'theirs', { desc = 'Choose the THEIRS version of a conflict for the whole file' } },
+      { 'n', '<leader>cB', actions.conflict_choose_all 'base', { desc = 'Choose the BASE version of a conflict for the whole file' } },
+    },
+    file_panel = {
+      { 'n', 'j', actions.prev_entry, { desc = 'Go to previous file entry' } },
+      { 'n', 'k', actions.next_entry, { desc = 'Go to next file entry' } },
+      { 'n', '<CR>', actions.select_entry, { desc = 'Open the diff for the selected entry' } },
+      { 'n', 's', actions.toggle_stage_entry, { desc = 'Stage / unstage the selected entry' } },
+      { 'n', 'S', actions.toggle_stage_all, { desc = 'Stage / unstage all entries' } },
+      { 'n', 'r', actions.restore_entry, { desc = 'Restore entry to the state on the left side' } },
+      { 'n', '<C-u>', actions.scroll_view(-0.25), { desc = 'Scroll the view up' } },
+      { 'n', '<C-d>', actions.scroll_view(0.25), { desc = 'Scroll the view down' } },
+      { 'n', '<tab>', actions.select_next_entry, { desc = 'Open the diff for the next file' } },
+      { 'n', '<s-tab>', actions.select_prev_entry, { desc = 'Open the diff for the previous file' } },
+      { 'n', '<leader>f', actions.focus_files, { desc = 'Focus the files panel' } },
+      { 'n', '<leader>t', actions.toggle_files, { desc = 'Toggle the files panel' } },
+      { 'n', '[c', actions.prev_conflict, { desc = 'Go to previous conflict marker' } },
+      { 'n', ']c', actions.next_conflict, { desc = 'Go to next conflict marker' } },
+      { 'n', 'g?', actions.help 'file_panel', { desc = 'Open the help panel' } },
+    },
+  },
+}
