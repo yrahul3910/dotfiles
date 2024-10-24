@@ -491,6 +491,10 @@ require('lazy').setup({
 
           map('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
+          map('<leader>jl', require('telescope.builtin').jumplist, '[J]ump[L]ist')
+
+          map('<leader>gb', require('telescope.builtin').git_bcommits, '[G]it [B]uffer Commits')
+
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
