@@ -7,7 +7,7 @@ Config files for quick setup.
 In theory, this should work:
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/yrahul3910/configs/master/bootstrap.sh | sh
+curl -sSL https://raw.githubusercontent.com/yrahul3910/configs/master/bootstrap.sh | bash
 ```
 
 Most important is probably the neovim config, which mostly works on macOS and Ubuntu.
