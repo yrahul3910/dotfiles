@@ -49,9 +49,9 @@ if [ "$(uname)" = "Darwin" ]; then
 fi
 
 alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf && \
-    sed -i --follow-symlinks -e s/MaterialDarker/AtomOneLight/g ~/.config/ghostty/config"
+    sed -i --follow-symlinks -e s/rose-pine/AtomOneLight/g ~/.config/ghostty/config"
 alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf && \
-    sed -i --follow-symlinks -e s/AtomOneLight/MaterialDarker/g ~/.config/ghostty/config"
+    sed -i --follow-symlinks -e s/AtomOneLight/rose-pine/g ~/.config/ghostty/config"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

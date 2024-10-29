@@ -55,9 +55,9 @@ alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
 alias tl="sed -i --follow-symlinks -e s/dark.conf/light.conf/g ~/.config/kitty/kitty.conf && \
-    sed -i --follow-symlinks -e s/MaterialDarker/AtomOneLight/g ~/.config/ghostty/config"
+    sed -i --follow-symlinks -e s/rose-pine/AtomOneLight/g ~/.config/ghostty/config"
 alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/kitty.conf && \
-    sed -i --follow-symlinks -e s/AtomOneLight/MaterialDarker/g ~/.config/ghostty/config"
+    sed -i --follow-symlinks -e s/AtomOneLight/rose-pine/g ~/.config/ghostty/config"
 
 if string match -q "Darwin" -- (uname)
     alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"

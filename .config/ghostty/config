@@ -265,7 +265,7 @@ grapheme-width-method = unicode
 # 
 # Any additional colors specified via background, foreground, palette, etc.
 # will override the colors specified in the theme.
-theme = MaterialDarker
+theme = rose-pine 
 
 # Background color for the window.
 # background = #282c34
@@ -682,7 +682,7 @@ mouse-scroll-multiplier = 1
 # The opacity level (opposite of transparency) of the background. A value of
 # 1 is fully opaque and a value of 0 is fully transparent. A value less than 0
 # or greater than 1 will be clamped to the nearest valid value.
-background-opacity = .9
+background-opacity = .85
 
 # A positive value enables blurring of the background when background-opacity
 # is less than 1. The value is the blur radius to apply. A value of 20
@@ -690,7 +690,7 @@ background-opacity = .9
 # rendering issues as well as performance issues.
 # 
 # This is only supported on macOS.
-background-blur-radius = 38
+background-blur-radius = 70
 
 # The opacity level (opposite of transparency) of an unfocused split.
 # Unfocused splits by default are slightly faded out to make it easier to see
@@ -1071,7 +1071,7 @@ keybind = super+k=clear_screen
 # left padding to 2 and the right padding to 4. If you want to set both
 # paddings to the same value, you can use a single value. For example,
 # `window-padding-x = 2` will set both paddings to 2.
-window-padding-x = 2
+window-padding-x = 18
 
 # Vertical window padding. This applies padding between the terminal cells and
 # the top and bottom window borders. The value is in points, meaning that it
@@ -1090,7 +1090,7 @@ window-padding-x = 2
 # top padding to 2 and the bottom padding to 4. If you want to set both
 # paddings to the same value, you can use a single value. For example,
 # `window-padding-y = 2` will set both paddings to 2.
-window-padding-y = 0
+window-padding-y = 16
 
 # The viewport dimensions are usually not perfectly divisible by the cell
 # size. In this case, some extra padding on the end of a column and the bottom
