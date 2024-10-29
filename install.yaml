@@ -97,11 +97,10 @@ features:
         - fontconfig
         - python3-pip 
         - nala 
-        - git-delta
         - build-essential 
+        - poppler-utils
+        - bat
         - stow 
-        - poppler 
-        - rust-bat
     post_install:
       rhel:
         - sudo dnf copr enable atim/lazygit -y

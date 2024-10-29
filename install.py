@@ -98,15 +98,16 @@ class DotfilesInstaller:
             if self.pkg_mgr.system not in feature["packages"]:
                 print(f"{self.pkg_mgr.system} not in {name}.packages, nothing to do.")
             else:
-                packages = " ".join(feature["packages"])
+                packages = " ".join(feature["packages"][self.pkg_mgr.system])
                 self.run_command(f"{self.pkg_mgr.install_cmd} {packages}")
         else:
             print(f"Error: feature['installer'] = {feature['installer']} is invalid.")
             sys.exit(1)
             
         if "post_install" in feature:
-            for cmd in feature["post_install"]:
-                self.run_command(cmd)
+            if self.pkg_mgr.system in feature["post_install"]:
+                for cmd in feature["post_install"][self.pkg_mgr.system]:
+                    self.run_command(cmd)
 
     def install_feature(self, name: str) -> None:
         features_to_install = self.get_dependencies(name)
