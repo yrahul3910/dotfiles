@@ -1,0 +1,149 @@
+features:
+  - name: Rust
+    installer: bash
+    cmd: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    post_install: 
+      - . "$HOME/.cargo/env"
+
+  - name: Node
+    installer: bash
+    cmd: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    post_install: 
+      - export NVM_DIR="$HOME/.nvm" 
+      - '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
+      - '[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"'
+      - nvm install 20
+      - curl -fsSL https://get.pnpm.io/install.sh | sh -
+      - curl -fsSL https://bun.sh/install | bash
+
+  - name: Kitty
+    installer: bash
+    cmd: curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
+  - name: Starship
+    installer: bash
+    cmd: curl -sS https://starship.rs/install.sh | sh
+
+  - name: zoxide
+    installer: bash
+    cmd: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+    post_install: export PATH="$PATH:~/.local/bin"
+
+  - name: utilities
+    installer: system
+    packages:
+      mac: 
+        - zsh 
+        - stow 
+        - neovim 
+        - silicon 
+        - ripgrep 
+        - fzf 
+        - python@3.12 
+        - yazi 
+        - poppler 
+        - zoxide 
+        - bat 
+        - gnu-sed 
+        - git-delta
+        - jesseduffield/lazygit/lazygit
+      rhel:
+        - zsh 
+        - stow 
+        - python3-neovim 
+        - cmake 
+        - expat-devel 
+        - fontconfig-devel 
+        - libxcb-devel 
+        - freetype-devel 
+        - libxml2-devel 
+        - harfbuzz 
+        - ripgrep 
+        - fzf 
+        - poppler 
+        - yazi 
+        - rust-bat 
+        - git-delta
+        - lazygit
+        - gcc 
+        - gcc-c++ 
+        - kernel-devel
+      arch:
+        - zsh 
+        - stow 
+        - neovim 
+        - silicon 
+        - ripgrep 
+        - fzf 
+        - poppler 
+        - zoxide 
+        - yazi 
+        - bat 
+        - git-delta 
+        - lazygit
+      debian:
+        - expat 
+        - libxml2-dev 
+        - pkg-config 
+        - libasound2-dev 
+        - libssl-dev 
+        - cmake 
+        - libfreetype6-dev 
+        - libexpat1-dev 
+        - libxcb-composite0-dev 
+        - libharfbuzz-dev 
+        - fzf 
+        - fontconfig
+        - python3-pip 
+        - nala 
+        - git-delta
+        - build-essential 
+        - stow 
+        - poppler 
+        - rust-bat
+    post_install:
+      rhel:
+        - sudo dnf copr enable atim/lazygit -y
+        - sudo dnf install -y lazygit
+      debian:
+        - curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+        - curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
+        - sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
+        - rm ripgrep*.deb
+
+  - name: uv
+    installer: bash
+    cmd: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+  - name: silicon (Debian only)
+    conditions:
+      - platform: debian
+    installer: bash
+    cmd: cargo install silicon
+post_features:
+  - name: Run stow
+    cmd:
+      - rm ~/.zshrc
+      - rm -rf ~/.config/
+      - cd ~/configs && stow .
+  - name: Install neovim (Debian only)
+    conditions:
+      - platform: debian
+    cmd:
+      - curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+      - sudo rm -rf /opt/nvim
+      - sudo tar -C /opt -xzf nvim-linux64.tar.gz
+      - export PATH="$PATH:/opt/nvim-linux64/bin"
+      - echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.zshrc
+      - echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.config/fish/config.fish
+      - echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc
+  - name: Update PATH
+    cmd:
+      - echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
+      - cp tmux-sessionizer /usr/local/bin
+  - name: MacOS defaults
+    conditions:
+      - platform: mac
+    cmd:
+      - ./setup-macos-defaults.sh
+
