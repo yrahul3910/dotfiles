@@ -30,6 +30,20 @@ set -x PATH $PATH /opt/homebrew/bin
 set -x PATH $PATH /usr/local/go/bin
 set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
+fish_vi_key_bindings
+
+# Enable command history search via fzf
+function reverse_history_search
+  history | fzf --no-sort | read -l command
+  if test $command
+    commandline -rb $command
+  end
+end
+
+function fish_user_key_bindings
+  bind -M default / reverse_history_search
+end
+
 function mkcd
   mkdir -p $argv  # Create the directory (and parent directories if needed)
   cd $argv         # Change directory into the newly created one
