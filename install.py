@@ -53,7 +53,7 @@ class DotfilesInstaller:
         print("\nAvailable features:")
         features = self.config["features"]
         for feature in features:
-            deps = ", ".join(feature["dependencies"]) if feature["dependencies"] else "none"
+            deps = ", ".join(feature["dependencies"]) if "dependencies" in features else "none"
             print(f"\n{feature['name']}:")
             print(f"  Description: {feature.get('description', 'None')}")
             print(f"  Dependencies: {deps}")
@@ -64,7 +64,8 @@ class DotfilesInstaller:
             accumulated = []
         
         features = self.config["features"]
-        if feature not in features:
+        feature_names = [f["name"] for f in features]
+        if feature not in feature_names:
             print(f"Unknown feature: {feature}")
             sys.exit(1)
             
