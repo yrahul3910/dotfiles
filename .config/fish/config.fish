@@ -80,7 +80,10 @@ if string match -q "Darwin" -- (uname)
     alias brewarm="/opt/homebrew/bin/brew"
     alias condaarm="/opt/homebrew/bin/conda"
     alias sed="gsed"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    if test -f /opt/homebrew/bin/brew
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    end
 end
 
 starship init fish | source
