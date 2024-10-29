@@ -119,6 +119,11 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
+# vim bindings
+bindkey -v
+bindkey -v '^?' backward-delete-char
+bindkey ^R history-incremental-search-backward
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -168,7 +173,14 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
 eval "$(zoxide init --cmd cd zsh)"
-eval "$(starship init zsh)"
+
+# Check that the function `starship_zle-keymap-select()` is defined.
+# xref: https://github.com/starship/starship/issues/3418
+type starship_zle-keymap-select >/dev/null || \
+  {
+    echo "Load starship"
+    eval "$(/usr/local/bin/starship init zsh)"
+  }
 
 # bun completions
 [ -s "/Users/yedidar/.bun/_bun" ] && source "/Users/yedidar/.bun/_bun"
