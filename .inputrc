@@ -1,0 +1,7 @@
+set editing-mode vi
+set keymap vi-insert
+set show-mode-in-prompt on
+
+# optionally, to make it look a little prettier, here's fish's mode string
+set vi-cmd-mode-string \1[1;91m\2[N]\1[0m \2
+set vi-ins-mode-string \1[1;92m\2[I]\1[0m \2
