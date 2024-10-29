@@ -8,7 +8,6 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
 export PATH="$HOME/.cargo/bin":$PATH
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
 
@@ -37,6 +36,7 @@ alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
 alias lg="lazygit"
 alias diff="delta"
+alias '...'='cd ../../'
 
 if [ "$(uname)" = "Darwin" ]; then
     alias python3="python3.12"
@@ -118,7 +118,6 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-source $ZSH/oh-my-zsh.sh
 
 # vim bindings
 bindkey -v

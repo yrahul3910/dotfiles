@@ -65,6 +65,7 @@ alias lg=lazygit
 alias diff=delta
 alias moss="~/moss.pl"
 alias python3="python3.12"
+alias '...'='cd ../../'
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
