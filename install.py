@@ -51,10 +51,11 @@ class DotfilesInstaller:
     def list_features(self) -> None:
         """Display available features and their descriptions."""
         print("\nAvailable features:")
-        for feature, info in self.config["features"].items():
-            deps = ", ".join(info["dependencies"]) if info["dependencies"] else "none"
-            print(f"\n{feature}:")
-            print(f"  Description: {info.get('description', 'None')}")
+        features = self.config["features"]
+        for feature in features:
+            deps = ", ".join(feature["dependencies"]) if feature["dependencies"] else "none"
+            print(f"\n{feature['name']}:")
+            print(f"  Description: {feature.get('description', 'None')}")
             print(f"  Dependencies: {deps}")
 
     def get_dependencies(self, feature: str, accumulated: Optional[List[str]] = None) -> List[str]:
