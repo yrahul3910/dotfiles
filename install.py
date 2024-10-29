@@ -18,15 +18,15 @@ class PackageManager:
         elif self.system == "Linux":
             # Detect Linux distribution
             if os.path.exists("/etc/arch-release"):
-                self.type = "pacman"
+                self.system = "arch"
                 self.install_cmd = "sudo pacman -S --noconfirm"
                 self.update_cmd = "sudo pacman -Sy"
             elif os.path.exists("/etc/debian_version"):
-                self.type = "apt"
+                self.system = "debian"
                 self.install_cmd = "sudo apt-get install -y"
                 self.update_cmd = "sudo apt-get update"
             elif os.path.exists("/etc/fedora-release") or os.path.exists("/etc/redhat-release"):
-                self.type = "dnf"
+                self.system = "rhel"
                 self.install_cmd = "sudo dnf install -y"
                 self.update_cmd = "sudo dnf check-update"
             else:
@@ -69,7 +69,8 @@ class DotfilesInstaller:
             print(f"Unknown feature: {feature}")
             sys.exit(1)
             
-        dependencies = [f for f in features if f["name"] == feature][0]
+        cur_feature = [f for f in features if f["name"] == feature][0]
+        dependencies = cur_feature["dependencies"] if "dependencies" in cur_feature else []
         for dep in dependencies:
             if dep not in accumulated:
                 self.get_dependencies(dep, accumulated)

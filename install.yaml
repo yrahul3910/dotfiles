@@ -27,7 +27,8 @@ features:
   - name: zoxide
     installer: bash
     cmd: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-    post_install: export PATH="$PATH:~/.local/bin"
+    post_install: 
+      - export PATH="$PATH:~/.local/bin"
 
   - name: utilities
     installer: system
