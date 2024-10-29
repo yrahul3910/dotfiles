@@ -8,7 +8,7 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="~/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 export PATH="$HOME/.cargo/bin":$PATH
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
 
@@ -118,6 +118,7 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+source $ZSH/oh-my-zsh.sh
 
 # vim bindings
 bindkey -v
@@ -169,8 +170,9 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/terraform terraform
+zstyle ':completion:*' completer _complete _ignored _expand_alias
+autoload -Uz compinit
+compinit
 
 eval "$(zoxide init --cmd cd zsh)"
 
