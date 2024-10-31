@@ -142,4 +142,6 @@ echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
 cp tmux-sessionizer /usr/local/bin
 ./setup-macos-defaults.sh
 
+chsh -s $(which zsh) $(whoami)
+
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
