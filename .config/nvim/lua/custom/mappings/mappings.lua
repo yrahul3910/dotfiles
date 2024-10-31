@@ -30,6 +30,9 @@ nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')
 nmap('<leader>Gh', '<cmd>DiffviewFileHistory %<CR>', 'Open Diffview for file history')
 nmap('<leader>tc', '<cmd>tabclose<CR>', '[T]ab [C]lose')
 
+-- gitsigns
+nmap('<leader>gw', '<cmd>Git blame --first-parent<CR>', '[G]it [W]ho')
+
 -- Some mappings inspired by Helix (Kakoune mappings)
 nmap('gh', '^', 'Move to first word') -- Somewhat different from helix
 nmap('gl', '$b', 'Move to end of line')
@@ -134,7 +137,7 @@ nmap('<leader>cl', function()
   vim.cmd 'colorscheme catppuccin'
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
-  vim.cmd 'colorscheme arctic'
+  vim.cmd 'colorscheme onedark'
 end, '[C]olorscheme [D]ark')
 
 -- function totally_harmless_dont_worry()
