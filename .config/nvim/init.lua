@@ -630,6 +630,7 @@ require('lazy').setup({
         'black',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      require('lspconfig').gleam.setup {}
 
       require('mason-lspconfig').setup {
         handlers = {
@@ -874,7 +875,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby', 'python' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'python' } },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
