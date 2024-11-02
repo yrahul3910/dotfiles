@@ -10,6 +10,7 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
   * Space finds open file names.
   * `/` searches in the current buffer.
   * `fb` finds across open buffers.
+    * In this picker, in insert mode, `<M-d>` closes the buffer.
   * `fg` finds across all files (except those in gitignore).
   * `ff` searches file names (except those in gitignore).
   * `fh` searches the help sections.
@@ -26,13 +27,13 @@ Here are the most important keybindings. Some come from Kickstart, but most are 
 * `<leader>xc` makes the file executable.methods 
 * Generally, the prefix `<leader>p` is used for plugin actions.
 * As an example, `<leader>ph` leads to Harpoon2 keybindings. After this prefix, `a` adds the current file, `d` deletes the current file, and `o` opens the list of files in Telescope.
-* `<leader>pt` leads to Trouble keybindings. Use `t` to toggle the window and `f` to fix.
+* `<leader>pt` leads to nvim-tree keybindings. Use `p` to increase the width and `m` to decrease.
 * `<leader>cl` changes the colorscheme to light. Of course, `<leader>cd` changes to dark.
 * `<leader>xc` makes the current file executable.
 * `<leader>fm` formats the current buffer (or at least, attempts to).
-* `<leader>yc` yanks to clipboard.
+* `<leader>yc` in visual mode yanks to clipboard.
 * `K` previews declaration, so I mapped `<leader>kf` to peek at definition, using `nvim-treesitter-textobjects`. Use the keybinding twice to enter the peek window. There's also the less useful `<leader>kF`.
-* `<C-n>` toggles treesitter. Use `<leader>pr` to refresh it.
+* `<C-s>` toggles treesitter. Use `<leader>pr` to refresh it.
 * `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
 * `<leader>pha` adds the current file to Harpoon. `<leader>phd` removes it, and `<leader>pho` shows the Harpoon window
-* `<C-v>`, `<C-b>`, `<C-n>`, `<C-m>` switch between Harpoon buffers.
+* `<M-h>`, `<M-j>`, `<M-k>`, `<M-l>` switch between Harpoon buffers.
