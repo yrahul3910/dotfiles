@@ -374,6 +374,13 @@ require('lazy').setup({
           path_display = { ['shorten'] = 5 },
         },
         pickers = {
+          buffers = {
+            mappings = {
+              i = {
+                ['<M-d>'] = require('telescope.actions').delete_buffer,
+              },
+            },
+          },
           lsp_references = {
             show_line = false,
           },
