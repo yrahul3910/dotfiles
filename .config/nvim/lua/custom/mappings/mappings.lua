@@ -137,7 +137,7 @@ nmap('<leader>cl', function()
   vim.cmd 'colorscheme catppuccin'
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
-  vim.cmd 'colorscheme onedark'
+  vim.cmd 'colorscheme arctic'
 end, '[C]olorscheme [D]ark')
 
 -- function totally_harmless_dont_worry()

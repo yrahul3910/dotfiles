@@ -950,7 +950,7 @@ require('lazy').setup({
   },
 })
 
-vim.cmd 'colorscheme onedark'
+vim.cmd 'colorscheme arctic'
 
 require 'custom.mappings'
 

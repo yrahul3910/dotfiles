@@ -4,6 +4,8 @@ if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
     unfunction ghostty-integration
 fi
 
+setopt ignoreeof  # for tmux + karabiner
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 

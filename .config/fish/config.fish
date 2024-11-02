@@ -2,6 +2,8 @@ if test -n "$GHOSTTY_RESOURCES_DIR"
     source "$GHOSTTY_RESOURCES_DIR/shell-integration/fish/vendor_conf.d/ghostty-shell-integration.fish"
 end
 
+bind \cd true  # nop
+
 # Fish syntax highlighting
 set -g fish_color_autosuggestion '555'  'brblack'
 set -g fish_color_cancel -r
