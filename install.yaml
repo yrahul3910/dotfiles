@@ -93,6 +93,7 @@ features:
         - libexpat1-dev 
         - libxcb-composite0-dev 
         - libharfbuzz-dev 
+        - python3-venv
         - fzf 
         - fontconfig
         - python3-pip 

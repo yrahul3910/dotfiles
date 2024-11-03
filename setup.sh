@@ -76,7 +76,7 @@ elif [[ -f /etc/debian_version ]]; then
     cargo install --locked yazi-fm yazi-cli
 
     # Needed for silicon, the code screenshot tool
-    sudo apt install -y expat libxml2-dev pkg-config libasound2-dev libssl-dev cmake libfreetype6-dev libexpat1-dev libxcb-composite0-dev libharfbuzz-dev fzf fontconfig
+    sudo apt install -y expat libxml2-dev pkg-config libasound2-dev libssl-dev cmake libfreetype6-dev libexpat1-dev libxcb-composite0-dev libharfbuzz-dev fzf fontconfig python3-venv
 
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
