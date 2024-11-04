@@ -97,7 +97,6 @@ features:
         - fzf 
         - fontconfig
         - python3-pip 
-        - nala 
         - build-essential 
         - poppler-utils
         - bat
