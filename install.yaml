@@ -123,9 +123,10 @@ features:
 post_features:
   - name: Run stow
     cmd:
-      - rm ~/.zshrc
+      - rm -f ~/.zshrc
       - rm -rf ~/.config/
-      - cd ~/configs && stow .
+      - git clone https://github.com/yrahul3910/dotfiles/ ~/configs
+      - cd ~/configs && stow --adopt .
   - name: Install neovim (Debian only)
     conditions:
       - platform: debian
@@ -140,7 +141,7 @@ post_features:
   - name: Update PATH
     cmd:
       - echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
-      - cp tmux-sessionizer /usr/local/bin
+      - sudo cp tmux-sessionizer /usr/local/bin
   - name: MacOS defaults
     conditions:
       - platform: mac

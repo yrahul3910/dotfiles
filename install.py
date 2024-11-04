@@ -128,10 +128,10 @@ class DotfilesInstaller:
 
         for item in self.config["post_features"]:
             if "conditions" in item:
-                if not all([self._check_condition(condition) for condition in item["condition"]]):
+                if not all([self._check_condition(condition) for condition in item["conditions"]]):
                     continue
 
-            for cmd in item["cmds"]:
+            for cmd in item["cmd"]:
                 self.run_command(cmd)
 
 
