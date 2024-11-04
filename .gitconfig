@@ -14,11 +14,12 @@
 
 	c = checkout
 	d = diff
+	ds = diff --staged
 	l = log --oneline
+	n = switch -c
 	p = push
 	pu = !git pull $(git remote) $(git branch --show-current)
 	pushf = !git push --force-with-lease --force-if-includes
-	n = switch -c
 	rs = restore --staged
 	s = status
 	sd = stash drop
