@@ -116,6 +116,26 @@ class DotfilesInstaller:
             self._install_feature(feature)
 
 
+    def _check_condition(self, condition) -> bool:
+        if "platform" in condition:
+            return self.pkg_mgr.system == condition["platform"]
+        raise ValueError(f"Post-feature condition {condition} is unsupported.")
+    
+
+    def post_features(self) -> None:
+        if "post_features" not in self.config:
+            return
+
+        for item in self.config["post_features"]:
+            if "conditions" in item:
+                if not all([self._check_condition(condition) for condition in item["condition"]]):
+                    continue
+
+            for cmd in item["cmds"]:
+                self.run_command(cmd)
+
+
+
 def main():
     parser = argparse.ArgumentParser(description="Modular dotfiles installer")
     parser.add_argument("--list", action="store_true", help="List available features")
@@ -131,6 +151,8 @@ def main():
     if args.install:
         for feature in args.install:
             installer.install_feature(feature)
+
+        installer.post_features()
     else:
         parser.print_help()
 
