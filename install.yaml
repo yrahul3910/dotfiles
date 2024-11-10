@@ -95,6 +95,7 @@ features:
         - libharfbuzz-dev 
         - python3-venv
         - fzf 
+        - git
         - fontconfig
         - python3-pip 
         - build-essential 
