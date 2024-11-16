@@ -41,12 +41,12 @@ alias diff="delta"
 alias '...'='cd ../../'
 
 if [ "$(uname)" = "Darwin" ]; then
-    alias python3="python3.12"
-    alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
-    alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
+    alias python3="python3.13"
+    alias python3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/python3"
+    alias pip3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/pip3"
     alias brewarm="/opt/homebrew/bin/brew"
     alias condaarm="/opt/homebrew/bin/conda"
-    alias pip3="python3.12 -m pip"
+    alias pip3="python3.13 -m pip"
     alias sed="gsed"
 fi
 

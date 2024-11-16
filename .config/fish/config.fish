@@ -32,6 +32,8 @@ set -x PATH $PATH /opt/homebrew/bin
 set -x PATH $PATH /usr/local/go/bin
 set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
+set -U HOMEBREW_NO_AUTO_UPDATE 1
+
 fish_vi_key_bindings
 
 # Enable command history search via fzf
@@ -66,7 +68,7 @@ alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
 alias lg=lazygit
 alias diff=delta
 alias moss="~/moss.pl"
-alias python3="python3.12"
+alias python3="python3.13"
 alias '...'='cd ../../'
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
@@ -77,8 +79,8 @@ alias td="sed -i --follow-symlinks -e s/light.conf/dark.conf/g ~/.config/kitty/k
     sed -i --follow-symlinks -e s/AtomOneLight/rose-pine/g ~/.config/ghostty/config"
 
 if string match -q "Darwin" -- (uname)
-    alias python3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/python3"
-    alias pip3arm="/opt/homebrew/Cellar/python@3.12/3.12.3/bin/pip3"
+    alias python3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/python3"
+    alias pip3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/pip3"
     alias brewarm="/opt/homebrew/bin/brew"
     alias condaarm="/opt/homebrew/bin/conda"
     alias sed="gsed"
