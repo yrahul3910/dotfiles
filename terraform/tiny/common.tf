@@ -1,0 +1,1 @@
+/Users/ryedida/configs/terraform/common.tf
