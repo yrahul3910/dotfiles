@@ -11,6 +11,7 @@
 	helper = !/usr/local/bin/gh auth git-credential
 [alias]
 	b = branch
+	bd = branch -D
 
 	c = checkout
 	d = diff
