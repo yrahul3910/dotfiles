@@ -90,6 +90,49 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- netrw stuff
+local enable_netrw = false
+
+if enable_netrw then
+  vim.g.netrw_keepdir = 0
+  vim.g.netrw_winsize = 30
+
+  vim.api.nvim_create_augroup('netrw_mapping', { clear = true })
+  vim.api.nvim_create_autocmd('FileType', {
+    group = 'netrw_mapping',
+    pattern = 'netrw',
+    callback = function()
+      -- Add your Netrw mapping logic here
+      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>', 'mf', { noremap = true })
+      vim.keymap.set('n', '<C-l>', '<C-w>l', { buffer = true })
+    end,
+  })
+
+  local netrw_is_open = false
+
+  function Toggle_netrw()
+    if netrw_is_open then
+      for i = vim.fn.bufnr '$', 1, -1 do
+        if vim.fn.getbufvar(i, '&filetype') == 'netrw' then
+          vim.cmd('silent bwipeout ' .. i)
+        end
+      end
+      netrw_is_open = false
+    else
+      netrw_is_open = true
+      vim.cmd 'silent Vexplore'
+      vim.cmd 'set number'
+      vim.cmd 'set relativenumber'
+    end
+  end
+
+  vim.api.nvim_set_keymap('n', '<leader>nw', '<cmd>lua Toggle_netrw()<CR>', {
+    noremap = true,
+    silent = true,
+    desc = 'Toggle [N]etr[W] (disabled)',
+  })
+end
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -198,7 +241,12 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+if enable_netrw then
+  --  The re-enabling of number and relativenumber is a workaround for netrw
+  vim.keymap.set('n', '<C-h>', '<C-w><C-h>:set number<CR>:set relativenumber<CR>', { desc = 'Move focus to the left window' })
+else
+  vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+end
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
@@ -876,6 +924,7 @@ require('lazy').setup({
       auto_install = true,
       highlight = {
         enable = true,
+        disable = { 'latex' }, -- needed for vimtex
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
