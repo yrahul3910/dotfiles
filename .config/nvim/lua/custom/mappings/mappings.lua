@@ -41,6 +41,8 @@ nmap('ge', 'G', 'Move to end of file')
 -- Convenience mappings
 nmap('gb', 'kJi', 'Go back (to prev line)')
 nmap('<leader>lr', ':LspRestart<CR>', '[L]SP [R]estart')
+nmap('gt', 'ddko', 'Go to next tab')
+nmap('<leader>td', ':TodoTelescope<CR>', '[T]odo [D]isplay')
 
 -- Mappings from ThePrimeagen
 -- Lets you move selected block around in visual mode
