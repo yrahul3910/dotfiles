@@ -28,6 +28,7 @@ Most important is probably the neovim config, which mostly works on macOS and Ub
 * git
 * pip
 * starship.rs
+* kanata
 
 ## Installation
 
@@ -59,3 +60,18 @@ Here are the keybindings in tmux/tmux-sessionizer:
 * `<C-a>,` lets you rename windows.
 * `<C-a>.` lets you re-number windows.
 * `<C-a>x` lets you delete a window.
+
+## kanata config
+
+You will probably want to change the device file location in `.config/kanata/config.kbd`
+
+## kanata config
+
+You will probably want to change the device file location in `.config/kanata/config.kbd`. Also, if the following does not work, you may want to instead move the systemd config file to `/etc/systemd/system` instead.
+
+```
+systemctl --user daemon-reload
+systemctl --user enable kanata.service
+systemctl --user start kanata.service
+systemctl --user status kanata.service
+```

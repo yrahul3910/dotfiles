@@ -68,7 +68,6 @@ alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
 alias lg=lazygit
 alias diff=delta
 alias moss="~/moss.pl"
-alias python3="python3.13"
 alias '...'='cd ../../'
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
