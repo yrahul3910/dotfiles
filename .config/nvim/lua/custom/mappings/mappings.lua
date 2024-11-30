@@ -77,7 +77,7 @@ nmap('j', "v:count == 0 ? 'gk' : 'k'", 'Go up', { expr = true })
 nmap('<leader>d', '"_d')
 nmap('<leader>c', '"_c')
 vmap('<leader>c', '"_c')
-vmap('<leader>yc', '"*y', '[Y]ank to [C]lipboard')
+vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
 
 -- fzf-lua
 -- local fzf = require 'fzf-lua'

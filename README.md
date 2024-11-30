@@ -63,11 +63,7 @@ Here are the keybindings in tmux/tmux-sessionizer:
 
 ## kanata config
 
-You will probably want to change the device file location in `.config/kanata/config.kbd`
-
-## kanata config
-
-You will probably want to change the device file location in `.config/kanata/config.kbd`. Also, if the following does not work, you may want to instead move the systemd config file to `/etc/systemd/system` instead.
+You will probably want to change the device file location in `.config/kanata/config.kbd`. Also, if the following does not work, you may want to instead move the systemd config file to `/etc/systemd/system` instead (and in this case, remove `--user`).
 
 ```
 systemctl --user daemon-reload
