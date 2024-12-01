@@ -1,0 +1,37 @@
+theme = "onedark"
+
+[editor]
+line-number = "relative"
+shell = ["fish", "-c"]
+bufferline = "multiple"
+text-width = 100
+
+[editor.lsp]
+display-messages = true
+
+[editor.auto-save]
+focus-lost = true
+
+[editor.whitespace.render]
+space = "all"
+tab = "all"
+nbsp = "none"
+nnbsp = "none"
+newline = "none"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+nnbsp = "␣"
+tab = "→"
+newline = "⏎"
+tabpad = "·" 
+
+[editor.indent-guides]
+render = true
+character = "┆"
+
+[keys.normal]
+# Cursed, but consistent with my nvim conf
+j = "move_line_up"
+k = "move_line_down"
