@@ -1,3 +1,5 @@
+-- Thanks to folke for the config
+-- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/editor/fzf.lua
 return {
   'ibhagwan/fzf-lua',
   cmd = 'FzfLua',
