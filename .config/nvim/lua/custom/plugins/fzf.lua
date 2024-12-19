@@ -8,6 +8,7 @@ return {
     return {
       'default-title',
       fzf_colors = true,
+      fzf_opts = { ['--cycle'] = true },
       defaults = {
         -- formatter = "path.filename_first",
         formatter = 'path.dirname_first',
@@ -89,8 +90,6 @@ return {
       init = function()
         vim.ui.select = function(...)
           require('lazy').load { plugins = { 'fzf-lua' } }
-          local opts = LazyVim.opts 'fzf-lua' or {}
-          require('fzf-lua').register_ui_select(opts.ui_select or nil)
           return vim.ui.select(...)
         end
       end,
