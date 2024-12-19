@@ -48,6 +48,12 @@ return {
           },
         })
       end,
+      previewers = {
+        builtin = {
+          -- treesitter can cause large files to render slowly, hanging fzf-lua
+          syntax_limit_b = 1024 * 100, -- 100 KB
+        },
+      },
       winopts = {
         width = 0.8,
         height = 0.8,
