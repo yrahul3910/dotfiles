@@ -788,6 +788,13 @@ require('lazy').setup({
 
       -- experimental signature help support
       signature = { enabled = true },
+
+      completion = {
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 100,
+        },
+      },
     },
     -- allows extending the providers array elsewhere in your config
     -- without having to redefine it
