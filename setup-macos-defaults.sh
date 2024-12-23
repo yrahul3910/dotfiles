@@ -30,6 +30,7 @@ if defaults read com.apple.finder &>/dev/null; then
 
     # Trackpad: enable tap to click for this user and for the login screen
     defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool true
     defaults write com.apple.AppleMultitouchTrackpad Clicking -int 1
     defaults -currentHost write -g com.apple.mouse.tapBehavior -int 1
     defaults write -g com.apple.mouse.tapBehavior -int 1
