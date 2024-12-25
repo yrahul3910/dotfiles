@@ -91,47 +91,26 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- netrw stuff
-local enable_netrw = false
+vim.g.netrw_keepdir = 0
+vim.g.netrw_winsize = 30
+vim.g.netrw_browse_split = 4
 
-if enable_netrw then
-  vim.g.netrw_keepdir = 0
-  vim.g.netrw_winsize = 30
+vim.api.nvim_create_augroup('netrw_mapping', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'netrw_mapping',
+  pattern = 'netrw',
+  callback = function()
+    -- Add your Netrw mapping logic here
+    vim.api.nvim_buf_set_keymap(0, 'n', '<leader>', 'mf', { noremap = true })
+    vim.keymap.set('n', '<C-l>', '<C-w>l', { buffer = true })
+  end,
+})
 
-  vim.api.nvim_create_augroup('netrw_mapping', { clear = true })
-  vim.api.nvim_create_autocmd('FileType', {
-    group = 'netrw_mapping',
-    pattern = 'netrw',
-    callback = function()
-      -- Add your Netrw mapping logic here
-      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>', 'mf', { noremap = true })
-      vim.keymap.set('n', '<C-l>', '<C-w>l', { buffer = true })
-    end,
-  })
-
-  local netrw_is_open = false
-
-  function Toggle_netrw()
-    if netrw_is_open then
-      for i = vim.fn.bufnr '$', 1, -1 do
-        if vim.fn.getbufvar(i, '&filetype') == 'netrw' then
-          vim.cmd('silent bwipeout ' .. i)
-        end
-      end
-      netrw_is_open = false
-    else
-      netrw_is_open = true
-      vim.cmd 'silent Vexplore'
-      vim.cmd 'set number'
-      vim.cmd 'set relativenumber'
-    end
-  end
-
-  vim.api.nvim_set_keymap('n', '<leader>nw', '<cmd>lua Toggle_netrw()<CR>', {
-    noremap = true,
-    silent = true,
-    desc = 'Toggle [N]etr[W] (disabled)',
-  })
-end
+vim.api.nvim_set_keymap('n', '<leader>nw', ':Vex<CR>', {
+  noremap = true,
+  silent = true,
+  desc = 'Toggle [N]etr[W] (disabled)',
+})
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -147,6 +126,8 @@ vim.opt.number = true
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 
 -- Based on https://stackoverflow.com/a/8292950
 vim.opt_global.sol = false
@@ -241,12 +222,8 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-if enable_netrw then
-  --  The re-enabling of number and relativenumber is a workaround for netrw
-  vim.keymap.set('n', '<C-h>', '<C-w><C-h>:set number<CR>:set relativenumber<CR>', { desc = 'Move focus to the left window' })
-else
-  vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-end
+--  The re-enabling of number and relativenumber is a workaround for netrw and nvim-tree
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>:set number<CR>:set relativenumber<CR>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
@@ -289,9 +266,6 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -537,6 +511,7 @@ require('lazy').setup({
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>la', vim.lsp.buf.code_action, '[L]SP [A]ction')
 
           -- map('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
           --
@@ -735,6 +710,8 @@ require('lazy').setup({
         typescriptreact = { 'prettier', stop_after_first = true },
         python = { 'ruff' },
         json = { 'prettier', stop_after_first = true },
+        c = { 'clang-format', stop_after_first = true },
+        cpp = { 'clang-format', stop_after_first = true },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
