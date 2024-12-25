@@ -58,18 +58,13 @@ nmap('<leader>xc', '<cmd>!chmod +x %<CR>', 'Make executable')
 -- End Primeagen mappings
 
 -- Swap j and k
-nmap('j', 'k')
-nmap('k', 'j')
 nmap('gj', 'gk')
 nmap('gk', 'gj')
 nmap('<C-j>', '<C-w>k')
 nmap('<C-k>', '<C-w>j')
-nmap('j', 'k')
-nmap('k', 'j')
 vmap('j', 'k')
 vmap('k', 'j')
 
--- Optional, but nice-to-haves
 nmap('k', "v:count == 0 ? 'gj' : 'j'", 'Go down', { expr = true })
 nmap('j', "v:count == 0 ? 'gk' : 'k'", 'Go up', { expr = true })
 
