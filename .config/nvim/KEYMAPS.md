@@ -2,7 +2,7 @@
 
 Here are the most important keybindings. Some come from Kickstart, but most are custom.
 
-* `<C-\>` opens a floating terminal window. You can use `<number><C-\>` to open a different one. When the floating window is open, you can be in insert or normal mode; in insert mode, `Esc` will hide the window. In normal mode, use `<C-\>` again.
+* `<C-\>` opens a floating terminal window. You can use `<number><C-\>` to open a different one. When the floating window is open, you can be in insert or normal mode; in insert mode, `<C-q>` will hide the window. In normal mode, use `<C-\>` again.
 * `<C-]>` goes to definition, including going inside libraries.
 * `V` selects the current line in visual mode. You can then move the selected lines using `J` and `K`.
 * Generally, `j` goes UP and `k` goes DOWN. I prefer it this way.
