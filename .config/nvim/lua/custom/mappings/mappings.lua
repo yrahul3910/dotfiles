@@ -112,7 +112,7 @@ end, 'neotest: Open output')
 -- toggleterm
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  vim.keymap.set('t', '<esc>', [[<C-\><C-n><C-w>j]], opts)
+  vim.keymap.set('t', '<C-q>', [[<C-\><C-n><C-w>j]], opts)
 end
 vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
