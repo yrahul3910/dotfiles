@@ -135,6 +135,8 @@ if [[ "$(uname)" == "Linux" ]]; then
   export PATH="$PATH:/opt/nvim-linux64/bin"
   echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.zshrc
   echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.config/fish/config.fish
+else
+  gsettings set org.gnome.desktop.interface clock-show-weekday true
 fi
 
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
