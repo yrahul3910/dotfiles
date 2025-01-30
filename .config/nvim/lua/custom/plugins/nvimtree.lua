@@ -1,5 +1,6 @@
 return {
   'nvim-tree/nvim-tree.lua',
+  lazy = true,
   cmd = { 'NvimTreeToggle', 'NvimTreeFocus' },
   opts = {
     filters = {
