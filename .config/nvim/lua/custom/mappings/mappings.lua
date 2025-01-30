@@ -134,6 +134,36 @@ nmap('<leader>cd', function()
   vim.cmd 'colorscheme arctic'
 end, '[C]olorscheme [D]ark')
 
+-- custom workflows
+local function copy_git_file_path()
+  local handle = io.popen 'git remote get-url origin'
+
+  if not handle then
+    vim.notify 'Not a git repository'
+    nmap('<leader>yf', '<Esc>O<C-r>%<Esc>0i<Esc>V"+y"_dd')
+    return
+  end
+
+  local result = handle:read '*a'
+  result = result:gsub('\n', '')
+  handle:close()
+
+  local base_url = result:gsub('%.git$', '')
+  local file_path = vim.fn.expand '%:p'
+  local relative_path = file_path:sub(#vim.fn.getcwd() + 1)
+
+  if base_url:find 'github' then
+    base_url = base_url .. '/blob/' .. vim.fn.system 'git rev-parse --abbrev-ref HEAD'
+  elseif base_url:find 'visualstudio.com' then
+    base_url = base_url .. '?path='
+  end
+
+  local full_url = base_url .. relative_path
+  vim.fn.setreg('+', full_url)
+end
+
+nmap('<leader>yf', copy_git_file_path, '[Y]ank [F]ilename')
+
 -- function totally_harmless_dont_worry()
 --   local click_pos = vim.fn.getmousepos()
 --   local target_win = click_pos.winid
