@@ -136,29 +136,31 @@ end, '[C]olorscheme [D]ark')
 
 -- custom workflows
 local function copy_git_file_path()
-  local handle = io.popen 'git remote get-url origin'
+  local base_url = vim.fn.system('git remote get-url origin'):gsub('%s+$', '')
 
-  if not handle then
-    vim.notify 'Not a git repository'
-    nmap('<leader>yf', '<Esc>O<C-r>%<Esc>0i<Esc>V"+y"_dd')
+  if vim.v.shell_error ~= 0 then
+    local file_path = vim.fn.expand '%:p'
+    vim.fn.setreg('+', file_path)
     return
   end
 
-  local result = handle:read '*a'
-  result = result:gsub('\n', '')
-  handle:close()
+  -- Normalize SSH URLs to HTTPS
+  base_url = base_url:gsub('git@github.com:', 'https://github.com/')
+  base_url = base_url:gsub('%.git$', '')
 
-  local base_url = result:gsub('%.git$', '')
   local file_path = vim.fn.expand '%:p'
-  local relative_path = file_path:sub(#vim.fn.getcwd() + 1)
+  local git_root = vim.fn.system('git rev-parse --show-toplevel'):gsub('%s+$', '')
+  local relative_path = file_path:sub(#git_root + 1)
+  local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD 2> /dev/null'):gsub('%s+$', '')
+
+  local full_url
 
   if base_url:find 'github' then
-    base_url = base_url .. '/blob/' .. vim.fn.system 'git rev-parse --abbrev-ref HEAD'
+    full_url = base_url .. '/blob/' .. branch .. relative_path
   elseif base_url:find 'visualstudio.com' then
-    base_url = base_url .. '?path='
+    full_url = base_url .. '?path=' .. relative_path
   end
 
-  local full_url = base_url .. relative_path
   vim.fn.setreg('+', full_url)
 end
 
