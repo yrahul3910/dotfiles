@@ -158,7 +158,7 @@ local function copy_git_file_path()
   if base_url:find 'github' then
     full_url = base_url .. '/blob/' .. branch .. relative_path
   elseif base_url:find 'visualstudio.com' then
-    full_url = base_url .. '?path=' .. relative_path
+    full_url = base_url .. '?path=' .. relative_path .. '&version=GB' .. branch
   end
 
   vim.fn.setreg('+', full_url)
