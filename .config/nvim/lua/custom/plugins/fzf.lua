@@ -75,6 +75,7 @@ return {
           ['alt-i'] = { actions.toggle_ignore },
           ['alt-h'] = { actions.toggle_hidden },
         },
+        rg_glob = true,
       },
 
       config = function(_, opts)
