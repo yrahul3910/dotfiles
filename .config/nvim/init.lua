@@ -708,7 +708,7 @@ require('lazy').setup({
         javascript = { 'prettier', stop_after_first = true },
         typescript = { 'prettier', stop_after_first = true },
         typescriptreact = { 'prettier', stop_after_first = true },
-        python = { 'ruff' },
+        python = { 'black', 'ruff' },
         json = { 'prettier', stop_after_first = true },
         c = { 'clang-format', stop_after_first = true },
         cpp = { 'clang-format', stop_after_first = true },
