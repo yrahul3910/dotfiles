@@ -1,39 +1,68 @@
 # Keybindings
 
-Here are the most important keybindings. Some come from Kickstart, but most are custom.
+Here are the keybindings. Some come from Kickstart, but most are custom.
 
-* `<C-\>` opens a floating terminal window. You can use `<number><C-\>` to open a different one. When the floating window is open, you can be in insert or normal mode; in insert mode, `<C-q>` will hide the window. In normal mode, use `<C-\>` again.
+## Movement
+
 * `<C-]>` goes to definition, including going inside libraries.
+* `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
+* `j` goes UP and `k` goes DOWN. I prefer it this way.
 * `V` selects the current line in visual mode. You can then move the selected lines using `J` and `K`.
-* Generally, `j` goes UP and `k` goes DOWN. I prefer it this way.
+
+## Search
+
 * Finding uses the following keymaps (all preceded by a space, which is the leader key):
   * Space finds open file names.
   * `/` searches in the current buffer.
   * `fb` finds across open buffers.
     * In this picker, in insert mode, `<M-d>` closes the buffer.
-  * `fg` finds across all files (except those in gitignore).
   * `ff` searches file names (except those in gitignore).
+  * `fg` finds across all files (except those in gitignore).
+  * `fG` finds across all files (except those in gitignore), but has glob support. This is slower than `fg`, though, so it's a trade-off.
   * `fh` searches the help sections.
   * `fr` resumes the previous search.
   * `f/` searches in open buffers.
-* `<leader>a` toggles the Aerial window (which shows a list of classes, functions, etc.)
-* `<leader>d` and `<leader>c` are mapped to `"_d` and `"_c`. This makes sure it doesn't overwrite your clipboard when you delete or change text.
-* `<leader>o` creates a new blank line below the current one, without leaving normal mode.
-* `<leader>bc` closes the current buffer.
+  * `ws` searches the workspace symbols.
+
+## Git
+
+* `<leader>fc` finds the next conflict.
+* `<leader>gcu` chooses the upstream version of the code in a 3-way merge conflict (this is usually the first section).
+* `<leader>gcb` chooses the base version of the code (this is usually the second section).
+* `<leader>gcs` chooses the stashed version of the code (this is usually the third section).
+* `<leader>gw` uses `gitsigns` to open a `git blame` pane.
+* `<leader>Gd` opens `diffview`, which lets you go through the commit history of open buffers (I think).
+* `<leader>Gh` does this for the current file.
+
+## Plugin-specific
+
+* (aerial) `<leader>a` toggles the Aerial window (which shows a list of classes, functions, etc.)
+* (bufferline) `<leader>bc` closes the current buffer.
+* (conform) `<leader>fm` formats the current buffer (or at least, attempts to).
+* (harpoon2) `<leader>ph` leads to Harpoon2 keybindings. After this prefix, `a` adds the current file, `d` deletes the current file, and `o` opens the list of files in Telescope.
+* (harpoon2) `<M-h>`, `<M-j>`, `<M-k>`, `<M-l>` switch between Harpoon buffers.
+* (nvim-tree) `<leader>pt` leads to nvim-tree keybindings. Use `p` to increase the width and `m` to decrease.
+* (nvim-tree) `<C-s>` toggles the file tree. Use `<leader>pr` to refresh it.
+* (nvim-treesitter-textobjects) `K` previews declaration, so I mapped `<leader>kf` to peek at definition, using `nvim-treesitter-textobjects`. Use the keybinding twice to enter the peek window. There's also the less useful `<leader>kF`, which peeks at the class definition.
+
+## Tests
+
 * For testing, the following exist (preceded by the leader key):
-  * `tr` runs the nearest test.
   * `tf` runs all tests in the current file.
   * `to` shows the test output.
-* `<leader>xc` makes the file executable.methods 
-* Generally, the prefix `<leader>p` is used for plugin actions.
-* As an example, `<leader>ph` leads to Harpoon2 keybindings. After this prefix, `a` adds the current file, `d` deletes the current file, and `o` opens the list of files in Telescope.
-* `<leader>pt` leads to nvim-tree keybindings. Use `p` to increase the width and `m` to decrease.
-* `<leader>cl` changes the colorscheme to light. Of course, `<leader>cd` changes to dark.
-* `<leader>xc` makes the current file executable.
-* `<leader>fm` formats the current buffer (or at least, attempts to).
+  * `tr` runs the nearest test.
+
+## Copy/paste
+
+* `<leader>d` and `<leader>c` are mapped to `"_d` and `"_c`. This makes sure it doesn't overwrite your clipboard when you delete or change text.
 * `<leader>yc` in visual mode yanks to clipboard.
-* `K` previews declaration, so I mapped `<leader>kf` to peek at definition, using `nvim-treesitter-textobjects`. Use the keybinding twice to enter the peek window. There's also the less useful `<leader>kF`.
-* `<C-s>` toggles treesitter. Use `<leader>pr` to refresh it.
-* `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
-* `<leader>pha` adds the current file to Harpoon. `<leader>phd` removes it, and `<leader>pho` shows the Harpoon window
-* `<M-h>`, `<M-j>`, `<M-k>`, `<M-l>` switch between Harpoon buffers.
+* `<leader>yf` in normal mode copies the URL of the current file in source control to the clipboard. This only works for ADO and GitHub, currently.
+* `x` in normal mode has been changed to not overwrite the vim clipboard.
+
+## Miscellaneous
+
+* `<leader>o` creates a new blank line below the current one, without leaving normal mode. Of course, `<leader>O` creates one above.
+* `<leader>xc` makes the file executable.
+* `<leader>cl` changes the colorscheme to light. Of course, `<leader>cd` changes to dark.
+* `<leader>tc` closes the current vim tab. This is not to be confused with the current buffer.
+* `<leader>xc` makes the current file executable.
