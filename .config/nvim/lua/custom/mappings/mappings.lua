@@ -78,7 +78,8 @@ vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
 local fzf = require 'fzf-lua'
 
 nmap('<leader>ff', fzf.files, '[F]ind [F]iles')
-nmap('<leader>fg', fzf.live_grep_native, '[F]ind by [G]rep')
+nmap('<leader>fg', fzf.live_grep_native, '[F]ind by [g]rep')
+nmap('<leader>fG', fzf.live_grep, '[F]ind by grep with [G]lob')
 nmap('<leader>fb', function()
   fzf.buffers { sort_mru = true, sort_lastused = true }
 end, '[F]ind [B]uffers')
