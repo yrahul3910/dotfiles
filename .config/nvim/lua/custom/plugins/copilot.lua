@@ -8,6 +8,12 @@ return {
       panel = {
         enabled = true,
         auto_refresh = true,
+        keymap = {
+          jump_prev = '[[',
+          jump_next = ']]',
+          accept = '<CR>',
+          open = '<M-CR>',
+        },
       },
       suggestion = {
         enabled = true,
@@ -16,17 +22,20 @@ return {
       },
     }
 
-    -- hide copilot suggestions when cmp menu is open
-    -- to prevent odd behavior/garbled up suggestions
-    local cmp_status_ok, cmp = pcall(require, 'cmp')
-    if cmp_status_ok then
-      cmp.event:on('menu_opened', function()
+    -- make sure blink and copilot don't interfere with e/o
+    -- https://github.com/Saghen/blink.cmp/discussions/226#discussioncomment-11467053
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'BlinkCmpCompletionMenuOpen',
+      callback = function()
         vim.b.copilot_suggestion_hidden = true
-      end)
+      end,
+    })
 
-      cmp.event:on('menu_closed', function()
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'BlinkCmpCompletionMenuClose',
+      callback = function()
         vim.b.copilot_suggestion_hidden = false
-      end)
-    end
+      end,
+    })
   end,
 }
