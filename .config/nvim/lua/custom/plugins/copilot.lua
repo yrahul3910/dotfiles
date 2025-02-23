@@ -40,4 +40,6 @@ if _G.myconfig.copilot_enabled then
       })
     end,
   }
+else
+  return {}
 end
