@@ -117,6 +117,12 @@ function _G.set_terminal_keymaps()
 end
 vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
+-- copilot
+if _G.myconfig.copilot then
+  nmap(']c', require('copilot.suggestion').next(), '[C]opilot [N]ext')
+  nmap('[c', require('copilot.suggestion').next(), '[C]opilot [P]revious')
+end
+
 -- bufferline + scope
 nmap('<tab>', '<cmd>bnext<CR>', 'Next buffer')
 nmap('<S-tab>', '<cmd>bprev<CR>', 'Previous buffer')
