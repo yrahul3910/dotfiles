@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 _G.myconfig = {
-  copilot_enabled = false,
+  copilot_enabled = true,
 }
 
 -- netrw stuff
