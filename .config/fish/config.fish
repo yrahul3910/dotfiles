@@ -65,7 +65,6 @@ end
 
 alias gcloud=$HOME/Downloads/google-cloud-sdk/bin/gcloud
 alias gsutil=$HOME/Downloads/google-cloud-sdk/bin/gcloud
-alias jupyter=/Users/ryedida/opt/anaconda3/bin/jupyter
 alias lg=lazygit
 alias diff=delta
 alias moss="~/moss.pl"
