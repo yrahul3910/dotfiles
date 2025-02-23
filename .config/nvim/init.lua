@@ -90,6 +90,10 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+_G.myconfig = {
+  copilot_enabled = true,
+}
+
 -- netrw stuff
 vim.g.netrw_keepdir = 0
 vim.g.netrw_winsize = 30
