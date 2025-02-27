@@ -32,7 +32,7 @@ set -x PATH $PATH /opt/homebrew/bin
 set -x PATH $PATH /usr/local/go/bin
 set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
-set -U HOMEBREW_NO_AUTO_UPDATE 1
+set -gx HOMEBREW_NO_AUTO_UPDATE 1
 
 fish_vi_key_bindings
 
