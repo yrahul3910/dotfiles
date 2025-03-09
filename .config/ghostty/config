@@ -212,7 +212,7 @@ font-thicken = false
 #     that things like status lines continue to look aligned.
 adjust-cell-width =
 
-adjust-cell-height = 30%
+adjust-cell-height = 30%  # use 15% for FiraCode NF Mono
 adjust-font-baseline = 
 adjust-underline-position = 
 adjust-underline-thickness = 
