@@ -49,6 +49,11 @@
 # 
 # Changing this configuration at runtime will only affect new terminals, i.e.
 # new windows, tabs, etc.
+font-family = "CommitMono-v1"
+font-family-bold = "CommitMono-v1"
+font-family-italic = "CommitMono-v1"
+font-family-bold-italic = "CommitMono-v1"
+
 font-family = "FiraCode Nerd Font"
 font-family-bold = "FiraCode Nerd Font"
 font-family-italic = "FiraCode Nerd Font"
@@ -207,7 +212,7 @@ font-thicken = false
 #     that things like status lines continue to look aligned.
 adjust-cell-width =
 
-adjust-cell-height = 15%
+adjust-cell-height = 30%
 adjust-font-baseline = 
 adjust-underline-position = 
 adjust-underline-thickness = 
