@@ -1,6 +1,11 @@
 .git
 .gitignore
 README.*
+LICENSE
 LICENSE.*
 install.sh
 bootstrap.sh
+*.tar.xz
+tmux-sessionizer
+user.js
+terraform/
