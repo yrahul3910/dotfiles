@@ -73,6 +73,7 @@ nmap('x', '"_x')
 nmap('<leader>c', '"_c')
 vmap('<leader>c', '"_c')
 vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
+nmap('<leader>yq', '"+yiq"', '[Y]ank [Q]uote')
 
 -- -- fzf-lua
 -- local fzf = require 'fzf-lua'

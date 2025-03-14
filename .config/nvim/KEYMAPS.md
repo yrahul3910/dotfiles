@@ -57,6 +57,7 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * `<leader>d` and `<leader>c` are mapped to `"_d` and `"_c`. This makes sure it doesn't overwrite your clipboard when you delete or change text.
 * `<leader>yc` in visual mode yanks to clipboard.
 * `<leader>yf` in normal mode copies the URL of the current file in source control to the clipboard. This only works for ADO and GitHub, currently.
+* `<leader>yiq` in normal mode copies the nearest quotes to the clipboard.
 * `x` in normal mode has been changed to not overwrite the vim clipboard.
 
 ## Miscellaneous
