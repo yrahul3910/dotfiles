@@ -41,7 +41,7 @@ nmap('ge', 'G', 'Move to end of file')
 -- Convenience mappings
 nmap('gb', 'kJi', 'Go back (to prev line)')
 nmap('<leader>lr', ':LspRestart<CR>', '[L]SP [R]estart')
-nmap('<leader>td', ':TodoTelescope<CR>', '[T]odo [D]isplay')
+nmap('<leader>td', ':TodoFzfLua<CR>', '[T]odo [D]isplay')
 
 -- Mappings from ThePrimeagen
 -- Lets you move selected block around in visual mode
@@ -75,20 +75,20 @@ vmap('<leader>c', '"_c')
 vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
 nmap('<leader>yq', '"+yiq"', '[Y]ank [Q]uote')
 
--- -- fzf-lua
--- local fzf = require 'fzf-lua'
---
--- nmap('<leader>ff', fzf.files, '[F]ind [F]iles')
--- nmap('<leader>fg', fzf.live_grep_native, '[F]ind by [g]rep')
--- nmap('<leader>fG', fzf.live_grep, '[F]ind by grep with [G]lob')
--- nmap('<leader>fb', function()
---   fzf.buffers { sort_mru = true, sort_lastused = true }
--- end, '[F]ind [B]uffers')
--- nmap('<leader>fh', fzf.helptags, '[F]ind [H]elp')
--- nmap('<leader>fr', '<cmd>FzfLua resume<CR>', '[F]ind [R]esume')
--- nmap('<leader>gr', fzf.lsp_references, '[G]o to [R]eferences')
--- nmap('<leader>ws', fzf.lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
---
+-- fzf-lua
+local fzf = require 'fzf-lua'
+
+nmap('<leader>ff', fzf.files, '[F]ind [F]iles')
+nmap('<leader>fg', fzf.live_grep_native, '[F]ind by [g]rep')
+nmap('<leader>fG', fzf.live_grep, '[F]ind by grep with [G]lob')
+nmap('<leader>fb', function()
+  fzf.buffers { sort_mru = true, sort_lastused = true }
+end, '[F]ind [B]uffers')
+nmap('<leader>fh', fzf.helptags, '[F]ind [H]elp')
+nmap('<leader>fr', '<cmd>FzfLua resume<CR>', '[F]ind [R]esume')
+nmap('<leader>gr', fzf.lsp_references, '[G]o to [R]eferences')
+nmap('<leader>ws', fzf.lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
+
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
 nmap('<leader>ptr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
