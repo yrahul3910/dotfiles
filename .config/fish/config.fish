@@ -54,6 +54,10 @@ function mkcd
   cd $argv         # Change directory into the newly created one
 end
 
+function so
+  source $HOME/.config/fish/config.fish
+end
+
 function yy
   set tmp (mktemp -t "yazi-cwd.XXXXXX")
   yazi $argv --cwd-file="$tmp"
@@ -97,3 +101,5 @@ zoxide init --cmd cd fish | source
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+set -x PATH $HOME/.local/bin $PATH
