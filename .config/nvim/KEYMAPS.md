@@ -9,6 +9,14 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * `j` goes UP and `k` goes DOWN. I prefer it this way.
 * `V` selects the current line in visual mode. You can then move the selected lines using `J` and `K`.
 
+> [!NOTE]
+> The following are nvim 0.11+
+
+* `]q`, `[q`, `]Q`, `[Q` navigate through the quickfix list.
+* `]a`, `[a`, `[A`, `]A` navigate through the argument list.
+* `]b`, `[b`, `]B`, `[B` navigate through the buffer list (but `Tab` and `<S-Tab>` will still be preferred.
+* `[<Space>` and `]<Space>` add a blank line above and below the cursor.
+
 ## Search
 
 * Finding uses the following keymaps (all preceded by a space, which is the leader key):
@@ -33,6 +41,21 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * `<leader>gw` uses `gitsigns` to open a `git blame` pane.
 * `<leader>Gd` opens `diffview`, which lets you go through the commit history of open buffers (I think).
 * `<leader>Gh` does this for the current file.
+
+## LSP
+
+* `<leader>gr` finds references.
+* `<leader>ca` shows code actions.
+
+> [!NOTE]  
+> Since nvim 0.11, there are default keymaps for LSP. When 0.11 becomes available in most package managers, I will
+> deprecate my keybinds in favor of these:
+
+* `grr` goes to references.
+* `grn` renames the variable.
+* `gri` goes to implementation.
+* `gra` shows code actions.
+* `<C-S>` in insert and select mode shows signature help.
 
 ## Plugin-specific
 

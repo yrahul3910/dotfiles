@@ -196,6 +196,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 12
 
+-- Since nvim 0.11, this is opt-in
+vim.diagnostic.config { virtual_text = true }
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -566,6 +569,17 @@ require('lazy').setup({
                 vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
               end,
             })
+          end
+
+          -- Set up an autocommand to enable features based on client capabilities.
+          -- vim.lsp is 0.11+
+          if vim.version().minor >= 11 then
+            if client and client:supports_method 'textDocument/completion' then
+              vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
+            end
+
+            -- Add noselecto to completeopt, otherwise autocompletion is annoying
+            vim.cmd 'set completeopt+=noselect'
           end
 
           -- The following autocommand is used to enable inlay hints in your
