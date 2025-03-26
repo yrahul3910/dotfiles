@@ -54,6 +54,22 @@ function mkcd
   cd $argv         # Change directory into the newly created one
 end
 
+function up --description "Move up directory tree by N levels (default: 1)"
+  set -l count 1
+
+  if test (count $argv) -gt 0
+    and string match -qr '^\d+$' $argv[1]
+    set count $argv[1]
+  end
+
+  set -l path "./"
+  for i in (seq $count)
+    set path "$path../"
+  end
+
+  cd $path
+end
+
 function so
   source $HOME/.config/fish/config.fish
 end
