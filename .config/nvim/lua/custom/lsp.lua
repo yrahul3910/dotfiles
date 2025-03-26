@@ -156,4 +156,4 @@ vim.diagnostic.config {
   },
 }
 
-vim.lsp.enable { 'lua-language-server', 'pyright', 'clangd', 'rust-analyzer', 'tailwindcss' }
+vim.lsp.enable { 'lua-language-server', 'pyright', 'clangd', 'rust-analyzer', 'tailwindcss', 'ts_ls' }
