@@ -48,8 +48,8 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * `<leader>ca` shows code actions.
 
 > [!NOTE]  
-> Since nvim 0.11, there are default keymaps for LSP. When 0.11 becomes available in most package managers, I will
-> deprecate my keybinds in favor of these:
+> Since nvim 0.11, there are default keymaps for LSP. Note that these will add the results to the quickfix list, as
+> opposed to Telescope.
 
 * `grr` goes to references.
 * `grn` renames the variable.
