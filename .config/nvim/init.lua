@@ -133,6 +133,9 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
+-- Disable new line auto comment
+vim.cmd [[autocmd FileType * set formatoptions-=ro]]
+
 -- Based on https://stackoverflow.com/a/8292950
 vim.opt_global.sol = false
 

@@ -83,6 +83,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight) then
       local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+
       vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
         buffer = event.buf,
         group = highlight_augroup,
@@ -112,7 +113,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       end
 
       -- Add noselecto to completeopt, otherwise autocompletion is annoying
-      vim.cmd 'set completeopt+=noselect'
+      vim.o.completeopt = 'menu,noinsert,popup,fuzzy'
     end
 
     -- The following autocommand is used to enable inlay hints in your
