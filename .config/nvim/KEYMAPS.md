@@ -85,7 +85,6 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 
 ## Miscellaneous
 
-* `<leader>o` creates a new blank line below the current one, without leaving normal mode. Of course, `<leader>O` creates one above.
 * `<leader>xc` makes the file executable.
 * `<leader>cl` changes the colorscheme to light. Of course, `<leader>cd` changes to dark.
 * `<leader>tc` closes the current vim tab. This is not to be confused with the current buffer.

@@ -17,8 +17,6 @@ local nmap = map { mode = 'n' }
 local vmap = map { mode = 'v' }
 
 -- Custom
-nmap('<leader>o', 'o<Esc>S<Esc>k', 'New empty line below')
-nmap('<leader>O', 'O<Esc>S<Esc>j', 'New empty line above')
 nmap('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
 nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream')
