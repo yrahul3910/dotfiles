@@ -19,9 +19,9 @@ local vmap = map { mode = 'v' }
 -- Custom
 nmap('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
-nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream')
-nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase')
-nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed')
+nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream (first)')
+nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase (second)')
+nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed (third)')
 
 -- Diffview
 nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')

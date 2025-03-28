@@ -33,17 +33,19 @@ local function set_python_path(path)
 end
 
 return {
-  cmd = { 'basedpyright-langserver', '--stdio' },
+  cmd = { 'pyright-langserver', '--stdio' },
   filetypes = { 'python' },
   root_markers = { '.git', 'setup.py', 'setup.cfg', 'pyproject.toml', 'requirements.txt', 'Pipfile', 'pyrightconfig.json' },
   settings = {
-    basedpyright = {
+    python = {
       analysis = {
         autoSearchPaths = true,
         useLibraryCodeForTypes = true,
+        autoImportCompletions = true,
         diagnosticMode = 'openFilesOnly',
-        typeCheckingMode = 'basic',
       },
+    },
+    pyright = {
       autoImportCompletion = true,
     },
   },
