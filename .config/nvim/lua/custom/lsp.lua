@@ -105,17 +105,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
       })
     end
 
-    -- Set up an autocommand to enable features based on client capabilities.
-    -- vim.lsp is 0.11+
-    if vim.version().minor >= 11 then
-      if client and client:supports_method 'textDocument/completion' then
-        vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
-      end
-
-      -- Add noselecto to completeopt, otherwise autocompletion is annoying
-      vim.o.completeopt = 'menu,noinsert,popup,fuzzy'
-    end
-
     -- The following autocommand is used to enable inlay hints in your
     -- code, if the language server you are using supports them
     --
