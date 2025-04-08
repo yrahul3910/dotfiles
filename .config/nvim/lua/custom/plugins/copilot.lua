@@ -25,16 +25,15 @@ if _G.myconfig.copilot_enabled then
       }
 
       -- make sure blink and copilot don't interfere with e/o
-      -- https://github.com/Saghen/blink.cmp/discussions/226#discussioncomment-11467053
       vim.api.nvim_create_autocmd('User', {
-        pattern = 'BlinkCmpCompletionMenuOpen',
+        pattern = 'BlinkCmpMenuOpen',
         callback = function()
           vim.b.copilot_suggestion_hidden = true
         end,
       })
 
       vim.api.nvim_create_autocmd('User', {
-        pattern = 'BlinkCmpCompletionMenuClose',
+        pattern = 'BlinkCmpMenuClose',
         callback = function()
           vim.b.copilot_suggestion_hidden = false
         end,
