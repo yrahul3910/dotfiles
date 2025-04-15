@@ -38,7 +38,6 @@ nmap('ge', 'G', 'Move to end of file')
 
 -- Convenience mappings
 nmap('gb', 'kJi', 'Go back (to prev line)')
-nmap('<leader>lr', ':LspRestart<CR>', '[L]SP [R]estart')
 nmap('<leader>td', ':TodoFzfLua<CR>', '[T]odo [D]isplay')
 
 -- Mappings from ThePrimeagen

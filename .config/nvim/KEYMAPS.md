@@ -46,6 +46,8 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 
 * `<leader>gr` finds references.
 * `<leader>ca` shows code actions.
+* `<leader>lh` toggles inlay hints. By default, they are off.
+* `<leader>li` shows LSP info.
 
 > [!NOTE]  
 > Since nvim 0.11, there are default keymaps for LSP. Note that these will add the results to the quickfix list, as

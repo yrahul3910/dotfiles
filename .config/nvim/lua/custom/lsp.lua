@@ -110,7 +110,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --
     -- This may be unwanted, since they displace some of your code
     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-      map('<leader>th', function()
+      map('<leader>lh', function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
       end, '[T]oggle Inlay [H]ints')
     end
@@ -147,3 +147,4 @@ vim.diagnostic.config {
 }
 
 vim.lsp.enable { 'lua-language-server', 'pyright', 'clangd', 'rust-analyzer', 'tailwindcss', 'ts_ls' }
+vim.keymap.set('n', '<leader>li', '<cmd>checkhealth vim.lsp<CR>', { desc = '[L]SP [I]nfo' })
