@@ -71,7 +71,46 @@ nmap('x', '"_x')
 nmap('<leader>c', '"_c')
 vmap('<leader>c', '"_c')
 vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
-nmap('<leader>yq', '"+yiq"', '[Y]ank [Q]uote')
+
+-- Yank next quote to clipboard
+-- I have no idea why this doesn't work using something like "+yiq in nmap, so here we are.
+nmap('<leader>yq', function()
+  -- Store current position
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local line = cursor_pos[1]
+  local col = cursor_pos[2]
+
+  -- Get the current line
+  local current_line = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
+
+  -- Find the next quote pair after cursor
+  local start_quote, end_quote
+  for i = col + 1, #current_line do
+    if current_line:sub(i, i) == '"' or current_line:sub(i, i) == "'" then
+      start_quote = i
+      break
+    end
+  end
+
+  if start_quote then
+    local quote_char = current_line:sub(start_quote, start_quote)
+    for i = start_quote + 1, #current_line do
+      if current_line:sub(i, i) == quote_char then
+        end_quote = i
+        break
+      end
+    end
+
+    if end_quote then
+      local quoted_text = current_line:sub(start_quote + 1, end_quote - 1)
+      vim.fn.setreg('+', quoted_text)
+      print('Yanked to clipboard: ' .. quoted_text)
+      return
+    end
+  end
+
+  print 'No quotes found after cursor'
+end, '[Y]ank [Q]uote')
 
 -- fzf-lua
 local fzf = require 'fzf-lua'
