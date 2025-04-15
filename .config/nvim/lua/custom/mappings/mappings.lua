@@ -101,6 +101,16 @@ nmap('<leader>yq', function()
       end
     end
 
+    if end_quote == nil then
+      for i = col - 1, 1, -1 do
+        if current_line:sub(i, i) == quote_char then
+          end_quote = start_quote
+          start_quote = i
+          break
+        end
+      end
+    end
+
     if end_quote then
       local quoted_text = current_line:sub(start_quote + 1, end_quote - 1)
       vim.fn.setreg('+', quoted_text)
