@@ -72,7 +72,6 @@ vmap('<leader>c', '"_c')
 vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
 
 -- Yank next quote to clipboard
--- I have no idea why this doesn't work using something like "+yiq in nmap, so here we are.
 nmap('<leader>yq', function()
   -- Store current position
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
@@ -120,6 +119,8 @@ nmap('<leader>yq', function()
 
   print 'No quotes found after cursor'
 end, '[Y]ank [Q]uote')
+
+-- nmap('<leader>yq', '"+yi"', '[Y]ank [Q]uote')  -- This works!
 
 -- fzf-lua
 local fzf = require 'fzf-lua'
