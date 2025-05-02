@@ -208,6 +208,12 @@ local function copy_git_file_path()
 
   local file_path = vim.fn.expand '%:p'
   local git_root = vim.fn.system('git rev-parse --show-toplevel'):gsub('%s+$', '')
+
+  if vim.v.shell_error ~= 0 then
+    vim.fn.setreg('+', file_path)
+    return
+  end
+
   local relative_path = file_path:sub(#git_root + 1)
   local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD 2> /dev/null'):gsub('%s+$', '')
 
