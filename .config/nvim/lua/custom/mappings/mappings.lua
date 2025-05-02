@@ -203,6 +203,9 @@ local function copy_git_file_path()
   base_url = base_url:gsub('git@github.com:', 'https://github.com/')
   base_url = base_url:gsub('%.git$', '')
 
+  -- Remove PAT from HTTPS URLs
+  base_url = base_url:gsub('https://[^@]+@', 'https://')
+
   local file_path = vim.fn.expand '%:p'
   local git_root = vim.fn.system('git rev-parse --show-toplevel'):gsub('%s+$', '')
   local relative_path = file_path:sub(#git_root + 1)
