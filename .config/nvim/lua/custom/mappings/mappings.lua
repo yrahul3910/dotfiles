@@ -72,7 +72,6 @@ vmap('<leader>c', '"_c')
 vmap('<leader>yc', '"+y', '[Y]ank to [C]lipboard')
 
 -- Yank next quote to clipboard
--- I have no idea why this doesn't work using something like "+yiq in nmap, so here we are.
 nmap('<leader>yq', function()
   -- Store current position
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
@@ -120,6 +119,8 @@ nmap('<leader>yq', function()
 
   print 'No quotes found after cursor'
 end, '[Y]ank [Q]uote')
+
+-- nmap('<leader>yq', '"+yi"', '[Y]ank [Q]uote')  -- This works!
 
 -- fzf-lua
 local fzf = require 'fzf-lua'
@@ -202,8 +203,17 @@ local function copy_git_file_path()
   base_url = base_url:gsub('git@github.com:', 'https://github.com/')
   base_url = base_url:gsub('%.git$', '')
 
+  -- Remove PAT from HTTPS URLs
+  base_url = base_url:gsub('https://[^@]+@', 'https://')
+
   local file_path = vim.fn.expand '%:p'
   local git_root = vim.fn.system('git rev-parse --show-toplevel'):gsub('%s+$', '')
+
+  if vim.v.shell_error ~= 0 then
+    vim.fn.setreg('+', file_path)
+    return
+  end
+
   local relative_path = file_path:sub(#git_root + 1)
   local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD 2> /dev/null'):gsub('%s+$', '')
 
