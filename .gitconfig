@@ -81,6 +81,3 @@
 	autosquash = true
 	enabled = true
 	autoupdate = true
-
-[credential]
-	helper = store
