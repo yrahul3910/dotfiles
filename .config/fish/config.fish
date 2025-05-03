@@ -34,6 +34,8 @@ set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 
+set -x ELECTRON_OZONE_PLATFORM_HINT auto
+
 fish_vi_key_bindings
 
 # Enable command history search via fzf
@@ -130,3 +132,6 @@ zoxide init --cmd cd fish | source
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+set -x PATH $HOME/.local/bin $PATH
+alias claude="$HOME/.claude/local/claude"
