@@ -13,6 +13,8 @@ setopt ignoreeof  # for tmux + karabiner
 export PATH="$HOME/.cargo/bin":$PATH
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
 
+export ELECTRON_OZONE_PLATFORM_HINT=auto
+
 if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW_NO_AUTO_UPDATE=1
     export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin
@@ -57,6 +59,7 @@ alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
 alias lg="lazygit"
 alias diff="delta"
+alias claude="$HOME/.claude/local/claude"
 alias '...'='cd ../../'
 
 if [ "$(uname)" = "Darwin" ]; then
