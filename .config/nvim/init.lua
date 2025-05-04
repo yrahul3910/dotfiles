@@ -348,21 +348,7 @@ require('lazy').setup({
     end,
   },
 
-  { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = {
-      ensure_installed = {
-        'stylua',
-        'prettier',
-        'black',
-        'ruff',
-        'clang-format',
-        'ruff',
-        'biome',
-      },
-    },
-  },
+  require 'custom.lsp',
 
   { -- Autoformat
     'stevearc/conform.nvim',
