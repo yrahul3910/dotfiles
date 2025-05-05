@@ -11,6 +11,8 @@ if _G.myconfig.copilot_enabled then
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
     build = 'make tiktoken',
+    lazy = true,
+    event = { 'InsertEnter ' },
     opts = {
       model = 'claude-3.7-sonnet',
       prompts = prompts,
@@ -89,7 +91,6 @@ if _G.myconfig.copilot_enabled then
         end,
       })
     end,
-    event = 'VeryLazy',
     keys = {
       {
         '<leader>Cp',
