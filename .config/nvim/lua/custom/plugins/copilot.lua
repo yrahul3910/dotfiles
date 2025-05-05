@@ -4,7 +4,7 @@ if _G.myconfig.copilot_enabled then
       'zbirenbaum/copilot.lua',
       cmd = 'Copilot',
       build = ':Copilot auth',
-      event = 'InsertEnter',
+      lazy = true,
       config = function()
         require('copilot').setup {
           panel = {
