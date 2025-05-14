@@ -399,7 +399,8 @@ require('lazy').setup({
   },
   {
     'saghen/blink.cmp',
-    lazy = false, -- lazy loading handled internally
+    lazy = true,
+    event = { 'InsertEnter', 'BufWinEnter' },
     version = 'v0.11.0',
 
     ---@module 'blink.cmp'
@@ -532,6 +533,8 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = true,
+    event = { 'InsertEnter', 'BufWinEnter' },
     build = ':TSUpdate',
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
