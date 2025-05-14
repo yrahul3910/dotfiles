@@ -175,6 +175,7 @@ end
 nmap('<tab>', '<cmd>bnext<CR>', 'Next buffer')
 nmap('<S-tab>', '<cmd>bprev<CR>', 'Previous buffer')
 nmap('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
+nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer Delete [A]ll')
 
 -- nvim-spider
 vim.keymap.set({ 'n', 'o', 'x' }, 'W', '<cmd>lua require("spider").motion("w")<CR>', { desc = 'Spider-w' })
