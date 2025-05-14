@@ -1,12 +1,13 @@
 return {
   'stevearc/aerial.nvim',
+  lazy = true,
+  event = { 'BufWinEnter' },
   opts = {},
   -- Optional dependencies
   dependencies = {
     'nvim-treesitter/nvim-treesitter',
     'nvim-tree/nvim-web-devicons',
   },
-  lazy = false,
   config = function()
     require('aerial').setup {
       on_attach = function(bufnr)
