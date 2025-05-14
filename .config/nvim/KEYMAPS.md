@@ -63,6 +63,7 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 
 * (aerial) `<leader>a` toggles the Aerial window (which shows a list of classes, functions, etc.)
 * (bufferline) `<leader>bc` closes the current buffer.
+* (bufferline) `<leader>ba` closes all buffers except the current one.
 * (conform) `<leader>fm` formats the current buffer (or at least, attempts to).
 * (harpoon2) `<leader>ph` leads to Harpoon2 keybindings. After this prefix, `a` adds the current file, `d` deletes the current file, and `o` opens the list of files in Telescope.
 * (harpoon2) `<M-h>`, `<M-j>`, `<M-k>`, `<M-l>` switch between Harpoon buffers.
