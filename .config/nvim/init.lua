@@ -401,7 +401,7 @@ require('lazy').setup({
     'saghen/blink.cmp',
     lazy = true,
     event = { 'InsertEnter', 'BufWinEnter' },
-    version = 'v0.11.0',
+    version = 'v1.3.1',
 
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
