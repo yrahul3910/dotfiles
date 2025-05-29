@@ -24,7 +24,6 @@ if _G.myconfig.copilot_enabled then
         },
         -- Close the chat
         close = {
-          normal = 'q',
           insert = '<C-q>',
         },
         -- Reset the chat buffer
