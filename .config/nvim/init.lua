@@ -536,6 +536,7 @@ require('lazy').setup({
     lazy = true,
     event = { 'InsertEnter', 'BufWinEnter' },
     build = ':TSUpdate',
+    branch = 'master',
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
       -- Autoinstall languages that are not installed
