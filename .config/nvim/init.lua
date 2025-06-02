@@ -533,6 +533,7 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
     lazy = true,
     event = { 'InsertEnter', 'BufWinEnter' },
     build = ':TSUpdate',
