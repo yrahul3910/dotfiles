@@ -35,6 +35,7 @@ set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 
 set -x ELECTRON_OZONE_PLATFORM_HINT auto
+set -x PYTHONSTARTUP ~/.pythonrc
 
 fish_vi_key_bindings
 
