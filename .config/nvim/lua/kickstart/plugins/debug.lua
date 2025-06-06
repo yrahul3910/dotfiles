@@ -28,6 +28,7 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+    vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
 
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
