@@ -23,6 +23,10 @@ nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstrea
 nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase (second)')
 nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed (third)')
 
+-- <C-i> is the same as <Tab>, which moves across buffers, so new mappings
+nmap(']o', '<C-i>', 'Next in jumplist')
+nmap('[o', '<C-o>', 'Back in jumplist')
+
 -- Diffview
 nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')
 nmap('<leader>Gh', '<cmd>DiffviewFileHistory %<CR>', 'Open Diffview for file history')

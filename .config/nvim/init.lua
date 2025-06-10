@@ -627,7 +627,7 @@ require('lazy').setup({
 
 require 'custom.lsp'
 
-vim.cmd 'colorscheme arctic'
+vim.cmd 'colorscheme catppuccin-mocha'
 
 require 'custom.mappings'
 

@@ -8,13 +8,14 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
 * `j` goes UP and `k` goes DOWN. I prefer it this way.
 * `V` selects the current line in visual mode. You can then move the selected lines using `J` and `K`.
+* `]o` and `[o` move forward and back through the jumplist. We can't use `<C-i>` since that is equivalent to `<Tab>`, which is mapped to buffer movement.
 
 > [!NOTE]
 > The following are nvim 0.11+
 
 * `]q`, `[q`, `]Q`, `[Q` navigate through the quickfix list.
 * `]a`, `[a`, `[A`, `]A` navigate through the argument list.
-* `]b`, `[b`, `]B`, `[B` navigate through the buffer list (but `Tab` and `<S-Tab>` will still be preferred.
+* `]b`, `[b`, `]B`, `[B` navigate through the buffer list (but `Tab` and `<S-Tab>` will still be preferred).
 * `[<Space>` and `]<Space>` add a blank line above and below the cursor.
 
 ## Search
