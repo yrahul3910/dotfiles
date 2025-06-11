@@ -181,11 +181,6 @@ nmap('<S-tab>', '<cmd>bprev<CR>', 'Previous buffer')
 nmap('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
 nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer Delete [A]ll')
 
--- nvim-spider
-vim.keymap.set({ 'n', 'o', 'x' }, 'W', '<cmd>lua require("spider").motion("w")<CR>', { desc = 'Spider-w' })
-vim.keymap.set({ 'n', 'o', 'x' }, 'E', '<cmd>lua require("spider").motion("e")<CR>', { desc = 'Spider-e' })
-vim.keymap.set({ 'n', 'o', 'x' }, 'B', '<cmd>lua require("spider").motion("b")<CR>', { desc = 'Spider-b' })
-
 -- theme
 nmap('<leader>cl', function()
   vim.cmd 'colorscheme catppuccin'
