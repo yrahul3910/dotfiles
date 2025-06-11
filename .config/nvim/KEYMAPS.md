@@ -70,7 +70,6 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * (harpoon2) `<M-h>`, `<M-j>`, `<M-k>`, `<M-l>` switch between Harpoon buffers.
 * (nvim-tree) `<leader>pt` leads to nvim-tree keybindings. Use `p` to increase the width and `m` to decrease.
 * (nvim-tree) `<C-s>` toggles the file tree. Use `<leader>pr` to refresh it.
-* (nvim-treesitter-textobjects) `K` previews declaration, so I mapped `<leader>kf` to peek at definition, using `nvim-treesitter-textobjects`. Use the keybinding twice to enter the peek window. There's also the less useful `<leader>kF`, which peeks at the class definition.
 
 ## Tests
 
@@ -78,6 +77,17 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
   * `tf` runs all tests in the current file.
   * `to` shows the test output.
   * `tr` runs the nearest test.
+
+## Debug
+
+When the debugging plugins are enabled, these are the keybinds set up:
+
+* `<leader>D` leads to the debug keybinds.
+* `<leader>Db` toggles a breakpoint at the current line.
+* `<leader>Dc` sets a conditional breakpoint at the current line.
+* `<leader>Dt` toggles the debug UI.
+* `<F5>` is for starting debugging or continuing.
+* `<F1>`, `<F2>`, and `<F3>` respectively are for step into, step over, and step out.
 
 ## Copy/paste
 
