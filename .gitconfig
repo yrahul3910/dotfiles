@@ -21,7 +21,7 @@
 	l = log --oneline
     lg = log --graph --oneline --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
     lgd = log --graph --oneline --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) => %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-    rpo = "!git remote prune origin && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == \"[gone]\" {sub(\"refs/heads/\", \"\", $1); print $1}'); do git branch -d $branch || echo \"Could not delete $branch (unmerged?)\"; done"
+    rpo = "!git remote prune origin && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == \"[gone]\" {sub(\"refs/heads/\", \"\", $1); print $1}'); do git branch -D $branch || echo \"Could not delete $branch (unmerged?)\"; done"
 	n = switch -c
 	p = push
 	pu = !git pull $(git remote) $(git branch --show-current)
