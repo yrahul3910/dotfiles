@@ -12,7 +12,6 @@
   "conform.nvim": { "branch": "master", "commit": "8132ec733eed3bf415b97b76797ca41b59f51d7d" },
   "copilot.lua": { "branch": "master", "commit": "c1bb86abbed1a52a11ab3944ef00c8410520543d" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
-  "fidget.nvim": { "branch": "main", "commit": "d9ba6b7bfe29b3119a610892af67602641da778e" },
   "fzf-lua": { "branch": "main", "commit": "1977a7648a264fabf453ee082e2398e38cc3b588" },
   "gitsigns.nvim": { "branch": "main", "commit": "6668f379ca634c36b8e11453118590b91bf8b295" },
   "harpoon": { "branch": "harpoon2", "commit": "ed1f853847ffd04b2b61c314865665e1dadf22c7" },

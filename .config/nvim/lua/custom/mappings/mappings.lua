@@ -167,6 +167,7 @@ function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
   vim.keymap.set('t', '<C-q>', [[<C-\><C-n><C-w>j]], opts)
 end
+
 vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 -- copilot
@@ -188,6 +189,9 @@ end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
   vim.cmd 'colorscheme arctic'
 end, '[C]olorscheme [D]ark')
+
+-- substitutions
+nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute [Q]uotes')
 
 -- custom workflows
 local function copy_git_file_path()
