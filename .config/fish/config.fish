@@ -111,6 +111,7 @@ alias '...'='cd ../../'
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
+alias olls="OLLAMA_FLASH_ATTENTION='1' OLLAMA_KV_CACHE_TYPE='q8_0' ollama serve"
 
 if string match -q "Darwin" -- (uname)
     alias python3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/python3"
