@@ -61,6 +61,7 @@ alias lg="lazygit"
 alias diff="delta"
 alias claude="$HOME/.claude/local/claude"
 alias '...'='cd ../../'
+alias olls="OLLAMA_FLASH_ATTENTION='1' OLLAMA_KV_CACHE_TYPE='q8_0' ollama serve"
 
 if [ "$(uname)" = "Darwin" ]; then
     alias python3="python3.13"
