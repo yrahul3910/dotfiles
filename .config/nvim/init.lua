@@ -240,8 +240,7 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --
 --  See `:help wincmd` for a list of all window commands
 --  The re-enabling of number and relativenumber is a workaround for netrw and nvim-tree
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>:set number<CR>:set relativenumber<CR>',
-  { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>:set number<CR>:set relativenumber<CR>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
@@ -294,7 +293,7 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',    opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -330,7 +329,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -512,13 +511,13 @@ require('lazy').setup({
             local search = statusline.section_searchcount { trunc_width = 75 }
 
             return statusline.combine_groups {
-              { hl = mode_hl,                 strings = { mode } },
+              { hl = mode_hl, strings = { mode } },
               { hl = 'MiniStatuslineDevinfo', strings = { git } },
               '%<',
               { hl = 'MiniStatuslineFilename', strings = { filename } },
               '%=',
               { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-              { hl = mode_hl,                  strings = { search, location } },
+              { hl = mode_hl, strings = { search, location } },
             }
           end,
         },
@@ -543,7 +542,6 @@ require('lazy').setup({
     event = { 'InsertEnter', 'BufWinEnter' },
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    branch = 'master',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
