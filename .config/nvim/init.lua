@@ -542,7 +542,6 @@ require('lazy').setup({
     event = { 'InsertEnter', 'BufWinEnter' },
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    dependencies = { 'OXY2DEV/markview.nvim' }, -- Workaround to load markview first
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
