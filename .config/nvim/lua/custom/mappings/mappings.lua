@@ -16,6 +16,16 @@ end
 local nmap = map { mode = 'n' }
 local vmap = map { mode = 'v' }
 
+local nth_word_from_end = function()
+  local count = vim.v.count
+  if count > 1 then
+    vim.cmd("normal! $" .. count .. "F " .. "l")
+  else
+    vim.cmd("normal! $b")
+  end
+end
+
+
 -- Custom
 nmap('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
@@ -37,7 +47,7 @@ nmap('<leader>gw', '<cmd>Git blame --first-parent<CR>', '[G]it [W]ho')
 
 -- Some mappings inspired by Helix (Kakoune mappings)
 nmap('gh', '^', 'Move to first word') -- Somewhat different from helix
-nmap('gl', '$b', 'Move to end of line')
+nmap('gl', nth_word_from_end, 'Move to nth argument from end')
 nmap('ge', 'G', 'Move to end of file')
 
 -- Convenience mappings
