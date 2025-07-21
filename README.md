@@ -65,6 +65,15 @@ Here are the keybindings in tmux/tmux-sessionizer:
 * `<M-1>` through `<M-4>` let you go to the first (through fourth) window.
 * `<C-a>S` swaps your current window with another (based on input).
 
+## Karabiner-Elements
+
+On macOS, home-row mods are implemented using Karabiner-Elements, which I find works a bit better than kanata.
+
+* `s` has mod-tap behavior and maps to (Left) Shift.
+* `f` has mod-tap behavior and maps to Left Meta (this is Left Option).
+* Caps Lock has mod-tap behavior and maps to Escape or Ctrl.
+* If for some reason you need Caps Lock, Right Command maps to it.
+
 ## kanata config
 
 You will probably want to change the device file location in `.config/kanata/config.kbd`. Also, if the following does not work, you may want to instead move the systemd config file to `/etc/systemd/system` instead (and in this case, remove `--user`).
