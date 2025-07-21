@@ -4,6 +4,30 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "mod-tap: s -> s or Shift",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "parameters": {
+                                    "basic.to_delayed_action_delay_milliseconds": 150,
+                                    "basic.to_if_held_down_threshold_milliseconds": 130
+                                },
+                                "to_delayed_action": { "to_if_canceled": [{ "key_code": "s" }] },
+                                "to_if_alone": [
+                                    {
+                                        "halt": true,
+                                        "key_code": "s"
+                                    }
+                                ],
+                                "to_if_held_down": [{ "key_code": "left_shift" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Post escape if caps is pressed alone, left_ctrl otherwise",
                         "manipulators": [
                             {
@@ -31,22 +55,22 @@
                         ]
                     },
                     {
-                        "description": "Map d to d or left option (lmeta on ghostty)",
+                        "description": "Map f to f or left option (lmeta on ghostty)",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "d",
+                                    "key_code": "f",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "parameters": {
                                     "basic.to_delayed_action_delay_milliseconds": 150,
                                     "basic.to_if_held_down_threshold_milliseconds": 130
                                 },
-                                "to_delayed_action": { "to_if_canceled": [{ "key_code": "d" }] },
+                                "to_delayed_action": { "to_if_canceled": [{ "key_code": "f" }] },
                                 "to_if_alone": [
                                     {
                                         "halt": true,
-                                        "key_code": "d"
+                                        "key_code": "f"
                                     }
                                 ],
                                 "to_if_held_down": [{ "key_code": "left_option" }],
