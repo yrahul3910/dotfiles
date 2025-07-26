@@ -2,8 +2,9 @@
 # VERSION: 3.0
 SETUVAR HOMEBREW_NO_AUTOUPDATE:1
 SETUVAR HOMEBREW_NO_AUTO_UPDATE:1
-SETUVAR __fish_initialized:3400
+SETUVAR __fish_initialized:3800
 SETUVAR fish_color_host_remote:yellow
+SETUVAR fish_color_search_match:white
 SETUVAR fish_color_status:red
 SETUVAR fish_key_bindings:fish_vi_key_bindings
 SETUVAR fish_pager_color_completion:normal

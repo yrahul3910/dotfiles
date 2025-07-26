@@ -36,6 +36,7 @@ set -gx HOMEBREW_NO_AUTO_UPDATE 1
 
 set -x ELECTRON_OZONE_PLATFORM_HINT auto
 set -x PYTHONSTARTUP ~/.pythonrc
+set -gx QT_QPA_PLATFORM wayland
 
 fish_vi_key_bindings
 
