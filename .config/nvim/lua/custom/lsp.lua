@@ -187,6 +187,7 @@ return {
           },
           single_file_support = true,
         },
+        ruff = {},
         rust_analyzer = {
           settings = {
             ['rust-analyzer'] = {
