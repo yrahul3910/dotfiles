@@ -19,12 +19,11 @@ local vmap = map { mode = 'v' }
 local nth_word_from_end = function()
   local count = vim.v.count
   if count > 1 then
-    vim.cmd("normal! $" .. count .. "F " .. "l")
+    vim.cmd('normal! $' .. count .. 'F ' .. 'l')
   else
-    vim.cmd("normal! $b")
+    vim.cmd 'normal! $b'
   end
 end
-
 
 -- Custom
 nmap('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
@@ -77,6 +76,12 @@ vmap('k', 'j')
 
 nmap('k', "v:count == 0 ? 'gj' : 'j'", 'Go down', { expr = true })
 nmap('j', "v:count == 0 ? 'gk' : 'k'", 'Go up', { expr = true })
+
+-- Swap `zO` and `zo`, and `zc` and `zC`
+nmap('zc', 'zC')
+nmap('zC', 'zc')
+nmap('zo', 'zO')
+nmap('zO', 'zo')
 
 -- Delete without copying
 nmap('<leader>d', '"_d')
