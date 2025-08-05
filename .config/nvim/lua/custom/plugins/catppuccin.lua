@@ -1,6 +1,7 @@
 return {
   'catppuccin/nvim',
   event = 'VeryLazy',
+  version = '1.11.0',
   config = function()
     require('catppuccin').setup {
       flavor = 'latte',
@@ -11,7 +12,6 @@ return {
         fidget = true,
         fzf = true,
         indent_blankline = true,
-        markview = true,
       },
       background = {
         light = 'latte',
