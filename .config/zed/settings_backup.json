@@ -12,7 +12,8 @@
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "gpt-4o"
-    }
+    },
+    "version": "2"
   },
   "telemetry": {
     "metrics": false,
@@ -22,18 +23,10 @@
   "ui_font_size": 16,
   "relative_line_numbers": true,
   "buffer_font_family": "CommitMono-v1",
-  "ui_font_family": "CommitMono-v1",
-  "minimap": {
-    "show": "always"
-  },
-  "vertical_scroll_margin": 100,
   "buffer_font_size": 16,
-  "inlay_hints": {
-    "enabled": true
-  },
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Catppuccin Mocha"
+    "dark": "Ayu Dark"
   }
 }

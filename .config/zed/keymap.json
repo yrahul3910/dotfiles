@@ -23,7 +23,6 @@
       "space f f": "file_finder::Toggle",
       "j": "vim::Up",
       "k": "vim::Down"
-      // "j k": "vim::SwitchToNormalMode"
     }
   }
 ]
