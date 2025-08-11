@@ -142,6 +142,13 @@ fi
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
 
 cp tmux-sessionizer /usr/local/bin
+
+# On macOS, VS Code does not follow XDG conventions
+if defaults read com.apple.finder &>/dev/null; then
+    mkdir -p ~/Library/Application\ Support/Code/User
+    cp .config/Code/*.json ~/Library/Application\ Support/Code/User/settings.json
+fi
+
 ./setup-macos-defaults.sh
 
 chsh -s $(which zsh) $(whoami)

@@ -148,4 +148,6 @@ post_features:
       - platform: mac
     cmd:
       - ./setup-macos-defaults.sh
+      - mkdir -p ~/Library/Application\ Support/Code/User
+      - cp .config/Code/*.json ~/Library/Application\ Support/Code/User/settings.json
 
