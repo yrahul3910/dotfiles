@@ -18,6 +18,7 @@
     "metrics": false,
     "diagnostics": false
   },
+  "format_on_save": "on",
   "vim_mode": true,
   "ui_font_size": 16,
   "relative_line_numbers": true,
@@ -26,14 +27,49 @@
   "minimap": {
     "show": "always"
   },
-  "vertical_scroll_margin": 100,
+  "vertical_scroll_margin": 200,
   "buffer_font_size": 16,
   "inlay_hints": {
     "enabled": true
   },
   "theme": {
     "mode": "system",
-    "light": "One Light",
+    "light": "Catppuccin Latte",
     "dark": "Catppuccin Mocha"
+  },
+  "languages": {
+    "Python": {
+      "language_servers": ["basedpyright", "ruff"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    }
+  },
+  "lsp": {
+    "basedpyright": {
+      "settings": {
+        "python": {
+          "pythonPath": ".venv/bin/python"
+        },
+        "basedpyright.analysis": {
+          "diagnosticMode": "workspace",
+          "inlayHints": {
+            "callArgumentNames": false
+          },
+          "typeCheckingMode": "standard"
+        }
+      }
+    }
   }
 }
