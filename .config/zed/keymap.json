@@ -22,7 +22,16 @@
     "bindings": {
       "space f f": "file_finder::Toggle",
       "j": "vim::Up",
-      "k": "vim::Down"
+      "k": "vim::Down",
+      "shift-k": "editor::OpenDocs",
+      "space r n": "editor::Rename"
+    }
+  },
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      "q": "vim::MiniQuotes",
+      "b": "vim::MiniBrackets"
     }
   }
 ]
