@@ -7,6 +7,7 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 * `<C-]>` goes to definition, including going inside libraries.
 * `gh` goes to the beginning of the first word in the current line (same as `_`). `gl` goes to the end of the line (the same as `$`). `ge` goes to the end of the file. These were inspired by Helix.
 * `j` goes UP and `k` goes DOWN. I prefer it this way.
+* `e` maps to `ea`. I've never used `e` and not wanted to be in insert mode.
 * `V` selects the current line in visual mode. You can then move the selected lines using `J` and `K`.
 * `]o` and `[o` move forward and back through the jumplist. We can't use `<C-i>` since that is equivalent to `<Tab>`, which is mapped to buffer movement.
 
