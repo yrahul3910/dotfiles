@@ -77,6 +77,9 @@ vmap('k', 'j')
 nmap('k', "v:count == 0 ? 'gj' : 'j'", 'Go down', { expr = true })
 nmap('j', "v:count == 0 ? 'gk' : 'k'", 'Go up', { expr = true })
 
+-- While we're being chaotic...
+nmap('e', 'ea', 'End of word, insert mode')
+
 -- Swap `zO` and `zo`, and `zc` and `zC`
 nmap('zc', 'zC')
 nmap('zC', 'zc')
