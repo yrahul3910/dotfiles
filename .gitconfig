@@ -3,6 +3,7 @@
 	email = yrahul3910@gmail.com
 [core]
 	editor = nvim
+    ignorecase = false
 [credential "https://github.com"]
 	helper = 
 	helper = !/usr/local/bin/gh auth git-credential
