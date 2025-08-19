@@ -13,7 +13,7 @@ return {
       'saghen/blink.cmp',
 
       -- Useful status updates for LSP.
-      -- { 'j-hui/fidget.nvim', lazy = true, opts = {} },
+      { 'j-hui/fidget.nvim',    lazy = true,  opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**

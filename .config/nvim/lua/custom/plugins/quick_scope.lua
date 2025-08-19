@@ -1,1 +1,1 @@
-return { 'unblevable/quick-scope' }
+return { 'unblevable/quick-scope', event = 'VeryLazy' }
