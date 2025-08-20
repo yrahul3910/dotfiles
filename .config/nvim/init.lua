@@ -633,13 +633,14 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd('CursorHold', {
-  callback = function()
-    vim.lsp.buf.signature_help {
-      silent = true,
-      focusable = false,
-    }
-  end,
-})
+-- Re-enable with 0.11.4, see https://github.com/neovim/neovim/pull/34946
+-- vim.api.nvim_create_autocmd('CursorHold', {
+--   callback = function()
+--     vim.lsp.buf.signature_help {
+--       silent = true,
+--       focusable = false,
+--     }
+--   end,
+-- })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
