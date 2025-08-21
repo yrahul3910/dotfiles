@@ -7,7 +7,7 @@
     "vscode-neovim.afterInitConfig": [
         "/Users/yedidar/configs/.config/nvim/init.lua"
     ],
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "standard",
     "github.copilot.nextEditSuggestions.enabled": true,
     "workbench.colorTheme": "Catppuccin Latte",
     "vim.normalModeKeyBindingsNonRecursive": [
@@ -43,6 +43,9 @@
     "editor.padding.top": 200,
     "vim.statusBarColors.visualblock": "",
     "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
     "vim.visualModeKeyBindingsNonRecursive": [
         {
             "before": [
@@ -63,5 +66,10 @@
     ],
     "editor.fontWeight": "normal",
     "workbench.iconTheme": "material-icon-theme",
-    "vim.smartRelativeLine": true
+    "vim.smartRelativeLine": true,
+    "workbench.colorCustomizations": {},
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "extensions.ignoreRecommendations": true
 }
