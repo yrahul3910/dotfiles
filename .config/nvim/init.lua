@@ -192,7 +192,7 @@ vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 vim.opt.signcolumn = 'yes'
 
 -- Decrease update time
-vim.opt.updatetime = 250
+vim.opt.updatetime = 1000
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
@@ -649,14 +649,21 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
--- Re-enable with 0.11.4, see https://github.com/neovim/neovim/pull/34946
--- vim.api.nvim_create_autocmd('CursorHold', {
---   callback = function()
---     vim.lsp.buf.signature_help {
---       silent = true,
---       focusable = false,
---     }
---   end,
--- })
+vim.api.nvim_create_autocmd('CursorHoldI', {
+  callback = function()
+    local clients = vim.lsp.get_clients()
+    if clients == nil or #clients == 0 then
+      return
+    end
+
+    local cur_client = clients[1]
+    if cur_client:supports_method(vim.lsp.protocol.Methods.textDocument_signatureHelp) then
+      vim.lsp.buf.signature_help {
+        silent = true,
+        focusable = false,
+      }
+    end
+  end,
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
