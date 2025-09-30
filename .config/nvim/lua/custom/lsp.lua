@@ -240,7 +240,6 @@ return {
       --  other tools, you can run
       --    :Mason
 
-      require('lspconfig').gleam.setup {}
       vim.lsp.enable(vim.tbl_extend('error', vim.tbl_keys(servers), { gleam = {} }))
     end,
   },
