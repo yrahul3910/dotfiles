@@ -649,12 +649,39 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd('CursorHold', {
+local function has_value(tab, val)
+  for key, _ in pairs(tab) do
+    if key == val then
+      return true
+    end
+  end
+
+  return false
+end
+
+vim.api.nvim_create_autocmd('CursorHoldI', {
   callback = function()
-    vim.lsp.buf.signature_help {
-      silent = true,
-      focusable = false,
+    local ignore_types = {
+      'markdown',
+      'conf',
+      'fish',
     }
+    if has_value(ignore_types, vim.bo.filetype) then
+      return
+    end
+
+    local clients = vim.lsp.get_clients()
+    if clients == nil or #clients == 0 then
+      return
+    end
+
+    local cur_client = clients[1]
+    if cur_client:supports_method(vim.lsp.protocol.Methods.textDocument_signatureHelp) then
+      vim.lsp.buf.signature_help {
+        silent = true,
+        focusable = false,
+      }
+    end
   end,
 })
 -- The line beneath this is called `modeline`. See `:help modeline`
