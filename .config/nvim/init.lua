@@ -651,6 +651,10 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
 
 vim.api.nvim_create_autocmd('CursorHoldI', {
   callback = function()
+    if vim.bo.filetype == 'markdown' then
+      return
+    end
+
     local clients = vim.lsp.get_clients()
     if clients == nil or #clients == 0 then
       return
