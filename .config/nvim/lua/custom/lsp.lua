@@ -13,7 +13,7 @@ return {
       'saghen/blink.cmp',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim',    lazy = true,  opts = {} },
+      { 'j-hui/fidget.nvim', lazy = true, opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -240,7 +240,6 @@ return {
       --  other tools, you can run
       --    :Mason
 
-      require('lspconfig').gleam.setup {}
       vim.lsp.enable(vim.tbl_extend('error', vim.tbl_keys(servers), { gleam = {} }))
     end,
   },
