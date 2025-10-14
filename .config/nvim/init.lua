@@ -665,6 +665,7 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
       'markdown',
       'conf',
       'fish',
+      'toml',
     }
     if has_value(ignore_types, vim.bo.filetype) then
       return
