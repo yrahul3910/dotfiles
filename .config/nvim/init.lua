@@ -649,9 +649,25 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
+local function has_value(tab, val)
+  for key, _ in pairs(tab) do
+    if key == val then
+      return true
+    end
+  end
+
+  return false
+end
+
 vim.api.nvim_create_autocmd('CursorHoldI', {
   callback = function()
-    if vim.bo.filetype == 'markdown' then
+    local ignore_types = {
+      'markdown',
+      'conf',
+      'fish',
+      'toml',
+    }
+    if has_value(ignore_types, vim.bo.filetype) then
       return
     end
 
