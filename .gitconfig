@@ -4,6 +4,11 @@
 [core]
 	editor = nvim
     ignorecase = false
+    fsmonitor = true
+    splitindex = true
+    preloadindex = true
+    untrackedcache = true
+
 [credential "https://github.com"]
 	helper = 
 	helper = !/usr/local/bin/gh auth git-credential
