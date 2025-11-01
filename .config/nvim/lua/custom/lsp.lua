@@ -194,6 +194,19 @@ return {
               checkOnSave = {
                 command = 'clippy',
               },
+              procMacro = {
+                enable = false,
+              },
+              cargo = {
+                loadOutDirsFromCheck = false,
+              },
+              workspace = {
+                symbol = {
+                  search = {
+                    limit = 1000,
+                  },
+                },
+              },
             },
           },
         },
