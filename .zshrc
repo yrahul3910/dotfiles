@@ -13,6 +13,8 @@ setopt ignoreeof  # for tmux + karabiner
 export PATH="$HOME/.cargo/bin":$PATH
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
 
+export PYTHONPATH=$PYTHONPATH:.
+
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 
 if [ "$(uname)" = "Darwin" ]; then
