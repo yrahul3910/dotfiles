@@ -131,6 +131,8 @@ starship init fish | source
 
 zoxide init --cmd cd fish | source
 
+# Python being Python
+set -x PYTHONPATH $PYTHONPATH .
 
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
