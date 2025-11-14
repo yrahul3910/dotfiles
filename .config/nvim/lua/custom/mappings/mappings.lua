@@ -205,7 +205,7 @@ nmap('<leader>cl', function()
   vim.cmd 'colorscheme catppuccin'
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
-  vim.cmd 'colorscheme arctic'
+  vim.cmd 'colorscheme catppuccin-mocha'
 end, '[C]olorscheme [D]ark')
 
 -- substitutions
