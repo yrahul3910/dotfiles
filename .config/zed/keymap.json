@@ -11,10 +11,9 @@
     "bindings": {}
   },
   {
-    "context": "Editor && vim_mode == insert && !menu",
+    "context": "Editor && showing_completions",
     "bindings": {
-      "space f f": "file_finder::Toggle"
-      // "j k": "vim::SwitchToNormalMode"
+      "ctrl-y": "editor::ConfirmCompletion"
     }
   },
   {
@@ -23,8 +22,9 @@
       "space f f": "file_finder::Toggle",
       "j": "vim::Up",
       "k": "vim::Down",
-      "shift-k": "editor::OpenDocs",
-      "space r n": "editor::Rename"
+      "space r n": "editor::Rename",
+      "K": "editor::Hover",
+      "e": ["workspace::SendKeystrokes", "e a"]
     }
   },
   {
@@ -32,6 +32,12 @@
     "bindings": {
       "q": "vim::MiniQuotes",
       "b": "vim::MiniBrackets"
+    }
+  },
+  {
+    "context": "((os != macos && Editor) && edit_prediction_conflict)",
+    "bindings": {
+      "shift-tab": "editor::AcceptEditPrediction"
     }
   }
 ]
