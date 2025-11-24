@@ -435,7 +435,7 @@ require('lazy').setup({
         preset = 'default',
         ['<S-Tab>'] = {
           function(_)
-            if require('copilot.suggestion').is_visible() then
+            if _G.myconfig.copilot_enabled and require('copilot.suggestion').is_visible() then
               require('copilot.suggestion').accept()
             end
           end,
