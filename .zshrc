@@ -12,6 +12,7 @@ setopt ignoreeof  # for tmux + karabiner
 # Path to your oh-my-zsh installation.
 export PATH="$HOME/.cargo/bin":$PATH
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
+export PATH="$HOME/go/bin":$PATH
 
 export PYTHONPATH=$PYTHONPATH:.
 
