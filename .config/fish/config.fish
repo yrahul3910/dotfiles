@@ -139,4 +139,6 @@ set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
 
 set -x PATH $HOME/.local/bin $PATH
+set -x PATH $HOME/go/bin $PATH
+
 alias claude="$HOME/.claude/local/claude"
