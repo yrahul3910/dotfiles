@@ -28,6 +28,13 @@
     }
   },
   {
+    "context": "Editor && vim_mode == visual && !menu",
+    "bindings": {
+      "j": "vim::Up",
+      "k": "vim::Down"
+    }
+  },
+  {
     "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
     "bindings": {
       "q": "vim::MiniQuotes",
