@@ -623,6 +623,19 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        'gzip',
+        'netrwPlugin',
+        'rplugin',
+        'tarplugin',
+        'zipPlugin',
+      },
+    },
+  },
+  -- Don't bother me when tweaking plugins; thanks to @MarisSolOs
+  change_detection = { notify = false },
 })
 
 require 'custom.lsp'
