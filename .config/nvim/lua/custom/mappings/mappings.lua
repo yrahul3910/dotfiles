@@ -15,6 +15,8 @@ end
 
 local nmap = map { mode = 'n' }
 local vmap = map { mode = 'v' }
+local imap = map { mode = 'i' }
+local ismap = map { mode = { 'i', 's' } }
 
 local nth_word_from_end = function()
   local count = vim.v.count
@@ -180,25 +182,34 @@ nmap('<leader>to', function()
   require('neotest').output.open()
 end, 'neotest: Open output')
 
--- toggleterm
-function _G.set_terminal_keymaps()
-  local opts = { buffer = 0 }
-  vim.keymap.set('t', '<C-q>', [[<C-\><C-n><C-w>j]], opts)
-end
-
-vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
-
 -- copilot
 if _G.myconfig.copilot then
   nmap(']c', require('copilot.suggestion').next(), '[C]opilot [N]ext')
   nmap('[c', require('copilot.suggestion').next(), '[C]opilot [P]revious')
 end
 
--- bufferline + scope
-nmap('<tab>', '<cmd>bnext<CR>', 'Next buffer')
-nmap('<S-tab>', '<cmd>bprev<CR>', 'Previous buffer')
+-- buffers
 nmap('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
 nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer Delete [A]ll')
+
+-- luasnip
+local luasnip = require 'luasnip'
+imap('<C-k>', function()
+  if luasnip.expand_or_jumpable() then
+    luasnip.expand_or_jump()
+  end
+end, 'Expand snippet')
+ismap('<C-h>', function()
+  luasnip.jump(-1)
+end, 'Snippet: jump back')
+ismap('<C-l>', function()
+  luasnip.jump(1)
+end, 'Snippet: jump forward')
+ismap('<C-e>', function()
+  if luasnip.choice_active() then
+    luasnip.change_choice(1)
+  end
+end, 'Snippet: change active choice')
 
 -- theme
 nmap('<leader>cl', function()

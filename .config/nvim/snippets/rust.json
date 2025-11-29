@@ -1,0 +1,7 @@
+{
+  "impl Trait": {
+    "prefix": "impl",
+    "body": ["impl ${1:Trait} for ${2:Type} {", "    ${0}", "}"],
+    "description": "Generate an impl block for a trait"
+  }
+}
