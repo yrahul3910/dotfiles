@@ -664,6 +664,8 @@ local function has_value(tab, val)
   return false
 end
 
+require 'custom.marks'
+
 vim.api.nvim_create_autocmd('CursorHoldI', {
   callback = function()
     local ignore_types = {
