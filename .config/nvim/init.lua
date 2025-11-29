@@ -421,6 +421,7 @@ require('lazy').setup({
     'saghen/blink.cmp',
     lazy = true,
     event = { 'InsertEnter', 'BufWinEnter' },
+    dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
     version = 'v1.3.1',
 
     ---@module 'blink.cmp'
@@ -440,6 +441,8 @@ require('lazy').setup({
             end
           end,
         },
+        -- Disable this so the LuaSnip keybind works as well
+        ['<C-k>'] = {},
       },
 
       appearance = {
@@ -451,6 +454,8 @@ require('lazy').setup({
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = 'mono',
       },
+
+      snippets = { preset = 'luasnip' },
 
       -- default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, via `opts_extend`
