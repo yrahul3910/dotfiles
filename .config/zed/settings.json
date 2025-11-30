@@ -16,15 +16,10 @@
   "ssh_connections": [
     {
       "host": "dev.ryedida.me",
-      "args": [
-        "-i",
-        "~/.ssh/dev"
-      ],
+      "args": ["-i", "~/.ssh/dev"],
       "projects": [
         {
-          "paths": [
-            "/home/ryedida/zotero-rag"
-          ]
+          "paths": ["/home/ryedida/zotero-rag"]
         }
       ]
     }

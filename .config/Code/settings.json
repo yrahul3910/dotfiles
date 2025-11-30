@@ -64,4 +64,9 @@
     "editor.fontWeight": "normal",
     "workbench.iconTheme": "material-icon-theme",
     "vim.smartRelativeLine": true
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "extensions.ignoreRecommendations": true
 }
+
