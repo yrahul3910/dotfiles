@@ -7,8 +7,11 @@ return {
     local config = require 'fzf-lua.config'
     local actions = require 'fzf-lua.actions'
 
+    -- Quickfix
+    config.defaults.keymap.fzf['ctrl-q'] = 'select-all+accept'
+
     return {
-      'default-title',
+      'telescope',
       fzf_colors = true,
       fzf_opts = { ['--cycle'] = true },
       defaults = {
@@ -60,6 +63,9 @@ return {
         row = 0.5,
         col = 0.5,
         preview = {
+          default = 'bat',
+          -- Uncomment below if you prefer horizontal layout; the default is 'flex'.
+          -- layout = 'horizontal',
           scrollchars = { '┃', '' },
         },
       },
@@ -68,6 +74,7 @@ return {
         actions = {
           ['alt-i'] = { actions.toggle_ignore },
           ['alt-h'] = { actions.toggle_hidden },
+          ['ctrl-q'] = { fn = actions.file_sel_to_qf, prefix = 'select-all' },
         },
       },
       grep = {
