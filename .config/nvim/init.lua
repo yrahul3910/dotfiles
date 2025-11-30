@@ -75,11 +75,11 @@ vim.g.editorconfig = false
 vim.g.have_nerd_font = true
 
 -- Make line numbers default
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
 
 -- Disable new line auto comment
 vim.cmd [[autocmd FileType * set formatoptions-=ro]]
@@ -89,66 +89,72 @@ vim.cmd [[autocmd FileType * set formatoptions-=ro]]
 vim.opt_global.sol = false
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
+vim.o.showmode = false
 
 -- Enable break indent
-vim.opt.breakindent = true
+vim.o.breakindent = true
 
 -- Save undo history
-vim.opt.undofile = true
+vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
 
-vim.opt.colorcolumn = '120'
-vim.opt.foldmethod = 'indent'
-vim.opt.foldenable = false
-vim.opt.termguicolors = true
+vim.o.colorcolumn = '120'
+vim.o.foldmethod = 'indent'
+vim.o.foldenable = false
+vim.o.termguicolors = true
 
 -- auto-session
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
 -- Keep signcolumn on by default
-vim.opt.signcolumn = 'yes'
+vim.o.signcolumn = 'yes'
 
 -- Decrease update time
+<<<<<<< HEAD
 vim.opt.updatetime = 250
+||||||| parent of d52f29f (feat(neovim): minor updates to blink/luasnip configs)
+vim.opt.updatetime = 1000
+=======
+vim.o.updatetime = 1000
+>>>>>>> d52f29f (feat(neovim): minor updates to blink/luasnip configs)
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
+vim.o.timeoutlen = 300
 
 -- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = true
+vim.o.splitright = true
+vim.o.splitbelow = true
 
 -- Sets how neovim will display certain whitespace characters in the editor.
-vim.opt.list = true
+vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
+vim.o.inccommand = 'split'
 
 -- Highlight which line your cursor is on
-vim.opt.cursorline = true
+vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 12
+vim.o.scrolloff = 12
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
-vim.opt.confirm = true
+vim.o.confirm = true
 
 -- Since nvim 0.11, this is opt-in
 vim.diagnostic.config { virtual_text = true }
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
-vim.opt.hlsearch = true
-vim.opt.incsearch = true
+vim.o.hlsearch = true
+vim.o.incsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
@@ -180,7 +186,10 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end
-vim.opt.rtp:prepend(lazypath)
+
+---@type vim.Option
+local rtp = vim.opt.rtp
+rtp:prepend(lazypath)
 
 require('lazy').setup({
   { import = 'plugins' },
