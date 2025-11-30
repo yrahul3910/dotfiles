@@ -13,6 +13,13 @@ return {
     -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
     -- see the "default configuration" section below for full documentation on how to define
     -- your own keymap.
+    --
+    -- All presets have the following mappings:
+    -- <tab>/<s-tab>: move to right/left of your snippet expansion
+    -- <c-space>: Open menu or open docs if already open
+    -- <c-n>/<c-p> or <up>/<down>: Select next/previous item
+    -- <c-e>: Hide menu
+    -- <c-k>: Toggle signature help
     keymap = {
       preset = 'default',
       ['<S-Tab>'] = {
@@ -22,8 +29,6 @@ return {
           end
         end,
       },
-      -- Disable this so the LuaSnip keybind works as well
-      ['<C-k>'] = {},
     },
 
     appearance = {
@@ -41,7 +46,7 @@ return {
     -- default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, via `opts_extend`
     sources = {
-      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
       -- optionally disable cmdline completions
       -- cmdline = {},
       providers = {
@@ -56,6 +61,12 @@ return {
         },
       },
     },
+
+    -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
+    -- which automatically downloads a prebuilt binary when enabled.
+    --
+    -- See :h blink-cmp-config-fuzzy for more information
+    fuzzy = { implementation = 'prefer_rust_with_warning' },
 
     -- experimental signature help support
     signature = { enabled = true },
