@@ -16,15 +16,10 @@
   "ssh_connections": [
     {
       "host": "dev.ryedida.me",
-      "args": [
-        "-i",
-        "~/.ssh/dev"
-      ],
+      "args": ["-i", "~/.ssh/dev"],
       "projects": [
         {
-          "paths": [
-            "/home/ryedida/zotero-rag"
-          ]
+          "paths": ["/home/ryedida/zotero-rag"]
         }
       ]
     }
@@ -68,10 +63,10 @@
       "format_on_save": "on",
       "formatter": [
         {
-          "code_actions": {
-            "source.organizeImports.ruff": true,
-            "source.fixAll.ruff": true
-          }
+          "code_action": "source.organizeImports.ruff"
+        },
+        {
+          "code_action": "source.fixAll.ruff"
         },
         {
           "language_server": {

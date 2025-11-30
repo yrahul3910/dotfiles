@@ -42,7 +42,7 @@ if vim.g.neovide then
 end
 
 _G.myconfig = {
-  copilot_enabled = true,
+  copilot_enabled = false,
 }
 
 vim.g.editorconfig = false
@@ -116,7 +116,7 @@ vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 vim.o.signcolumn = 'yes'
 
 -- Decrease update time
-vim.opt.updatetime = 250
+vim.o.updatetime = 1000
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
@@ -227,7 +227,7 @@ require 'mappings'
 -- Show marks in gutter
 require 'marks'
 
-vim.cmd 'colorscheme catppuccin'
+vim.cmd 'colorscheme catppuccin-mocha'
 
 -- Highlight .pysh files as Python
 -- See https://github.com/yrahul3910/pysh

@@ -1,2 +1,23 @@
 [Default Applications]
 text/plain=nvim.desktop
+image/png=org.gnome.Loupe.desktop
+image/jpeg=org.gnome.Loupe.desktop
+image/webp=org.gnome.Loupe.desktop
+x-scheme-handler/http=firefox.desktop
+application/xhtml+xml=firefox.desktop
+text/html=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/mailto=thunderbird.desktop
+video/quicktime=vlc.desktop
+video/mp4=vlc.desktop
+
+[Added Associations]
+image/png=org.gnome.Loupe.desktop;
+image/jpeg=org.gnome.Loupe.desktop;
+image/webp=org.gnome.Loupe.desktop;
+x-scheme-handler/http=firefox.desktop;
+application/xhtml+xml=firefox.desktop;
+text/html=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+video/quicktime=vlc.desktop;
+video/mp4=vlc.desktop;

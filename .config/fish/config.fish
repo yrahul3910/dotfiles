@@ -74,7 +74,6 @@ function up --description "Move up directory tree by N levels (default: 1)"
   cd $path
 end
 
-
 function so
   source $HOME/.config/fish/config.fish
 end
