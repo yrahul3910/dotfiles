@@ -5,6 +5,6 @@ return {
   event = { 'InsertEnter', 'BufWinEnter' },
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function(_, opts)
-    require 'custom.mappings.harpoon'
+    require 'mappings.harpoon'
   end,
 }
