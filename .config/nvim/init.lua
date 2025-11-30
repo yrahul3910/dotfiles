@@ -116,13 +116,7 @@ vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 vim.o.signcolumn = 'yes'
 
 -- Decrease update time
-<<<<<<< HEAD
 vim.opt.updatetime = 250
-||||||| parent of d52f29f (feat(neovim): minor updates to blink/luasnip configs)
-vim.opt.updatetime = 1000
-=======
-vim.o.updatetime = 1000
->>>>>>> d52f29f (feat(neovim): minor updates to blink/luasnip configs)
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
