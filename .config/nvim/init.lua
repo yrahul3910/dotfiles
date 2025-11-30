@@ -42,7 +42,7 @@ if vim.g.neovide then
 end
 
 _G.myconfig = {
-  copilot_enabled = false,
+  copilot_enabled = true,
 }
 
 vim.g.editorconfig = false
