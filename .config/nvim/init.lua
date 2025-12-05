@@ -226,8 +226,67 @@ require('lazy').setup({
 require 'mappings'
 -- Show marks in gutter
 require 'marks'
+require('plugins.fancydiagnostics.diagnostics').setup()
+
+-- QuickScope colors
+vim.api.nvim_create_augroup('qs_colors', { clear = true })
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = 'qs_colors',
+  callback = function(args)
+    if args.match == 'catppuccin-mocha' then
+      -- Dark theme
+      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+        fg = '#afff5f',
+        bold = true,
+        nocombine = true,
+        ctermfg = 155,
+        cterm = { bold = true },
+      })
+      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+        fg = '#d7afff',
+        underline = true,
+        nocombine = true,
+        ctermfg = 81,
+        cterm = { underline = true },
+      })
+    else
+      -- Light theme
+      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+        fg = '#005f00', -- dark green
+        bold = true,
+        nocombine = true,
+        ctermfg = 22, -- approximate dark green
+        cterm = { bold = true },
+      })
+      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+        fg = '#5f0087', -- dark teal/blue
+        underline = true,
+        nocombine = true,
+        ctermfg = 24, -- approximate dark blue
+        cterm = { underline = true },
+      })
+    end
+  end,
+})
 
 vim.cmd 'colorscheme catppuccin-mocha'
+
+-- Make :Q behave like :q, make :Wq behave like :wq, etc.
+vim.cmd [[
+  cnoreabbrev <expr> Q  (getcmdtype() == ':' ? 'q'  : 'Q')
+  cnoreabbrev <expr> Qa (getcmdtype() == ':' ? 'qa' : 'Qa')
+
+  " Write variants
+  cnoreabbrev <expr> W   (getcmdtype() == ':' ? 'w'   : 'W')
+  cnoreabbrev <expr> Wq  (getcmdtype() == ':' ? 'wq'  : 'Wq')
+  cnoreabbrev <expr> WQ  (getcmdtype() == ':' ? 'wq'  : 'WQ')
+  cnoreabbrev <expr> Wqa (getcmdtype() == ':' ? 'wqa' : 'Wqa')
+
+  " Quit-without-saving variants
+  cnoreabbrev <expr> Q!  (getcmdtype() == ':' ? 'q!'  : 'Q!')
+  cnoreabbrev <expr> QA! (getcmdtype() == ':' ? 'qa!' : 'QA!')
+  cnoreabbrev <expr> Wqa (getcmdtype() == ':' ? 'wqa' : 'Wqa')
+]]
 
 -- Highlight .pysh files as Python
 -- See https://github.com/yrahul3910/pysh
