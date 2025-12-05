@@ -22,6 +22,7 @@ return {
     -- <c-k>: Toggle signature help
     keymap = {
       preset = 'default',
+      ['<Tab>'] = {},
       ['<S-Tab>'] = {
         function(_)
           if _G.myconfig.copilot_enabled and require('copilot.suggestion').is_visible() then

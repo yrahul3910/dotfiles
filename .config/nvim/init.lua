@@ -226,6 +226,8 @@ require('lazy').setup({
 require 'mappings'
 -- Show marks in gutter
 require 'marks'
+-- autocmds
+require 'autocmds'
 
 vim.cmd 'colorscheme catppuccin-mocha'
 
