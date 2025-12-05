@@ -63,7 +63,6 @@ return {
         row = 0.5,
         col = 0.5,
         preview = {
-          default = 'bat',
           -- Uncomment below if you prefer horizontal layout; the default is 'flex'.
           -- layout = 'horizontal',
           scrollchars = { '┃', '' },
