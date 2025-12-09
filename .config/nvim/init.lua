@@ -226,6 +226,7 @@ require('lazy').setup({
 require 'mappings'
 -- Show marks in gutter
 require 'marks'
+require 'autocmds'
 require('plugins.fancydiagnostics.diagnostics').setup()
 
 -- QuickScope colors
