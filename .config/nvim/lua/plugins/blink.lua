@@ -1,7 +1,7 @@
 return {
   'saghen/blink.cmp',
   lazy = true,
-  event = { 'InsertEnter', 'BufWinEnter' },
+  event = 'VeryLazy',
   dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
   version = 'v1.3.1',
 
@@ -47,7 +47,7 @@ return {
     -- default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, via `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
+      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
       -- optionally disable cmdline completions
       -- cmdline = {},
       providers = {
