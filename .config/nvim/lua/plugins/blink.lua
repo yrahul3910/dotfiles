@@ -1,7 +1,7 @@
 return {
   'saghen/blink.cmp',
   lazy = true,
-  event = { 'InsertEnter', 'BufWinEnter' },
+  event = 'VeryLazy',
   dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
   version = 'v1.3.1',
 
@@ -22,7 +22,7 @@ return {
     -- <c-k>: Toggle signature help
     keymap = {
       preset = 'default',
-      ['<Tab>'] = nil, -- Disable Tab for snippet navigation
+      ['<Tab>'] = {}, -- Disable Tab for snippet navigation
       ['<S-Tab>'] = {
         function(_)
           if _G.myconfig.copilot_enabled and require('copilot.suggestion').is_visible() then
