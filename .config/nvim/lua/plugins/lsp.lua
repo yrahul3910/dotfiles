@@ -42,11 +42,7 @@ return {
           ---@param bufnr? integer some lsp support methods only in specific files
           ---@return boolean
           local function client_supports_method(client, method, bufnr)
-            if vim.fn.has 'nvim-0.11' == 1 then
-              return client:supports_method(method, bufnr)
-            else
-              return client.supports_method(method, { bufnr = bufnr })
-            end
+            return client:supports_method(method, bufnr)
           end
 
           -- The following two autocommands are used to highlight references of the
@@ -131,22 +127,38 @@ return {
       local servers = {
         -- clangd = {},
         gopls = {},
-        pyright = {
+        basedpyright = {
           filetypes = { 'python', 'pysh' },
           settings = {
-            pyright = {
+            basedpyright = {
               autoImportCompletion = true,
             },
             python = {
               analysis = {
                 autoSearchPaths = true,
                 diagnosticMode = 'openFilesOnly',
-                useLibraryForCodeTypes = true,
+                useLibraryCodeForTypes = true,
               },
             },
           },
           single_file_support = true,
         },
+        -- pyright = {
+        --   filetypes = { 'python', 'pysh' },
+        --   settings = {
+        --     pyright = {
+        --       autoImportCompletion = true,
+        --     },
+        --     python = {
+        --       analysis = {
+        --         autoSearchPaths = true,
+        --         diagnosticMode = 'openFilesOnly',
+        --         useLibraryForCodeTypes = true,
+        --       },
+        --     },
+        --   },
+        --   single_file_support = true,
+        -- },
         ruff = {},
         rust_analyzer = {
           settings = {
