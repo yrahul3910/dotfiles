@@ -220,7 +220,8 @@ nmap('<leader>cd', function()
 end, '[C]olorscheme [D]ark')
 
 -- substitutions
-nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute [Q]uotes')
+nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute Smart [Q]uotes')
+nmap('<leader>sc', '<C-w>v<C-w>l/=====<CR>', '[S]how Git [C]onflicts: split window')
 
 -- custom workflows
 local function copy_git_file_path()
