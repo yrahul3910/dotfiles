@@ -1,8 +1,6 @@
 return {
   'nvim-treesitter/nvim-treesitter-context',
-  lazy = true,
-  event = { 'InsertEnter', 'BufWinEnter' },
-  dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  event = 'VeryLazy',
   opts = {
     max_lines = 10,
   },

@@ -1,24 +1,44 @@
-return { -- Highlight, edit, and navigate code
+return {
   'nvim-treesitter/nvim-treesitter',
-  branch = 'master',
   lazy = false,
-  event = { 'InsertEnter', 'BufWinEnter' },
+  branch = 'main',
+  version = false,
   build = ':TSUpdate',
-  main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-  -- dependencies = { 'OXY2DEV/markview.nvim' },
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  opts = {
-    ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
-    -- Autoinstall languages that are not installed
-    auto_install = true,
-    highlight = {
-      enable = true,
-      disable = { 'latex' }, -- needed for vimtex
-      -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-      --  If you are experiencing weird indenting issues, add the language to
-      --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-      additional_vim_regex_highlighting = { 'ruby' },
-    },
-    indent = { enable = true, disable = { 'ruby', 'python' } },
-  },
+  config = function()
+    local TS = require 'nvim-treesitter'
+    if not TS.get_installed then
+      vim.notify 'Please check `package-lock.json` to ensure `nvim-treesitter` is on the **main** branch.'
+      return
+    end
+    local parser_installed = {
+      'python',
+      'go',
+      'c',
+      'lua',
+      'vim',
+      'vimdoc',
+      'query',
+      'markdown_inline',
+      'markdown',
+    }
+
+    vim.defer_fn(function()
+      require('nvim-treesitter').install(parser_installed)
+    end, 1000)
+
+    -- auto-start highlights & indentation
+    vim.api.nvim_create_autocmd('FileType', {
+      desc = 'User: enable treesitter highlighting',
+      callback = function(ctx)
+        -- highlights
+        local hasStarted = pcall(vim.treesitter.start) -- errors for filetypes with no parser
+
+        -- indent
+        local noIndent = {}
+        if hasStarted and not vim.list_contains(noIndent, ctx.match) then
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+      end,
+    })
+  end,
 }
