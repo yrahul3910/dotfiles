@@ -27,6 +27,27 @@ local nth_word_from_end = function()
   end
 end
 
+-- neovide: re-add common mappings
+if vim.g.neovide then
+  imap('<C-v>', '<C-R>+', 'Paste from clipboard')
+  nmap('<C-v>', '"+p', 'Paste from clipboard')
+  vmap('<C-v>', '"+p', 'Paste from clipboard')
+
+  nmap('<C-=>', function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
+  end, 'Increase Neovide font size')
+  nmap('<C-->', function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
+  end, 'Decrease Neovide font size')
+
+  -- Also map Cmd on macOS
+  nmap('<D-=>', function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
+  end, 'Increase Neovide font size')
+  nmap('<D-->', function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
+  end, 'Decrease Neovide font size')
+end
 -- Custom
 nmap('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
