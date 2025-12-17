@@ -45,6 +45,8 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
       'conf',
       'fish',
       'toml',
+      'json',
+      'txt',
     }
     if has_value(ignore_types, vim.bo.filetype) then
       return

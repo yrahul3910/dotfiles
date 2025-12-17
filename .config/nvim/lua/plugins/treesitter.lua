@@ -11,15 +11,6 @@ return { -- Highlight, edit, and navigate code
     ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
     -- Autoinstall languages that are not installed
     auto_install = true,
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<A-o>',
-        node_incremental = '<A-o>',
-        scope_incremental = '<A-o>',
-        node_decremental = '<A-i>',
-      },
-    },
     highlight = {
       enable = true,
       disable = { 'latex' }, -- needed for vimtex
