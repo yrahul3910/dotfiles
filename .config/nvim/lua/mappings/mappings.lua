@@ -48,12 +48,16 @@ if vim.g.neovide then
     vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
   end, 'Decrease Neovide font size')
 end
+
 -- Custom
 nmap('n', 'nzzzv', 'Next') -- From LazyVim, centers the screen after jumping
 nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
 nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream (first)')
 nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase (second)')
 nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed (third)')
+
+-- For 60% keyboard layouts where backtick is hard to type
+imap('<C-q>', '`', 'Insert backtick')
 
 -- <C-i> is the same as <Tab>, which moves across buffers, so new mappings
 nmap(']o', '<C-i>', 'Next in jumplist')

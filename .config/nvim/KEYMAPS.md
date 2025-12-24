@@ -22,16 +22,14 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
 ## Search
 
 * Finding uses the following keymaps (all preceded by a space, which is the leader key):
-  * Space finds open file names.
-  * `/` searches in the current buffer.
   * `fb` finds across open buffers.
     * In this picker, in insert mode, `<M-d>` closes the buffer.
   * `ff` searches file names (except those in gitignore).
   * `fg` finds across all files (except those in gitignore).
+    * In here, you can use `<C-q>` to move results to the quickfix list.
   * `fG` finds across all files (except those in gitignore), but has glob support. This is slower than `fg`, though, so it's a trade-off.
   * `fh` searches the help sections.
   * `fr` resumes the previous search.
-  * `f/` searches in open buffers.
   * `ws` searches the workspace symbols.
 
 ## Git
@@ -104,3 +102,4 @@ When the debugging plugins are enabled, these are the keybinds set up:
 * `<leader>cl` changes the colorscheme to light. Of course, `<leader>cd` changes to dark.
 * `<leader>tc` closes the current vim tab. This is not to be confused with the current buffer.
 * `<leader>xc` makes the current file executable.
+* `<C-q>` inserts a backtick. This is useful since I have a 60% keyboard.
