@@ -78,6 +78,38 @@ function so
   source $HOME/.config/fish/config.fish
 end
 
+function copyenv --description "Copy .env from home and ensure it's in .gitignore"
+  # Copy .env from home to current directory
+  if not test -f $HOME/.env
+    echo "Error: $HOME/.env does not exist"
+    return 1
+  end
+
+  cp $HOME/.env ./.env
+  echo "Copied .env to current directory"
+
+  # Find git root
+  set git_root (git rev-parse --show-toplevel 2>/dev/null)
+
+  if test -z "$git_root"
+    echo "Warning: Not in a git repository, skipping .gitignore check"
+    return 0
+  end
+
+  # Check if .env is in .gitignore (matches .env or /.env)
+  if test -f "$git_root/.gitignore"
+    if not grep -qE '^/?\.env$' "$git_root/.gitignore"
+      echo ".env" >> "$git_root/.gitignore"
+      echo "Added .env to $git_root/.gitignore"
+    else
+      echo ".env already in $git_root/.gitignore"
+    end
+  else
+    echo ".env" > "$git_root/.gitignore"
+    echo "Created .gitignore and added .env"
+  end
+end
+
 function yy
   set tmp (mktemp -t "yazi-cwd.XXXXXX")
   yazi $argv --cwd-file="$tmp"
