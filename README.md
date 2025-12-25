@@ -45,6 +45,16 @@ Then, use GNU Stow to create symlinks to your configs:
 stow .
 ```
 
+## Fish configuration
+
+`fish` is configured to use vim bindings, and `/` in normal mode searches command history using `fzf`. The following custom functions exist: 
+
+* `mkcd` creates and goes into a new directory. 
+* `so` sources the fish config.
+* `up <number>` goes up a specified number of directories.
+* `tl` and `td` change to light and dark theme respectively.
+* `copyenv` copies `.env` from this repo (so you'll need one here) to wherever you are. Then, it checks if you're in a git repo. If so, it checks whether the `.gitignore` contains a `.env`; if not (or if there is no `.gitignore`), it adds it.
+
 ## Neovim configuration
 
 See `.config/nvim/README.md`
