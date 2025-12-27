@@ -156,38 +156,6 @@ return {
       local servers = {
         -- clangd = {},
         gopls = {},
-        basedpyright = {
-          filetypes = { 'python', 'pysh' },
-          settings = {
-            basedpyright = {
-              autoImportCompletion = true,
-            },
-            python = {
-              analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = 'openFilesOnly',
-                useLibraryCodeForTypes = true,
-              },
-            },
-          },
-          single_file_support = true,
-        },
-        -- pyright = {
-        --   filetypes = { 'python', 'pysh' },
-        --   settings = {
-        --     pyright = {
-        --       autoImportCompletion = true,
-        --     },
-        --     python = {
-        --       analysis = {
-        --         autoSearchPaths = true,
-        --         diagnosticMode = 'openFilesOnly',
-        --         useLibraryForCodeTypes = true,
-        --       },
-        --     },
-        --   },
-        --   single_file_support = true,
-        -- },
         ruff = {},
         rust_analyzer = {
           settings = {
@@ -219,6 +187,7 @@ return {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
+        ty = {},
         lua_ls = {
           settings = {
             Lua = {
