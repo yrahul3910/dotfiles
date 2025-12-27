@@ -8,6 +8,17 @@
     splitindex = true
     preloadindex = true
     untrackedcache = true
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+
+[merge]
+    conflictStyle = zdiff3
+    autostash = true
 
 [credential "https://github.com"]
 	helper = 
@@ -65,11 +76,6 @@
 
 [help]
 	autocorrect = prompt
-
-[merge]
-	conflictstyle = diff3
-	autostash = true
-	tool = vimdiff
 
 [mergetool]
 	prompt = false
