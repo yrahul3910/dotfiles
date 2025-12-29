@@ -1,28 +1,22 @@
-model_provider = "anthropic"  # Generation model provider
-embedding_provider = "voyageai"  # Embedding/reranker model provider
-reranker_provider = "voyageai"  # Usually this will be the same as your `embedding_provider`
-max_concurrent_requests = 5  # Max concurrent embedding requests
-max_retries = 3  # Max retries when network requests fail
+model_provider = "anthropic"
+embedding_provider = "voyageai"
+reranker_provider = "voyageai"
+max_concurrent_requests = 5
+max_retries = 3
 
-# `log_level` is a CLI-only arg so it isn't applied inadvertently.
-
-# Provider-specific configs. This allows you to merely change the `model_provider`
-# above and have the settings for that provider applied.
 [anthropic]
 model = "claude-sonnet-4-5"
-api_key = "..."
+api_key = ""
 max_tokens = 64000
 
 [openai]
-model = "gpt-5"
-api_key = "..."
+model = "gpt-5.2-2025-12-11"
 max_tokens = 8192
-embedding_model = "text-embedding-3-small"
+embedding_model = "text-embedding-3-large"
 embedding_dims = 1536
 
 [gemini]
 model = "gemini-2.5-pro"
-api_key = "..."
 embedding_model = "gemini-embedding-001"
 embedding_dims = 3072
 
@@ -30,7 +24,7 @@ embedding_dims = 3072
 reranker = "rerank-2.5"
 embedding_model = "voyage-3-large"
 embedding_dims = 2048
-api_key = "..."
+api_key = ""
 
 [cohere]
 reranker = "rerank-v3.5"
@@ -38,6 +32,4 @@ embedding_model = "embed-v4.0"
 embedding_dims = 1536
 
 [openrouter]
-api_key = "..."
 model = "anthropic/claude-sonnet-4.5"
-
