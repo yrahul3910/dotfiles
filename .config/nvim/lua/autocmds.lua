@@ -66,3 +66,12 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
     end
   end,
 })
+
+-- Fix window width for normal buffers
+vim.api.nvim_create_autocmd('WinEnter', {
+  callback = function()
+    if vim.bo.buftype == '' then
+      vim.wo.winfixwidth = true
+    end
+  end,
+})

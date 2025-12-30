@@ -74,7 +74,8 @@ vim.g.editorconfig = false
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- Make line numbers default
+-- Options
+vim.o.equalalways = false
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.tabstop = 4
