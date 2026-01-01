@@ -27,6 +27,25 @@
       "headers": {
         "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY"
       }
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "timeout": 120,
+      "disabled": false,
+      "disabled_tools": ["create_issue", "create_pull_request"],
+      "headers": {
+        "Authorization": "Bearer $GITHUB_PAT"
+      }
+    },
+    "linear": {
+      "type": "http",
+      "url": "https://mcp.linear.app/mcp",
+      "timeout": 120,
+      "disabled": false,
+      "headers": {
+        "Authorization": "Bearer $LINEAR_API_KEY"
+      }
     }
   }
 }
