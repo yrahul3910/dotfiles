@@ -26,6 +26,8 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.g.sidekick_nes = true
+
 -- Neovide settings
 if vim.g.neovide then
   -- Disable all animations
@@ -42,7 +44,7 @@ if vim.g.neovide then
 end
 
 _G.myconfig = {
-  copilot_enabled = false,
+  copilot_enabled = true,
 }
 
 vim.g.editorconfig = false

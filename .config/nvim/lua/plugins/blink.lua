@@ -22,12 +22,9 @@ return {
     -- <c-k>: Toggle signature help
     keymap = {
       preset = 'default',
-      ['<Tab>'] = {}, -- Disable Tab for snippet navigation
       ['<S-Tab>'] = {
-        function(_)
-          if _G.myconfig.copilot_enabled and require('copilot.suggestion').is_visible() then
-            require('copilot.suggestion').accept()
-          end
+        function() -- sidekick next edit suggestion
+          return require('sidekick').nes_jump_or_apply()
         end,
       },
     },

@@ -8,8 +8,9 @@ return { -- Useful plugin to show you pending keybinds.
     require('which-key').add {
       { '<leader>p', group = '[P]lugins' },
       { '<leader>r', group = '[R]ename' },
+      { '<leader>g', group = '[G]it' },
+      { '<leader>s', group = '[S]idekick' },
       { '<leader>f', group = '[F]ind' },
-      { '<leader>s', group = '[S]ubstitute' },
       { '<leader>w', group = '[W]orkspace' },
       { '<leader>t', group = '[T]oggle' },
       { '<leader>D', group = '[D]ebug' },
