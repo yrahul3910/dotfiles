@@ -41,6 +41,19 @@ if _G.myconfig.copilot_enabled then
             enabled = true,
           },
           copilot_model = 'gpt-41-copilot',
+          prompts = {
+            document = 'Add documentation to {function|line}, following the project standards',
+            review = 'Can you review {file} for any issues or improvements?',
+            tests = 'Can you write tests for {this}?',
+            -- simple context prompts
+            file = '{file}',
+            line = '{line}',
+            position = '{position}',
+            selection = '{selection}',
+          },
+          -- preferred picker for selecting files
+          ---@alias sidekick.picker "snacks"|"telescope"|"fzf-lua"
+          picker = 'fzf-lua', ---@type sidekick.picker
         },
       },
       keys = {
