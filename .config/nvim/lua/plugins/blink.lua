@@ -23,6 +23,11 @@ return {
     keymap = {
       preset = 'default',
       ['<S-Tab>'] = {
+        function()
+          if _G.myconfig.copilot_enabled and require('copilot.suggestion').is_visible() then
+            require('copilot.suggestion').accept()
+          end
+        end,
         function() -- sidekick next edit suggestion
           return require('sidekick').nes_jump_or_apply()
         end,
