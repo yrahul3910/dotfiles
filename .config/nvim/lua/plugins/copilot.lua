@@ -22,6 +22,7 @@ if _G.myconfig.copilot_enabled then
             auto_trigger = true,
             accept = false, -- disable built-in keymapping
           },
+          copilot_model = 'gpt-41-copilot',
         }
       end,
     },
