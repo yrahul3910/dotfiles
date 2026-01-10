@@ -250,7 +250,6 @@ vim.cmd [[
   " Quit-without-saving variants
   cnoreabbrev <expr> Q!  (getcmdtype() == ':' ? 'q!'  : 'Q!')
   cnoreabbrev <expr> QA! (getcmdtype() == ':' ? 'qa!' : 'QA!')
-  cnoreabbrev <expr> Wqa (getcmdtype() == ':' ? 'wqa' : 'Wqa')
 ]]
 
 -- Highlight .pysh files as Python
