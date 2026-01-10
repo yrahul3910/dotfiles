@@ -4,6 +4,6 @@ return {
   event = { 'InsertEnter', 'BufWinEnter' },
   dependencies = { 'nvim-treesitter/nvim-treesitter' },
   opts = {
-    max_lines = 10,
+    max_lines = 5,
   },
 }
