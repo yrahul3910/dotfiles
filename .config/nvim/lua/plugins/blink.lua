@@ -24,10 +24,13 @@ return {
       preset = 'default',
       ['<Tab>'] = {}, -- Disable Tab for snippet navigation
       ['<S-Tab>'] = {
-        function(_)
+        function()
           if _G.myconfig.copilot_enabled and require('copilot.suggestion').is_visible() then
             require('copilot.suggestion').accept()
           end
+        end,
+        function() -- sidekick next edit suggestion
+          return require('sidekick').nes_jump_or_apply()
         end,
       },
     },
@@ -47,7 +50,7 @@ return {
     -- default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, via `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
+      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
       -- optionally disable cmdline completions
       -- cmdline = {},
       providers = {

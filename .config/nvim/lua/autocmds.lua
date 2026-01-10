@@ -67,6 +67,47 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
   end,
 })
 
+-- QuickScope colors
+vim.api.nvim_create_augroup('qs_colors', { clear = true })
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = 'qs_colors',
+  callback = function(args)
+    if args.match == 'catppuccin-mocha' then
+      -- Dark theme
+      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+        fg = '#afff5f',
+        bold = true,
+        nocombine = true,
+        ctermfg = 155,
+        cterm = { bold = true },
+      })
+      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+        fg = '#d7afff',
+        underline = true,
+        nocombine = true,
+        ctermfg = 81,
+        cterm = { underline = true },
+      })
+    else
+      -- Light theme
+      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+        fg = '#005f00', -- dark green
+        bold = true,
+        nocombine = true,
+        ctermfg = 22, -- approximate dark green
+        cterm = { bold = true },
+      })
+      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+        fg = '#5f0087', -- dark teal/blue
+        underline = true,
+        nocombine = true,
+        ctermfg = 24, -- approximate dark blue
+        cterm = { underline = true },
+      })
+    end
+  end,
+})
+
 -- Fix window width for normal buffers
 vim.api.nvim_create_autocmd('WinEnter', {
   callback = function()

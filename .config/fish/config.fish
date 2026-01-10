@@ -50,6 +50,7 @@ end
 
 function fish_user_key_bindings
   bind -M normal / reverse_history_search
+  bind -M user \cy accept-autosuggestion
   bind -M insert ctrl-y accept-autosuggestion
 end
 
