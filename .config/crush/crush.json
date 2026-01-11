@@ -20,24 +20,6 @@
     }
   },
   "mcp": {
-    "context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp",
-      "disabled": false,
-      "headers": {
-        "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY"
-      }
-    },
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/",
-      "timeout": 120,
-      "disabled": false,
-      "disabled_tools": ["create_issue", "create_pull_request"],
-      "headers": {
-        "Authorization": "Bearer $GITHUB_PAT"
-      }
-    },
     "linear": {
       "type": "http",
       "url": "https://mcp.linear.app/mcp",
@@ -45,7 +27,31 @@
       "disabled": false,
       "headers": {
         "Authorization": "Bearer $LINEAR_API_KEY"
-      }
+      },
+      "disabled_tools": [
+        "create_comment",
+        "list_cycles",
+        "get_document",
+        "list_documents",
+        "create_document",
+        "update_document",
+        "create_issue",
+        "update_issue",
+        "list_issue_statuses",
+        "get_issue_status",
+        "list_issue_labels",
+        "create_issue_label",
+        "list_projects",
+        "get_project",
+        "create_project",
+        "update_project",
+        "list_project_labels",
+        "list_teams",
+        "get_team",
+        "list_users",
+        "get_user",
+        "search_documentation"
+      ]
     }
   }
 }
