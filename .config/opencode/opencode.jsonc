@@ -19,21 +19,21 @@
     "skill": "ask",
     "webfetch": "ask",
     "doom_loop": "ask",
-    "external_directory": "ask"
+    "external_directory": "ask",
+    "lsp": "allow"
   },
-  "mcp": {
-    "gh_grep": {
-      "type": "remote",
-      "url": "https://mcp.grep.app",
-      "enabled": true
-    },
-    "linear": {
-      "type": "remote",
-      "url": "https://mcp.linear.app/mcp",
-      "headers": {
-        "Authorization": "Bearer {env:LINEAR_API_KEY}"
-      },
-      "enabled": true
-    }
+  "keybinds": {
+    "leader": "ctrl+x",
+    "session_export": "<leader>x",
+    "session_new": "<leader>n",
+    "session_list": "<leader>l",
+    "session_share": "<leader>s",
+    "session_unshare": "<leader>S",
+    "session_compact": "<leader>c",
+    "messages_page_up": "ctrl+b",
+    "messages_page_down": "ctrl+f",
+    "messages_half_page_up": "ctrl+u",
+    "messages_half_page_down": "ctrl+d",
+    "model_list": "<leader>m"
   }
 }
