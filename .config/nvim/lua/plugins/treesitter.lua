@@ -14,7 +14,14 @@ return {
       fold = { enable = true },
       highlight = { enable = true, disable = { 'latex' } },
       indent = { enable = true, disable = { 'ruby', 'python' } },
-      incremental_selection = { enable = true },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = '<A-o>',
+          node_incremental = '<A-o>',
+          node_decremental = '<A-i>',
+        },
+      },
     },
   },
 }
