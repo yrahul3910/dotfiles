@@ -1,24 +1,20 @@
-return { -- Highlight, edit, and navigate code
-  'nvim-treesitter/nvim-treesitter',
-  branch = 'master',
-  lazy = false,
-  event = { 'InsertEnter', 'BufWinEnter' },
-  build = ':TSUpdate',
-  main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-  -- dependencies = { 'OXY2DEV/markview.nvim' },
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  opts = {
-    ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' },
-    -- Autoinstall languages that are not installed
-    auto_install = true,
-    highlight = {
-      enable = true,
-      disable = { 'latex' }, -- needed for vimtex
-      -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-      --  If you are experiencing weird indenting issues, add the language to
-      --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-      additional_vim_regex_highlighting = { 'ruby' },
+local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' }
+
+return {
+  {
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    build = ':TSUpdate',
+  },
+  {
+    'MeanderingProgrammer/treesitter-modules.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    opts = {
+      ensure_installed = ensure_installed,
+      fold = { enable = true },
+      highlight = { enable = true, disable = { 'latex' } },
+      indent = { enable = true, disable = { 'ruby', 'python' } },
+      incremental_selection = { enable = true },
     },
-    indent = { enable = true, disable = { 'ruby', 'python' } },
   },
 }
