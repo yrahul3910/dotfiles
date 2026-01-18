@@ -38,6 +38,7 @@ features:
         - stow 
         - neovim 
         - silicon 
+        - fd
         - ripgrep 
         - fzf 
         - python@3.12 
@@ -48,6 +49,7 @@ features:
         - gnu-sed 
         - git-delta
         - jesseduffield/lazygit/lazygit
+        - sccache
       rhel:
         - zsh 
         - stow 
@@ -59,6 +61,7 @@ features:
         - freetype-devel 
         - libxml2-devel 
         - harfbuzz 
+        - fd-find
         - ripgrep 
         - fzf 
         - poppler 
@@ -74,6 +77,7 @@ features:
         - stow 
         - neovim 
         - silicon 
+        - fd
         - ripgrep 
         - fzf 
         - poppler 
@@ -89,6 +93,7 @@ features:
         - libasound2-dev 
         - libssl-dev 
         - cmake 
+        - fd-find
         - libfreetype6-dev 
         - libexpat1-dev 
         - libxcb-composite0-dev 
@@ -115,6 +120,10 @@ features:
   - name: uv
     installer: bash
     cmd: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+  - name: tree-sitter-cli
+    installer: bash
+    cmd: cargo install --locked tree-sitter-cli
 
   - name: silicon (Debian only)
     conditions:

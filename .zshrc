@@ -17,6 +17,7 @@ export PATH="$HOME/go/bin":$PATH
 export PYTHONPATH=$PYTHONPATH:.
 
 export ELECTRON_OZONE_PLATFORM_HINT=auto
+export RUSTC_WRAPPER=sccache
 
 if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW_NO_AUTO_UPDATE=1
