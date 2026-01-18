@@ -52,7 +52,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo ""
     # Install Homebrew if not installed
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    /opt/homebrew/bin/brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed git-delta
+    /opt/homebrew/bin/brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed git-delta sccache
     /opt/homebrew/bin/brew install jesseduffield/lazygit/lazygit
 
 elif [[ -f /etc/redhat-release ]]; then
@@ -111,6 +111,7 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt install -y fish
 fi
 
+cargo install --locked tree-sitter-cli
 
 # Set up dotfiles
 echo ""
