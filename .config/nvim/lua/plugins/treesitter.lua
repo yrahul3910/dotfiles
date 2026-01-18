@@ -1,4 +1,4 @@
-local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gitcommit' }
+local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'rust', 'vim', 'vimdoc', 'gitcommit' }
 
 return {
   {
@@ -10,6 +10,7 @@ return {
     'MeanderingProgrammer/treesitter-modules.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {
+      auto_install = true,
       ensure_installed = ensure_installed,
       fold = { enable = true },
       highlight = { enable = true, disable = { 'latex' } },
