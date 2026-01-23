@@ -16,7 +16,12 @@
   },
   "permission": {
     "edit": "ask",
-    "bash": "ask",
+    "bash": {
+      "*": "ask",
+      "cargo build": "allow",
+      "cargo clippy": "allow",
+      "cargo fmt": "allow"
+    },
     "skill": "ask",
     "webfetch": "ask",
     "doom_loop": "ask",
@@ -29,6 +34,12 @@
       "command": ["bunx", "-y", "mcp-remote", "https://mcp.linear.app/mcp"],
       "enabled": true
     }
+  },
+  "tools": {
+    "linear*": false,
+    "linear_list_comments": true,
+    "linear_get_issue": true,
+    "linear_list_issues": true
   },
   "keybinds": {
     "leader": "ctrl+x",
