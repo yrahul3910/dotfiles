@@ -80,7 +80,7 @@ fi
 function tl() {
   sed -i --follow-symlinks -e "s/dark.conf/light.conf/g" ~/.config/kitty/kitty.conf 
   sed -i --follow-symlinks -e "s/GitHub Dark Default/Atom One Light/g" ~/.config/ghostty/config
-  sed -i --follow-symlinks -e "s/status-bg black/status-bg white/g" ~/.tmux.conf
+  sed -i --follow-symlinks -e "s/status-bg default/status-bg white/g" ~/.tmux.conf
   sed -i --follow-symlinks -e "s/status-fg white/status-fg black/g" ~/.tmux.conf
   tmux source-file ~/.tmux.conf
 }
@@ -88,7 +88,7 @@ function tl() {
 function td() {
   sed -i --follow-symlinks -e "s/light.conf/dark.conf/g" ~/.config/kitty/kitty.conf 
   sed -i --follow-symlinks -e "s/Atom One Light/GitHub Dark Default/g" ~/.config/ghostty/config
-  sed -i --follow-symlinks -e "s/status-bg white/status-bg black/g" ~/.tmux.conf
+  sed -i --follow-symlinks -e "s/status-bg white/status-bg default/g" ~/.tmux.conf
   sed -i --follow-symlinks -e "s/status-fg black/status-fg white/g" ~/.tmux.conf
   tmux source-file ~/.tmux.conf
 }
