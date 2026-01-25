@@ -271,7 +271,7 @@ grapheme-width-method = unicode
 # 
 # Any additional colors specified via background, foreground, palette, etc.
 # will override the colors specified in the theme.
-theme = "Rose Pine"
+theme = "GitHub Dark Default"
 
 # Background color for the window.
 # background = #282c34
@@ -688,7 +688,7 @@ mouse-scroll-multiplier = 1
 # The opacity level (opposite of transparency) of the background. A value of
 # 1 is fully opaque and a value of 0 is fully transparent. A value less than 0
 # or greater than 1 will be clamped to the nearest valid value.
-background-opacity = .85
+background-opacity = .8
 
 # A positive value enables blurring of the background when background-opacity
 # is less than 1. The value is the blur radius to apply. A value of 20
@@ -696,7 +696,7 @@ background-opacity = .85
 # rendering issues as well as performance issues.
 # 
 # This is only supported on macOS.
-background-blur-radius = 70
+background-blur-radius = 80
 
 # The opacity level (opposite of transparency) of an unfocused split.
 # Unfocused splits by default are slightly faded out to make it easier to see
