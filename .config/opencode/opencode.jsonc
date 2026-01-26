@@ -28,11 +28,6 @@
     "lsp": "allow"
   },
   "mcp": {
-    "linear": {
-      "type": "local",
-      "command": ["bunx", "-y", "mcp-remote", "https://mcp.linear.app/mcp"],
-      "enabled": true
-    }
   },
   "tools": {
     "linear*": false,
