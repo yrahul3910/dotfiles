@@ -1,8 +1,9 @@
 [user]
-	name = Rahul Yedida
-	email = yrahul3910@gmail.com
+    name = Rahul Yedida
+    email = yrahul3910@gmail.com
+
 [core]
-	editor = nvim
+    editor = nvim
     ignorecase = false
     fsmonitor = true
     splitindex = true
@@ -21,77 +22,78 @@
     autostash = true
 
 [credential "https://github.com"]
-	helper = 
-	helper = !/usr/local/bin/gh auth git-credential
+    helper = 
+    helper = !/usr/local/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/local/bin/gh auth git-credential
-[alias]
-	b = branch
-	bd = branch -D
+    helper = 
+    helper = !/usr/local/bin/gh auth git-credential
 
-	c = checkout
+[alias]
+    b = branch
+    bd = branch -D
+    c = checkout
     cp = cherry-pick
     cpc = cherry-pick --continue
-	d = diff
-	ds = diff --staged
-	l = log --oneline --no-merges --first-parent
+    d = diff
+    ds = diff --staged
+    f = "!f() { git fetch origin \"$1\"; }; f"
+    l = log --oneline --no-merges --first-parent
     lg = log --graph --oneline --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
     lgd = log --graph --oneline --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) => %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
     rpo = "!git remote prune origin && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == \"[gone]\" {sub(\"refs/heads/\", \"\", $1); print $1}'); do git branch -D $branch || echo \"Could not delete $branch (unmerged?)\"; done"
-	n = switch -c
-	p = push
-	pu = !git pull $(git remote) $(git branch --show-current)
-	pushf = !git push --force-with-lease --force-if-includes
-	rs = restore --staged
-	s = status
-	sd = stash drop
-	sl = stash list
-	sp = stash push
-	spo = stash pop
-	ss = stash push -S
-	ssh = stash show
-	unfck = reset --hard HEAD
+    n = switch -c
+    p = push
+    pu = !git pull $(git remote) $(git branch --show-current)
+    pushf = !git push --force-with-lease --force-if-includes
+    rs = restore --staged
+    s = status
+    sd = stash drop
+    sl = stash list
+    sp = stash push
+    spo = stash pop
+    ss = stash push -S
+    ssh = stash show
+    unfck = reset --hard HEAD
 
 [delta]
-	side-by-side = true
+    side-by-side = true
 
 [diff]
-	algorithm = histogram
+    algorithm = histogram
 
 [commit]
-	verbose = true
+    verbose = true
 
 [core]
-	autocrlf = false
+    autocrlf = false
 
 [diff]
-	algorithm = histogram
+    algorithm = histogram
 
 [gc]
-	pruneexpire = now
+    pruneexpire = now
 
 [grep]
-	linenumber = true
+    linenumber = true
 
 [help]
-	autocorrect = prompt
+    autocorrect = prompt
 
 [mergetool]
-	prompt = false
+    prompt = false
 
 [pull]
-	rebase = true
+    rebase = true
 
 [push]
-	autosetupremote = true
-	default = simple
+    autosetupremote = true
+    default = simple
 
 [rebase]
-	autostash = true
+    autostash = true
 
 [rerere]
-	autosquash = true
-	enabled = true
-	autoupdate = true
+    autosquash = true
+    enabled = true
+    autoupdate = true
 
