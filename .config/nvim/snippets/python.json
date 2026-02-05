@@ -1,0 +1,12 @@
+{
+  "for w/ range": {
+    "prefix": "forr",
+    "body": ["for ${1:value} in range($2):", "\t${3:pass}"],
+    "description": "for loop that iterates over range of integers"
+  },
+  "Method w/ return type": {
+    "prefix": "defst",
+    "body": ["def ${1:mname}(self$2) -> ${3:None}:", "\t${4:pass}"],
+    "description": "Class method definition"
+  },
+}
