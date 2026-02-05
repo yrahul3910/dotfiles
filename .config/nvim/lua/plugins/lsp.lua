@@ -159,6 +159,22 @@ return {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
+        basedpyright = {
+          filetypes = { 'python', 'pysh' },
+          settings = {
+            basedpyright = {
+              autoImportCompletion = true,
+            },
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = 'openFilesOnly',
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+          single_file_support = true,
+        },
         ty = {},
         lua_ls = {
           settings = {
