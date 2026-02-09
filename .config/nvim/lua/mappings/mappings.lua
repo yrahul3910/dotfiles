@@ -183,16 +183,13 @@ end, '[F]ind [B]uffers')
 nmap('<leader>fh', fzf.helptags, '[F]ind [H]elp')
 nmap('<leader>fr', '<cmd>FzfLua resume<CR>', '[F]ind [R]esume')
 nmap('<leader>gr', fzf.lsp_references, '[G]o to [R]eferences')
-nmap('<leader>ws', fzf.lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
+nmap('<leader>ws', fzf.lsp_document_symbols, '[W]orkspace [S]ymbols')
 
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
 nmap('<leader>ptr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
 nmap('<leader>ptm', '<cmd>NvimTreeResize -10<CR>', 'nvim-tree [m]inus')
 nmap('<leader>ptp', '<cmd>NvimTreeResize +10<CR>', 'nvim-tree [p]lus')
-
--- aerial
-nmap('<leader>a', '<cmd>AerialToggle!<CR>', 'Toggle Aerial window')
 
 -- neotest
 nmap('<leader>tr', function()

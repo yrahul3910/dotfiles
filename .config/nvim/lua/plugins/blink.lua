@@ -29,9 +29,6 @@ return {
             require('copilot.suggestion').accept()
           end
         end,
-        function() -- sidekick next edit suggestion
-          return require('sidekick').nes_jump_or_apply()
-        end,
       },
     },
 
