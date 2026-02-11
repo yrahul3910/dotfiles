@@ -26,9 +26,6 @@ if _G.myconfig.copilot_enabled then
         }
       end,
     },
-    {
-      'giuxtaposition/blink-cmp-copilot',
-    },
   }
 else
   return {}
