@@ -79,6 +79,14 @@ function so
   source $HOME/.config/fish/config.fish
 end
 
+function envsource
+  for line in (cat $argv | grep -v '^#' | grep -v '^\s*$')
+    set item (string split -m 1 '=' $line)
+    set -gx $item[1] $item[2]
+    echo "Exported key $item[1]"
+  end
+end
+
 function copyenv --description "Copy .env from home and ensure it's in .gitignore"
   # Copy .env from home to current directory
   if not test -f $HOME/.env

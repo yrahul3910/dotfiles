@@ -2,14 +2,5 @@
 # VERSION: 3.0
 SETUVAR HOMEBREW_NO_AUTOUPDATE:1
 SETUVAR HOMEBREW_NO_AUTO_UPDATE:1
-SETUVAR __fish_initialized:3800
-SETUVAR fish_color_host_remote:yellow
-SETUVAR fish_color_search_match:white
-SETUVAR fish_color_status:red
-SETUVAR fish_key_bindings:fish_vi_key_bindings
-SETUVAR fish_pager_color_completion:normal
-SETUVAR fish_pager_color_description:yellow\x1e\x2di
-SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
-SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
-SETUVAR fish_pager_color_selected_background:\x2dr
+SETUVAR __fish_initialized:4300
 SETUVAR fish_user_paths:/Users/yedidar/\x2ebun/bin\x1e/home/ryedida/\x2ecargo/bin
