@@ -68,6 +68,30 @@ nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')
 nmap('<leader>Gh', '<cmd>DiffviewFileHistory %<CR>', 'Open Diffview for file history')
 nmap('<leader>tc', '<cmd>tabclose<CR>', '[T]ab [C]lose')
 
+nmap('<leader>aq', function()
+  vim.ui.input({ prompt = 'Ask question' }, function(input)
+    if input == nil then
+      return
+    end
+
+    vim.cmd(':Chat ' .. input)
+  end)
+end, 'Ask [Q]uestion')
+
+vmap('<leader>ae', function()
+  vim.ui.input({ prompt = 'Enter instructions' }, function(input)
+    if input == nil then
+      return
+    end
+
+    vim.cmd(':Chat ' .. input)
+  end)
+end, 'AI [E]dit')
+
+vmap('<leader>ad', function()
+  vim.cmd ':Chat doc'
+end, 'AI [D]ocs')
+
 -- gitsigns
 nmap('<leader>gw', '<cmd>Git blame --first-parent<CR>', '[G]it [W]ho')
 
