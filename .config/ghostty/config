@@ -49,6 +49,11 @@
 # 
 # Changing this configuration at runtime will only affect new terminals, i.e.
 # new windows, tabs, etc.
+font-family = "Maple Mono"
+font-family-bold = "Maple Mono"
+font-family-italic = "Maple Mono"
+font-family-bold-italic = "Maple Mono"
+
 font-family = "CommitMono-v1"
 font-family-bold = "CommitMono-v1"
 font-family-italic = "CommitMono-v1"
