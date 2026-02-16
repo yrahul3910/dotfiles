@@ -175,6 +175,7 @@ return {
           single_file_support = true,
         },
         ty = {},
+        mojo = {},
         lua_ls = {
           settings = {
             Lua = {
