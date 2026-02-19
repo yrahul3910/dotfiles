@@ -17,10 +17,10 @@ return {
       stream_output = false,
     },
     models = {
-      default = 'claude-sonnet-4-5',
+      default = 'claude-haiku-4-5',
       anthropic = {
-        default = 'claude-sonnet-4-5',
-        ['claude-sonnet-4-5'] = {},
+        default = 'claude-haiku-4-5',
+        ['claude-haiku-4-5'] = {},
       },
     },
   },
