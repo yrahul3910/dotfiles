@@ -232,7 +232,15 @@ require 'autocmds'
 
 require('plugins.fancydiagnostics.diagnostics').setup()
 
-vim.cmd 'colorscheme catppuccin-mocha'
+do
+  local hour = tonumber(vim.fn.strftime('%H'))
+  local scheme = (hour >= 9 and hour < 18) and 'catppuccin' or 'catppuccin-mocha'
+
+  local ok, err = pcall(vim.cmd, 'colorscheme ' .. scheme)
+  if not ok then
+    vim.notify(('Failed to set colorscheme %q: %s'):format(scheme, err), vim.log.levels.WARN)
+  end
+end
 
 -- Make :Q behave like :q, make :Wq behave like :wq, etc.
 vim.cmd [[
