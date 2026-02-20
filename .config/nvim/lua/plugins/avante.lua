@@ -22,8 +22,11 @@ return {
       'git_commit',
       'delete_path',
     },
-    behavior = {
+    behaviour = {
       auto_suggestions = false,
+      auto_approve_tool_permissions = false,
+      auto_apply_diff_after_generation = false,
+      confirmation_ui_style = 'popup',
     },
     mappings = {
       diff = {
@@ -33,8 +36,6 @@ return {
       suggestion = {
         accept = '<M-y>',
         dismiss = '<M-n>',
-        next = '<M-l>',
-        prev = '<M-h>',
       },
       jump = {
         next = ']]',
@@ -65,20 +66,6 @@ return {
     'nvim-tree/nvim-web-devicons',
     'folke/snacks.nvim',
     'zbirenbaum/copilot.lua',
-    {
-      -- support for image pasting
-      'HakonHarnes/img-clip.nvim',
-      event = 'VeryLazy',
-      opts = {
-        default = {
-          embed_image_as_base64 = false,
-          prompt_for_file_name = false,
-          drag_and_drop = {
-            insert_mode = true,
-          },
-        },
-      },
-    },
     {
       'MeanderingProgrammer/render-markdown.nvim',
       opts = {
