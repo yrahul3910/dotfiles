@@ -98,7 +98,7 @@ vim.o.showmode = false
 -- Enable break indent
 vim.o.breakindent = true
 
--- Save undo history
+-- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
@@ -145,7 +145,15 @@ vim.o.scrolloff = 12
 vim.o.confirm = true
 
 -- Since nvim 0.11, this is opt-in
-vim.diagnostic.config { virtual_text = true }
+vim.diagnostic.config {
+  update_in_insert = true,
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+  virtual_text = true,
+  virtual_lines = false,
+  jump = { float = true },
+}
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.o.hlsearch = true
