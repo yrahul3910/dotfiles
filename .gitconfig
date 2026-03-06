@@ -34,7 +34,7 @@
     cpc = cherry-pick --continue
     d = diff
     ds = diff --staged
-    f = "!f() { git fetch origin \"$1\"; }; f"
+    f = "!f() { git fetch origin \"$1\" && git checkout \"$1\"; }; f"
     l = log --oneline --no-merges --first-parent
     lg = log --graph --oneline --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
     lgd = log --graph --oneline --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) => %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
