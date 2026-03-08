@@ -6,6 +6,7 @@ return { -- Useful plugin to show you pending keybinds.
 
     -- Document existing key chains
     require('which-key').add {
+      { '<leader>a', group = '[A]I' },
       { '<leader>p', group = '[P]lugins' },
       { '<leader>r', group = '[R]ename' },
       { '<leader>f', group = '[F]ind' },
