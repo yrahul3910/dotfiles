@@ -232,8 +232,6 @@ require 'marks'
 -- autocmds
 require 'autocmds'
 
-require('plugins.fancydiagnostics.diagnostics').setup()
-
 vim.cmd 'colorscheme catppuccin-mocha'
 
 -- Make :Q behave like :q, make :Wq behave like :wq, etc.

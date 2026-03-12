@@ -6,16 +6,18 @@ return { -- Useful plugin to show you pending keybinds.
 
     -- Document existing key chains
     require('which-key').add {
+      { '<leader>b', group = '[B]uffer' },
+      { '<leader>D', group = '[D]ebug' },
+      { '<leader>f', group = '[F]ind' },
+      { '<leader>G', group = '[G]it Diffview' },
+      { '<leader>g', group = '[G]it' },
+      { '<leader>l', group = '[L]aTeX / [L]SP' },
       { '<leader>p', group = '[P]lugins' },
       { '<leader>r', group = '[R]ename' },
-      { '<leader>g', group = '[G]it' },
       { '<leader>s', group = '[S]idekick' },
-      { '<leader>f', group = '[F]ind' },
+      { '<leader>t', group = '[T]oggle / [T]est' },
       { '<leader>w', group = '[W]orkspace' },
-      { '<leader>t', group = '[T]oggle' },
-      { '<leader>D', group = '[D]ebug' },
-      -- { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      { '<leader>l', group = '[L]aTeX / [L]SP' },
+      { '<leader>y', group = '[Y]ank' },
     }
   end,
 }
