@@ -49,6 +49,11 @@ function reverse_history_search
   end
 end
 
+# Usage: `prdiff origin/main..HEAD -- .`
+function prdiff
+  git --no-pager diff --word-diff=color --word-diff-regex="[A-Za-z0-9_]+|[^A-Za-z0-9_[:space:]]" $argv
+end
+
 function fish_user_key_bindings
   bind -M normal / reverse_history_search
   bind -M insert ctrl-y accept-autosuggestion

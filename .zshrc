@@ -29,6 +29,11 @@ function mkcd () {
   cd $1        # Change into the new directory
 }
 
+# Usage: `prdiff origin/main..HEAD -- .`
+function prdiff () {
+    git --no-pager diff --word-diff=color --word-diff-regex="[A-Za-z0-9_]+|[^A-Za-z0-9_[:space:]]" "$@"
+}
+
 function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     yazi "$@" --cwd-file="$tmp"
