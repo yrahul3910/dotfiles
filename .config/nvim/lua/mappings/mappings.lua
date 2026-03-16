@@ -172,18 +172,29 @@ end, '[Y]ank [Q]uote')
 -- nmap('<leader>yq', '"+yi"', '[Y]ank [Q]uote')  -- This works!
 
 -- fzf-lua
-local fzf = require 'fzf-lua'
+local Snacks = require 'snacks'
 
-nmap('<leader>ff', fzf.files, '[F]ind [F]iles')
-nmap('<leader>fg', fzf.live_grep_native, '[F]ind by [g]rep')
-nmap('<leader>fG', fzf.live_grep, '[F]ind by grep with [G]lob')
+nmap('<leader>ff', function()
+  Snacks.picker.files()
+end, '[F]ind [F]iles')
+nmap('<leader>fg', function()
+  Snacks.picker.grep()
+end, '[F]ind by [G]rep')
 nmap('<leader>fb', function()
-  fzf.buffers { sort_mru = true, sort_lastused = true }
+  Snacks.picker.buffers()
 end, '[F]ind [B]uffers')
-nmap('<leader>fh', fzf.helptags, '[F]ind [H]elp')
-nmap('<leader>fr', '<cmd>FzfLua resume<CR>', '[F]ind [R]esume')
-nmap('<leader>gr', fzf.lsp_references, '[G]o to [R]eferences')
-nmap('<leader>ws', fzf.lsp_document_symbols, '[W]orkspace [S]ymbols')
+nmap('<leader>fh', function()
+  Snacks.picker.help()
+end, '[F]ind [H]elp')
+nmap('<leader>fr', function()
+  Snacks.picker.resume()
+end, '[F]ind [R]esume')
+nmap('<leader>gr', function()
+  Snacks.picker.lsp_references()
+end, '[G]o to [R]eferences')
+nmap('<leader>ws', function()
+  Snacks.picker.lsp_symbols()
+end, '[W]orkspace [S]ymbols')
 
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
