@@ -181,7 +181,16 @@ nmap('<leader>fg', function()
   Snacks.picker.grep()
 end, '[F]ind by [G]rep')
 nmap('<leader>fb', function()
-  Snacks.picker.buffers()
+  Snacks.picker.buffers {
+    win = {
+      input = {
+        keys = {
+          ['<C-d>'] = { 'bufdelete', mode = { 'n', 'i' } },
+        },
+      },
+      list = { keys = { ['dd'] = 'bufdelete' } },
+    },
+  }
 end, '[F]ind [B]uffers')
 nmap('<leader>fh', function()
   Snacks.picker.help()
