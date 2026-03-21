@@ -63,28 +63,10 @@ imap('<C-q>', '`', 'Insert backtick')
 nmap(']o', '<C-i>', 'Next in jumplist')
 nmap('[o', '<C-o>', 'Back in jumplist')
 
--- pi coding agent
-vmap('<leader>av', ':PiAskSelection<CR>', 'Pi: [A]sk with [V]isual Selection')
-vmap('<leader>ab', ':PiAsk<CR>', 'Pi: [A]sk with [B]uffer Context')
-
 -- Diffview
 nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')
 nmap('<leader>Gh', '<cmd>DiffviewFileHistory %<CR>', 'Open Diffview for file history')
 nmap('<leader>tc', '<cmd>tabclose<CR>', '[T]ab [C]lose')
-
-vmap('<leader>ae', function()
-  vim.ui.input({ prompt = 'Enter instructions' }, function(input)
-    if input == nil then
-      return
-    end
-
-    vim.cmd(':Chat ' .. input)
-  end)
-end, 'AI [E]dit')
-
-vmap('<leader>ad', function()
-  vim.cmd ':Chat doc'
-end, 'AI [D]ocs')
 
 -- gitsigns
 nmap('<leader>gw', '<cmd>Git blame --first-parent<CR>', '[G]it [W]ho')
