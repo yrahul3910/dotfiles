@@ -52,7 +52,7 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
       return
     end
 
-    local clients = vim.lsp.get_clients()
+    local clients = vim.lsp.get_clients { bufnr = 0 }
     if clients == nil or #clients == 0 then
       return
     end
