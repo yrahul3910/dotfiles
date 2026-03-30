@@ -55,6 +55,7 @@ nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
 nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream (first)')
 nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase (second)')
 nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed (third)')
+nmap('<leader>gcd', '<C-w>v<C-w>l/=====<CR>', '[G]it [C]onflicts: Show [D]iffs')
 
 -- For 60% keyboard layouts where backtick is hard to type
 imap('<C-q>', '`', 'Insert backtick')
