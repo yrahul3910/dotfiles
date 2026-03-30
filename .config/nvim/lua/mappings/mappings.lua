@@ -67,20 +67,6 @@ noxmap('W', "<cmd>lua require('spider').motion('w')<CR>")
 noxmap('E', "<cmd>lua require('spider').motion('e')<CR>")
 noxmap('B', "<cmd>lua require('spider').motion('b')<CR>")
 
--- Debugging/DAP
-local dap = require 'dap'
-local dapui = require 'dapui'
-
-nmap('<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-nmap('<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-nmap('<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-nmap('<F3>', dap.step_out, { desc = 'Debug: Step Out' })
-nmap('<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
-nmap('<leader>Db', dap.toggle_breakpoint, { desc = '[D]ebug: Toggle [B]reakpoint' })
-nmap('<leader>Dc', function()
-  dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-end, { desc = '[D]ebug: Set [C]onditional Breakpoint' })
-nmap('<leader>Dt', dapui.toggle, { desc = '[D]ebug: [T]oggle UI' })
 
 -- For 60% keyboard layouts where backtick is hard to type
 imap('<C-q>', '`', 'Insert backtick')
@@ -198,44 +184,6 @@ end, '[Y]ank [Q]uote')
 -- nmap('<leader>yq', '"+yi"', '[Y]ank [Q]uote')  -- This works!
 
 -- fzf-lua
-local Snacks = require 'snacks'
-
-nmap('<leader>ff', function()
-  Snacks.picker.files()
-end, '[F]ind [F]iles')
-nmap('<leader>fg', function()
-  Snacks.picker.grep()
-end, '[F]ind by [G]rep')
-nmap('<leader>fb', function()
-  Snacks.picker.buffers {
-    win = {
-      input = {
-        keys = {
-          ['<C-d>'] = { 'bufdelete', mode = { 'n', 'i' } },
-        },
-      },
-      list = { keys = { ['dd'] = 'bufdelete' } },
-    },
-  }
-end, '[F]ind [B]uffers')
-nmap('<leader>fh', function()
-  Snacks.picker.help()
-end, '[F]ind [H]elp')
-nmap('<leader>fr', function()
-  Snacks.picker.resume()
-end, '[F]ind [R]esume')
-nmap('<leader>gr', function()
-  Snacks.picker.lsp_references()
-end, '[G]o to [R]eferences')
-nmap('<leader>gi', function()
-  Snacks.picker.lsp_incoming_calls()
-end, '[G]o to [I]ncoming calls')
-nmap('<leader>go', function()
-  Snacks.picker.lsp_outgoing_calls()
-end, '[G]o to [O]utgoing calls')
-nmap('<leader>ws', function()
-  Snacks.picker.lsp_symbols()
-end, '[W]orkspace [S]ymbols')
 
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
@@ -267,23 +215,6 @@ nmap('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
 nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer Delete [A]ll')
 
 -- luasnip
-local luasnip = require 'luasnip'
-imap('<C-k>', function()
-  if luasnip.expand_or_jumpable() then
-    luasnip.expand_or_jump()
-  end
-end, 'Expand snippet')
-ismap('<C-h>', function()
-  luasnip.jump(-1)
-end, 'Snippet: jump back')
-ismap('<C-l>', function()
-  luasnip.jump(1)
-end, 'Snippet: jump forward')
-ismap('<C-e>', function()
-  if luasnip.choice_active() then
-    luasnip.change_choice(1)
-  end
-end, 'Snippet: change active choice')
 
 -- theme
 nmap('<leader>cl', function()

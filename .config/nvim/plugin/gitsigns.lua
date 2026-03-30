@@ -1,10 +1,7 @@
 -- Adds git related signs to the gutter, as well as utilities for managing changes
-vim.pack.add {
-  src = 'https://github.com/lewis6991/gitsigns.nvim',
-  version = '1.0.1',
-}
+vim.pack.add({ 'https://github.com/lewis6991/gitsigns.nvim' })
 
-require('gitsigns.nvim').setup {
+require('gitsigns').setup {
   signs = {
     add = { text = '+' },
     change = { text = '~' },

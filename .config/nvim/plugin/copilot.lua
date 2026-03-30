@@ -1,3 +1,4 @@
+if _G.myconfig.copilot_enabled then
 -- TODO: Refactor; this is also used in `luasnip.lua`
 -- See `:h vim.pack-events`
 local hooks = function(ev)
@@ -12,15 +13,14 @@ local hooks = function(ev)
 end
 vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
-vim.pack.add {
+vim.pack.add({
   { src = 'https://github.com/giuxtaposition/blink-cmp-copilot' },
   {
     src = 'https://github.com/zbirenbaum/copilot.lua',
   },
-}
+})
 
-if _G.myconfig.copilot_enabled then
-  require('copilot.lua').setup {
+  require('copilot').setup({
     panel = {
       enabled = true,
       auto_refresh = true,
@@ -36,5 +36,5 @@ if _G.myconfig.copilot_enabled then
       auto_trigger = true,
       accept = false, -- disable built-in keymapping
     },
-  }
+  })
 end

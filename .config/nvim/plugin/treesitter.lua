@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
 local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'rust', 'vim', 'vimdoc', 'gitcommit' }
 
-vim.pack.add {
+vim.pack.add({
   {
     src = 'https://github.com/nvim-treesitter/nvim-treesitter',
     version = 'main',
@@ -22,9 +22,9 @@ vim.pack.add {
   {
     src = 'https://github.com/MeanderingProgrammer/treesitter-modules.nvim',
   },
-}
+})
 
-require('treesitter-modules.nvim').setup {
+require('treesitter-modules').setup {
   auto_install = true,
   ensure_installed = ensure_installed,
   fold = { enable = true },
@@ -40,8 +40,6 @@ require('treesitter-modules.nvim').setup {
   },
 }
 
-vim.pack.add {
-  src = 'https://github.com/nvim-treesitter/nvim-treesitter-context',
-}
+vim.pack.add({ 'https://github.com/nvim-treesitter/nvim-treesitter-context' })
 
-require('nvim-treesitter-context').setup { max_lines = 5 }
+require('treesitter-context').setup { max_lines = 5 }

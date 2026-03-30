@@ -1,8 +1,8 @@
 -- If you came here because some auto-session is broken, they're probably in
 -- ~/.local/share/nvim/sessions/
-vim.pack.add {
+vim.pack.add ({{
   src = 'https://github.com/rmagatti/auto-session',
-}
+}})
 
 require('auto-session').setup {
   log_level = 'error',

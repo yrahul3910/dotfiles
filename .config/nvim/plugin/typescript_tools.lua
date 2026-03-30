@@ -6,4 +6,4 @@ vim.pack.add {
   },
 }
 
-require('typescript-tools.nvim').setup {}
+require('typescript-tools').setup {}

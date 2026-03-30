@@ -14,9 +14,9 @@ vim.pack.add {
   },
 }
 
-require('mason.nvim').setup {}
-require('fidget.nvim').setup {}
-require('lazydev.nvim').setup {}
+require('mason').setup {}
+require('fidget').setup {}
+require('lazydev').setup {}
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),

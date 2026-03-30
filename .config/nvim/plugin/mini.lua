@@ -1,6 +1,6 @@
-vim.pack.add {
+vim.pack.add({ {
   src = 'https://github.com/nvim-mini/mini.nvim',
-}
+}})
 
 -- Better Around/Inside textobjects
 --

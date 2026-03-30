@@ -1,4 +1,4 @@
-vim.pack.add {
+vim.pack.add({
   {
     src = 'https://github.com/nvim-lua/plenary.nvim',
   },
@@ -23,11 +23,11 @@ vim.pack.add {
   {
     src = 'https://github.com/yetone/avante.nvim',
   },
-}
+})
 
-require('render-markdown.nvim').setup {}
+require('render-markdown').setup {}
 
-require('avante.nvim').setup {
+require('avante').setup {
   instructions_file = 'AGENTS.md',
   provider = 'opencode',
   acp_providers = {

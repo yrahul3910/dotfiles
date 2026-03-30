@@ -1,10 +1,10 @@
-vim.pack.add {
+vim.pack.add({{
   src = 'https://github.com/catppuccin/nvim',
   name = 'catppuccin',
-  version = '1.11.0',
-}
+  version = 'v1.11.0'
+}})
 
-require('catppuccin').setup {
+require('catppuccin').setup({
   flavor = 'latte',
   integrations = {
     aerial = true,
@@ -18,4 +18,4 @@ require('catppuccin').setup {
     light = 'latte',
     dark = 'latte',
   },
-}
+})

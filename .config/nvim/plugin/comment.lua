@@ -1,4 +1,4 @@
 -- "gc" to comment visual regions/lines
-vim.pack.add { 'https://github.com/numToStr/Comment.nvim' }
+vim.pack.add({'https://github.com/numToStr/Comment.nvim' })
 
-require('Comment.nvim').setup {}
+require('Comment').setup {}

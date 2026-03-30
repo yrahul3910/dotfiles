@@ -1,8 +1,8 @@
-vim.pack.add {
+vim.pack.add({ {
   src = 'https://github.com/nvim-tree/nvim-tree.lua',
-}
+}})
 
-require('nvim-tree.lua').setup {
+require('nvim-tree').setup {
   filters = {
     dotfiles = false,
     exclude = {},
