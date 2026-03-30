@@ -1,10 +1,12 @@
-return {
-  'folke/snacks.nvim',
+vim.pack.add {
+  src = 'folke/snacks.nvim',
   priority = 1000,
-  lazy = false,
+}
+
+require('snacks.nvim').setup(
   ---@type snacks.Config
-  opts = {
+  {
     input = { enabled = true },
     picker = {},
-  },
-}
+  }
+)

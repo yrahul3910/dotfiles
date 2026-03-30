@@ -17,6 +17,7 @@ local nmap = map { mode = 'n' }
 local vmap = map { mode = 'v' }
 local imap = map { mode = 'i' }
 local ismap = map { mode = { 'i', 's' } }
+local noxmap = map { mode = { 'n', 'o', 'x' } }
 
 local nth_word_from_end = function()
   local count = vim.v.count
@@ -55,6 +56,31 @@ nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
 nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream (first)')
 nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase (second)')
 nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed (third)')
+
+-- Conform
+nmap('<leader>fm', function()
+  require('conform').format { async = true, lsp_format = 'fallback' }
+end, '[F]or[m]at buffer')
+
+-- Spider
+noxmap('W', "<cmd>lua require('spider').motion('w')<CR>")
+noxmap('E', "<cmd>lua require('spider').motion('e')<CR>")
+noxmap('B', "<cmd>lua require('spider').motion('b')<CR>")
+
+-- Debugging/DAP
+local dap = require 'dap'
+local dapui = require 'dapui'
+
+nmap('<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
+nmap('<F1>', dap.step_into, { desc = 'Debug: Step Into' })
+nmap('<F2>', dap.step_over, { desc = 'Debug: Step Over' })
+nmap('<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+nmap('<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
+nmap('<leader>Db', dap.toggle_breakpoint, { desc = '[D]ebug: Toggle [B]reakpoint' })
+nmap('<leader>Dc', function()
+  dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+end, { desc = '[D]ebug: Set [C]onditional Breakpoint' })
+nmap('<leader>Dt', dapui.toggle, { desc = '[D]ebug: [T]oggle UI' })
 
 -- For 60% keyboard layouts where backtick is hard to type
 imap('<C-q>', '`', 'Insert backtick')
