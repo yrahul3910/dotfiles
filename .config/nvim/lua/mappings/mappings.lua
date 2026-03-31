@@ -68,6 +68,10 @@ nmap('<leader>Gd', '<cmd>DiffviewOpen<CR>', 'Open Diffview')
 nmap('<leader>Gh', '<cmd>DiffviewFileHistory %<CR>', 'Open Diffview for file history')
 nmap('<leader>tc', '<cmd>tabclose<CR>', '[T]ab [C]lose')
 
+-- treesitter incremental selection
+nmap('<A-o>', 'van')
+nmap('<A-i>', 'vin')
+
 -- gitsigns
 nmap('<leader>gw', '<cmd>Git blame --first-parent<CR>', '[G]it [W]ho')
 
