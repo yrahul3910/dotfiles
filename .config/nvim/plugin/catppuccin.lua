@@ -1,11 +1,11 @@
-vim.pack.add({{
+vim.pack.add { {
   src = 'https://github.com/catppuccin/nvim',
   name = 'catppuccin',
-  version = 'v1.11.0'
-}})
+  version = 'v1.11.0',
+} }
 
-require('catppuccin').setup({
-  flavor = 'latte',
+require('catppuccin').setup {
+  flavor = 'mocha',
   integrations = {
     aerial = true,
     blink_cmp = true,
@@ -16,8 +16,8 @@ require('catppuccin').setup({
   },
   background = {
     light = 'latte',
-    dark = 'latte',
+    dark = 'mocha',
   },
-})
+}
 
 vim.cmd 'colorscheme catppuccin-mocha'
