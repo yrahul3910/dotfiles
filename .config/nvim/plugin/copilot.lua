@@ -1,5 +1,4 @@
 if _G.myconfig.copilot_enabled then
--- TODO: Refactor; this is also used in `luasnip.lua`
 -- See `:h vim.pack-events`
 local hooks = function(ev)
   -- Use available |event-data|

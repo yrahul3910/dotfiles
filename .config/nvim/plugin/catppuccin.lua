@@ -19,3 +19,5 @@ require('catppuccin').setup({
     dark = 'latte',
   },
 })
+
+vim.cmd 'colorscheme catppuccin-mocha'

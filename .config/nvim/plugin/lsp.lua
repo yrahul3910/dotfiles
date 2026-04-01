@@ -9,7 +9,6 @@ vim.pack.add {
   -- Useful status updates for LSP.
   { src = 'https://github.com/j-hui/fidget.nvim' },
   {
-    -- TODO:: Make this only load for lua files, maybe put it in `ftplugin`?
     src = 'https://github.com/folke/lazydev.nvim',
   },
 }
@@ -34,7 +33,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --  See `:help K` for why this keymap.
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
 
-    -- WARN: This is not Goto Definition, this is Goto Declaration.
     --  For example, in C this would take you to the header.
     nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 

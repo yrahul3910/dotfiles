@@ -1,4 +1,3 @@
--- TODO: Refactor; this is also used in `luasnip.lua` and `copilot.lua`
 -- See `:h vim.pack-events`
 local hooks = function(ev)
   -- Use available |event-data|
