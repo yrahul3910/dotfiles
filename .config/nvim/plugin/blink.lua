@@ -1,13 +1,15 @@
-return {
-  'saghen/blink.cmp',
-  lazy = true,
-  event = 'VeryLazy',
-  dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
-  version = 'v1.3.1',
+vim.pack.add {
+  { src = 'https://github.com/L3MON4D3/LuaSnip', version = 'v2.4.1' },
+  {
+    src = 'https://github.com/saghen/blink.cmp',
+    version = 'v1.3.1',
+  },
+}
 
+require('blink.cmp').setup(
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
-  opts = {
+  {
     -- 'default' for mappings similar to built-in completion
     -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
     -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
@@ -78,8 +80,5 @@ return {
         auto_show_delay_ms = 100,
       },
     },
-  },
-  -- allows extending the providers array elsewhere in your config
-  -- without having to redefine it
-  opts_extend = { 'sources.default' },
-}
+  }
+)
