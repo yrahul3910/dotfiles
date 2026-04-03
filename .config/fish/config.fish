@@ -185,3 +185,7 @@ set --export PATH $BUN_INSTALL/bin $PATH
 
 set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/go/bin $PATH
+
+set -gx GPG_TTY (tty)
+
+
