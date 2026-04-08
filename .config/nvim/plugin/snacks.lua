@@ -4,7 +4,11 @@ require('snacks').setup(
   ---@type snacks.Config
   {
     input = { enabled = true },
-    picker = {},
+    picker = {
+      matcher = {
+        frecency = true,
+      },
+    },
   }
 )
 
