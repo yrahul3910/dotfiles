@@ -67,7 +67,6 @@ noxmap('W', "<cmd>lua require('spider').motion('w')<CR>")
 noxmap('E', "<cmd>lua require('spider').motion('e')<CR>")
 noxmap('B', "<cmd>lua require('spider').motion('b')<CR>")
 
-
 -- For 60% keyboard layouts where backtick is hard to type
 imap('<C-q>', '`', 'Insert backtick')
 
@@ -222,7 +221,7 @@ nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer De
 
 -- theme
 nmap('<leader>cl', function()
-  vim.cmd 'colorscheme catppuccin'
+  vim.cmd 'colorscheme catppuccin-latte'
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
   vim.cmd 'colorscheme catppuccin-mocha'
