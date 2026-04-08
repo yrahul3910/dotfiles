@@ -217,7 +217,7 @@ nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer De
 
 -- theme
 nmap('<leader>cl', function()
-  vim.cmd 'colorscheme catppuccin'
+  vim.cmd 'colorscheme catppuccin-latte'
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
   vim.cmd 'colorscheme catppuccin-mocha'
