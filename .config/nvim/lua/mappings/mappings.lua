@@ -31,6 +31,7 @@ end
 -- neovide: re-add common mappings
 if vim.g.neovide then
   imap('<C-v>', '<C-R>+', 'Paste from clipboard')
+  imap('<D-v>', '<C-R>+', 'Paste from clipboard')
   nmap('<C-v>', '"+p', 'Paste from clipboard')
   vmap('<C-v>', '"+p', 'Paste from clipboard')
 

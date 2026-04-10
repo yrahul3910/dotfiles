@@ -175,7 +175,7 @@ local servers = {
     },
     single_file_support = true,
   },
-  ty = {},
+  -- ty = {},
   lua_ls = {
     settings = {
       Lua = {
