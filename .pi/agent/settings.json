@@ -2,14 +2,14 @@
   "lastChangelogVersion": "0.67.1",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-sonnet-4-6",
-  "defaultThinkingLevel": "minimal",
+  "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
   "transport": "auto",
   "packages": [
     "npm:pi-permission-system",
     "npm:@tmustier/pi-usage-extension",
     "npm:@tintinweb/pi-subagents",
-    "git:github.com/annapurna-himal/pi-vim-editor",
+    "npm:@heyhuynhgiabuu/pi-diff",
     "git:github.com/ghoseb/pi-splash"
   ],
   "theme": "dark",
