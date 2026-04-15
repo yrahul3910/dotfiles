@@ -1,4 +1,13 @@
 {
+  "bash": {
+    "rm *": "ask",
+    "rg": "allow",
+    "fd": "allow",
+    "head": "allow",
+    "tail": "allow",
+    "python *": "ask",
+    "python3 *": "ask"
+  },
   "defaultPolicy": {
     "tools": "ask",
     "bash": "ask",
