@@ -20,6 +20,12 @@
     "edit": "ask",
     "bash": {
       "*": "ask",
+      "rg": "allow",
+      "fd": "allow",
+      "head": "allow",
+      "tail": "allow",
+      "find": "allow",
+      "ls": "allow",
       "cargo build": "allow",
       "cargo clippy": "allow",
       "cargo fmt": "allow"

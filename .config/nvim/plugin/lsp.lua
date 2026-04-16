@@ -200,6 +200,7 @@ local servers = {
       },
     },
   },
+  biome = {},
   tailwindcss = {},
   zls = {},
 }
