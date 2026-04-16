@@ -1441,8 +1441,14 @@ class VimEditor extends CustomEditor {
     // ─── Render (mode indicator on bottom border) ───────────────────────
 
     render(width: number): string[] {
-        const lines = super.render(width);
+        const lines = super.render(width - 2);
         if (lines.length === 0) return lines;
+
+        for (let i = 0; i < lines.length; i++) {
+            if (i == 1) {
+                lines[i] = "❯ " + lines[i];
+            }
+        }
 
         // Restyle the software cursor per vim mode.
         // The base Editor always renders a reverse-video block: \x1b[7m<char>\x1b[0m.
