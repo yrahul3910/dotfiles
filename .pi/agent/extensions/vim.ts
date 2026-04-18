@@ -1542,7 +1542,6 @@ export default function (pi: ExtensionAPI) {
     pi.on("session_start", (_event, ctx) => {
         if (!ctx.hasUI || !vimEnabled) return;
         ctx.ui.setEditorComponent((tui, theme, kb) => new VimEditor(tui, theme, kb));
-        ctx.ui.setStatus("vim", "\x1b[1;44;97m VIM \x1b[0m");
     });
 
     pi.on("session_shutdown", () => {
