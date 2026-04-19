@@ -186,7 +186,6 @@ nmap('<leader>yq', function()
   print 'No quotes found after cursor'
 end, '[Y]ank [Q]uote')
 
-
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
 nmap('<leader>ptr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
@@ -221,7 +220,7 @@ nmap('<leader>cl', function()
   vim.cmd 'colorscheme catppuccin-latte'
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
-  vim.cmd 'colorscheme catppuccin-mocha'
+  vim.cmd 'colorscheme kanagawa'
 end, '[C]olorscheme [D]ark')
 
 -- substitutions

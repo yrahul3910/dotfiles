@@ -95,7 +95,7 @@ vim.api.nvim_create_augroup('qs_colors', { clear = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = 'qs_colors',
   callback = function(args)
-    if args.match == 'catppuccin-mocha' then
+    if args.match == 'kanagawa-wave' then
       -- Dark theme
       vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
         fg = '#afff5f',
