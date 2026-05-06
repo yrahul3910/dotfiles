@@ -8,6 +8,53 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Automatically change quickscope highlight colors based on the current theme's background (dark or light).
+vim.api.nvim_create_augroup('qs_colors', { clear = true })
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = 'qs_colors',
+  pattern = '*', -- Matches any theme
+  callback = function()
+    -- Check the current background determined by the theme or terminal
+    local is_dark = vim.o.background == 'dark'
+
+    if is_dark then
+      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+        fg = '#afff5f',
+        bold = true,
+        nocombine = true,
+        ctermfg = 155,
+        cterm = { bold = true },
+      })
+      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+        fg = '#d7afff',
+        underline = true,
+        nocombine = true,
+        ctermfg = 81,
+        cterm = { underline = true },
+      })
+    else
+      -- Light theme
+      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+        fg = '#005f00', -- dark green
+        bold = true,
+        nocombine = true,
+        ctermfg = 22, -- approximate dark green
+        cterm = { bold = true },
+      })
+      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+        fg = '#5f0087', -- dark teal/blue
+        underline = true,
+        nocombine = true,
+        ctermfg = 24, -- approximate dark blue
+        cterm = { underline = true },
+      })
+    end
+
+    -- 2. Apply highlights that should be exactly the same regardless of light/dark
+    vim.api.nvim_set_hl(0, 'SomeGenericGroup', { underline = true })
+  end,
+})
+
 -- LSP progress bar in ghostty/iTerm/GNOME terminal/etc. that support OSC 9;4.
 -- See: https://www.reddit.com/r/neovim/comments/1rcvliq/ghostty_lsp_progress_bar/o73wdkc/
 vim.api.nvim_create_autocmd('LspProgress', {
@@ -86,47 +133,6 @@ vim.api.nvim_create_autocmd('CursorHoldI', {
         silent = true,
         focusable = false,
       }
-    end
-  end,
-})
-
--- QuickScope colors
-vim.api.nvim_create_augroup('qs_colors', { clear = true })
-vim.api.nvim_create_autocmd('ColorScheme', {
-  group = 'qs_colors',
-  callback = function(args)
-    if args.match == 'catppuccin-mocha' then
-      -- Dark theme
-      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
-        fg = '#afff5f',
-        bold = true,
-        nocombine = true,
-        ctermfg = 155,
-        cterm = { bold = true },
-      })
-      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
-        fg = '#d7afff',
-        underline = true,
-        nocombine = true,
-        ctermfg = 81,
-        cterm = { underline = true },
-      })
-    else
-      -- Light theme
-      vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
-        fg = '#005f00', -- dark green
-        bold = true,
-        nocombine = true,
-        ctermfg = 22, -- approximate dark green
-        cterm = { bold = true },
-      })
-      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
-        fg = '#5f0087', -- dark teal/blue
-        underline = true,
-        nocombine = true,
-        ctermfg = 24, -- approximate dark blue
-        cterm = { underline = true },
-      })
     end
   end,
 })
