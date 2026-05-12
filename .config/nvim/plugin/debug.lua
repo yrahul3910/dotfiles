@@ -7,7 +7,7 @@
 -- be extended to other languages as well. That's why it's called
 -- kickstart.nvim and not kitchen-sink.nvim ;)
 
-vim.pack.add({
+vim.pack.add {
   -- Creates a beautiful debugger UI
   { src = 'https://github.com/rcarriga/nvim-dap-ui' },
 
@@ -23,7 +23,7 @@ vim.pack.add({
 
   -- Main DAP plugin
   { src = 'https://github.com/mfussenegger/nvim-dap' },
-})
+}
 
 local dap = require 'dap'
 local dapui = require 'dapui'
@@ -71,9 +71,6 @@ dap.listeners.after.event_initialized['dapui_config'] = dapui.open
 dap.listeners.before.event_terminated['dapui_config'] = dapui.close
 dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-require('dap-python').setup 'python3'
-require('dap-python').test_runner = 'pytest'
-
 local nmap = function(keys, func, desc)
   if desc then
     desc = 'DAP: ' .. desc
@@ -82,13 +79,13 @@ local nmap = function(keys, func, desc)
   vim.keymap.set('n', keys, func, { desc = desc })
 end
 
-nmap('<F5>', dap.continue, 'Debug: Start/Continue' )
-nmap('<F1>', dap.step_into,  'Debug: Step Into' )
-nmap('<F2>', dap.step_over, 'Debug: Step Over' )
-nmap('<F3>', dap.step_out,  'Debug: Step Out' )
-nmap('<F7>', dapui.toggle,  'Debug: See last session result.' )
-nmap('<leader>Db', dap.toggle_breakpoint,  '[D]ebug: Toggle [B]reakpoint' )
+nmap('<F5>', dap.continue, 'Debug: Start/Continue')
+nmap('<F1>', dap.step_into, 'Debug: Step Into')
+nmap('<F2>', dap.step_over, 'Debug: Step Over')
+nmap('<F3>', dap.step_out, 'Debug: Step Out')
+nmap('<F7>', dapui.toggle, 'Debug: See last session result.')
+nmap('<leader>Db', dap.toggle_breakpoint, '[D]ebug: Toggle [B]reakpoint')
 nmap('<leader>Dc', function()
   dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-end,  '[D]ebug: Set [C]onditional Breakpoint' )
-nmap('<leader>Dt', dapui.toggle,  '[D]ebug: [T]oggle UI' )
+end, '[D]ebug: Set [C]onditional Breakpoint')
+nmap('<leader>Dt', dapui.toggle, '[D]ebug: [T]oggle UI')

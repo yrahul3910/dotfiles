@@ -148,7 +148,7 @@ vim.o.confirm = true
 vim.diagnostic.config {
   update_in_insert = true,
   severity_sort = true,
-  float = { border = 'rounded', source = 'if_many' },
+  float = { border = 'rounded', source = 'if_many', float = { title_pos = 'right' } },
   underline = { severity = { min = vim.diagnostic.severity.WARN } },
   virtual_text = true,
   virtual_lines = false,
@@ -203,6 +203,8 @@ vim.cmd [[
   cnoreabbrev <expr> QA! (getcmdtype() == ':' ? 'qa!' : 'QA!')
   cnoreabbrev <expr> Wqa (getcmdtype() == ':' ? 'wqa' : 'Wqa')
 ]]
+
+vim.cmd [[ colorscheme catppuccin ]]
 
 -- Highlight .pysh files as Python
 -- See https://github.com/yrahul3910/pysh

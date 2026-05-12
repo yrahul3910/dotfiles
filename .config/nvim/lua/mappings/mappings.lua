@@ -217,10 +217,23 @@ nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer De
 
 -- theme
 nmap('<leader>cl', function()
-  vim.cmd 'colorscheme catppuccin-latte'
+  vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+    fg = '#005f00', -- dark green
+    bold = true,
+    nocombine = true,
+    ctermfg = 22, -- approximate dark green
+    cterm = { bold = true },
+  })
+  vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+    fg = '#5f0087', -- dark teal/blue
+    underline = true,
+    nocombine = true,
+    ctermfg = 24, -- approximate dark blue
+    cterm = { underline = true },
+  })
 end, '[C]olorscheme [L]ight')
 nmap('<leader>cd', function()
-  vim.cmd 'colorscheme kanagawa'
+  vim.cmd 'colorscheme catppuccin'
 end, '[C]olorscheme [D]ark')
 
 -- substitutions
