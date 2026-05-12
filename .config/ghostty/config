@@ -49,20 +49,36 @@
 # 
 # Changing this configuration at runtime will only affect new terminals, i.e.
 # new windows, tabs, etc.
+
+# font-family = Monaspace Neon NF
+# font-style = Regular
+# font-style-bold = Bold
+# font-style-italic = Italic
+# font-style-bold-italic = Bold Italic
+# font-feature === "'calt', 'ss01', 'ss02', 'ss03', 'ss07', 'ss09', 'liga'"
+# font-size = 14
+# font-thicken = true
+# adjust-cell-height = 30
+# adjust-underline-position = 8
+
 font-family = "Maple Mono"
-font-family-bold = "Maple Mono"
-font-family-italic = "Maple Mono"
-font-family-bold-italic = "Maple Mono"
+font-size = 14
+adjust-underline-position = 6
+adjust-cell-height = 30%
 
-font-family = "CommitMono-v1"
-font-family-bold = "CommitMono-v1"
-font-family-italic = "CommitMono-v1"
-font-family-bold-italic = "CommitMono-v1"
+# font-family = "CommitMono-v1"
+# font-family-bold = "CommitMono-v1"
+# font-family-italic = "CommitMono-v1"
+# font-family-bold-italic = "CommitMono-v1"
+# adjust-cell-height = 20
+# font-thicken = true
 
-font-family = "FiraCode Nerd Font"
-font-family-bold = "FiraCode Nerd Font"
-font-family-italic = "FiraCode Nerd Font"
-font-family-bold-italic = "FiraCode Nerd Font"
+# 
+# font-family = "FiraCode Nerd Font"
+# font-family-bold = "FiraCode Nerd Font"
+# font-family-italic = "FiraCode Nerd Font"
+# font-family-bold-italic = "FiraCode Nerd Font"
+# adjust-cell-height = 15%
 
 # The named font style to use for each of the requested terminal font styles.
 # This looks up the style based on the font style string advertised by the
@@ -76,11 +92,11 @@ font-family-bold-italic = "FiraCode Nerd Font"
 # These are only valid if its corresponding font-family is also specified. If
 # no font-family is specified, then the font-style is ignored unless you're
 # disabling the font style.
-font-style = default
-
-font-style-bold = default
-font-style-italic = default
-font-style-bold-italic = default
+# font-style = default
+# 
+# font-style-bold = default
+# font-style-italic = default
+# font-style-bold-italic = default
 # Control whether Ghostty should synthesize a style if the requested style is
 # not available in the specified font-family.
 # 
@@ -130,7 +146,7 @@ font-synthetic-style = bold,italic,bold-italic
 # 
 # To generally disable most ligatures, use `-calt`, `-liga`, and `-dlig` (as
 # separate repetitive entries in your config).
-font-feature = 
+#font-feature = 
 
 # Font size in points. This value can be a non-integer and the nearest integer
 # pixel size will be selected. If you have a high dpi display where 1pt = 2px
@@ -188,7 +204,7 @@ font-codepoint-map =
 
 # Draw fonts with a thicker stroke, if supported. This is only supported
 # currently on macOS.
-font-thicken = false
+#font-thicken = false
 
 # All of the configurations behavior adjust various metrics determined by the
 # font. The values can be integers (1, -1, etc.) or a percentage (20%, -15%,
@@ -217,14 +233,12 @@ font-thicken = false
 #     that things like status lines continue to look aligned.
 adjust-cell-width =
 
-# use 15% for FiraCode NF Mono
-adjust-cell-height = 30%   
-adjust-font-baseline = 
-adjust-underline-position = 
-adjust-underline-thickness = 
-adjust-strikethrough-position = 
-adjust-strikethrough-thickness = 
-adjust-cursor-thickness = 
+# adjust-font-baseline = 
+# adjust-underline-position = 
+# adjust-underline-thickness = 
+# adjust-strikethrough-position = 
+# adjust-strikethrough-thickness = 
+# adjust-cursor-thickness = 
 # The method to use for calculating the cell width of a grapheme cluster.
 # The default value is `unicode` which uses the Unicode standard to determine
 # grapheme width. This results in correct grapheme width but may result in
@@ -693,7 +707,7 @@ mouse-scroll-multiplier = 1
 # The opacity level (opposite of transparency) of the background. A value of
 # 1 is fully opaque and a value of 0 is fully transparent. A value less than 0
 # or greater than 1 will be clamped to the nearest valid value.
-background-opacity = .8
+background-opacity = .9
 
 # A positive value enables blurring of the background when background-opacity
 # is less than 1. The value is the blur radius to apply. A value of 20
