@@ -1,8 +1,8 @@
 vim.pack.add {
-  { src = 'https://github.com/L3MON4D3/LuaSnip', version = 'v2.4.1' },
+  { src = 'https://github.com/L3MON4D3/LuaSnip' },
+  { src = 'https://github.com/saghen/blink.lib' },
   {
     src = 'https://github.com/saghen/blink.cmp',
-    version = 'v1.3.1',
   },
 }
 
@@ -35,10 +35,6 @@ require('blink.cmp').setup(
     },
 
     appearance = {
-      -- Sets the fallback highlight groups to nvim-cmp's highlight groups
-      -- Useful for when your theme doesn't support blink.cmp
-      -- will be removed in a future release
-      use_nvim_cmp_as_default = true,
       -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
       -- Adjusts spacing to ensure icons are aligned
       nerd_font_variant = 'mono',
@@ -79,6 +75,21 @@ require('blink.cmp').setup(
         auto_show = true,
         auto_show_delay_ms = 100,
       },
+      menu = {
+        auto_show = true,
+        -- nvim-cmp style menu
+        draw = {
+          columns = {
+            { 'kind_icon' },
+            { 'label', 'label_description', gap = 1 },
+          },
+        },
+      },
+      ghost_text = { enabled = false },
     },
   }
 )
+
+local cmp = require 'blink.cmp'
+cmp.build():wait(60000)
+cmp.setup()
