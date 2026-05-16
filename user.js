@@ -14,11 +14,11 @@
  * url: https://github.com/yokoffing/Better-Fox                             *
  * license: https://github.com/yokoffing/Better-Fox/blob/master/LICENSE     *
  * README: https://github.com/yokoffing/Better-Fox/blob/master/README.md    *
-****************************************************************************/
+ ****************************************************************************/
 
 /****************************************************************************
  * SECTION: FASTFOX                                                         *
-****************************************************************************/
+ ****************************************************************************/
 user_pref("image.jxl.enabled", true);
 user_pref("layout.css.grid-template-masonry-value.enabled", true);
 user_pref("dom.enable_web_task_scheduling", true);
@@ -28,15 +28,27 @@ user_pref("layout.css.animation-composition.enabled", true);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
-****************************************************************************/
+ ****************************************************************************/
 /** TRACKING PROTECTION ***/
 user_pref("browser.contentblocking.category", "strict");
 user_pref("privacy.trackingprotection.emailtracking.enabled", true);
-user_pref("privacy.query_stripping.strip_list", "__hsfp __hssc __hstc __s _hsenc _openstat dclid fbclid gbraid gclid hsCtaTracking igshid mc_eid ml_subscriber ml_subscriber_hash msclkid oft_c oft_ck oft_d oft_id oft_ids oft_k oft_lk oft_sk oly_anon_id oly_enc_id rb_clickid s_cid twclid vero_conv vero_id wbraid wickedid yclid");
-user_pref("urlclassifier.trackingSkipURLs", "*.reddit.com, *.twitter.com, *.twimg.com");
-user_pref("urlclassifier.features.socialtracking.skipURLs", "*.instagram.com, *.twitter.com, *.twimg.com");
+user_pref(
+  "privacy.query_stripping.strip_list",
+  "__hsfp __hssc __hstc __s _hsenc _openstat dclid fbclid gbraid gclid hsCtaTracking igshid mc_eid ml_subscriber ml_subscriber_hash msclkid oft_c oft_ck oft_d oft_id oft_ids oft_k oft_lk oft_sk oly_anon_id oly_enc_id rb_clickid s_cid twclid vero_conv vero_id wbraid wickedid yclid",
+);
+user_pref(
+  "urlclassifier.trackingSkipURLs",
+  "*.reddit.com, *.twitter.com, *.twimg.com",
+);
+user_pref(
+  "urlclassifier.features.socialtracking.skipURLs",
+  "*.instagram.com, *.twitter.com, *.twimg.com",
+);
 user_pref("privacy.trackingprotection.lower_network_priority", true);
-user_pref("privacy.partition.always_partition_third_party_non_cookie_storage", true);
+user_pref(
+  "privacy.partition.always_partition_third_party_non_cookie_storage",
+  true,
+);
 user_pref("beacon.enabled", false);
 
 /** OCSP & CERTS / HPKP ***/
@@ -44,6 +56,9 @@ user_pref("security.OCSP.enabled", 0);
 user_pref("security.remote_settings.crlite_filters.enabled", true);
 user_pref("security.pki.crlite_mode", 2);
 user_pref("security.cert_pinning.enforcement_level", 2);
+
+user_pref("dom.serviceWorkers.enabled", false);
+user_pref("dom.serviceWorkers.privateBrowsing.enabled", false);
 
 /** SSL / TLS ***/
 user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
@@ -135,7 +150,10 @@ user_pref("media.peerconnection.ice.default_address_only", true);
 user_pref("browser.safebrowsing.malware.enabled", false);
 user_pref("browser.safebrowsing.phishing.enabled", false);
 user_pref("browser.safebrowsing.downloads.enabled", false);
-user_pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted", false);
+user_pref(
+  "browser.safebrowsing.downloads.remote.block_potentially_unwanted",
+  false,
+);
 user_pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
 user_pref("browser.safebrowsing.blockedURIs.enabled", false);
 
@@ -144,7 +162,10 @@ user_pref("identity.fxaccounts.enabled", false);
 user_pref("dom.push.enabled", false);
 user_pref("permissions.default.desktop-notification", 2);
 user_pref("permissions.default.geo", 2);
-user_pref("geo.provider.network.url", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
+user_pref(
+  "geo.provider.network.url",
+  "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%",
+);
 user_pref("geo.provider.ms-windows-location", false); /* WINDOWS */
 user_pref("geo.provider.use_corelocation", false); /* MAC */
 user_pref("geo.provider.use_gpsd", false); /* LINUX */
@@ -181,7 +202,7 @@ user_pref("browser.newtabpage.activity-stream.telemetry", false);
 
 /****************************************************************************
  * SECTION: PESKYFOX                                                        *
-****************************************************************************/
+ ****************************************************************************/
 
 /** MOZILLA UI ***/
 user_pref("layout.css.prefers-color-scheme.content-override", 2);
@@ -193,8 +214,14 @@ user_pref("browser.privatebrowsing.vpnpromourl", "");
 user_pref("extensions.getAddons.showPane", false);
 user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 user_pref("browser.shell.checkDefaultBrowser", false);
-user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
-user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
+user_pref(
+  "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons",
+  false,
+);
+user_pref(
+  "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features",
+  false,
+);
 user_pref("browser.preferences.moreFromMozilla", false);
 user_pref("findbar.highlightAll", true);
 
@@ -216,10 +243,22 @@ user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
-user_pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks", false);
-user_pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads", false);
-user_pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);
-user_pref("browser.newtabpage.activity-stream.section.highlights.includeVisited", false);
+user_pref(
+  "browser.newtabpage.activity-stream.section.highlights.includeBookmarks",
+  false,
+);
+user_pref(
+  "browser.newtabpage.activity-stream.section.highlights.includeDownloads",
+  false,
+);
+user_pref(
+  "browser.newtabpage.activity-stream.section.highlights.includePocket",
+  false,
+);
+user_pref(
+  "browser.newtabpage.activity-stream.section.highlights.includeVisited",
+  false,
+);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("browser.messaging-system.whatsNewPanel.enabled", false);
 
@@ -247,7 +286,7 @@ user_pref("dom.popup_allowed_events", "click dblclick");
 
 /****************************************************************************
  * SECTION: SMOOTHFOX                                                       *
-****************************************************************************/
+ ****************************************************************************/
 // see https://github.com/yokoffing/BetterFox/blob/master/SmoothFox.js
 // Enter your scrolling prefs below this line:
 // recommended for 120hz+ displays
@@ -265,7 +304,7 @@ user_pref("mousewheel.default.delta_multiplier_y", 280);
 
 /****************************************************************************
  * START: MY OVERRIDES                                                      *
-****************************************************************************/
+ ****************************************************************************/
 // Enter your personal prefs below this line:
 // PREF: Enable animation-composition
 // [1] https://bugzilla.mozilla.org/show_bug.cgi?id=1785329
@@ -290,7 +329,7 @@ user_pref("dom.enable_web_task_scheduling", true);
 
 // PREF: disable preSkeletonUI on startup
 // May set to "true" if your hardware is very old.
-  // user_pref("browser.startup.preXulSkeletonUI", false);
+// user_pref("browser.startup.preXulSkeletonUI", false);
 
 // PREF: JPEG XL image format
 user_pref("image.jxl.enabled", true);
@@ -298,7 +337,7 @@ user_pref("image.jxl.enabled", true);
 // PREF: about:home startup cache
 // A cache for the initial about:home document that is loaded by default at startup.
 // The purpose of the cache is to improve startup performance.
-      // user_pref("browser.startup.homepage.abouthome_cache.enabled", true);
+// user_pref("browser.startup.homepage.abouthome_cache.enabled", true);
 
 // PREF: CSS Masonry Layout
 user_pref("layout.css.grid-template-masonry-value.enabled", true);
@@ -337,11 +376,11 @@ user_pref("privacy.resistFingerprinting.letterboxing", false); // [HIDDEN PREF]
 /* override recipe: enable web conferencing: Google Meet | JitsiMeet | BigBlueButton | Zoom | Discord ***/
 // IMPORTANT: uncheck "Prevent WebRTC from leaking local IP addresses" in uBlock Origin's settings
 // NOTE: if using RFP (4501)
-   // some sites, e.g. Zoom, need a canvas site exception [Right Click>View Page Info>Permissions]
-   // Discord video does not work: it thinks you are FF78: this fixes itself in FF91+
+// some sites, e.g. Zoom, need a canvas site exception [Right Click>View Page Info>Permissions]
+// Discord video does not work: it thinks you are FF78: this fixes itself in FF91+
 user_pref("media.peerconnection.enabled", true); // 2001
 user_pref("media.peerconnection.ice.no_host", false); // 2001 [may be required]
-   // user_pref("media.autoplay.blocking_policy", 0); // 2031 optional [otherwise add site exceptions]
+// user_pref("media.autoplay.blocking_policy", 0); // 2031 optional [otherwise add site exceptions]
 
 user_pref("media.getusermedia.screensharing.enabled", true); // reset this: removed from user.js v91
 user_pref("javascript.options.wasm", true); // 5506 reset this: default-inactive in user.js v91
@@ -357,20 +396,20 @@ user_pref("privacy.trackingprotection.socialtracking.enabled", true); // 2711 us
 /* override recipe: keep some cookies + other site data on close ***/
 user_pref("network.cookie.lifetimePolicy", 0); // 2703
 user_pref("privacy.clearOnShutdown.cookies", false); // 2802
-  // user_pref("privacy.clearOnShutdown.offlineApps", true); // 2802 optional
+// user_pref("privacy.clearOnShutdown.offlineApps", true); // 2802 optional
 user_pref("privacy.cpd.cookies", true); // 2803 Ctrl-Shift-Del
-  // user_pref("privacy.cpd.offlineApps", true); // 2803 Ctrl-Shift-Del optional
+// user_pref("privacy.cpd.offlineApps", true); // 2803 Ctrl-Shift-Del optional
 
 /* override recipe: enable session restore ***/
-  // user_pref("browser.privatebrowsing.autostart", false); // 0110 required if you had it set as true
-  // user_pref("places.history.enabled", true); // 0862 required if you had it set as false
-  // user_pref("browser.sessionstore.privacy_level", 0); // 1003 optional [to restore cookies/formdata]
+// user_pref("browser.privatebrowsing.autostart", false); // 0110 required if you had it set as true
+// user_pref("places.history.enabled", true); // 0862 required if you had it set as false
+// user_pref("browser.sessionstore.privacy_level", 0); // 1003 optional [to restore cookies/formdata]
 user_pref("privacy.clearOnShutdown.history", false); // 2803
-  // user_pref("privacy.clearOnShutdown.cookies", false); // 2803 optional
-  // user_pref("privacy.clearOnShutdown.formdata", false); // 2803 optional
+// user_pref("privacy.clearOnShutdown.cookies", false); // 2803 optional
+// user_pref("privacy.clearOnShutdown.formdata", false); // 2803 optional
 user_pref("privacy.cpd.history", false); // 2804 to match when you use Ctrl-Shift-Del
-  // user_pref("privacy.cpd.cookies", false); // 2804 optional
-  // user_pref("privacy.cpd.formdata", false); // 2804 optional
+// user_pref("privacy.cpd.cookies", false); // 2804 optional
+// user_pref("privacy.cpd.formdata", false); // 2804 optional
 
 // 2001: Needed for WebRTC
 user_pref("media.peerconnection.enabled", true);
@@ -382,7 +421,7 @@ user_pref("browser.display.use_system_colors", true); // [DEFAULT: false]
 user_pref("app.update.background.scheduling.enabled", true);
 
 /* override recipe: enable DRM and let me watch videos ***/
-   // user_pref("media.gmp-widevinecdm.enabled", true); // 2021 default-inactive in user.js
+// user_pref("media.gmp-widevinecdm.enabled", true); // 2021 default-inactive in user.js
 user_pref("media.eme.enabled", true); // 2022
 
 // 0102
@@ -393,4 +432,4 @@ user_pref("browser.startup.homepage", "about:home");
 
 /****************************************************************************
  * END: BETTERFOX                                                           *
-****************************************************************************/
+ ****************************************************************************/
