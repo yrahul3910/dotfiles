@@ -4,10 +4,8 @@
 [core]
     editor = nvim
     ignorecase = false
-    fsmonitor = true
-    splitindex = true
-    preloadindex = true
-    untrackedcache = true
+    fsmonitor = false
+    splitindex = false
     pager = delta
 
 [interactive]

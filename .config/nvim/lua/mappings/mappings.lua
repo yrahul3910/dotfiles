@@ -224,8 +224,22 @@ nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer De
 nmap('<leader>cl', function()
   vim.cmd 'colorscheme catppuccin-latte'
 end, '[C]olorscheme [L]ight')
+
 nmap('<leader>cd', function()
-  vim.cmd 'colorscheme catppuccin-mocha'
+  vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
+    fg = '#afff5f',
+    bold = true,
+    nocombine = true,
+    ctermfg = 155,
+    cterm = { bold = true },
+  })
+  vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
+    fg = '#d7afff',
+    underline = true,
+    nocombine = true,
+    ctermfg = 81,
+    cterm = { underline = true },
+  })
 end, '[C]olorscheme [D]ark')
 
 -- substitutions
