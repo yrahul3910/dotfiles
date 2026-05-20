@@ -1,17 +1,9 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { truncateToWidth } from "@mariozechner/pi-tui";
-import { GUY_FRAMES } from "./characters";
-
-// Two-frame walking animation (5x4)
-const FRAMES = [
-  ["  ◯  ", " /|\\ ", "  |  ", " / \\ "],
-  ["  ◯  ", " /|\\ ", "  |  ", "  |\\ "],
-];
+import { deleteKittyImage, getCapabilities, Image } from "@mariozechner/pi-tui";
+import { guyImageForFrame } from "./characters";
 
 export default function (pi: ExtensionAPI) {
   let intervalId: ReturnType<typeof setInterval> | null = null;
-
-  // Remember the `tui` arg so we can use it in `setInterval`.
   let tuiRef: { requestRender: () => void } | null = null;
 
   pi.on("session_start", async (_event, ctx) => {
@@ -19,31 +11,50 @@ export default function (pi: ExtensionAPI) {
 
     let tick = 0;
     let x = 0;
-    let direction = 1;
+    let direction: 1 | -1 = 1;
+    let lastWidth = 80;
+    let imageId: number | undefined;
 
     ctx.ui.setWidget("pixilate", (tui, theme) => {
       tuiRef = tui;
       return {
         render(width: number): string[] {
-          const frame = tick % 10 === 0 ? GUY_FRAMES.blink : GUY_FRAMES.default;
+          lastWidth = width;
 
-          const guyWidth = frame.length;
-          const clampedX = Math.max(
-            0,
-            Math.min(x, Math.max(0, width - guyWidth)),
+          const frameIndex = Math.floor(tick / 2) % 2;
+          const guyWidthCells = Math.min(10, Math.max(1, width));
+          const clampedX = Math.max(0, Math.min(x, Math.max(0, width - guyWidthCells)));
+          const base64Data = guyImageForFrame({
+            widthCells: width,
+            xCells: clampedX,
+            direction,
+            frameIndex,
+            blink: tick % 28 === 0,
+          });
+          const previousImageId = imageId;
+          const image = new Image(
+            base64Data,
+            "image/png",
+            { fallbackColor: (str) => theme.fg("accent", str) },
+            { maxWidthCells: width, maxHeightCells: 5, imageId },
           );
 
-          const lines: string[] = [];
-          // Empty line above the guy
-          lines.push(" ".repeat(width));
+          const lines = image.render(width + 2);
+          imageId = image.getImageId();
 
-          for (const row of frame) {
-            const padding = " ".repeat(clampedX);
-            const colored = padding + theme.fg("accent", row) + "\x1b[0m";
-            lines.push(truncateToWidth(colored, width));
-          }
+          const clearPreviousImage =
+            previousImageId !== undefined && getCapabilities().images === "kitty"
+              ? deleteKittyImage(previousImageId)
+              : "";
 
-          return lines;
+          return [
+            " ".repeat(width),
+            // Keep the image at a fixed cursor position. The generated PNG uses
+            // an opaque grass-green canvas so each frame covers the previous one.
+            ...lines.map((line, index) =>
+              index === 0 ? `${clearPreviousImage}${line}` : line,
+            ),
+          ];
         },
         invalidate(): void {},
       };
@@ -51,12 +62,18 @@ export default function (pi: ExtensionAPI) {
 
     intervalId = setInterval(() => {
       tick += 1;
+      const maxX = Math.max(0, lastWidth - 10);
       x += direction;
-      // Bounce back and forth across a reasonable range
-      if (x >= 60) direction = -1;
-      if (x <= 0) direction = 1;
+      if (x >= maxX) {
+        x = maxX;
+        direction = -1;
+      }
+      if (x <= 0) {
+        x = 0;
+        direction = 1;
+      }
       tuiRef?.requestRender();
-    }, 200);
+    }, 160);
   });
 
   pi.on("session_shutdown", async () => {
