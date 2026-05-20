@@ -15,45 +15,31 @@ const PALETTE: Record<string, [number, number, number, number]> = {
 };
 
 const WALK_RIGHT = [
+    "                ",
+    "                ",
+    "                ",
     "     KKKK       ",
-    "   KKSSSSKK     ",
-    "  KSSWSSWSSK    ",
+    "   KSWSSWSK     ",
+    " KKKSSSSSSSKKK  ",
     "  KSSSSSSSSK    ",
-    "  KSSPSSPSSK    ",
-    "   KKSSSSKK     ",
-    "     KKKK       ",
-    "    KBBBBK      ",
-    "   KBBDBBBK K   ",
-    "  KBBBDDBBBK    ",
-    " K  KBBBBK      ",
-    "    KDDDDK      ",
-    "   KDD  DDK     ",
-    "  KKD    DKK    ",
-    "                ",
-    "                ",
+    "   KDKKKKDK     ",
+    "     D  D       ",
 ];
 
 const WALK_RIGHT_STEP = [
+    "                ",
+    "                ",
+    "                ",
     "     KKKK       ",
-    "   KKSSSSKK     ",
-    "  KSSWSSWSSK    ",
+    " K KSWSSWSK K   ",
+    "  KKSSSSSSSKK   ",
     "  KSSSSSSSSK    ",
-    "  KSSPSSPSSK    ",
-    "   KKSSSSKK     ",
-    "     KKKK       ",
-    "    KBBBBK      ",
-    " K KBBDBBBK     ",
-    "   KBBBDDBBBK   ",
-    "     KBBBBK  K  ",
-    "     KDDDDK     ",
-    "    KDD  DDK    ",
-    "   KKD    DKK   ",
-    "                ",
-    "                ",
+    "   KDKKKKDK     ",
+    "     D  D       ",
 ];
 
 const BLINK_RIGHT = WALK_RIGHT.map((row, i) =>
-    i === 2 ? "  KSSKSSKSSK    " : row,
+    i === 4 ? row.replaceAll("W", "S") : row
 );
 
 // One foreground bush. Spaces are transparent, so only the leaf/trunk pixels draw.
