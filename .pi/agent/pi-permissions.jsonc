@@ -1,10 +1,16 @@
 {
   "bash": {
     "rm *": "ask",
-    "rg": "allow",
-    "fd": "allow",
-    "head": "allow",
-    "tail": "allow",
+    "rg *": "allow",
+    "grep *": "allow",
+    "fd *": "allow",
+    "ls *": "allow",
+    "cat *": "allow",
+    "cat *.env": "deny",  // last match wins
+    "sed *": "allow",
+    "echo *": "allow",
+    "head *": "allow",
+    "tail *": "allow",
     "python *": "ask",
     "python3 *": "ask"
   },
