@@ -1,5 +1,5 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { deleteKittyImage, getCapabilities, Image } from "@mariozechner/pi-tui";
+import { allocateImageId, deleteKittyImage, getCapabilities, Image } from "@mariozechner/pi-tui";
 import { guyImageForFrame } from "./characters";
 
 export default function (pi: ExtensionAPI) {
@@ -13,7 +13,13 @@ export default function (pi: ExtensionAPI) {
     let x = 0;
     let direction: 1 | -1 = 1;
     let lastWidth = 80;
-    let imageId: number | undefined;
+    // Allocate a stable Kitty image id once. Reusing the same id every frame is
+    // what lets `deleteKittyImage` work: `d=I` deletes the image and all of its
+    // placements wherever they are on screen, so the previous frame is wiped
+    // before the next is drawn. Without a stable id the sequence carries no `i=`,
+    // each frame becomes an undeletable placement, and old frames linger when the
+    // viewport scrolls (e.g. on permission prompts or tool results).
+    const imageId = allocateImageId();
 
     ctx.ui.setWidget("pixilate", (tui, theme) => {
       tuiRef = tui;
@@ -31,7 +37,6 @@ export default function (pi: ExtensionAPI) {
             frameIndex,
             blink: tick % 28 === 0,
           });
-          const previousImageId = imageId;
           const image = new Image(
             base64Data,
             "image/png",
@@ -40,12 +45,12 @@ export default function (pi: ExtensionAPI) {
           );
 
           const lines = image.render(width + 2);
-          imageId = image.getImageId();
 
+          // Delete the previous placement of this id before drawing the next
+          // frame. Harmless no-op on the first frame; on later frames it removes
+          // any stale placement left behind when the viewport scrolled.
           const clearPreviousImage =
-            previousImageId !== undefined && getCapabilities().images === "kitty"
-              ? deleteKittyImage(previousImageId)
-              : "";
+            getCapabilities().images === "kitty" ? deleteKittyImage(imageId) : "";
 
           return [
             " ".repeat(width),
