@@ -32,6 +32,12 @@ vim.api.nvim_create_autocmd('ColorScheme', {
         ctermfg = 81,
         cterm = { underline = true },
       })
+      vim.api.nvim_set_hl(0, 'MarkSign', {
+        fg = '#a6e3a1',
+        bold = true,
+        ctermfg = 156,
+        cterm = { bold = true },
+      })
     else
       -- Light theme
       vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
@@ -47,6 +53,12 @@ vim.api.nvim_create_autocmd('ColorScheme', {
         nocombine = true,
         ctermfg = 24, -- approximate dark blue
         cterm = { underline = true },
+      })
+      vim.api.nvim_set_hl(0, 'MarkSign', {
+        fg = '#005f87', -- dark blue, high contrast on light gutter
+        bold = true,
+        ctermfg = 24,
+        cterm = { bold = true },
       })
     end
 
