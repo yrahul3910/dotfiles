@@ -94,7 +94,9 @@ nmap('ge', 'G', 'Move to end of file')
 
 -- Convenience mappings
 nmap('gb', 'kJi', 'Go back (to prev line)')
-nmap('<leader>td', ':TodoFzfLua<CR>', '[T]odo [D]isplay')
+nmap('<leader>td', function()
+  require('snacks').picker.todo_comments()
+end, '[T]odo [D]isplay')
 
 -- Mappings from ThePrimeagen
 -- Lets you move selected block around in visual mode
