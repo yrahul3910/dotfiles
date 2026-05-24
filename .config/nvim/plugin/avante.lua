@@ -7,9 +7,6 @@ if _G.myconfig.copilot_enabled then
       src = 'https://github.com/MunifTanjim/nui.nvim',
     },
     {
-      src = 'https://github.com/ibhagwan/fzf-lua',
-    },
-    {
       src = 'https://github.com/nvim-tree/nvim-web-devicons',
     },
     {
@@ -31,6 +28,7 @@ if _G.myconfig.copilot_enabled then
   require('avante').setup {
     instructions_file = 'AGENTS.md',
     provider = 'opencode',
+    selector = { provider = 'snacks' },
     acp_providers = {
       ['opencode'] = {
         command = 'opencode',

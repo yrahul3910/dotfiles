@@ -8,6 +8,10 @@ require('snacks').setup(
       matcher = {
         frecency = true,
       },
+      sources = {
+        files = { hidden = true, ignored = false },
+        grep = { hidden = true, ignored = false },
+      },
     },
   }
 )
