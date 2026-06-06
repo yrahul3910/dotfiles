@@ -7,6 +7,14 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry"
+    }
+  },
+  "project_panel": {
+    "dock": "left"
+  },
   "terminal": {
     "dock": "bottom"
   },
@@ -27,6 +35,7 @@
     "dock": "right"
   },
   "agent": {
+    "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
       "model": "claude-sonnet-4.5"
