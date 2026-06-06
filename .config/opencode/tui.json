@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/tui.json",
-  "theme": "lucent-orng",
+  "theme": "system",
   "keybinds": {
     "leader": "ctrl+x",
     "session_export": "<leader>x",
