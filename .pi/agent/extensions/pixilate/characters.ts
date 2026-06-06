@@ -3,21 +3,18 @@ import { deflateSync } from "node:zlib";
 
 const PALETTE: Record<string, [number, number, number, number]> = {
     " ": [0, 0, 0, 0],
-    K: [28, 28, 36, 255],  // character outline
-    B: [79, 156, 255, 255],  // blue (shirt)
-    D: [41, 89, 172, 255],  // dark blue (pants/shadow)
-    S: [255, 213, 160, 255],  // skin; a pale, blush color
-    W: [255, 255, 255, 255],  // white (eyes)
-    P: [255, 128, 180, 255],  // pink (cheeks)
-    L: [88, 204, 88, 255],  // light green (leaf)
-    T: [28, 120, 48, 255],  // trees (dark green)
-    R: [96, 56, 32, 255],  // tree root (brown)
+    K: [28, 28, 36, 255], // character outline
+    B: [79, 156, 255, 255], // blue (shirt)
+    D: [41, 89, 172, 255], // dark blue (pants/shadow)
+    S: [255, 213, 160, 255], // skin; a pale, blush color
+    W: [255, 255, 255, 255], // white (eyes)
+    P: [255, 128, 180, 255], // pink (cheeks)
+    L: [88, 204, 88, 255], // light green (leaf)
+    T: [28, 120, 48, 255], // trees (dark green)
+    R: [96, 56, 32, 255], // tree root (brown)
 };
 
 const WALK_RIGHT = [
-    "                ",
-    "                ",
-    "                ",
     "     KKKK       ",
     "   KSWSSWSK     ",
     " KKKSSSSSSSKKK  ",
@@ -26,10 +23,7 @@ const WALK_RIGHT = [
     "     D  D       ",
 ];
 
-const WALK_RIGHT_STEP = [
-    "                ",
-    "                ",
-    "                ",
+const WALK_RIGHT_JUMP = [
     "     KKKK       ",
     " K KSWSSWSK K   ",
     "  KKSSSSSSSKK   ",
@@ -38,9 +32,8 @@ const WALK_RIGHT_STEP = [
     "     D  D       ",
 ];
 
-const BLINK_RIGHT = WALK_RIGHT.map((row, i) =>
-    i === 4 ? row.replaceAll("W", "S") : row
-);
+const EYES_ROW = 1;
+const LINES = WALK_RIGHT.length + 10;
 
 // One foreground bush. Spaces are transparent, so only the leaf/trunk pixels draw.
 // Because this is drawn after the guy in `renderScene`, he can walk behind it.
@@ -81,12 +74,19 @@ function chunk(type: string, data: Buffer): Buffer {
 
 function bitmapToPngBase64(
     rows: string[],
-    scale = 4,
-    options: { canvasWidth?: number; offsetX?: number; background?: [number, number, number, number] } = {},
+    scale = 4.5,
+    options: {
+        canvasWidth?: number;
+        offsetX?: number;
+        background?: [number, number, number, number];
+    } = {},
 ): string {
     const sourceHeight = rows.length;
     const spriteWidth = Math.max(...rows.map((row) => row.length));
-    const sourceWidth = Math.max(spriteWidth + (options.offsetX ?? 0), options.canvasWidth ?? spriteWidth);
+    const sourceWidth = Math.max(
+        spriteWidth + (options.offsetX ?? 0),
+        options.canvasWidth ?? spriteWidth,
+    );
     const width = sourceWidth * scale;
     const height = sourceHeight * scale;
     const scanlines: Buffer[] = [];
@@ -99,8 +99,14 @@ function bitmapToPngBase64(
         line[0] = 0; // PNG filter: none
         for (let x = 0; x < width; x++) {
             const sourceX = Math.floor(x / scale) - offsetX;
-            const char = sourceX >= 0 && sourceX < spriteWidth ? sourceRow[sourceX] : " ";
-            const pixel = char === " " ? background : PALETTE[char ?? " "] ?? background;
+            const char =
+                sourceX >= 0 && sourceX < spriteWidth
+                    ? sourceRow[sourceX]
+                    : " ";
+            const pixel =
+                char === " "
+                    ? background
+                    : (PALETTE[char ?? " "] ?? background);
             line.set(pixel, 1 + x * 4);
         }
         scanlines.push(line);
@@ -125,10 +131,17 @@ const SPRITE_WIDTH_CELLS = 10;
 const BACKGROUND: [number, number, number, number] = [64, 176, 72, 255];
 
 function makeCanvas(width: number, height: number): string[][] {
-    return Array.from({ length: height }, () => Array.from({ length: width }, () => " "));
+    return Array.from({ length: height }, () =>
+        Array.from({ length: width }, () => " "),
+    );
 }
 
-function drawBitmap(canvas: string[][], bitmap: string[], x: number, y: number): void {
+function drawBitmap(
+    canvas: string[][],
+    bitmap: string[],
+    x: number,
+    y: number,
+): void {
     for (let row = 0; row < bitmap.length; row++) {
         const canvasRow = canvas[y + row];
         if (!canvasRow) continue;
@@ -155,26 +168,51 @@ export function guyImageForFrame(options: {
     direction: 1 | -1;
     frameIndex: number;
     blink: boolean;
+    jump: number;
 }): string {
-    const guy = options.blink
-        ? options.direction === 1
-            ? BLINK_RIGHT
-            : flip(BLINK_RIGHT)
-        : options.direction === 1
-            ? [WALK_RIGHT, WALK_RIGHT_STEP][options.frameIndex % 2]!
-            : [flip(WALK_RIGHT), flip(WALK_RIGHT_STEP)][options.frameIndex % 2]!;
+    // apply transforms one at a time; assumes no padding lines
+    const flipFunction = (lines: string[]) =>
+        options.direction === 1 ? lines : flip(lines);
+    const blinkFunction = (lines: string[]) =>
+        options.blink
+            ? lines.map((line, i) =>
+                  i === EYES_ROW ? line.replaceAll("W", "S") : line,
+              )
+            : lines;
+    // get the baseline guy
+    const jumpFunction = () => (options.jump ? WALK_RIGHT : WALK_RIGHT_JUMP);
+
+    let guy: string[] = jumpFunction();
+    let transforms = [blinkFunction, flipFunction];
+
+    for (let transform of transforms) {
+        guy = transform(guy);
+    }
+
+    const paddingTop = LINES - WALK_RIGHT.length - options.jump;
+    const paddingBottom = options.jump;
+
+    const paddingContent = "";
+
+    const finalGuy: string[] = [
+        ...Array(paddingTop).fill(paddingContent),
+        ...guy,
+        ...Array(paddingBottom).fill(paddingContent),
+    ];
 
     const canvasWidth = Math.max(
         SPRITE_WIDTH,
         Math.ceil((options.widthCells * SPRITE_WIDTH) / SPRITE_WIDTH_CELLS),
     );
-    const canvasHeight = WALK_RIGHT.length;
-    const guyX = Math.round((options.xCells * SPRITE_WIDTH) / SPRITE_WIDTH_CELLS);
+    const canvasHeight = LINES;
+    const guyX = Math.round(
+        (options.xCells * SPRITE_WIDTH) / SPRITE_WIDTH_CELLS,
+    );
 
     const canvas = makeCanvas(canvasWidth, canvasHeight);
 
     // Layer order controls what appears in front. Put background scenery here first.
-    drawBitmap(canvas, guy, guyX, 0);
+    drawBitmap(canvas, finalGuy, guyX, 0);
 
     // Foreground scenery goes last. This bush will cover the guy when he overlaps it.
     const bushX = Math.round(canvasWidth * 0.45);
