@@ -1,0 +1,18 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+email = "yrahul3910@gmail.com"
+name = "Rahul Yedida"
+
+[revsets]
+bookmark-advance-to = 'closest_pushable(@)'
+
+[revset-aliases]
+# Closest revision that is mutable, described and either non-empty or a merge
+# See `jj help -k config`
+'closest_pushable(to)' = '''
+  heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))
+'''
+
+[ui]
+editor = "nvim"
