@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.78.1",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
+  "lastChangelogVersion": "0.78.0",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-sonnet-4.6",
   "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
   "transport": "auto",
@@ -12,9 +12,10 @@
     "git:github.com/yrahul3910/pi-permission-system",
     "git:github.com/ghoseb/pi-splash"
   ],
-  "theme": "dark",
+  "theme": "light",
   "quietStartup": true,
   "collapseChangelog": true,
   "enableInstallTelemetry": false,
   "steeringMode": "one-at-a-time"
 }
+

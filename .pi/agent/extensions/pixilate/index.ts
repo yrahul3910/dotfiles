@@ -38,12 +38,12 @@ export default function (pi: ExtensionAPI) {
                             // jump height: 5
                             tick % 25 < JUMP_HEIGHT
                                 ? // for the first half, we go upward
-                                  tick % 25 < Math.round(JUMP_HEIGHT / 2)
+                                tick % 25 < Math.round(JUMP_HEIGHT / 2)
                                     ? tick % 25
                                     : // and downward for the second half
-                                      JUMP_HEIGHT - (tick % 25)
+                                    JUMP_HEIGHT - (tick % 25)
                                 : // otherwise we're on the ground
-                                  0,
+                                0,
                     });
                     const previousImageId = imageId;
                     const image = new Image(
@@ -58,7 +58,7 @@ export default function (pi: ExtensionAPI) {
 
                     const clearPreviousImage =
                         previousImageId !== undefined &&
-                        getCapabilities().images === "kitty"
+                            getCapabilities().images === "kitty"
                             ? deleteKittyImage(previousImageId)
                             : "";
 
@@ -71,7 +71,7 @@ export default function (pi: ExtensionAPI) {
                         ),
                     ];
                 },
-                invalidate(): void {},
+                invalidate(): void { },
             };
         });
 
