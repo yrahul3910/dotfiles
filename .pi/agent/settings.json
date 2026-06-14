@@ -1,14 +1,14 @@
 {
-    "lastChangelogVersion": "0.78.1",
-    "defaultProvider": "openai-codex",
-    "defaultModel": "gpt-5.5",
-    "defaultThinkingLevel": "low",
+    "lastChangelogVersion": "0.79.3",
+    "defaultProvider": "openrouter",
+    "defaultModel": "minimax/minimax-m3",
+    "defaultThinkingLevel": "high",
     "editorPaddingX": 0,
     "transport": "auto",
     "packages": [
         "npm:@tmustier/pi-usage-extension",
         "npm:@tintinweb/pi-subagents",
-        "npm:@heyhuynhgiabuu/pi-diff",
+        "npm:pi-mcp-extension",
         "git:github.com/yrahul3910/pi-permission-system",
         "git:github.com/ghoseb/pi-splash"
     ],
