@@ -4,7 +4,7 @@
     signingKey = 863E6DE6D96FA1840D9FF2322EEB918E6BF03C22
 
 [core]
-    editor = nvim
+    editor = nvim --clean
     ignorecase = false
     fsmonitor = true
     splitindex = true
