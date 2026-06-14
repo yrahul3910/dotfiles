@@ -1,6 +1,7 @@
 [user]
     name = Rahul Yedida
     email = yrahul3910@gmail.com
+    signingKey = 863E6DE6D96FA1840D9FF2322EEB918E6BF03C22
 
 [core]
     editor = nvim
@@ -62,6 +63,7 @@
     algorithm = histogram
 
 [commit]
+    gpgSign = true
     verbose = true
 
 [core]
