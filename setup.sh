@@ -13,11 +13,11 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
     echo ""
     echo ">>> Installing Node and nvm..."
     echo ""
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-    nvm install 20
+    nvm install 26
 fi
 
 # On macOS, Ghostty (installed via the Brewfile) replaces Kitty
@@ -67,9 +67,8 @@ elif [[ -f /etc/redhat-release ]]; then
     echo ""
     echo ">>> Detected Red Hat-based system, installing software..."
     echo ""
-    sudo dnf install -y zsh vim stow fish python3-neovim cmake expat-devel fontconfig-devel libxcb-devel freetype-devel libxml2-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
+    sudo dnf install -y zsh vim stow fish python3-neovim cmake fontconfig-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
     sudo dnf install -y gcc gcc-c++ kernel-devel
-    cargo install silicon
 
     sudo dnf copr enable atim/lazygit -y
     sudo dnf install -y lazygit
@@ -80,7 +79,7 @@ elif [[ -f /etc/arch-release ]]; then
     echo ">>> Detected Arch-based system, installing software..."
     echo ""
     sudo pacman -Syu
-    sudo pacman -S zsh vim stow fish neovim silicon ripgrep fzf poppler zoxide yazi bat git-delta lazygit
+    sudo pacman -S zsh vim stow fish neovim ripgrep fzf poppler zoxide yazi bat git-delta lazygit
 
 elif [[ -f /etc/debian_version ]]; then
     # Debian
@@ -88,30 +87,19 @@ elif [[ -f /etc/debian_version ]]; then
     echo ">>> Detected Debian-based system, installing software..."
     echo ""
 
-    # Install zsh
     sudo apt update
 
     cargo install --locked yazi-fm yazi-cli
 
-    # Needed for silicon, the code screenshot tool
-    sudo apt install -y expat libxml2-dev pkg-config libasound2-dev libssl-dev cmake libfreetype6-dev libexpat1-dev libxcb-composite0-dev libharfbuzz-dev fzf fontconfig python3-venv
-
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
-    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
-    sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
-    rm ripgrep*.deb
-
-    sudo apt install -y zsh vim build-essential stow poppler rust-bat
-    cargo install silicon
-
-    sudo apt install -y python3-pip nala git-delta
+    sudo apt-get install -y zsh vim build-essential stow poppler rust-bat ripgrep python3-pip git-delta
 
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
     tar xf lazygit.tar.gz lazygit
     sudo install lazygit /usr/local/bin
-    
+
     sudo apt install software-properties-common python3-launchpadlib
     sudo apt-add-repository ppa:fish-shell/release-3
     sudo apt update
