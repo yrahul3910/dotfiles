@@ -2,7 +2,7 @@
 set -ex
 
 # Define the Git repository URL
-REPO_URL="https://github.com/yrahul3910/configs/"
+REPO_URL="https://github.com/yrahul3910/dotfiles/"
 
 # Define the directory where the repository will be cloned
 CLONE_DIR="$HOME/configs"

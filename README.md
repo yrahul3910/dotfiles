@@ -7,10 +7,12 @@ Config files for quick setup.
 In theory, this should work:
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/yrahul3910/configs/master/bootstrap.sh | bash
+curl -sSL https://raw.githubusercontent.com/yrahul3910/dotfiles/master/bootstrap.sh | bash
 ```
 
 Most important is probably the neovim config, which mostly works on macOS and Ubuntu.
+
+On macOS, all packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle`. Linux package installs live in `setup.sh`.
 
 ## Requirements
 
@@ -35,7 +37,7 @@ Most important is probably the neovim config, which mostly works on macOS and Ub
 First, checkout the repo to your `$HOME` directory:
 
 ```sh
-git clone https://github.com/yrahul3910/configs.git
+git clone https://github.com/yrahul3910/dotfiles.git
 cd configs
 ```
 

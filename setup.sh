@@ -8,32 +8,39 @@ echo ""
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
 
-echo ""
-echo ">>> Installing Node, nvm, pnpm, and bun..."
-echo ""
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-nvm install 20
-curl -fsSL https://get.pnpm.io/install.sh | sh -
-curl -fsSL https://bun.sh/install | bash
+# On macOS, Node is installed via the Brewfile
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    echo ""
+    echo ">>> Installing Node and nvm..."
+    echo ""
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    nvm install 20
+fi
 
-echo ""
-echo ">>> Installing Kitty..."
-echo ""
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+# On macOS, Ghostty (installed via the Brewfile) replaces Kitty
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    echo ""
+    echo ">>> Installing Kitty..."
+    echo ""
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+fi
 
 echo ""
 echo ">>> Installing Starship..."
 echo ""
 curl -sS https://starship.rs/install.sh | sh
 
-echo ""
-echo ">>> Installing zoxide"
-echo ""
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-export PATH="$PATH:~/.local/bin"
+# On macOS, zoxide is installed via the Brewfile
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    echo ""
+    echo ">>> Installing zoxide"
+    echo ""
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+    export PATH="$PATH:~/.local/bin"
+fi
 
 echo ""
 echo ">>> Installing Poetry..."
@@ -52,8 +59,8 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo ""
     # Install Homebrew if not installed
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    /opt/homebrew/bin/brew install zsh vim stow fish neovim silicon ripgrep fzf python@3.12 yazi poppler zoxide bat gnu-sed git-delta sccache
-    /opt/homebrew/bin/brew install jesseduffield/lazygit/lazygit
+    # Install all macOS packages (brews, casks, Go & Cargo tools) from the Brewfile
+    /opt/homebrew/bin/brew bundle --file="$HOME/configs/Brewfile"
 
 elif [[ -f /etc/redhat-release ]]; then
     # Red Hat
@@ -111,7 +118,10 @@ elif [[ -f /etc/debian_version ]]; then
     sudo apt install -y fish
 fi
 
-cargo install --locked tree-sitter-cli
+# On macOS, tree-sitter-cli is installed via the Brewfile
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    cargo install --locked tree-sitter-cli
+fi
 
 # Set up dotfiles
 echo ""
