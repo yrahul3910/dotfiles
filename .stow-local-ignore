@@ -3,8 +3,9 @@
 README.*
 LICENSE
 LICENSE.*
-install.sh
+setup.sh
 bootstrap.sh
+Brewfile
 .*.tar.xz
 tmux-sessionizer
 user.js

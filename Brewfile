@@ -2,7 +2,6 @@ tap "anomalyco/tap"
 tap "aws/tap"
 tap "homebrew/brew-vulns"
 tap "mohamedelashri/free-mac"
-tap "oven-sh/bun"
 tap "withgraphite/tap"
 # Perf monitoring CLI tool for Apple Silicon
 brew "asitop"
