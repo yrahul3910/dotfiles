@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "0.79.3",
   "defaultProvider": "openrouter",
-  "defaultModel": "minimax/minimax-m3",
+  "defaultModel": "qwen/qwen3.7-max",
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
   "transport": "auto",
