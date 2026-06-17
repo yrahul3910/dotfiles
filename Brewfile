@@ -2,6 +2,7 @@ tap "anomalyco/tap"
 tap "aws/tap"
 tap "homebrew/brew-vulns"
 tap "mohamedelashri/free-mac"
+tap "oven-sh/bun"
 tap "withgraphite/tap"
 # Perf monitoring CLI tool for Apple Silicon
 brew "asitop"
@@ -11,6 +12,8 @@ brew "bat"
 brew "boost"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
+brew "clang-format"
 # Cross-platform make
 brew "cmake"
 # Simple, fast and user-friendly alternative to find
@@ -29,6 +32,8 @@ brew "git-delta"
 brew "gnu-sed"
 # Simple terminal UI for git commands
 brew "lazygit"
+# Next-gen compiler infrastructure
+brew "llvm"
 # Curses-based tool for viewing and analyzing log files
 brew "lnav"
 # Language Server for the Lua language
@@ -67,6 +72,8 @@ brew "tmux"
 brew "vim"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+# Tool for managing your YubiKey configuration
+brew "ykman"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
 # Programming language designed for robustness, optimality, and clarity
@@ -75,14 +82,26 @@ brew "zig"
 brew "zoxide"
 # UNIX shell (command interpreter)
 brew "zsh"
+# The AI coding agent built for the terminal.
+brew "anomalyco/tap/opencode", trusted: true
 # Check Homebrew packages for known vulnerabilities via osv.dev
 brew "homebrew/brew-vulns/brew-vulns"
+# Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
+brew "oven-sh/bun/bun", trusted: true
+# Allows you to manage your stacked changes and submit them for review on GitHub
+brew "withgraphite/tap/graphite", trusted: true
 # Universal database tool and SQL client
 cask "dbeaver-community"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
+# Neovim Client
+cask "neovide-app"
 # Image viewer
 cask "qview"
+# Multiplayer code editor
+cask "zed"
+# Open-source markdown editor
+cask "zettlr"
 go "github.com/spf13/cobra-cli"
 go "github.com/golangci/golangci-lint/v2/cmd/golangci-lint"
 cargo "cargo-audit"
@@ -97,3 +116,4 @@ cargo "stylua"
 cargo "tree-sitter-cli"
 cargo "trunk"
 cargo "zqa"
+uv "basedpyright"
