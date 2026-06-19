@@ -9,3 +9,7 @@ automatic_backups/
 .config/fish/functions/
 *.bak
 .env
+.pi/agent/auth.json
+.pi/agent/trust.json
+.pi/npm/
+.pi/git/

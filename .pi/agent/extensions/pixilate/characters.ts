@@ -4,7 +4,8 @@ import { deflateSync } from "node:zlib";
 const PALETTE: Record<string, [number, number, number, number]> = {
     " ": [0, 0, 0, 0],
     K: [28, 28, 36, 255], // character outline
-    B: [79, 156, 255, 255], // blue (shirt)
+    b: [0, 0, 0, 0],  // black
+    B: [79, 156, 255, 160], // blue (shirt)
     D: [41, 89, 172, 255], // dark blue (pants/shadow)
     S: [255, 213, 160, 255], // skin; a pale, blush color
     W: [255, 255, 255, 255], // white (eyes)
@@ -15,6 +16,13 @@ const PALETTE: Record<string, [number, number, number, number]> = {
 };
 
 const WALK_RIGHT = [
+    "                ",
+    "                ",
+    "                ",
+    "                ",
+    "                ",
+    "                ",
+    "                ",
     "     KKKK       ",
     "   KSWSSWSK     ",
     " KKKSSSSSSSKKK  ",
@@ -24,6 +32,13 @@ const WALK_RIGHT = [
 ];
 
 const WALK_RIGHT_JUMP = [
+    "                ",
+    "                ",
+    "                ",
+    "                ",
+    "                ",
+    "                ",
+    "                ",
     "     KKKK       ",
     " K KSWSSWSK K   ",
     "  KKSSSSSSSKK   ",
@@ -31,9 +46,41 @@ const WALK_RIGHT_JUMP = [
     "   KDKKKKDK     ",
     "     D  D       ",
 ];
+const EYES_ROW = 2;
 
-const EYES_ROW = 1;
-const LINES = WALK_RIGHT.length + 10;
+const BUNNY_JUMP = [
+    "              ",
+    "       K K K  ",
+    "       K K K  ",
+    "       K K K  ",
+    "       KK K K ",
+    "    KKKB     K",
+    "   K BB   K  K",
+    "KKKBB  B  K  K",
+    "K KB B  B    K",
+    "KKB   B  B KK ",
+    "KBBBKKB  BK   ",
+    "K     KKK  K  ",
+    "KKKKKK   KKK  "
+];
+
+const BUNNY = [
+    "        K K   ",
+    "       K K K  ",
+    "       K K K  ",
+    "       KBKBK  ",
+    "       KB   K ",
+    "    KKKB     K",
+    "   K BB   K  K",
+    "KKKBB  B  K  K",
+    "K KB B  B    K",
+    "KKB   B  B KK ",
+    "KBBBKKB  BK   ",
+    "K     KKK  K  ",
+    "KKKKKK   KKK  "
+];
+
+const LINES = BUNNY.length + 10;
 
 // One foreground bush. Spaces are transparent, so only the leaf/trunk pixels draw.
 // Because this is drawn after the guy in `renderScene`, he can walk behind it.
@@ -128,7 +175,8 @@ function bitmapToPngBase64(
 
 const SPRITE_WIDTH = Math.max(...WALK_RIGHT.map((row) => row.length));
 const SPRITE_WIDTH_CELLS = 10;
-const BACKGROUND: [number, number, number, number] = [64, 176, 72, 255];
+// const BACKGROUND: [number, number, number, number] = [64, 176, 72, 255];
+const BACKGROUND: [number, number, number, number] = [0, 0, 0, 0];
 
 function makeCanvas(width: number, height: number): string[][] {
     return Array.from({ length: height }, () =>
@@ -176,11 +224,11 @@ export function guyImageForFrame(options: {
     const blinkFunction = (lines: string[]) =>
         options.blink
             ? lines.map((line, i) =>
-                  i === EYES_ROW ? line.replaceAll("W", "S") : line,
-              )
+                i === EYES_ROW ? line.replaceAll("W", "S") : line,
+            )
             : lines;
     // get the baseline guy
-    const jumpFunction = () => (options.jump ? WALK_RIGHT : WALK_RIGHT_JUMP);
+    const jumpFunction = () => (options.jump ? BUNNY_JUMP : BUNNY);
 
     let guy: string[] = jumpFunction();
     let transforms = [blinkFunction, flipFunction];
@@ -189,7 +237,7 @@ export function guyImageForFrame(options: {
         guy = transform(guy);
     }
 
-    const paddingTop = LINES - WALK_RIGHT.length - options.jump;
+    const paddingTop = LINES - guy.length - options.jump;
     const paddingBottom = options.jump;
 
     const paddingContent = "";
