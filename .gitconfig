@@ -2,7 +2,7 @@
     name = Rahul Yedida
     email = yrahul3910@gmail.com
 [core]
-    editor = nvim
+    editor = nvim --clean
     ignorecase = false
     fsmonitor = false
     splitindex = false
