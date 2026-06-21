@@ -1,6 +1,7 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { deleteKittyImage, getCapabilities, Image } from "@mariozechner/pi-tui";
 import { guyImageForFrame } from "./characters";
+import { classifyBackground, getTerminalBackgroundColor } from "./osc11";
 
 export default function (pi: ExtensionAPI) {
     let intervalId: ReturnType<typeof setInterval> | null = null;
@@ -8,6 +9,12 @@ export default function (pi: ExtensionAPI) {
 
     pi.on("session_start", async (_event, ctx) => {
         if (!ctx.hasUI) return;
+
+        let background: "light" | "dark" = "dark";
+        try {
+            const backgroundColor = await getTerminalBackgroundColor();
+            background = classifyBackground(backgroundColor);
+        } catch {}
 
         let tick = 0;
         let x = 0;
@@ -29,6 +36,7 @@ export default function (pi: ExtensionAPI) {
                     );
                     const JUMP_HEIGHT = 9;
                     const base64Data = guyImageForFrame({
+                        terminalBackground: background,
                         widthCells: width,
                         xCells: clampedX,
                         direction,

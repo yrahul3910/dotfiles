@@ -1,19 +1,25 @@
 import { Buffer } from "node:buffer";
 import { deflateSync } from "node:zlib";
 
-const PALETTE: Record<string, [number, number, number, number]> = {
-    " ": [0, 0, 0, 0],
-    K: [28, 28, 36, 255], // character outline
-    b: [0, 0, 0, 0],  // black
+type RGBA = [number, number, number, number];
+const PALETTE: Record<string, RGBA> = {
+    // TODO: Blinking currently doesn't work since the term bg-based palette update
+    K: [28, 28, 36, 255], // character outline, updated based on term bg
+    E: [28, 28, 36, 255], // bunny eyes (distinguished from "K")
     B: [79, 156, 255, 160], // blue (shirt)
     D: [41, 89, 172, 255], // dark blue (pants/shadow)
     S: [255, 213, 160, 255], // skin; a pale, blush color
-    W: [255, 255, 255, 255], // white (eyes)
+    W: [255, 255, 255, 255], // white (guy's eyes)
     P: [255, 128, 180, 255], // pink (cheeks)
     L: [88, 204, 88, 255], // light green (leaf)
     T: [28, 120, 48, 255], // trees (dark green)
     R: [96, 56, 32, 255], // tree root (brown)
 };
+
+function invertPixel(pixel: RGBA): RGBA {
+    const [r, g, b, a] = pixel;
+    return [255 - r, 255 - g, 255 - b, a];
+}
 
 const WALK_RIGHT = [
     "                ",
@@ -54,14 +60,14 @@ const BUNNY_JUMP = [
     "       K K K  ",
     "       K K K  ",
     "       KK K K ",
-    "    KKKB     K",
-    "   K BB   K  K",
-    "KKKBB  B  K  K",
-    "K KB B  B    K",
-    "KKB   B  B KK ",
-    "KBBBKKB  BK   ",
+    "    KKKBWWWWWK",
+    "   KWBBWWWEWWK",
+    "KKKBBWWBWWEWWK",
+    "KWKBWBWWBWWWWK",
+    "KKBWWWBWWBWKK ",
+    "KBBBKKBWWBK   ",
     "K     KKK  K  ",
-    "KKKKKK   KKK  "
+    "KKKKKK   KKK  ",
 ];
 
 const BUNNY = [
@@ -69,15 +75,15 @@ const BUNNY = [
     "       K K K  ",
     "       K K K  ",
     "       KBKBK  ",
-    "       KB   K ",
-    "    KKKB     K",
-    "   K BB   K  K",
-    "KKKBB  B  K  K",
-    "K KB B  B    K",
-    "KKB   B  B KK ",
-    "KBBBKKB  BK   ",
+    "       KBWWWK ",
+    "    KKKBWWWWWK",
+    "   KWBBWWWEWWK",
+    "KKKBBWWBWWEWWK",
+    "KWKBWBWWBWWWWK",
+    "KKBWWWBWWBWKK ",
+    "KBBBKKBWWBK   ",
     "K     KKK  K  ",
-    "KKKKKK   KKK  "
+    "KKKKKK   KKK  ",
 ];
 
 const LINES = BUNNY.length + 10;
@@ -120,13 +126,14 @@ function chunk(type: string, data: Buffer): Buffer {
 }
 
 function bitmapToPngBase64(
+    palette: Record<string, RGBA> = PALETTE,
     rows: string[],
     scale = 4.5,
     options: {
         canvasWidth?: number;
         offsetX?: number;
-        background?: [number, number, number, number];
-    } = {},
+        background: RGBA;
+    } = { background: BACKGROUND },
 ): string {
     const sourceHeight = rows.length;
     const spriteWidth = Math.max(...rows.map((row) => row.length));
@@ -138,7 +145,7 @@ function bitmapToPngBase64(
     const height = sourceHeight * scale;
     const scanlines: Buffer[] = [];
     const offsetX = options.offsetX ?? 0;
-    const background = options.background ?? PALETTE[" "]!;
+    const background = options.background;
 
     for (let y = 0; y < height; y++) {
         const sourceRow = rows[Math.floor(y / scale)] ?? "";
@@ -148,12 +155,10 @@ function bitmapToPngBase64(
             const sourceX = Math.floor(x / scale) - offsetX;
             const char =
                 sourceX >= 0 && sourceX < spriteWidth
-                    ? sourceRow[sourceX]
+                    ? (sourceRow[sourceX] ?? " ")
                     : " ";
             const pixel =
-                char === " "
-                    ? background
-                    : (PALETTE[char ?? " "] ?? background);
+                char === " " ? background : (palette[char] ?? background);
             line.set(pixel, 1 + x * 4);
         }
         scanlines.push(line);
@@ -175,8 +180,7 @@ function bitmapToPngBase64(
 
 const SPRITE_WIDTH = Math.max(...WALK_RIGHT.map((row) => row.length));
 const SPRITE_WIDTH_CELLS = 10;
-// const BACKGROUND: [number, number, number, number] = [64, 176, 72, 255];
-const BACKGROUND: [number, number, number, number] = [0, 0, 0, 0];
+const BACKGROUND: RGBA = [0, 0, 0, 0];
 
 function makeCanvas(width: number, height: number): string[][] {
     return Array.from({ length: height }, () =>
@@ -211,6 +215,7 @@ function canvasToRows(canvas: string[][]): string[] {
 }
 
 export function guyImageForFrame(options: {
+    terminalBackground: "light" | "dark";
     widthCells: number;
     xCells: number;
     direction: 1 | -1;
@@ -224,8 +229,8 @@ export function guyImageForFrame(options: {
     const blinkFunction = (lines: string[]) =>
         options.blink
             ? lines.map((line, i) =>
-                i === EYES_ROW ? line.replaceAll("W", "S") : line,
-            )
+                  i === EYES_ROW ? line.replaceAll("W", "S") : line,
+              )
             : lines;
     // get the baseline guy
     const jumpFunction = () => (options.jump ? BUNNY_JUMP : BUNNY);
@@ -267,7 +272,13 @@ export function guyImageForFrame(options: {
     const bushY = canvasHeight - FRONT_BUSH.length;
     drawBitmap(canvas, FRONT_BUSH, bushX, bushY);
 
-    return bitmapToPngBase64(canvasToRows(canvas), 4, {
+    // Update palette based on terminal background
+    let themePalette = { ...PALETTE };
+    if (options.terminalBackground === "dark") {
+        themePalette["K"] = invertPixel(themePalette["K"]!);
+    }
+
+    return bitmapToPngBase64(themePalette, canvasToRows(canvas), 4, {
         background: BACKGROUND,
     });
 }
