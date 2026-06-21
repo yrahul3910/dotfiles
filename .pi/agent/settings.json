@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.79.3",
+  "lastChangelogVersion": "0.79.8",
   "defaultProvider": "openrouter",
-  "defaultModel": "qwen/qwen3.7-max",
+  "defaultModel": "z-ai/glm-5.2",
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
   "transport": "auto",
@@ -9,12 +9,13 @@
     "npm:@tmustier/pi-usage-extension",
     "npm:@tintinweb/pi-subagents",
     "npm:pi-mcp-extension",
-    "git:github.com/yrahul3910/pi-permission-system",
-    "git:github.com/ghoseb/pi-splash"
+    "git:github.com/yrahul3910/pi-permission-system"
   ],
   "theme": "dark",
-  "quietStartup": true,
+  "quietStartup": false,
   "collapseChangelog": true,
   "enableInstallTelemetry": false,
+  "enableAnalytics": false,
   "steeringMode": "one-at-a-time"
 }
+

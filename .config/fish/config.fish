@@ -149,6 +149,7 @@ function td
   tmux source-file ~/.tmux.conf
 end
 
+alias pio="pi --offline"
 alias gcloud=$HOME/Downloads/google-cloud-sdk/bin/gcloud
 alias gsutil=$HOME/Downloads/google-cloud-sdk/bin/gcloud
 alias lg=lazygit

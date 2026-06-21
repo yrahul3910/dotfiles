@@ -62,6 +62,7 @@ function so() {
     source $HOME/.zshrc
 }
 
+alias pio="pi --offline"
 alias mongod="mongod --dbpath=~/data/db"
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
