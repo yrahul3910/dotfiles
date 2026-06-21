@@ -3,4 +3,4 @@
 SETUVAR HOMEBREW_NO_AUTOUPDATE:1
 SETUVAR HOMEBREW_NO_AUTO_UPDATE:1
 SETUVAR __fish_initialized:4300
-SETUVAR fish_user_paths:/Users/yedidar/\x2ebun/bin\x1e/home/ryedida/\x2ecargo/bin
+SETUVAR fish_user_paths:/opt/homebrew/opt/coreutils/libexec/gnubin\x1e/opt/homebrew/opt/llvm/bin\x1e/Users/yedidar/\x2ebun/bin\x1e/home/ryedida/\x2ecargo/bin
