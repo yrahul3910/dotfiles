@@ -104,7 +104,6 @@ cask "qview"
 cask "zed"
 # Open-source markdown editor
 cask "zettlr"
-go "github.com/spf13/cobra-cli"
 go "github.com/golangci/golangci-lint/v2/cmd/golangci-lint"
 cargo "cargo-audit"
 cargo "cargo-deny"
