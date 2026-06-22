@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.stripquarantine</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/ryedida/.local/bin/quarantine-bash</string>
+        <string>/Users/ryedida/.local/bin/strip-quarantine.sh</string>
+    </array>
+    <key>WatchPaths</key>
+    <array>
+        <string>/Users/ryedida/Downloads</string>
+        <string>/Applications</string>
+        <string>/Users/ryedida/Desktop</string>
+    </array>
+    <key>StandardErrorPath</key>
+    <string>/tmp/stripquarantine.err</string>
+</dict>
+</plist>
