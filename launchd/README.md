@@ -31,9 +31,21 @@ cp launchd/com.user.stripquarantine.plist ~/Library/LaunchAgents/
 launchctl load ~/Library/LaunchAgents/com.user.stripquarantine.plist
 ```
 
+* **Test:**
+
+```sh
+touch /tmp/test.txt
+xattr -w com.apple.quarantine "0000;00000000;Test;" /tmp/test.txt
+mv /tmp/test.txt ~/Downloads/test.txt
+sleep 2
+xattr -l ~/Downloads/test.txt   # should print nothing now
+rm ~/Downloads/test.txt
+```
+
 While you're at it, you probably also want this, which disables the other popup that commonly shows up.
 
 ```sh
 sudo spctl --master-enable
 sudo defaults write com.apple.LaunchServices LSQuarantine -bool true
 ```
+
