@@ -23,58 +23,60 @@ if _G.myconfig.copilot_enabled then
     },
   }
 
-  require('avante').setup {
-    instructions_file = 'AGENTS.md',
-    provider = 'opencode',
-    selector = { provider = 'snacks' },
-    acp_providers = {
-      ['opencode'] = {
-        command = 'opencode',
-        args = { 'acp' },
+  vim.defer_fn(function()
+    require('avante').setup {
+      instructions_file = 'AGENTS.md',
+      provider = 'opencode',
+      selector = { provider = 'snacks' },
+      acp_providers = {
+        ['opencode'] = {
+          command = 'opencode',
+          args = { 'acp' },
+        },
       },
-    },
-    disabled_tools = {
-      'rag_search',
-      'python',
-      'git_diff',
-      'git_commit',
-      'delete_path',
-    },
-    behaviour = {
-      auto_suggestions = false,
-      auto_approve_tool_permissions = false,
-      auto_apply_diff_after_generation = false,
-      confirmation_ui_style = 'popup',
-    },
-    mappings = {
-      diff = {
-        next = ']h',
-        prev = '[h',
+      disabled_tools = {
+        'rag_search',
+        'python',
+        'git_diff',
+        'git_commit',
+        'delete_path',
       },
-      suggestion = {
-        accept = '<M-y>',
-        dismiss = '<M-n>',
+      behaviour = {
+        auto_suggestions = false,
+        auto_approve_tool_permissions = false,
+        auto_apply_diff_after_generation = false,
+        confirmation_ui_style = 'popup',
       },
-      jump = {
-        next = ']]',
-        prev = '[[',
+      mappings = {
+        diff = {
+          next = ']h',
+          prev = '[h',
+        },
+        suggestion = {
+          accept = '<M-y>',
+          dismiss = '<M-n>',
+        },
+        jump = {
+          next = ']]',
+          prev = '[[',
+        },
+        submit = {
+          normal = '<CR>',
+          insert = '<C-s>',
+        },
+        cancel = {
+          normal = { '<C-c>', '<Esc>', 'q' },
+          insert = { '<C-c>' },
+        },
+        sidebar = {
+          apply_all = 'A',
+          apply_cursor = 'a',
+          edit_user_request = 'e',
+          remove_file = 'd',
+          add_file = '@',
+          close = { '<Esc>', 'q' },
+        },
       },
-      submit = {
-        normal = '<CR>',
-        insert = '<C-s>',
-      },
-      cancel = {
-        normal = { '<C-c>', '<Esc>', 'q' },
-        insert = { '<C-c>' },
-      },
-      sidebar = {
-        apply_all = 'A',
-        apply_cursor = 'a',
-        edit_user_request = 'e',
-        remove_file = 'd',
-        add_file = '@',
-        close = { '<Esc>', 'q' },
-      },
-    },
-  }
+    }
+  end, 0)
 end
