@@ -26,6 +26,9 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- No :python3 based plugins using `pynvim`
+vim.g.loaded_python3_provider = 0
+
 -- Neovide settings
 if vim.g.neovide then
   -- Disable all animations

@@ -25,67 +25,130 @@ vim.pack.add {
   { src = 'https://github.com/mfussenegger/nvim-dap' },
 }
 
-local dap = require 'dap'
-local dapui = require 'dapui'
-vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
+local dap_ready = false
 
-require('mason-nvim-dap').setup {
-  -- Makes a best effort to setup the various debuggers with
-  -- reasonable debug configurations
-  automatic_installation = true,
+local function setup_dap()
+  if dap_ready then
+    return
+  end
 
-  -- You can provide additional configuration to the handlers,
-  -- see mason-nvim-dap README for more information
-  handlers = {},
+  dap_ready = true
 
-  -- You'll need to check that you have the required things installed
-  -- online, please don't ask me how to install them :)
-  ensure_installed = {
-    -- Update this to ensure that you have the debuggers for the langs you want
-    -- 'delve',
-  },
-}
+  local dap = require 'dap'
+  local dapui = require 'dapui'
 
--- For more information, see |:help nvim-dap-ui|
-dapui.setup {
-  -- Set icons to characters that are more likely to work in every terminal.
-  --    Feel free to remove or use ones that you like more! :)
-  --    Don't feel like these are good choices.
-  icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-  controls = {
-    icons = {
-      pause = '⏸',
-      play = '▶',
-      step_into = '⏎',
-      step_over = '⏭',
-      step_out = '⏮',
-      step_back = 'b',
-      run_last = '▶▶',
-      terminate = '⏹',
-      disconnect = '⏏',
+  vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
+  require('mason-nvim-dap').setup {
+    -- Makes a best effort to setup the various debuggers with
+    -- reasonable debug configurations
+    automatic_installation = true,
+
+    -- You can provide additional configuration to the handlers,
+    -- see mason-nvim-dap README for more information
+    handlers = {},
+
+    -- You'll need to check that you have the required things installed
+    -- online, please don't ask me how to install them :)
+    ensure_installed = {
+      -- Update this to ensure that you have the debuggers for the langs you want
+      -- 'delve',
     },
-  },
-}
+  }
 
-dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-dap.listeners.before.event_exited['dapui_config'] = dapui.close
+  -- For more information, see |:help nvim-dap-ui|
+  dapui.setup {
+    -- Set icons to characters that are more likely to work in every terminal.
+    --    Feel free to remove or use ones that you like more! :)
+    --    Don't feel like these are good choices.
+    icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+    controls = {
+      icons = {
+        pause = '⏸',
+        play = '▶',
+        step_into = '⏎',
+        step_over = '⏭',
+        step_out = '⏮',
+        step_back = 'b',
+        run_last = '▶▶',
+        terminate = '⏹',
+        disconnect = '⏏',
+      },
+    },
+  }
 
+<<<<<<< HEAD
+||||||| parent of 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
+require('dap-python').setup 'python3'
+require('dap-python').test_runner = 'pytest'
+
+=======
+  dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+  dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+  dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+  require('dap-python').setup 'python3'
+  require('dap-python').test_runner = 'pytest'
+end
+
+>>>>>>> 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
 local nmap = function(keys, func, desc)
   if desc then
     desc = 'DAP: ' .. desc
   end
 
-  vim.keymap.set('n', keys, func, { desc = desc })
+  vim.keymap.set('n', keys, function()
+    setup_dap()
+    func()
+  end, { desc = desc })
 end
 
+<<<<<<< HEAD
 nmap('<F5>', dap.continue, 'Debug: Start/Continue')
 nmap('<F1>', dap.step_into, 'Debug: Step Into')
 nmap('<F2>', dap.step_over, 'Debug: Step Over')
 nmap('<F3>', dap.step_out, 'Debug: Step Out')
 nmap('<F7>', dapui.toggle, 'Debug: See last session result.')
 nmap('<leader>Db', dap.toggle_breakpoint, '[D]ebug: Toggle [B]reakpoint')
+||||||| parent of 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
+nmap('<F5>', dap.continue, 'Debug: Start/Continue' )
+nmap('<F1>', dap.step_into,  'Debug: Step Into' )
+nmap('<F2>', dap.step_over, 'Debug: Step Over' )
+nmap('<F3>', dap.step_out,  'Debug: Step Out' )
+nmap('<F7>', dapui.toggle,  'Debug: See last session result.' )
+nmap('<leader>Db', dap.toggle_breakpoint,  '[D]ebug: Toggle [B]reakpoint' )
+=======
+nmap('<F5>', function()
+  require('dap').continue()
+end, 'Debug: Start/Continue')
+nmap('<F1>', function()
+  require('dap').step_into()
+end, 'Debug: Step Into')
+nmap('<F2>', function()
+  require('dap').step_over()
+end, 'Debug: Step Over')
+nmap('<F3>', function()
+  require('dap').step_out()
+end, 'Debug: Step Out')
+nmap('<F7>', function()
+  require('dapui').toggle()
+end, 'Debug: See last session result.')
+nmap('<leader>Db', function()
+  require('dap').toggle_breakpoint()
+end, '[D]ebug: Toggle [B]reakpoint')
+>>>>>>> 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
 nmap('<leader>Dc', function()
+<<<<<<< HEAD
   dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
 end, '[D]ebug: Set [C]onditional Breakpoint')
 nmap('<leader>Dt', dapui.toggle, '[D]ebug: [T]oggle UI')
+||||||| parent of 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
+  dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+end,  '[D]ebug: Set [C]onditional Breakpoint' )
+nmap('<leader>Dt', dapui.toggle,  '[D]ebug: [T]oggle UI' )
+=======
+  require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+end, '[D]ebug: Set [C]onditional Breakpoint')
+nmap('<leader>Dt', function()
+  require('dapui').toggle()
+end, '[D]ebug: [T]oggle UI')
+>>>>>>> 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
