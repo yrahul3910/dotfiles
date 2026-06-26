@@ -13,4 +13,4 @@ automatic_backups/
 .pi/agent/trust.json
 .pi/npm/
 .pi/git/
-.jj/repos/
+.config/jj/repos/

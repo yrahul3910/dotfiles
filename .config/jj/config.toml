@@ -28,6 +28,10 @@ p = {
     """, ""],
     doc = "Advance bookmark and push to git"
 }
+cm = {
+    definition = ["commit", "-m"],
+    doc = "commit :3"
+}
 
 [revset-aliases]
 # Closest revision that is mutable, described and either non-empty or a merge
