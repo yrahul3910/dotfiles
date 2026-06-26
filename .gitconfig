@@ -28,6 +28,7 @@
     b = branch
     bd = branch -D
     c = checkout
+    cm = commit -m
     cp = cherry-pick
     cpc = cherry-pick --continue
     d = diff
