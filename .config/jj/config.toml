@@ -7,12 +7,36 @@ name = "Rahul Yedida"
 [revsets]
 bookmark-advance-to = 'closest_pushable(@)'
 
+[signing]
+behavior = "drop"
+backend = "gpg"
+
+[git]
+sign-on-push = true
+
+[aliases]
+l = {
+    definition = ["log", "-r", "(master..@):: | (master..@)-"],
+    doc = "Log pending changes"
+}
+p = {
+    definition = [
+        "util", "exec", "--", "bash", "-c", """
+        set -eu
+        jj bookmark advance || true
+        jj git push "$@"
+    """, ""],
+    doc = "Advance bookmark and push to git"
+}
+
 [revset-aliases]
 # Closest revision that is mutable, described and either non-empty or a merge
 # See `jj help -k config`
 'closest_pushable(to)' = '''
   heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))
 '''
+# Avoid accidentally overwriting others' commits/editing history
+"immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())"
 
 [ui]
-editor = "nvim"
+editor = "nvim --clean"
