@@ -1,11 +1,13 @@
 tap "anomalyco/tap"
-tap "aws/tap"
+tap "aws/tap", trusted: true
 tap "homebrew/brew-vulns"
-tap "mohamedelashri/free-mac"
+tap "mohamedelashri/free-mac", "https://github.com/MohamedElashri/homebrew-free-mac"
 tap "oven-sh/bun"
 tap "withgraphite/tap"
 # Perf monitoring CLI tool for Apple Silicon
 brew "asitop"
+# B2 Cloud Storage Command-Line Tools
+brew "b2-tools"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Collection of portable C++ source libraries
@@ -86,24 +88,57 @@ brew "zoxide"
 brew "zsh"
 # The AI coding agent built for the terminal.
 brew "anomalyco/tap/opencode", trusted: true
+# EC2 Instance Selector is a tool to filter EC2 instance types based on resource criteria
+brew "aws/tap/ec2-instance-selector"
 # Check Homebrew packages for known vulnerabilities via osv.dev
 brew "homebrew/brew-vulns/brew-vulns"
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun", trusted: true
 # Allows you to manage your stacked changes and submit them for review on GitHub
 brew "withgraphite/tap/graphite", trusted: true
+# Multi-cloud backup application
+cask "arq"
+# Desktop password and login vault
+cask "bitwarden"
+# Calendar software focusing on flexibility and reliability
+cask "busycal"
+# E-books management software
+cask "calibre"
+# Disk space visualiser
+cask "daisydisk"
 # Universal database tool and SQL client
 cask "dbeaver-community"
+# Web browser
+cask "firefox"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
+# Graphically shows disk usage within a file system
+cask "grandperspective"
+# Keyboard customiser
+cask "karabiner-elements"
+# Discover, download, and run local LLMs
+cask "lm-studio"
+# Clipboard manager
+cask "maccy"
 # Neovim Client
 cask "neovide-app"
 # Image viewer
 cask "qview"
+# App switcher driven by the Right Command key
+cask "rcmd"
+# Customizable email client
+cask "thunderbird"
+# REST, GraphQL and gRPC client
+cask "yaak"
 # Multiplayer code editor
 cask "zed"
+# Gecko based web browser
+cask "zen"
 # Open-source markdown editor
 cask "zettlr"
+# Collect, organise, cite, and share research sources
+cask "zotero"
+go "github.com/spf13/cobra-cli"
 go "github.com/golangci/golangci-lint/v2/cmd/golangci-lint"
 cargo "cargo-audit"
 cargo "cargo-deny"
