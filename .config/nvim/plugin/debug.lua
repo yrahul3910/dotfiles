@@ -76,12 +76,6 @@ local function setup_dap()
     },
   }
 
-<<<<<<< HEAD
-||||||| parent of 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
-require('dap-python').setup 'python3'
-require('dap-python').test_runner = 'pytest'
-
-=======
   dap.listeners.after.event_initialized['dapui_config'] = dapui.open
   dap.listeners.before.event_terminated['dapui_config'] = dapui.close
   dap.listeners.before.event_exited['dapui_config'] = dapui.close
@@ -90,7 +84,6 @@ require('dap-python').test_runner = 'pytest'
   require('dap-python').test_runner = 'pytest'
 end
 
->>>>>>> 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
 local nmap = function(keys, func, desc)
   if desc then
     desc = 'DAP: ' .. desc
@@ -102,21 +95,6 @@ local nmap = function(keys, func, desc)
   end, { desc = desc })
 end
 
-<<<<<<< HEAD
-nmap('<F5>', dap.continue, 'Debug: Start/Continue')
-nmap('<F1>', dap.step_into, 'Debug: Step Into')
-nmap('<F2>', dap.step_over, 'Debug: Step Over')
-nmap('<F3>', dap.step_out, 'Debug: Step Out')
-nmap('<F7>', dapui.toggle, 'Debug: See last session result.')
-nmap('<leader>Db', dap.toggle_breakpoint, '[D]ebug: Toggle [B]reakpoint')
-||||||| parent of 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
-nmap('<F5>', dap.continue, 'Debug: Start/Continue' )
-nmap('<F1>', dap.step_into,  'Debug: Step Into' )
-nmap('<F2>', dap.step_over, 'Debug: Step Over' )
-nmap('<F3>', dap.step_out,  'Debug: Step Out' )
-nmap('<F7>', dapui.toggle,  'Debug: See last session result.' )
-nmap('<leader>Db', dap.toggle_breakpoint,  '[D]ebug: Toggle [B]reakpoint' )
-=======
 nmap('<F5>', function()
   require('dap').continue()
 end, 'Debug: Start/Continue')
@@ -135,20 +113,9 @@ end, 'Debug: See last session result.')
 nmap('<leader>Db', function()
   require('dap').toggle_breakpoint()
 end, '[D]ebug: Toggle [B]reakpoint')
->>>>>>> 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
 nmap('<leader>Dc', function()
-<<<<<<< HEAD
-  dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-end, '[D]ebug: Set [C]onditional Breakpoint')
-nmap('<leader>Dt', dapui.toggle, '[D]ebug: [T]oggle UI')
-||||||| parent of 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
-  dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-end,  '[D]ebug: Set [C]onditional Breakpoint' )
-nmap('<leader>Dt', dapui.toggle,  '[D]ebug: [T]oggle UI' )
-=======
   require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
 end, '[D]ebug: Set [C]onditional Breakpoint')
 nmap('<leader>Dt', function()
   require('dapui').toggle()
 end, '[D]ebug: [T]oggle UI')
->>>>>>> 5bb9dfc (perf(neovim): defer avante setup, gate debug plugins to first use)
