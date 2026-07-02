@@ -1,4 +1,4 @@
-import { type RGBA } from "./characters.ts";
+import { type RGBA } from "./png.ts";
 
 /**
  * Normalizes a hex color channel of 1-4 hex digits (as used by OSC 11 responses)
