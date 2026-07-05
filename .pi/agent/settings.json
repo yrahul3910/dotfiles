@@ -9,7 +9,8 @@
         "npm:@tmustier/pi-usage-extension",
         "npm:@tintinweb/pi-subagents",
         "npm:pi-mcp-extension",
-        "git:github.com/yrahul3910/pi-permission-system"
+        "git:github.com/yrahul3910/pi-permission-system",
+        "npm:pi-system-prompt"
     ],
     "theme": "light",
     "quietStartup": false,
