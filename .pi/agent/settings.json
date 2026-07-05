@@ -1,15 +1,16 @@
 {
-  "lastChangelogVersion": "0.79.8",
+  "lastChangelogVersion": "0.80.3",
   "defaultProvider": "openrouter",
   "defaultModel": "z-ai/glm-5.2",
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "xhigh",
   "editorPaddingX": 0,
   "transport": "auto",
   "packages": [
     "npm:@tmustier/pi-usage-extension",
     "npm:@tintinweb/pi-subagents",
     "npm:pi-mcp-extension",
-    "git:github.com/yrahul3910/pi-permission-system"
+    "git:github.com/yrahul3910/pi-permission-system",
+    "npm:pi-system-prompt"
   ],
   "theme": "dark",
   "quietStartup": false,
@@ -18,4 +19,3 @@
   "enableAnalytics": false,
   "steeringMode": "one-at-a-time"
 }
-
