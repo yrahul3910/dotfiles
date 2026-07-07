@@ -93,36 +93,11 @@ function envsource
   end
 end
 
-function copyenv --description "Copy .env from home and ensure it's in .gitignore"
-  # Copy .env from home to current directory
-  if not test -f $HOME/.env
-    echo "Error: $HOME/.env does not exist"
-    return 1
-  end
-
-  cp $HOME/.env ./.env
-  echo "Copied .env to current directory"
-
-  # Find git root
-  set git_root (git rev-parse --show-toplevel 2>/dev/null)
-
-  if test -z "$git_root"
-    echo "Warning: Not in a git repository, skipping .gitignore check"
-    return 0
-  end
-
-  # Check if .env is in .gitignore (matches .env or /.env)
-  if test -f "$git_root/.gitignore"
-    if not grep -qE '^/?\.env$' "$git_root/.gitignore"
-      echo ".env" >> "$git_root/.gitignore"
-      echo "Added .env to $git_root/.gitignore"
-    else
-      echo ".env already in $git_root/.gitignore"
+function copyenv --description "Load encrypted secrets into this shell"
+    for f in ~/configs/secrets/*.env
+        source (sops -d $f | psub)
     end
-  else
-    echo ".env" > "$git_root/.gitignore"
-    echo "Created .gitignore and added .env"
-  end
+    echo "Secrets loaded."
 end
 
 function yy
@@ -175,8 +150,8 @@ if string match -q "Darwin" -- (uname)
 end
 
 starship init fish | source
-
 zoxide init --cmd cd fish | source
+direnv hook fish | source
 
 # Python being Python
 set -x PYTHONPATH $PYTHONPATH .
@@ -189,4 +164,4 @@ set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/go/bin $PATH
 
 set -gx GPG_TTY (tty)
-
+set -gx SOPS_AGE_KEY_FILE ~/.config/sops/age/keys.txt

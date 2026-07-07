@@ -4,6 +4,8 @@ tap "homebrew/brew-vulns"
 tap "mohamedelashri/free-mac", "https://github.com/MohamedElashri/homebrew-free-mac"
 tap "oven-sh/bun"
 tap "withgraphite/tap"
+# Simple, modern, secure file encryption
+brew "age"
 # Perf monitoring CLI tool for Apple Silicon
 brew "asitop"
 # B2 Cloud Storage Command-Line Tools
@@ -18,6 +20,8 @@ brew "btop"
 brew "cmake"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+# Load/unload environment variables based on $PWD
+brew "direnv"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
@@ -64,6 +68,8 @@ brew "ripgrep"
 brew "scc"
 # Used as a compiler wrapper and avoids compilation when possible
 brew "sccache"
+# Editor of encrypted files
+brew "sops"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
 # Terminal multiplexer
