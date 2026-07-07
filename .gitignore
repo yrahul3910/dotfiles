@@ -14,3 +14,4 @@ automatic_backups/
 .pi/npm/
 .pi/git/
 .config/jj/repos/
+.config/sops/age/keys.txt

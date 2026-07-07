@@ -62,6 +62,16 @@ function so() {
     source $HOME/.zshrc
 }
 
+function copyenv() {
+  local f
+
+  for f in ~/configs/secrets/*.env; do
+    source <(sops -d "$f")
+  done
+
+  echo "Secrets loaded."
+}
+
 alias pio="pi --offline"
 alias mongod="mongod --dbpath=~/data/db"
 alias l="ls --color=auto"
@@ -224,7 +234,7 @@ type starship_zle-keymap-select >/dev/null || \
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-
+export SOPS_AGE_KEY_FILE ~/.config/sops/age/keys.txt
 . "$HOME/.cargo/env"
 
 export NVM_DIR="$HOME/.nvm"
