@@ -21,7 +21,7 @@ require('conform').setup {
     lua = { 'stylua' },
     javascript = { 'prettier', stop_after_first = true },
     typescript = { 'prettier', 'biome', stop_after_first = false },
-    typescriptreact = { 'prettier', 'biome', stop_after_first = true },
+    typescriptreact = { 'prettier', 'biome', stop_after_first = false },
     python = { 'black', 'ruff', stop_after_first = false },
     json = { 'prettier', stop_after_first = false },
     c = { 'clang-format', stop_after_first = true },
