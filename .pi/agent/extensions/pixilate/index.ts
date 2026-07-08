@@ -10,7 +10,7 @@ export default function (pi: ExtensionAPI) {
     let tuiRef: { requestRender: () => void } | null = null;
 
     pi.on("session_start", async (_event, ctx) => {
-        if (!ctx.hasUI) return;
+        if (!ctx.hasUI || !!process.env.TMUX) return;
 
         let background: "light" | "dark" = "dark";
         try {
