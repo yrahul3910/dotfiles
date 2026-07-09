@@ -163,7 +163,7 @@
       "src": "https://github.com/folke/todo-comments.nvim"
     },
     "treesitter-modules.nvim": {
-      "rev": "dbded29dade0ff4435642530ec2b5a81730f8e1a",
+      "rev": "290eec96bfc43ed28264661dd30e894a60c4b99c",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
     },
     "typescript-tools.nvim": {
