@@ -261,6 +261,17 @@ end, '[C]olorscheme [D]ark')
 nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute Smart [Q]uotes')
 nmap('<leader>gcd', '<C-w>v<C-w>l/=====<CR>', '[G]it [C]onflicts: Show [D]iffs')
 
+-- vim.pack
+nmap('<leader>pu', function()
+  vim.pack.update()
+end, '[P]lugin [U]pdate')
+nmap('<leader>pl', function()
+  vim.pack.update(nil, { offline = true })
+end, '[P]lugin [L]ist')
+nmap('<leader>ps', function()
+  vim.pack.update(nil, { target = 'lockfile' })
+end, '[P]lugin [S]ync (disk to lockfile)')
+
 -- custom workflows
 local function copy_git_file_path()
   local base_url = vim.fn.system('git remote get-url origin'):gsub('%s+$', '')
