@@ -1,4 +1,12 @@
-This is a `launchd` script that watches for changes in `~/Downloads` and removes the stupid quarantine bit macOS puts on it. To set it up:
+This is a `launchd` script that periodically checks for changes in `~/Downloads` and removes the stupid quarantine bit macOS puts on it. 
+
+> [!WARNING]
+> Don't use this if you don't understand what exactly it does. This specifically bypasses Gatekeeper, one of macOS' security measures.
+
+> [!WARNING]
+> This can sometimes cause system freees if a newly-installed app launches and asks for permissions. This can happen if this is misconfigured to send too many requests to `tccd`, which effectively processes requests one at a time. `tccd` waits for you to click one of Allow or Don't Allow, which are processed by `WindowServer`, which has to send the click to `tccd` synchronously. This closes a deadlock cycle.
+
+To set it up:
 
 * **Set up a quarantined bash:** We'll give it Full Disk Access, so we won't use `/bin/bash`:
 
@@ -37,7 +45,7 @@ launchctl load ~/Library/LaunchAgents/com.user.stripquarantine.plist
 touch /tmp/test.txt
 xattr -w com.apple.quarantine "0000;00000000;Test;" /tmp/test.txt
 mv /tmp/test.txt ~/Downloads/test.txt
-sleep 2
+sleep 60
 xattr -l ~/Downloads/test.txt   # should print nothing now
 rm ~/Downloads/test.txt
 ```
