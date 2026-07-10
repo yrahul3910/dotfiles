@@ -9,12 +9,8 @@
         <string>/Users/ryedida/.local/bin/quarantine-bash</string>
         <string>/Users/ryedida/.local/bin/strip-quarantine.sh</string>
     </array>
-    <key>WatchPaths</key>
-    <array>
-        <string>/Users/ryedida/Downloads</string>
-        <string>/Applications</string>
-        <string>/Users/ryedida/Desktop</string>
-    </array>
+    <key>StartInterval</key>
+    <integer>60</integer>
     <key>StandardErrorPath</key>
     <string>/tmp/stripquarantine.err</string>
 </dict>
