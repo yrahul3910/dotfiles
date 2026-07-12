@@ -14,6 +14,7 @@ export PATH="$PATH:/Users/ryedida/.lmstudio/bin"
 
 export PATH=$PATH:$HOME/Downloads/google-cloud-sdk/bin/
 
+eval "$(zoxide init bash)"
 
 # Added by Antigravity CLI installer
 export PATH="/Users/ryedida/.local/bin:$PATH"
