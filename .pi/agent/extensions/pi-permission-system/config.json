@@ -1,5 +1,6 @@
 {
-  "debugLog": false,
-  "permissionReviewLog": true,
-  "yoloMode": false
+    "debugLog": false,
+    "permissionReviewLog": true,
+    "yoloMode": false,
+    "desktopNotifications": true
 }

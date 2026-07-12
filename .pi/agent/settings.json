@@ -17,5 +17,5 @@
     "collapseChangelog": true,
     "enableInstallTelemetry": false,
     "enableAnalytics": false,
-    "steeringMode": "one-at-a-time"
+    "steeringMode": "all"
 }

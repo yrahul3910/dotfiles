@@ -20,6 +20,8 @@
     "cargo test *": "allow",
     "bun test": "allow",
     "uv run pytest *": "allow",
+    "git diff *": "allow",
+    "git status *": "allow",
   },
   "defaultPolicy": {
     "tools": "ask",
