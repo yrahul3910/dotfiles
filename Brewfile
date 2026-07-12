@@ -24,6 +24,8 @@ brew "cmake"
 brew "coreutils"
 # Load/unload environment variables based on $PWD
 brew "direnv"
+# Perl lib for reading and writing EXIF metadata
+brew "exiftool"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
@@ -52,6 +54,8 @@ brew "molten-vk"
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
+# Create, run, and share large language models (LLMs)
+brew "ollama"
 # Drop-in replacement for Terraform. Infrastructure as Code Tool
 brew "opentofu"
 # Swiss-army knife of markup format conversion
@@ -76,6 +80,8 @@ brew "sccache"
 brew "sops"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
+# Send macOS User Notifications from the command-line
+brew "terminal-notifier"
 # Terminal multiplexer
 brew "tmux"
 # Vi 'workalike' with many additional features
@@ -120,6 +126,8 @@ cask "firefox"
 cask "ghostty"
 # Graphically shows disk usage within a file system
 cask "grandperspective"
+# Vector graphics editor
+cask "inkscape"
 # Keyboard customiser
 cask "karabiner-elements"
 # Discover, download, and run local LLMs
@@ -128,6 +136,8 @@ cask "lm-studio"
 cask "maccy"
 # Neovim Client
 cask "neovide-app"
+# Get up and running with large language models locally
+cask "ollama-app"
 # Image viewer
 cask "qview"
 # App switcher driven by the Right Command key
