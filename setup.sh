@@ -153,5 +153,6 @@ fi
 ./setup-macos-defaults.sh
 
 chsh -s $(which zsh) $(whoami)
+ln -s $HOME/configs/.pi/agent/skills/okf/scripts/okf.ts $HOME/.local/bin/okf
 
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
