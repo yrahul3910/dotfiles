@@ -1,0 +1,110 @@
+# rcmd configuration file
+# Edit this file to customise rcmd's behaviour. Changes are picked up within a few seconds.
+# Full settings reference: run `rcmd config help`
+stages: []
+appKeyAssignments:
+  h: {app: /Applications/Helium.app, launchIfNotRunning: true, whenAlreadyFocusedAction: FollowGlobal}
+  g: {app: /Applications/Ghostty.app, launchIfNotRunning: true, whenAlreadyFocusedAction: FollowGlobal}
+  t: {app: /Applications/Thunderbird.app, launchIfNotRunning: true, whenAlreadyFocusedAction: FollowGlobal}
+  z: {app: /Applications/Zen.app, launchIfNotRunning: true, whenAlreadyFocusedAction: FollowGlobal}
+  b: {app: /Applications/Bloom.app, launchIfNotRunning: true, whenAlreadyFocusedAction: FollowGlobal}
+windowKeyAssignments: {}
+ignoredApps: [app.legcord.Legcord, com.apple.ActivityMonitor, com.apple.Preview, com.apple.systempreferences, com.bitwarden.desktop, com.busymac.busycal3, com.neovide.neovide, ru.keepcoder.Telegram]
+appsWhereRcmdIsPaused: []
+ignoredKeys: []
+searchPins: {}
+triggers:
+  triggerKeys: [ralt]
+  windowTriggerKeys: [ralt, rctrl]
+  assignKeyTriggerKeys: [rcmd, ralt]
+  hideOnFocusTriggerKeys: [rcmd, lshift]
+  enableAssignHotkey: false
+  enableHideOthersHotkey: false
+  alwaysHideOthers: false
+appSwitcher:
+  showAppSwitcher: true
+  appSwitcherOSDDelay: 0
+  appSwitcherFeatures: [runningApps, launchableApps, bottomActions]
+  switcherScreenPlacement: {position: center, offsetX: -21, offsetY: 70}
+  osdSize: {width: 360, height: 600}
+  actionKeys: {hideKey: minus, actionKey: equal, exposeKey: period, enableHideAndActionKeys: true}
+  hideOnlyFocusedAppOnMinus: false
+  appSort: name
+  appSortReverse: false
+windowSwitcher:
+  showWindowSwitcher: false
+  windowSwitcherOSDDelay: 0
+  windowSwitcherAppearance: clean
+  windowKeyMode: mixed
+  osdLook:
+    density: clean
+    backgroundStyle:
+      glass: {opacity: 2.2e-1}
+    accentColor: system
+    foregroundColor: adaptive
+    keycapColor: adaptive
+    keycapStyle: plaintext
+    searchBarStyle: clean
+    cornerRadius: 1.4e+1
+    appIconSize: 2e+1
+    iconStyle: native
+    fontStyle: rounded
+    focusStyle: bar
+    rowSeparationStyle: none
+  windowSwitcherFeatures: [lastWindow, windows, windowActions, bottomActions]
+  windowSwitcherDimFocused: false
+  windowSwitcherPlacement: {mirrorAppSwitcher: true}
+  osdSize: {width: 480, height: 420}
+  actionKeys: {windowMinimizeKey: minus, windowAssignKey: equal, enableWindowMinimizeAndAssignKeys: false}
+  minimizeOnlyFocusedWindowOnMinus: true
+stageSwitcher:
+  stageTriggerKeys: [capsLock]
+  actionKeys: {stageAssignKey: equal, stageCloseKey: minus, stageRepositionKey: section, stageCloseAction: close}
+  stageReopenClosedItems: true
+  stageSwitcherOSDDelay: 80
+  showStageSwitcher: false
+  stageSwitcherPlacement: {mirrorAppSwitcher: true}
+tabCycle:
+  enableTabCycle: true
+  tabCycleScope: auto
+  tabCycleSearchScope: allWindows
+  tabCycleInclude: [minimized, hidden]
+  tabCycleFocusOnKeyUp: false
+  hijackCommandTab: false
+  stickyAppSwitcher: false
+  stickyAppSwitcherScope: rcmdOnly
+  windowCycleKey: grave
+  enableWindowCycleKey: false
+  hijackWindowCycleHotkey: false
+spaces: {spaceMode: single, createMissingSpaces: true, osdOnActiveSpaceOnly: false, enableInstantSpaceSwitching: true}
+general:
+  whenAlreadyFocusedAction: Hide
+  focusBehaviour: allWindows
+  focusBehaviourSingle: allWindows
+  focusBehaviourMulti: sameSpaceWindow
+  focusOnKeyUp: false
+  activationMode: adaptive
+  fuzzySearch: true
+  searchMatchMode: anchored
+  searchOptionalPrefixes:
+  - google
+  - microsoft
+  - adobe
+  - apple
+  - amazon
+  - affinity
+  - jetbrains
+  - nvidia
+  - parallels
+  - elgato
+  - logitech
+  - synology
+  - wondershare
+  - the
+  - 4k
+  - 8k
+  - 3d
+  showMenubarAppsInSearch: true
+  enableStickySpaceSearch: true
+  hidePerAppSettings: false
+overrideUserDefaults: false
