@@ -6,8 +6,11 @@
 [core]
     editor = nvim --clean
     ignorecase = false
-    fsmonitor = true
-    splitindex = true
+
+    # these can improve `git` performance, but can use a decent bit of cpu at times
+    fsmonitor = false
+    splitindex = false
+
     preloadindex = true
     untrackedcache = true
     pager = delta
