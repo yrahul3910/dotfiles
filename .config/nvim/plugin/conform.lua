@@ -24,6 +24,7 @@ require('conform').setup {
     typescriptreact = { 'prettier', 'biome', stop_after_first = false },
     python = { 'black', 'ruff', stop_after_first = false },
     json = { 'prettier', stop_after_first = false },
+    jsonc = { 'prettier', stop_after_first = false },
     c = { 'clang-format', stop_after_first = true },
     cpp = { 'clang-format', stop_after_first = true },
     -- Conform can also run multiple formatters sequentially
