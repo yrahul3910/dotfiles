@@ -56,8 +56,6 @@ brew "ollama"
 brew "opentofu"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
-# AI agent toolkit
-brew "pi-coding-agent"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Protocol buffers (Google's data interchange format)
@@ -92,8 +90,6 @@ brew "zig"
 brew "zoxide"
 # UNIX shell (command interpreter)
 brew "zsh"
-# The AI coding agent built for the terminal.
-brew "anomalyco/tap/opencode", trusted: true
 # EC2 Instance Selector is a tool to filter EC2 instance types based on resource criteria
 brew "aws/tap/ec2-instance-selector"
 # Check Homebrew packages for known vulnerabilities via osv.dev
