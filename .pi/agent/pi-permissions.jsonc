@@ -1,39 +1,26 @@
 {
+  // Redesigned bash permission format (pi-permission-system 0.8.0-patch.2).
+  // Rules are word-prefix lists matched per executed command; read-only
+  // commands (rg, grep, cat, git log, ...) are allowed by the built-in
+  // safe-command registry, and .env/.ssh/key files are denied by built-in
+  // protected paths — no per-command deny globs needed anymore.
   "bash": {
-    "rm *": "ask",
-    "rg *": "allow",
-    "grep *": "allow",
-    "fd *": "allow",
-    "ls *": "allow",
-    "cat *": "allow",
-    "cat *.env": "deny",  // last match wins
-    "sed *": "allow",
-    "echo *": "allow",
-    "head *": "allow",
-    "tail *": "allow",
-    "python *": "ask",
-    "python3 *": "ask",
-    "uv run python3 *": "ask",
-    "uv run python *": "ask",
-    "cargo clippy *": "allow",
-    "cargo check *": "allow",
-    "cargo fmt *": "allow",
-    "cargo test *": "allow",
-    "bun test": "allow",
-    "uv run pytest *": "allow",
-    "git diff *": "allow",
-    "git status *": "allow",
-    "git log *": "allow",
-    "jj diff *": "allow",
-    "jj status *": "allow",
-    "jj log *": "allow"
+    "allow": [
+      "cargo clippy",
+      "cargo check",
+      "cargo fmt",
+      "cargo test",
+      "bun test",
+      "uv run pytest",
+      "gh run view",
+    ],
   },
   "defaultPolicy": {
     "tools": "ask",
     "bash": "ask",
     "mcp": "ask",
     "skills": "ask",
-    "special": "ask"
+    "special": "ask",
   },
   "tools": {
     "read": "allow",
@@ -41,6 +28,8 @@
     "find": "allow",
     "ls": "allow",
     "write": "ask",
-    "edit": "ask"
-  }
+    "edit": "ask",
+    "mcp_kagi_kagi_search_fetch": "allow",
+    "mcp_kagi_kagi_extract": "allow",
+  },
 }
