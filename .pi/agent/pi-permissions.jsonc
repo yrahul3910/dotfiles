@@ -9,11 +9,10 @@
       "cargo clippy",
       "cargo check",
       "cargo fmt",
-      "cargo test",
       "bun test",
-      "uv run pytest",
       "gh run view",
     ],
+    "ask": ["cargo test", "uv run pytest"],
   },
   "defaultPolicy": {
     "tools": "ask",
