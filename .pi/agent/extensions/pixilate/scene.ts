@@ -200,7 +200,9 @@ export class Scene {
         this.widthCells = initialWidthCells;
         const sprites = characterNames
             .map((name) => CHARACTERS[name.trim().toLowerCase()])
-            .filter((sprite): sprite is CharacterSprite => sprite !== undefined);
+            .filter(
+                (sprite): sprite is CharacterSprite => sprite !== undefined,
+            );
         if (sprites.length === 0) sprites.push(CHARACTERS.bunny!);
 
         // Spread starting positions out and alternate initial headings so the
