@@ -1,17 +1,15 @@
 {
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.81.1",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
-  "defaultThinkingLevel": "xhigh",
+  "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
   "transport": "auto",
   "packages": [
     "npm:@tintinweb/pi-subagents",
     "npm:pi-mcp-extension",
     "git:github.com/yrahul3910/pi-permission-system",
-    "npm:pi-system-prompt",
-    "npm:@marckrenn/pi-sub-core",
-    "npm:@marckrenn/pi-sub-bar"
+    "npm:pi-system-prompt"
   ],
   "theme": "light/dark",
   "quietStartup": false,
