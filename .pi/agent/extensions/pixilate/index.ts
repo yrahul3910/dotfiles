@@ -34,7 +34,7 @@ export default function (pi: ExtensionAPI) {
                         base64Data,
                         "image/png",
                         { fallbackColor: (str) => theme.fg("accent", str) },
-                        { maxWidthCells: width, maxHeightCells: 5, imageId },
+                        { maxWidthCells: width, maxHeightCells: 3, imageId },
                     );
 
                     const lines = image.render(width + 2);
