@@ -1,4 +1,3 @@
-tap "anomalyco/tap"
 tap "aws/tap", trusted: true
 tap "homebrew/brew-vulns"
 tap "mohamedelashri/free-mac", "https://github.com/MohamedElashri/homebrew-free-mac"
@@ -60,6 +59,8 @@ brew "ollama"
 brew "opentofu"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
+# AI agent toolkit
+brew "pi-coding-agent"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Protocol buffers (Google's data interchange format)
