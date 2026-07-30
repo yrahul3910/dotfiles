@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.81.1",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-sol",
+  "lastChangelogVersion": "0.82.1",
+  "defaultProvider": "modal",
+  "defaultModel": "yrahul3910--ep-kimi-k3-server.us-west.modal.direct",
   "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
   "transport": "auto",
