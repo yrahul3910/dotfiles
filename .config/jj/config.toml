@@ -19,6 +19,10 @@ l = {
     definition = ["log", "-r", "(master..@):: | (master..@)-"],
     doc = "Log pending changes"
 }
+ba = {
+    definition = ["bookmark", "advance"],
+    doc = "Advance bookmark"
+}
 p = {
     definition = [
         "util", "exec", "--", "bash", "-c", """
@@ -27,6 +31,25 @@ p = {
         jj git push "$@"
     """, ""],
     doc = "Advance bookmark and push to git"
+}
+pp = {
+    definition = [
+        "util", "exec", "--", "bash", "-c", """
+        set -eu
+        jj bookmark advance || true
+        jj git push --dry-run "$@"
+        jj undo
+    """, ""],
+    doc = "Preview what 'jj p' would advance and dry-run push"
+}
+bt = {
+    definition = [
+        "util", "exec", "--", "bash", "-c", """
+        set -eu
+        jj bookmark create "$1"
+        jj bookmark track "$1"
+    """, ""],
+    doc = "Create a bookmark and track its remote"
 }
 cm = {
     definition = ["commit", "-m"],
@@ -44,3 +67,7 @@ cm = {
 
 [ui]
 editor = "nvim --clean"
+
+[templates]
+commit_trailers = '''
+format_signed_off_by_trailer(self)'''
