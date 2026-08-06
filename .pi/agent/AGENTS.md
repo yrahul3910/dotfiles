@@ -61,11 +61,19 @@ If a request that should be small has you thinking or exploring for a long
 time, stop: answer with what you have, or ask. A wrong fast answer I can
 correct; ten silent minutes followed by a wrong answer I cannot.
 
+Observable trigger: if you've made ~3+ exploration/tool calls on something
+you classified as a Question or Small change, that's the signal. Re-check the
+classification, then answer with what you have or ask, rather than exploring
+further on the original assumption.
+
 ## Style
 
-Before writing or editing non-trivial code, load the `code-style` skill (skip
-if this repo's AGENTS.md already carries equivalent rules), including the
-reference file for the language in question. Always, at minimum:
+Before writing or editing non-trivial code (>= 10 lines), load the `code-style` skill,
+including the reference file for the language in question. If the repo has an AGENTS.md,
+STYLE.md, STANDARDS.md, or similar, those rules apply _in addition_ to the rules in the
+`code-style` skill; in case of conflicts, prefer the repo's standards.
+
+Always, at minimum:
 
 - Match the surrounding code; local consistency beats external best practice.
 - Search before writing helpers; no new dependency for what the stdlib or an
@@ -74,3 +82,5 @@ reference file for the language in question. Always, at minimum:
 - No decorative, changelog, or name-paraphrasing comments; ASCII only, no em
   dashes, no smart punctuation.
 - Keep diffs surgical: what was asked, plus the cleanup it directly requires.
+  If you spot a larger refactor, surface it, don't perform it: make the
+  smallest applicable change and name the bigger one for me to decide on.
