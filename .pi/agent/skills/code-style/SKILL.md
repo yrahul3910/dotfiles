@@ -36,7 +36,7 @@ However: if there is a nicer way and the effort to change it is not significant,
 
 ## Be honest with the tools
 
-- **Never silence the type checker or linter to make an error go away.** No `# noqa`, `# type: ignore`, `@ts-ignore`, `// biome-ignore`, blanket `any`, gratuitous casts, or `!` non-null assertions used as escape hatches. Fix the root cause.
+- **Avoid silencing the type checker or linter to make an error go away.** No `# noqa`, `# type: ignore`, `@ts-ignore`, `// biome-ignore`, blanket `any`, gratuitous casts, or `!` non-null assertions used as escape hatches unless necessary or fixing it would need hacks or workarounds. Fix the root cause.
 - A suppression is acceptable only when the tool is genuinely wrong, it is **narrowly scoped to the single line**, and it carries a comment explaining *why*. This should be rare.
 - **Don't weaken types to compile.** Loosening a type to `any`/`object`/`unknown` to get past an error is hiding a bug, not fixing one.
 - **Don't make tests pass by deleting, skipping, or weakening them.** If a test is genuinely wrong, say so and explain--don't quietly gut it.
@@ -44,6 +44,7 @@ However: if there is a nicer way and the effort to change it is not significant,
 ## Code shape smells
 
 - **Data clumps**: always passing `(userId, orgId, accountId)` together → make a struct. Same for `(start, end)`, `(x, y)`, `(key, value)`.
+- Code clumps: separate logical blocks of code with a blank line.
 - Don't return different shapes from one function (sometimes a list, sometimes a single item, sometimes `null`). Pick one, or expose two functions.
 - Rely on invariants in the code. If an argument is typed `usize`, there is no need for a `if (arg < 0)`. If an argument is typed as an `int`, don't "make sure", believe it, and let the type checker bring up issues. If a function is called after some invariants are checked, don't recheck inside the function. Either avoid the pre-call check, or remove it from the function and document that invariant in the function's docstring.
 - For the items in this section, if the current code has these smells, follow the current code style, but bring up the possible refactor to the user if your own code has to use these smells.
@@ -54,6 +55,7 @@ However: if there is a nicer way and the effort to change it is not significant,
 - **Comments explain *why*, not *what*.** Don't narrate code that already says what it does. Explain the non-obvious: a tricky invariant, a workaround, a reason for an unusual choice.
 - **Match the tone of the codebase.** Read a few existing comments before writing your own. If this codebase's comments are whimsical or full of references, write in that register; if they are strictly design-and-algorithm notes, keep yours dry and technical. Don't impose your own voice on a codebase that has one.
 - **Don't reference the pre-refactor state.** Write changed code as if the current version is the only one that ever existed. No "old schema", "previously now uses", "changed from X", "formerly". The reader has no access to what was there before and no reason to care; that context lives in git, not the source.
+- **Don't narrate the change as a contrast.** When you edit code (including fixing code the user just wrote and asked you to review), don't describe the result by pointing at what it replaced: no "instead of X", "rather than the previous Y", "changed to use Z". The reader sees only the current code; contrasting it against a version they never saw is noise. This is distinct from a genuine rationale comment: "we avoid X here because it deadlocks under load" earns its place when the choice is non-obvious and a reader would plausibly reach for X. The test: does the comment explain a live decision the next reader faces, or just recount the diff? Keep the former, cut the latter.
 - **No changelog comments** (`// added X`, `// fixed bug`). Git records history.
 - **Delete commented-out code.** It's dead weight; git remembers it.
 - No comment that just paraphrases the function name. The name is the comment. Either write a real docstring, or don't write one at all.
