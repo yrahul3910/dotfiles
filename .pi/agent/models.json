@@ -1,0 +1,34 @@
+{
+  "providers": {
+    "modal": {
+      "baseUrl": "https://inference.us-west.modal.direct/v1",
+      "authHeader": true,
+      "api": "openai-completions",
+      "apiKey": "$MODAL_API_KEY",
+      "models": [
+        {
+          "id": "yrahul3910--ep-kimi-k3-server.us-west.modal.direct",
+          "name": "Kimi K3",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": "low",
+            "medium": null,
+            "high": "high",
+            "xhigh": null,
+            "max": "max"
+          },
+          "input": ["text"],
+          "contextWindow": 1000000,
+          "maxTokens": 32000,
+          "cost": {
+            "input": 3,
+            "output": 15,
+            "cacheRead": 0.3,
+            "cacheWrite": 0
+          }
+        }
+      ]
+    }
+  }
+}
