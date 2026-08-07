@@ -8,8 +8,7 @@
   "packages": [
     "npm:@tintinweb/pi-subagents",
     "npm:pi-mcp-extension",
-    "git:github.com/yrahul3910/pi-permission-system",
-    "npm:pi-system-prompt"
+    "git:github.com/yrahul3910/pi-permission-system"
   ],
   "theme": "light/dark",
   "quietStartup": false,
