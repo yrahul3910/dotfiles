@@ -1,20 +1,20 @@
 {
-  "lastChangelogVersion": "0.83.0",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-opus-4.8",
-  "defaultThinkingLevel": "low",
-  "editorPaddingX": 0,
-  "transport": "auto",
-  "packages": [
-    "npm:@tintinweb/pi-subagents",
-    "npm:pi-mcp-extension",
-    "git:github.com/yrahul3910/pi-permission-system",
-    "npm:pi-system-prompt"
-  ],
-  "theme": "light/dark",
-  "quietStartup": false,
-  "collapseChangelog": true,
-  "enableInstallTelemetry": false,
-  "enableAnalytics": false,
-  "steeringMode": "all"
+    "lastChangelogVersion": "0.83.0",
+    "defaultProvider": "github-copilot",
+    "defaultModel": "claude-opus-4.8",
+    "defaultThinkingLevel": "low",
+    "editorPaddingX": 0,
+    "transport": "auto",
+    "packages": [
+        "npm:@tintinweb/pi-subagents",
+        "npm:pi-mcp-extension",
+        "git:github.com/yrahul3910/pi-permission-system",
+        "npm:pi-system-prompt"
+    ],
+    "theme": "light/dark",
+    "quietStartup": false,
+    "collapseChangelog": true,
+    "enableInstallTelemetry": false,
+    "enableAnalytics": false,
+    "steeringMode": "all"
 }

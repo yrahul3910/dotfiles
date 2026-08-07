@@ -32,8 +32,8 @@
     "ls": "allow",
     "write": "ask",
     "edit": "ask",
-    "mcp_kagi_kagi_search_fetch": "allow",
-    "mcp_kagi_kagi_extract": "allow",
-    "set_reasoning_effort": "allow",
+    "ask_user": "allow",
+    "bg_start": "allow",
+    "bg_status": "allow",
   },
 }
