@@ -297,6 +297,7 @@ const makeManager = Effect.gen(function* () {
     ((snap: TerminalSnapshot, consumed: boolean) => void) | undefined;
 
   const notify = (id?: string) => {
+    // oxlint-disable-next-line no-useless-spread -- iterate a copy so listeners can unsubscribe during iteration
     for (const listener of [...listeners]) {
       try {
         listener();

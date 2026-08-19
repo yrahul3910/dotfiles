@@ -6,7 +6,6 @@ import { spawn, spawnSync } from "node:child_process";
 import type { ExtensionAPI, BashOperations } from "@earendil-works/pi-coding-agent";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
 
-const STATUS_KEY = "process-cwd";
 let previousCwd: string | undefined;
 let cachedFishPath: string | null | undefined;
 
@@ -37,7 +36,7 @@ function resolveFishPath(): string | null {
 
 function createFishOperations(): BashOperations {
     return {
-        async exec(command, cwd, { onData, signal, timeout, env }) {
+        async exec(command, cwd, { signal, timeout, env }) {
             const fish = resolveFishPath();
             if (!fish) throw new Error("Could not find fish. Set PI_FISH_PATH to your fish binary.");
 
