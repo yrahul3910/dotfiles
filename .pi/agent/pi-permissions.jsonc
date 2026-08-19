@@ -16,6 +16,7 @@
       "uv run ruff check",
       "uv run ruff format",
       "gh run view",
+      "no-sloppy",
     ],
   },
   "defaultPolicy": {
