@@ -1,0 +1,29 @@
+# No-sloppy overlay config. Passed to `ruff check --config <this file>` by
+# scripts/check.py, so it applies the same standard to freshly written code
+# regardless of the project's own lint setup. Not a project config.
+
+# The overlay skips project config discovery, so ruff can't infer this from
+# requires-python; assume modern Python.
+target-version = "py314"
+
+line-length = 120
+
+[lint]
+select = ["ALL"]
+# SLOPxxx codes belong to this tool's custom rules; this keeps RUF100 from
+# flagging their noqa directives as unknown.
+external = ["SLOP"]
+ignore = [
+  "D203",    # conflicts with D211 (blank line before class docstring)
+  "D213",    # conflicts with D212 (summary on first line)
+  "N806",    # allow UPPER_CASE constants inside functions
+  "TRY003",  # leads to a pile of one-off exception classes
+  "FBT002",  # better fix is making boolean args required-positional
+  "COM812",  # ruff recommends disabling alongside the formatter
+  "PLE1205", # weird interactions with loguru
+  "FIX002",  # TODOs are allowed to exist
+  "S311",    # most projects don't need a CSPRNG
+]
+
+[lint.pylint]
+max-args = 8

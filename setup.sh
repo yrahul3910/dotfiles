@@ -153,6 +153,9 @@ fi
 ./setup-macos-defaults.sh
 
 chsh -s $(which zsh) $(whoami)
+
+# Pi agent skill scripts
 ln -s $HOME/configs/.pi/agent/skills/okf/scripts/okf.ts $HOME/.local/bin/okf
+uv tool install -e "$HOME/configs/.pi/agent/skills/no-sloppy"
 
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="

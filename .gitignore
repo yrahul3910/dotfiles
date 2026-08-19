@@ -1,5 +1,7 @@
 .DS_Store
 automatic_backups/
+__pycache__/
+.ruff_cache/
 .config/gh/
 .config/uv/
 .config/github-copilot/

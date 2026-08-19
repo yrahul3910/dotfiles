@@ -68,10 +68,11 @@ further on the original assumption.
 
 ## Style
 
-Before writing or editing non-trivial code (>= 10 lines), load the `code-style` skill,
+Before writing or editing non-trivial code (>= 10 lines), you should load the `code-style` skill,
 including the reference file for the language in question. If the repo has an AGENTS.md,
 STYLE.md, STANDARDS.md, or similar, those rules apply _in addition_ to the rules in the
-`code-style` skill; in case of conflicts, prefer the repo's standards.
+`code-style` skill; in case of conflicts, prefer the repo's standards. For Python code,
+you must also use the `no-sloppy` skill to check your code.
 
 Always, at minimum:
 
