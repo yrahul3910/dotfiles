@@ -4,8 +4,7 @@
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
       "url": "https://mcp.linear.app/mcp",
-      "auth": { "type": "oauth" },
-      "lifecycle": "eager"
+      "auth": { "type": "oauth" }
     },
     "firecrawl": {
       "command": "npx",
