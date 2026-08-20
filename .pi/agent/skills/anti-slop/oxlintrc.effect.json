@@ -1,0 +1,9 @@
+{
+  "extends": ["./oxlintrc.json"],
+  "jsPlugins": [
+    { "name": "anti-slop-effect", "specifier": "./plugin/effect/index.ts" }
+  ],
+  "rules": {
+    "anti-slop-effect/no-service-constructor-imports": "error"
+  }
+}
