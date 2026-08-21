@@ -1,5 +1,5 @@
 # No-sloppy overlay config. Passed to `ruff check --config <this file>` by
-# scripts/check.py, so it applies the same standard to freshly written code
+# src/no_sloppy/check.py, so it applies the same standard to freshly written code
 # regardless of the project's own lint setup. Not a project config.
 
 # The overlay skips project config discovery, so ruff can't infer this from
