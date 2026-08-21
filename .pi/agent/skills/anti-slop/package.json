@@ -1,0 +1,14 @@
+{
+  "name": "anti-slop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Anti-slop oxlint overlay for TypeScript/JavaScript, vendored from dmmulroy/anti-slop.",
+  "type": "module",
+  "bin": {
+    "anti-slop": "./check.ts"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "1.78.0",
+    "oxlint": "1.78.0"
+  }
+}
