@@ -7,22 +7,23 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "existing_window",
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "git_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "agent_servers": {
     "claude-acp": {
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "terminal": {
-    "dock": "bottom"
+    "dock": "bottom",
   },
   "preferred_line_length": 120,
   "soft_wrap": "preferred_line_length",
@@ -32,29 +33,29 @@
       "args": ["-i", "~/.ssh/dev"],
       "projects": [
         {
-          "paths": ["/home/ryedida/zotero-rag"]
-        }
-      ]
-    }
+          "paths": ["/home/ryedida/zotero-rag"],
+        },
+      ],
+    },
   ],
   "outline_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "agent": {
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5"
+      "model": "claude-sonnet-4.5",
     },
     "model_parameters": [],
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4o"
-    }
+      "model": "gpt-4o",
+    },
   },
   "telemetry": {
     "metrics": false,
-    "diagnostics": false
+    "diagnostics": false,
   },
   "format_on_save": "on",
   "vim_mode": true,
@@ -63,17 +64,17 @@
   "buffer_font_family": "CommitMono-v1",
   "ui_font_family": "CommitMono-v1",
   "minimap": {
-    "show": "always"
+    "show": "always",
   },
   "vertical_scroll_margin": 200,
   "buffer_font_size": 16,
   "inlay_hints": {
-    "enabled": true
+    "enabled": false,
   },
   "theme": {
     "mode": "system",
     "light": "Catppuccin Latte",
-    "dark": "Catppuccin Mocha"
+    "dark": "Catppuccin Mocha",
   },
   "languages": {
     "Python": {
@@ -81,33 +82,33 @@
       "format_on_save": "on",
       "formatter": [
         {
-          "code_action": "source.organizeImports.ruff"
+          "code_action": "source.organizeImports.ruff",
         },
         {
-          "code_action": "source.fixAll.ruff"
+          "code_action": "source.fixAll.ruff",
         },
         {
           "language_server": {
-            "name": "ruff"
-          }
-        }
-      ]
-    }
+            "name": "ruff",
+          },
+        },
+      ],
+    },
   },
   "lsp": {
     "basedpyright": {
       "settings": {
         "python": {
-          "pythonPath": ".venv/bin/python"
+          "pythonPath": ".venv/bin/python",
         },
         "basedpyright.analysis": {
           "diagnosticMode": "workspace",
           "inlayHints": {
-            "callArgumentNames": false
+            "callArgumentNames": false,
           },
-          "typeCheckingMode": "standard"
-        }
-      }
-    }
-  }
+          "typeCheckingMode": "standard",
+        },
+      },
+    },
+  },
 }
