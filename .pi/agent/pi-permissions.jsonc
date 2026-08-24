@@ -17,7 +17,21 @@
       "gh run view",
       "no-sloppy",
     ],
-    "ask": ["cargo test", "uv run pytest"],
+    "registryOverrides": {
+      "jj": {
+        "safeSubcommands": [
+          "bookmark list",
+          "diff",
+          "file list",
+          "file show",
+          "log",
+          "op log",
+          "show",
+          "status",
+        ],
+        "unsafeArgs": ["--config", "--config-toml", "--config-file"],
+      },
+    },
   },
   "defaultPolicy": {
     "tools": "ask",
