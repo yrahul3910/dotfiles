@@ -13,8 +13,13 @@ __pycache__/
 .env
 .pi/agent/auth.json
 .pi/agent/trust.json
+.pi/agent/npm/
+.pi/agent/git/
 .pi/npm/
 .pi/git/
+.pi/agent/cache/
+.pi/agent/sessions/
+.pi/agent/models-store.json
 .config/jj/repos/
 .config/sops/age/keys.txt
 .config/btop
@@ -27,3 +32,4 @@ __pycache__/
 .config/tokscale
 .config/zed/prompts
 .config/lnav
+node_modules/
