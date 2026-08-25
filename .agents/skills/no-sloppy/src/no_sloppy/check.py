@@ -177,7 +177,9 @@ def changed_lines(base: str) -> dict[Path, list[range]]:
             if count:
                 changed.setdefault(current, []).append(range(start, start + count))
 
-    untracked = git("-C", str(root), "ls-files", "--others", "--exclude-standard", "--", "*.py")
+    untracked = git(
+        "-C", str(root), "ls-files", "--others", "--exclude-standard", "--", "*.py"
+    )
     for name in untracked.splitlines():
         changed[root / name] = [WHOLE_FILE]
 
@@ -193,13 +195,23 @@ def main() -> int:
         type=Path,
         help="files/dirs to check whole (default: changed files)",
     )
-    parser.add_argument("--base", default="HEAD", help="git ref to diff against (default: HEAD)")
-    parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
-    parser.add_argument("--strict", action="store_true", help="exit nonzero on warnings too")
+    parser.add_argument(
+        "--base", default="HEAD", help="git ref to diff against (default: HEAD)"
+    )
+    parser.add_argument(
+        "--all", action="store_true", help="report whole-file findings on changed files"
+    )
+    parser.add_argument(
+        "--strict", action="store_true", help="exit nonzero on warnings too"
+    )
     args = parser.parse_args()
 
     if args.paths:
-        paths = git("ls-files", "--exclude-standard", "--", *map(str, args.paths)).strip().splitlines()
+        paths = (
+            git("ls-files", "--exclude-standard", "--", *map(str, args.paths))
+            .strip()
+            .splitlines()
+        )
         scope = {Path(path): [WHOLE_FILE] for path in paths}
     else:
         scope = changed_lines(args.base)
@@ -213,9 +225,11 @@ def main() -> int:
 
     files = sorted(scope)
     py_files = [
-        f for path in files for f in ([path] if path.is_file() else sorted(path.rglob("*.py"))) if f.suffix == ".py"
+        f
+        for path in files
+        for f in ([path] if path.is_file() else sorted(path.rglob("*.py")))
+        if f.suffix == ".py"
     ]
-    print(f"no-sloppy: checking {len(py_files)} .py file(s)")  # noqa: T201
     findings = [
         f
         for f in run_ruff(files) + run_rules(py_files)
@@ -243,7 +257,9 @@ def main() -> int:
         return 1 if errors or (warns and args.strict) else 0
 
     green, reset = (GREEN, RESET) if color else ("", "")
-    print(f"{green}no-sloppy: clean ({len(files)} path(s) checked){reset}")  # noqa: T201
+    print(
+        f"{green}no-sloppy: clean ({len(files)} path(s) checked){reset}"
+    )  # noqa: T201
     return 0
 
 

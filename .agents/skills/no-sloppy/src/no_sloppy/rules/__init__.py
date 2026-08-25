@@ -74,7 +74,9 @@ class Finding:
         return "\n".join(out)
 
 
-type RuleFunc = Callable[[Path, str, ast.Module, list[tokenize.TokenInfo]], list[Finding]]
+type RuleFunc = Callable[
+    [Path, str, ast.Module, list[tokenize.TokenInfo]], list[Finding]
+]
 RULES: list[RuleFunc] = []
 
 
@@ -139,7 +141,9 @@ def _suppressed_codes(tokens: list[tokenize.TokenInfo]) -> dict[int, set[str]]:
         if match is None:
             continue
         codes = match.group("codes")
-        suppressed[tok.start[0]] = set(re.findall(r"[A-Z]+\d+", codes.upper())) if codes else set()
+        suppressed[tok.start[0]] = (
+            set(re.findall(r"[A-Z]+\d+", codes.upper())) if codes else set()
+        )
     return suppressed
 
 
@@ -153,7 +157,9 @@ def run_rules(py_files: list[Path]) -> list[Finding]:
     if not RULES:
         return []
 
-    print(f"no-sloppy: running {len(RULES)} custom rules on {len(py_files)} .py files")  # noqa: T201
+    print(
+        f"no-sloppy: running {len(RULES)} custom rules on {len(py_files)} .py files"
+    )
 
     findings: list[Finding] = []
     for path in py_files:
