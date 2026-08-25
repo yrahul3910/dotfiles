@@ -10,3 +10,4 @@ Brewfile
 tmux-sessionizer
 user.js
 terraform/
+launchd/

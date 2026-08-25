@@ -20,10 +20,19 @@
     ],
     "registryOverrides": {
       "jj": {
-        "safeSubcommands": ["bookmark list", "diff", "file list", "file show", "log", "op log", "show", "status"],
-        "unsafeArgs": ["--config", "--config-toml", "--config-file"]
-      }
-    }
+        "safeSubcommands": [
+          "bookmark list",
+          "diff",
+          "file list",
+          "file show",
+          "log",
+          "op log",
+          "show",
+          "status",
+        ],
+        "unsafeArgs": ["--config", "--config-toml", "--config-file"],
+      },
+    },
   },
   "defaultPolicy": {
     "tools": "ask",

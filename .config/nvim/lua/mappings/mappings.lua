@@ -57,6 +57,12 @@ nmap('<leader>fc', '/<<<<CR>', '[F]ind [C]onflicts')
 nmap('<leader>gcu', 'dd/|||<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [U]pstream (first)')
 nmap('<leader>gcb', '0v/|||<CR>$x/====<CR>0v/>>><CR>$x', '[G]it [C]onflict Choose [B]ase (second)')
 nmap('<leader>gcs', '0v/====<CR>$x/>>><CR>dd', '[G]it [C]onflict Choose [S]tashed (third)')
+nmap('<leader>gcd', '<C-w>v<C-w>l/=====<CR>', '[G]it [C]onflicts: Show [D]iffs')
+
+-- Conform
+nmap('<leader>fm', function()
+  require('conform').format { async = true, lsp_format = 'fallback' }
+end, '[F]or[m]at buffer')
 
 -- Conform
 nmap('<leader>fm', function()
@@ -187,10 +193,6 @@ nmap('<leader>yq', function()
   print 'No quotes found after cursor'
 end, '[Y]ank [Q]uote')
 
--- nmap('<leader>yq', '"+yi"', '[Y]ank [Q]uote')  -- This works!
-
--- fzf-lua
-
 -- nvim-tree
 nmap('<C-s>', '<cmd>NvimTreeToggle<CR>', 'Toggle NvimTree')
 nmap('<leader>ptr', '<cmd>NvimTreeRefresh<CR>', 'Refresh NvimTree')
@@ -220,8 +222,6 @@ end
 nmap('<leader>bc', '<cmd>bdelete<CR><cmd>bprevious<CR>', '[B]uffer [C]lose')
 nmap('<leader>ba', '<cmd>%bd|e#<CR><cmd>bnext<CR><cmd>bdelete<CR>', '[B]uffer Delete [A]ll')
 
--- luasnip
-
 -- theme
 nmap('<leader>cl', function()
   vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
@@ -239,23 +239,6 @@ nmap('<leader>cl', function()
     cterm = { underline = true },
   })
 end, '[C]olorscheme [L]ight')
-
-nmap('<leader>cd', function()
-  vim.api.nvim_set_hl(0, 'QuickScopePrimary', {
-    fg = '#afff5f',
-    bold = true,
-    nocombine = true,
-    ctermfg = 155,
-    cterm = { bold = true },
-  })
-  vim.api.nvim_set_hl(0, 'QuickScopeSecondary', {
-    fg = '#d7afff',
-    underline = true,
-    nocombine = true,
-    ctermfg = 81,
-    cterm = { underline = true },
-  })
-end, '[C]olorscheme [D]ark')
 
 -- substitutions
 nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute Smart [Q]uotes')

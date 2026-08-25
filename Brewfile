@@ -15,6 +15,8 @@ brew "bat"
 brew "boost"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
+brew "clang-format"
 # Cross-platform make
 brew "cmake"
 # GNU File, Shell, and Text utilities
@@ -39,6 +41,8 @@ brew "git-delta"
 brew "gnu-sed"
 # Simple terminal UI for git commands
 brew "lazygit"
+# Next-gen compiler infrastructure
+brew "llvm"
 # Curses-based tool for viewing and analyzing log files
 brew "lnav"
 # Language Server for the Lua language
@@ -83,6 +87,8 @@ brew "tmux"
 brew "vim"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+# Tool for managing your YubiKey configuration
+brew "ykman"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
 # Programming language designed for robustness, optimality, and clarity
@@ -159,3 +165,4 @@ cargo "stylua"
 cargo "tree-sitter-cli"
 cargo "trunk"
 cargo "zqa"
+uv "basedpyright"

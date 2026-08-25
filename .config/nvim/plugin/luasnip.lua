@@ -13,7 +13,6 @@ vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
 vim.pack.add { {
   src = 'https://github.com/L3MON4D3/LuaSnip',
-  version = 'v2.4.1',
 } }
 require('luasnip.loaders.from_vscode').lazy_load {
   paths = { vim.fn.stdpath 'config' .. '/snippets' },

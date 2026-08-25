@@ -1,6 +1,7 @@
 [user]
     name = Rahul Yedida
     email = yrahul3910@gmail.com
+
 [core]
     editor = nvim --clean
     ignorecase = false
@@ -29,6 +30,7 @@
 [credential "https://gist.github.com"]
     helper = 
     helper = !/usr/local/bin/gh auth git-credential
+
 [alias]
     b = branch
     bd = branch -D

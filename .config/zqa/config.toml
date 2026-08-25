@@ -41,4 +41,4 @@ embedding_model = "embed-v4.0"
 embedding_dims = 1536
 
 [openrouter]
-model = "anthropic/claude-sonnet-4.6"
+model = "moonshotai/kimi-k3"

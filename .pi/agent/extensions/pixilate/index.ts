@@ -42,7 +42,7 @@ export default function (pi: ExtensionAPI) {
 
                     const clearPreviousImage =
                         previousImageId !== undefined &&
-                            getCapabilities().images === "kitty"
+                        getCapabilities().images === "kitty"
                             ? deleteKittyImage(previousImageId)
                             : "";
 
@@ -53,7 +53,7 @@ export default function (pi: ExtensionAPI) {
                         ),
                     ];
                 },
-                invalidate(): void { },
+                invalidate(): void {},
             };
         });
 
