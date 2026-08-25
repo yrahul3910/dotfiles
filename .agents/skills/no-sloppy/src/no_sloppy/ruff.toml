@@ -25,5 +25,16 @@ ignore = [
   "S311",    # most projects don't need a CSPRNG
 ]
 
+[lint.extend-per-file-ignores]
+"tests/**/*.py" = [
+    "S101", # asserts allowed in tests
+    "ARG", # Unused function args -> fixtures nevertheless are functionally relevant...
+    "FBT", # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
+    "PLR2004", # Magic value used in comparison
+    "SLF001",  # Allow private member access in tests
+    "D", # Docstrings
+]
+
+
 [lint.pylint]
 max-args = 8
