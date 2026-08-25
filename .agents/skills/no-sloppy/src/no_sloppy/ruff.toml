@@ -35,6 +35,5 @@ ignore = [
     "D", # Docstrings
 ]
 
-
 [lint.pylint]
 max-args = 8
