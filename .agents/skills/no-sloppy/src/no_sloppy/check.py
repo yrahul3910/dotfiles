@@ -199,7 +199,8 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.paths:
-        scope = {path.resolve(): [WHOLE_FILE] for path in args.paths}
+        paths = git("ls-files", "--exclude-standard", "--", *map(str, args.paths)).strip().splitlines()
+        scope = {Path(path): [WHOLE_FILE] for path in paths}
     else:
         scope = changed_lines(args.base)
         if args.all:
@@ -211,8 +212,14 @@ def main() -> int:
         return 0
 
     files = sorted(scope)
+    py_files = [
+        f for path in files for f in ([path] if path.is_file() else sorted(path.rglob("*.py"))) if f.suffix == ".py"
+    ]
+    print(f"no-sloppy: checking {len(py_files)} .py file(s)")  # noqa: T201
     findings = [
-        f for f in run_ruff(files) + run_rules(files) if any(f.start_line in r for r in scope.get(f.path, [WHOLE_FILE]))
+        f
+        for f in run_ruff(files) + run_rules(py_files)
+        if any(f.start_line in r for r in scope.get(f.path, [WHOLE_FILE]))
     ]
     findings.sort(key=lambda f: (str(f.path), f.start_line, f.start_col))
 

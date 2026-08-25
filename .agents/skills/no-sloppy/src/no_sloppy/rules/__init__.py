@@ -143,8 +143,8 @@ def _suppressed_codes(tokens: list[tokenize.TokenInfo]) -> dict[int, set[str]]:
     return suppressed
 
 
-def run_rules(files: list[Path]) -> list[Finding]:
-    """Discover and run every rule; directories are expanded to .py files."""
+def run_rules(py_files: list[Path]) -> list[Finding]:
+    """Discover and run every rule on the specified Python files."""
     # Import every sibling module so its @rule registrations run.
     for mod in sorted(Path(__file__).parent.glob("*.py")):
         if mod.stem != "__init__":
@@ -153,9 +153,7 @@ def run_rules(files: list[Path]) -> list[Finding]:
     if not RULES:
         return []
 
-    py_files = [
-        f for path in files for f in ([path] if path.is_file() else sorted(path.rglob("*.py"))) if f.suffix == ".py"
-    ]
+    print(f"no-sloppy: running {len(RULES)} custom rules on {len(py_files)} .py files")  # noqa: T201
 
     findings: list[Finding] = []
     for path in py_files:
