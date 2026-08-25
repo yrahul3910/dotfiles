@@ -25,10 +25,6 @@
       "rev": "6cde3874a9283c2db55627acca5f28e4fa402320",
       "src": "https://github.com/rmagatti/auto-session"
     },
-    "avante.nvim": {
-      "rev": "8a5a5c16a3c693bf7d9a8da1ee78269e8728879b",
-      "src": "https://github.com/yetone/avante.nvim"
-    },
     "blink-cmp-copilot": {
       "rev": "439cff78780c033aa23cf061d7315314b347e3c1",
       "src": "https://github.com/giuxtaposition/blink-cmp-copilot"
