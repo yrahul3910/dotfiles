@@ -19,6 +19,7 @@
 * `ask-user` - letting the agent ask questions.
 * `background-terminals` - background terminals.
 * `pixilate` - adds little pixel characters that roam around.
+* `pr-review` - installs a GitHub Actions workflow for automatic Pi PR reviews.
 
 ## Skills
 
