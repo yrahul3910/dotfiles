@@ -1,6 +1,6 @@
 ---
 name: experiment-loop
-description: Run a bounded empirical research loop using Pi background terminals: launch experiments, analyze evidence, and refine the stated hypothesis. Use for explicit research or experiment requests; do not use for ordinary implementation work or open-ended exploration.
+description: Run a bounded empirical research loop using Pi background terminals - launch experiments, analyze evidence, and refine the stated hypothesis. Use for explicit research or experiment requests; do not use for ordinary implementation work or open-ended exploration.
 ---
 
 # Experiment loop
