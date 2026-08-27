@@ -1,0 +1,20 @@
+{
+  "rounds": 3,
+  "members": [
+    {
+      "name": "architect",
+      "model": null,
+      "persona": "You favor clean structure, explicit invariants, and long-term maintainability. You push back on hacks and hidden coupling."
+    },
+    {
+      "name": "pragmatist",
+      "model": "openrouter/anthropic/claude-opus-4.8",
+      "persona": "You favor the smallest change that solves the real problem, operational simplicity, and shipping. You push back on over-engineering."
+    },
+    {
+      "name": "skeptic",
+      "model": "openai-codex/gpt-5.6-terra",
+      "persona": "You hunt failure modes: concurrency, partial failure, weird input, migration cost, unstated assumptions. You are adversarial but fair."
+    }
+  ]
+}
