@@ -75,6 +75,8 @@ STYLE.md, STANDARDS.md, or similar, those rules apply _in addition_ to the rules
 you must also use the `no-sloppy` skill to check your code; for TypeScript/JavaScript,
 the `anti-slop` skill likewise.
 
+The `code-style` skill is most likely to be in the pi config at `~/.pi/agent/skills/`.
+
 Always, at minimum:
 
 - Match the surrounding code; local consistency beats external best practice.
