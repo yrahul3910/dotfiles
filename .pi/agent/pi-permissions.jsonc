@@ -53,5 +53,6 @@
     "bg_status": "allow",
     "get_subagent_result": "allow",
     "steer_subagent": "allow",
+    "set_reasoning_effort": "allow"
   },
 }
