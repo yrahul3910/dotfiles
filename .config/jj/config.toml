@@ -16,10 +16,6 @@ sign-on-push = true
 auto-local-bookmark = true
 
 [aliases]
-l = {
-    definition = ["log", "-r", "(main..@):: | (main..@)-"],
-    doc = "Log pending changes"
-}
 ba = {
     definition = ["bookmark", "advance"],
     doc = "Advance bookmark"
@@ -28,9 +24,30 @@ bl = {
     definition = ["bookmark", "list"],
     doc = "List bookmarks"
 }
+bt = {
+    definition = [
+        "util", "exec", "--", "bash", "-c", """
+        set -eu
+        jj bookmark create "$1"
+        jj bookmark track "$1"
+    """, ""],
+    doc = "Create a bookmark and track its remote"
+}
+cm = {
+    definition = ["commit", "-m"],
+    doc = "commit :3"
+}
+f = {
+    definition = ["git", "fetch", "--tracked"],
+    doc = "Fetch tracked branches from git"
+}
 gfm = {
     definition = ["git", "fetch", "--branch", "main"],
     doc = "Fetch `main` from git"
+}
+l = {
+    definition = ["log", "-r", "(main..@):: | (main..@)-"],
+    doc = "Log pending changes"
 }
 p = {
     definition = [
@@ -50,19 +67,6 @@ pp = {
         jj undo
     """, ""],
     doc = "Preview what 'jj p' would advance and dry-run push"
-}
-bt = {
-    definition = [
-        "util", "exec", "--", "bash", "-c", """
-        set -eu
-        jj bookmark create "$1"
-        jj bookmark track "$1"
-    """, ""],
-    doc = "Create a bookmark and track its remote"
-}
-cm = {
-    definition = ["commit", "-m"],
-    doc = "commit :3"
 }
 
 [revset-aliases]
