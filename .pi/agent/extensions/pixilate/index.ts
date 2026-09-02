@@ -3,7 +3,7 @@ import { deleteKittyImage, getCapabilities, Image } from "@mariozechner/pi-tui";
 import { classifyBackground, getTerminalBackgroundColor } from "./osc11";
 import { Scene } from "./scene";
 
-const DEFAULT_CHARACTERS = "bunny,cat,guy";
+const DEFAULT_CHARACTERS = "crab,bunny,cat";
 
 export default function (pi: ExtensionAPI) {
     let intervalId: ReturnType<typeof setInterval> | null = null;

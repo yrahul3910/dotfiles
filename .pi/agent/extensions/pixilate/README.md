@@ -8,6 +8,7 @@ while the agent works.
 
 - `bunny` — hops along in little arcs
 - `cat` — trots around, pounces, and stretches into a loaf when idle
+- `crab` — skitters along and snips its claws in Rust orange
 - `guy` — a round-faced fellow who shuffles about
 
 Pick which ones appear (comma-separated) via the `PIXILATE_CHARACTERS`

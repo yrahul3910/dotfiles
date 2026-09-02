@@ -10,6 +10,8 @@ export const PALETTE: Record<string, RGBA> = {
     P: [255, 128, 180, 255], // pink (cheeks, noses, flower petals)
     O: [235, 148, 60, 255], // orange (cat fur)
     N: [186, 98, 32, 255], // dark orange (cat stripes)
+    C: [222, 66, 27, 255], // rust orange / crab shell (#de421b - classic Ferris/Rust color)
+    M: [175, 45, 15, 255], // dark rust orange (crab shadow/accent)
     Y: [255, 214, 90, 255], // yellow (flower centers)
     L: [88, 204, 88, 255], // light green (leaves)
     T: [28, 120, 48, 255], // dark green (bush)
@@ -228,10 +230,81 @@ export const CAT: CharacterSprite = {
     speed: 0.7,
 };
 
+// Rust crab (Ferris-style): 2 claws, 2 stalk eyes, and 6 walking legs.
+// Solid silhouette design so dark-mode inversion (K -> white outline) creates
+// a clean perimeter rather than hollow internal wireframes.
+const CRAB_WALK_A = pad([
+    " KK      KK   ",
+    "KCCKK E KCCK  ",
+    " KCCCCECECCK  ",
+    "  KCCCCCCCCK  ",
+    "  KMMMCCMMCK  ",
+    "  KKKKKKKKKK  ",
+    " K K  K   K K ",
+]);
+
+const CRAB_WALK_B = pad([
+    " KK      KK   ",
+    "KCCKK E KCCK  ",
+    " KCCCCECECCK  ",
+    "  KCCCCCCCCK  ",
+    "  KMMMCCMMCK  ",
+    "  KKKKKKKKKK  ",
+    "   K K  K  K  ",
+]);
+
+// Crab jump pose with claws raised up.
+const CRAB_JUMP = pad([
+    " KCCK   KCCK  ",
+    "  KCCK EKCCK  ",
+    "   KCCECECK   ",
+    "  KCCCCCCCCK  ",
+    "  KMMMCCMMCK  ",
+    "  KKKKKKKKKK  ",
+    "  K K K K K   ",
+]);
+
+// Crab idle: snapping claws.
+const CRAB_SNIP_A = pad([
+    " KK      KK   ",
+    "KCCKK E KCCK  ",
+    " KCCCCECECCK  ",
+    "  KCCCCCCCCK  ",
+    "  KMMMCCMMCK  ",
+    "  KKKKKKKKKK  ",
+    "  K K  K  K   ",
+]);
+
+const CRAB_SNIP_B = pad([
+    " KKK    KKK   ",
+    "KCCCK E KCCCK ",
+    " KCCCCECECCK  ",
+    "  KCCCCCCCCK  ",
+    "  KMMMCCMMCK  ",
+    "  KKKKKKKKKK  ",
+    "  K K  K  K   ",
+]);
+
+export const CRAB: CharacterSprite = {
+    name: "crab",
+    walk: [CRAB_WALK_A, CRAB_WALK_B],
+    jump: CRAB_JUMP,
+    idle: [
+        { art: CRAB_SNIP_B, ticks: 3 },
+        { art: CRAB_SNIP_A, ticks: 3 },
+        { art: CRAB_SNIP_B, ticks: 3 },
+        { art: CRAB_SNIP_A, ticks: 1 },
+    ],
+    blink: { E: "C" },
+    gait: "walk",
+    speed: 0.6,
+};
+
 export const CHARACTERS: Record<string, CharacterSprite> = {
     bunny: BUNNY,
     guy: GUY,
     cat: CAT,
+    crab: CRAB,
 };
 
 // One foreground bush. Spaces are transparent, so only the leaf/trunk pixels
