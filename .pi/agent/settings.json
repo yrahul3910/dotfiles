@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.84.3",
-  "defaultProvider": "modal",
-  "defaultModel": "yrahul3910--ep-kimi-k3-server.us-west.modal.direct",
+  "lastChangelogVersion": "0.84.4",
+  "defaultProvider": "openrouter",
+  "defaultModel": "z-ai/glm-5.3:nitro",
   "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
   "transport": "auto",
