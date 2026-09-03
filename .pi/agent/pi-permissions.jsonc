@@ -39,7 +39,7 @@
     "tools": "ask",
     "bash": "ask",
     "mcp": "ask",
-    "skills": "ask",
+    "skills": "allow",
     "special": "ask",
   },
   "tools": {
