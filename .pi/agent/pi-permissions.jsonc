@@ -56,5 +56,6 @@
     "set_reasoning_effort": "allow",
     "mcp_firecrawl_firecrawl_search": "allow",
     "mcp_firecrawl_firecrawl_scrape": "allow",
+    "Agent": "allow",
   },
 }
