@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "anti-slop",
+      "name": "no-slop-ts",
       "dependencies": {
         "@oxlint/plugins": "1.78.0",
         "oxlint": "1.78.0",
