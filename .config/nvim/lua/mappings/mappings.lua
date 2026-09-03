@@ -64,11 +64,6 @@ nmap('<leader>fm', function()
   require('conform').format { async = true, lsp_format = 'fallback' }
 end, '[F]or[m]at buffer')
 
--- Conform
-nmap('<leader>fm', function()
-  require('conform').format { async = true, lsp_format = 'fallback' }
-end, '[F]or[m]at buffer')
-
 -- Spider
 noxmap('W', "<cmd>lua require('spider').motion('w')<CR>")
 noxmap('E', "<cmd>lua require('spider').motion('e')<CR>")
@@ -242,7 +237,6 @@ end, '[C]olorscheme [L]ight')
 
 -- substitutions
 nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute Smart [Q]uotes')
-nmap('<leader>gcd', '<C-w>v<C-w>l/=====<CR>', '[G]it [C]onflicts: Show [D]iffs')
 
 -- vim.pack
 nmap('<leader>pu', function()

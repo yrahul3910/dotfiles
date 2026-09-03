@@ -12,10 +12,6 @@
       "rev": "0abc8f390b278c3b4aabc4c004ac8a088b65cf24",
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
-    "arctic.nvim": {
-      "rev": "46da33aeb3a8ee48533f41911b3aaf4f1541dd6f",
-      "src": "https://github.com/rockyzhang24/arctic.nvim"
-    },
     "async.nvim": {
       "rev": "46adf61a022d5c923f981d527443f406e7d0f63e",
       "src": "https://github.com/lewis6991/async.nvim"

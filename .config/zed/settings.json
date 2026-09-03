@@ -61,8 +61,8 @@
   "vim_mode": true,
   "ui_font_size": 16,
   "relative_line_numbers": "enabled",
-  "buffer_font_family": "Maple Mono",
-  "ui_font_family": "Maple Mono",
+  "buffer_font_family": "CommitMono-v1",
+  "ui_font_family": "CommitMono-v1",
   "minimap": {
     "show": "always",
   },
