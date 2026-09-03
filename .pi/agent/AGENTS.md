@@ -27,6 +27,20 @@ whose purpose isn't obvious from my request, say in one short sentence what
 you're doing and why. Never fire off a sequence of unexplained commands. Ask
 before commands that are slow, destructive, or mutate state beyond the edit.
 
+## Write plain replies
+
+- Apply the `unslop` skill to substantial replies and prose artifacts. Direct
+  answers and short status updates should stay short without a separate pass.
+- Remove all mannered prose: no stock openings, praise, fake enthusiasm,
+  throat-clearing, or generic conclusions.
+- Prefer concrete claims, ordinary words, active voice, and the real name of
+  the thing. Existing agent-written prose is not authoritative vocabulary.
+  Name the actual interface, user path, test script, setup code, or extra work
+  when one of those is what you mean.
+- Use ASCII punctuation. Never use an em dash. When a dash is the clearest
+  punctuation, use `--` without surrounding spaces.
+- Preserve required formats, literal output, quotations, paths, and symbols.
+
 ## Plans
 
 - Format: goal in one sentence; 3-7 bullets of approach; risks and open
@@ -75,7 +89,7 @@ STYLE.md, STANDARDS.md, or similar, those rules apply _in addition_ to the rules
 you must also use the `no-sloppy` skill to check your code; for TypeScript/JavaScript,
 the `anti-slop` skill likewise.
 
-The `code-style` skill is most likely to be in the pi config at `~/.pi/agent/skills/`.
+Shared skills, including `code-style`, live under `~/.agents/skills/`.
 
 Always, at minimum:
 

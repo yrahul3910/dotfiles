@@ -17,6 +17,7 @@
       "uv run ruff format",
       "gh run view",
       "no-sloppy",
+      "anti-slop",
     ],
     "registryOverrides": {
       "jj": {
