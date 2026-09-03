@@ -157,10 +157,6 @@ def run_rules(py_files: list[Path]) -> list[Finding]:
     if not RULES:
         return []
 
-    print(
-        f"no-sloppy: running {len(RULES)} custom rules on {len(py_files)} .py files"
-    )
-
     findings: list[Finding] = []
     for path in py_files:
         source = path.read_text(encoding="utf-8", errors="replace")
