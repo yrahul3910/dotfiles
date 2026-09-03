@@ -157,7 +157,7 @@ chsh -s $(which zsh) $(whoami)
 # Pi agent skill scripts
 ln -s $HOME/configs/.pi/agent/skills/okf/scripts/okf.ts $HOME/.local/bin/okf
 uv tool install -e "$HOME/configs/.agents/skills/no-sloppy"
-bun install --cwd "$HOME/configs/.pi/agent/skills/anti-slop" --frozen-lockfile
-ln -sf "$HOME/configs/.pi/agent/skills/anti-slop/check.ts" "$HOME/.local/bin/anti-slop"
+bun install --cwd "$HOME/configs/.agents/skills/no-slop-ts" --frozen-lockfile
+ln -sf "$HOME/configs/.agents/skills/no-slop-ts/check.ts" "$HOME/.local/bin/no-slop-ts"
 
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
