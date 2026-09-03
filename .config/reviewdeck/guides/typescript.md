@@ -5,7 +5,7 @@ always: false
 ---
 # TypeScript
 
-Source: personal code-style rules (~/.pi/agent/skills/code-style/references/typescript.md).
+Source: personal code-style rules (~/.agents/skills/code-style/references/typescript.md).
 
 - [R1] Never use `any` to get past an error; it disables checking for everything it touches. Reach for `unknown` and narrow, a precise type, or a generic. `any` is acceptable only at a genuine external boundary, narrowly scoped.
 - [R2] No non-null `!` assertions or `as` casts to silence the checker. Narrow with a type guard, `?.`, or a runtime check that also convinces the compiler.

@@ -5,7 +5,7 @@ always: true
 ---
 # General review standards
 
-Source: personal code-style rules (~/.pi/agent/skills/code-style). Optimize for
+Source: personal code-style rules (~/.agents/skills/code-style). Optimize for
 the person who reads the code next, not for finishing the diff.
 
 ## Fit in before you stand out
