@@ -23,13 +23,31 @@
 
 ## Skills
 
-* `background-terminals` for using the `background-terminals` extension
-* `code-style`, for... code style rules.
-* `design-doc`, for writing design docs and self-critiquing via the `critic` agent.
-* `okf`, for the Google OKF wiki spec.
+Shared skills live under `~/.agents/skills/` so Pi and other coding agents use
+one copy:
+
+* `code-style` - code-quality rules plus language-specific references.
+* `diagnosing-bugs` - a disciplined loop for hard, intermittent, or performance bugs.
+* `experiment-loop` - bounded, reproducible empirical research.
+* `grilling` - resolve material decisions before planning or implementing a large feature.
+* `no-sloppy` - deterministic changed-line checks for Python.
+* `unslop` - remove mannered AI prose from substantial replies and documents.
+* `unattended-run` - verified, scoped work while the user is away.
+* `verify-real-surface` - prove behavior through the UI, CLI, or API people use.
+* `wait-what` - re-explain an answer in plain language.
+* `writing-for-agents` - write lean, predictable skills and agent instructions.
+
+Pi-specific skills live under `~/.pi/agent/skills/`:
+
+* `anti-slop` - deterministic changed-line checks for TypeScript and JavaScript.
+* `background-terminals` - use the background-terminal extension.
+* `design-doc` - write design documents and run the `critic` review loop.
+* `okf` - read and maintain Open Knowledge Format bundles.
 
 ## Attributions
 
 * `background-terminals` skill and extension from [davis7dotsh/my-pi-setup](https://github.com/davis7dotsh/my-pi-setup/blob/main/skills/background-terminals/SKILL.md).
 * `clipboard-image` extension from [samfoy/pi-essentials](https://github.com/samfoy/pi-essentials/blob/master/src/clipboard-image.ts).
 * `vim` extension from [annapurna-himal/pi-vim-editor](https://github.com/annapurna-himal/pi-vim-editor/blob/main/index.ts).
+* `unslop` adapted from [cursor/plugins pstack](https://github.com/cursor/plugins/tree/main/pstack/skills/unslop).
+* `diagnosing-bugs`, `grilling`, `wait-what`, and `writing-for-agents` adapted from [mattpocock/skills](https://github.com/mattpocock/skills).

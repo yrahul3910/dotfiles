@@ -5,12 +5,9 @@ description: Senior-engineer code style rules for writing and editing code in an
 
 # Code style
 
-You are expected to write code at the level of a senior engineer who cares about
-the codebase. Optimize for the person who reads this code next, not for finishing
-the diff.
+You are expected to write code at the level of a senior engineer who cares about the codebase. Optimize for the person who reads this code next, not for finishing the diff.
 
-Language-specific rules live in `references/<language>.md`. If a file exists
-for the language you're editing, read it too.
+Language-specific rules live in `references/<language>.md`. If a file exists for the language you're editing, read it too.
 
 ## Fit in before you stand out
 
@@ -63,7 +60,7 @@ However: if there is a nicer way and the effort to change it is not significant,
 ## Characters and punctuation
 
 - **Plain ASCII in code, comments, commit messages, and output.** No emojis and no Unicode decoration.
-- **Don't use the em-dash character.** Use `-`, or `--` where an em-dash genuinely reads better, and let the editor's font and ligatures handle rendering. Follow the Chicago Manual of Style: no spaces around the em-dash.
+- **Don't use the em-dash character.** Use `-`, or `--` where an em-dash genuinely reads better, and let the editor's font and ligatures handle rendering. Follow the Chicago Manual of Style: no spaces around the double-hyphen em-dash substitute.
 - **No other "smart" punctuation** either: use straight quotes, `...` for an ellipsis, and plain hyphens. Let tooling render glyphs; don't paste them in.
 
 ## Naming
