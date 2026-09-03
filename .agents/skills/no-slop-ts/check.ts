@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// anti-slop — deterministic slop check for TypeScript/JavaScript.
+// no-slop-ts - deterministic slop check for TypeScript/JavaScript.
 //
 // Runs an oxlint overlay (oxlintrc.json in this directory) plus the vendored
 // anti-slop jsPlugin rules from https://github.com/dmmulroy/anti-slop,
@@ -8,12 +8,12 @@
 // untracked files), so output is about the code just written.
 //
 // Usage:
-//     anti-slop                 # changed files, findings on changed lines only
-//     anti-slop --base <ref>    # diff against another ref (e.g. main)
-//     anti-slop --all           # changed files, whole-file findings
-//     anti-slop --strict        # warnings also fail the check
-//     anti-slop --effect        # force the Effect rules on (--no-effect: off)
-//     anti-slop PATH...         # explicit files/dirs, whole-file findings
+//     no-slop-ts                 # changed files, findings on changed lines only
+//     no-slop-ts --base <ref>    # diff against another ref (e.g. main)
+//     no-slop-ts --all           # changed files, whole-file findings
+//     no-slop-ts --strict        # warnings also fail the check
+//     no-slop-ts --effect        # force the Effect rules on (--no-effect: off)
+//     no-slop-ts PATH...         # explicit files/dirs, whole-file findings
 //
 // The Effect rule group is enabled automatically when the repo's root
 // package.json declares a direct `effect` dependency.
@@ -63,7 +63,7 @@ function git(...args: string[]): string {
   } catch (error) {
     // SAFETY: execFileSync failures carry the child's stderr on the thrown error.
     const stderr = (error as { stderr?: string }).stderr ?? String(error);
-    console.error(`anti-slop: git ${args[0]} failed: ${stderr.toString().trim()}`);
+    console.error(`no-slop-ts: git ${args[0]} failed: ${stderr.toString().trim()}`);
     process.exit(2);
   }
 }
@@ -147,7 +147,7 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
   try {
     raw = JSON.parse(proc.stdout);
   } catch {
-    console.error(`anti-slop: oxlint failed:\n${(proc.stderr || proc.stdout).trim()}`);
+    console.error(`no-slop-ts: oxlint failed:\n${(proc.stderr || proc.stdout).trim()}`);
     process.exit(2);
   }
 
@@ -215,10 +215,10 @@ function main(): number {
     else if (arg === "--effect") effect = true;
     else if (arg === "--no-effect") effect = false;
     else if (arg === "--help" || arg === "-h") {
-      console.log("usage: anti-slop [--base REF] [--all] [--strict] [--effect|--no-effect] [PATH...]");
+      console.log("usage: no-slop-ts [--base REF] [--all] [--strict] [--effect|--no-effect] [PATH...]");
       return 0;
     } else if (arg.startsWith("-")) {
-      console.error(`anti-slop: unknown option ${arg}`);
+      console.error(`no-slop-ts: unknown option ${arg}`);
       return 2;
     } else paths.push(arg);
   }
@@ -234,7 +234,7 @@ function main(): number {
   }
 
   if (scope.size === 0) {
-    console.log("anti-slop: no changed TypeScript/JavaScript files");
+    console.log("no-slop-ts: no changed TypeScript/JavaScript files");
     return 0;
   }
 
@@ -249,7 +249,7 @@ function main(): number {
   const color = colorEnabled();
   if (findings.length === 0) {
     const [green, reset] = color ? [GREEN, RESET] : ["", ""];
-    console.log(`${green}anti-slop: clean (${targets.length} path(s) checked)${reset}`);
+    console.log(`${green}no-slop-ts: clean (${targets.length} path(s) checked)${reset}`);
     return 0;
   }
 
@@ -277,7 +277,7 @@ function main(): number {
   if (errors) counts.push(`${style("error")}${errors} error(s)${reset}`);
   if (warns) counts.push(`${style("warn")}${warns} warning(s)${reset}`);
   const fileCount = new Set(findings.map((f) => f.path)).size;
-  console.log(`\nanti-slop: ${counts.join(", ")} in ${fileCount} file(s)`);
+  console.log(`\nno-slop-ts: ${counts.join(", ")} in ${fileCount} file(s)`);
   return errors > 0 || (warns > 0 && strict) ? 1 : 0;
 }
 

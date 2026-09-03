@@ -9,3 +9,4 @@
 - Use `??` and `?.` over `||`/manual guards when you mean null/undefined, not falsy. `0`, `""`, and `false` are valid values, not absence.
 - No default exports for modules with a clear primary name; prefer named exports so imports stay consistent and renames are safe.
 - Don't reach for enums; prefer union-of-string-literals or `as const` objects unless the repo already standardizes on `enum`.
+- If you have the `no-slop-ts` skill (or the `no-slop-ts` CLI is already in `PATH`), use it to check your code style.

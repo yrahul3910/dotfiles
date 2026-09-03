@@ -87,7 +87,7 @@ including the reference file for the language in question. If the repo has an AG
 STYLE.md, STANDARDS.md, or similar, those rules apply _in addition_ to the rules in the
 `code-style` skill; in case of conflicts, prefer the repo's standards. For Python code,
 you must also use the `no-sloppy` skill to check your code; for TypeScript/JavaScript,
-the `anti-slop` skill likewise.
+the `no-slop-ts` skill likewise.
 
 Shared skills, including `code-style`, live under `~/.agents/skills/`.
 

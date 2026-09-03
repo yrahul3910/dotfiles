@@ -26,8 +26,8 @@
 Shared skills live under `~/.agents/skills/` so Pi and other coding agents use
 one copy:
 
+* `no-slop-ts` - deterministic changed-line checks for TypeScript and JavaScript.
 * `code-style` - code-quality rules plus language-specific references.
-* `diagnosing-bugs` - a disciplined loop for hard, intermittent, or performance bugs.
 * `experiment-loop` - bounded, reproducible empirical research.
 * `grilling` - resolve material decisions before planning or implementing a large feature.
 * `no-sloppy` - deterministic changed-line checks for Python.
@@ -39,7 +39,6 @@ one copy:
 
 Pi-specific skills live under `~/.pi/agent/skills/`:
 
-* `anti-slop` - deterministic changed-line checks for TypeScript and JavaScript.
 * `background-terminals` - use the background-terminal extension.
 * `design-doc` - write design documents and run the `critic` review loop.
 * `okf` - read and maintain Open Knowledge Format bundles.
@@ -50,4 +49,4 @@ Pi-specific skills live under `~/.pi/agent/skills/`:
 * `clipboard-image` extension from [samfoy/pi-essentials](https://github.com/samfoy/pi-essentials/blob/master/src/clipboard-image.ts).
 * `vim` extension from [annapurna-himal/pi-vim-editor](https://github.com/annapurna-himal/pi-vim-editor/blob/main/index.ts).
 * `unslop` adapted from [cursor/plugins pstack](https://github.com/cursor/plugins/tree/main/pstack/skills/unslop).
-* `diagnosing-bugs`, `grilling`, `wait-what`, and `writing-for-agents` adapted from [mattpocock/skills](https://github.com/mattpocock/skills).
+* `grilling`, `wait-what`, and `writing-for-agents` adapted from [mattpocock/skills](https://github.com/mattpocock/skills).

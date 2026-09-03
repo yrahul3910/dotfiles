@@ -1,9 +1,9 @@
 ---
-name: anti-slop
+name: no-slop-ts
 description: Deterministic anti-slop pass for TypeScript/JavaScript. After writing or editing TS/JS code, run the bundled checker before declaring the work done; it lints just the changed lines with an oxlint overlay plus the vendored anti-slop rules. Use for any non-trivial TypeScript or JavaScript change.
 ---
 
-# Anti-slop (TypeScript/JavaScript)
+# No-slop-ts (TypeScript/JavaScript)
 
 A deterministic slop check for TS/JS code you just wrote--the sibling of the `no-sloppy` skill for Python. Two layers, both driven by [oxlintrc.json](oxlintrc.json) so the same standard applies regardless of the
 project's own lint setup:
@@ -29,14 +29,14 @@ Needs `git` and `bun`; oxlint comes from this skill's own node_modules (`bun ins
 
 ## Usage
 
-The checker is normally on PATH as `anti-slop` (setup.sh symlinks [check.ts](check.ts) into ~/.local/bin). Otherwise run `<skill-dir>/check.ts`. Run from anywhere inside the repo being worked on:
+The checker is normally on PATH as `no-slop-ts` (setup.sh symlinks [check.ts](check.ts) into ~/.local/bin). Otherwise run `<skill-dir>/check.ts`. Run from anywhere inside the repo being worked on:
 
 ```
-anti-slop              # changed lines vs HEAD (default)
-anti-slop --base main  # diff against another ref
-anti-slop --all        # changed files, whole-file findings
-anti-slop --strict     # warnings also fail the check
-anti-slop PATH...      # explicit files/dirs, whole-file (dirs recurse)
+no-slop-ts              # changed lines vs HEAD (default)
+no-slop-ts --base main  # diff against another ref
+no-slop-ts --all        # changed files, whole-file findings
+no-slop-ts --strict     # warnings also fail the check
+no-slop-ts PATH...      # explicit files/dirs, whole-file (dirs recurse)
 ```
 
 Findings have two levels: **errors** fail the check (exit 1); **warnings** are informational (exit 0, unless `--strict`). The level comes from the severity in [oxlintrc.json](oxlintrc.json)--anti-slop rules and the correctness category are errors, the suspicious category warns. The default mode reports only findings on lines changed relative to `--base` (staged, unstaged, and untracked), so output is about the code just written, not the surrounding codebase. Declaration files (`.d.ts`) are skipped.
@@ -49,4 +49,4 @@ Findings have two levels: **errors** fail the check (exit 1); **warnings** are i
 
 ## Maintaining the vendored plugin
 
-[plugin/](plugin/) is a vendored copy of upstream's `skills/install-anti-slop/assets/anti-slop` (commit `6d53855`, rules written against oxlint 1.78.0--keep `oxlint` and `@oxlint/plugins` in [package.json](package.json) at the same version as each other). Upstream intends the copy to be owned and edited; tune rules here rather than re-syncing blindly. New rules follow upstream's shape: a `defineRule` module under [plugin/rules/](plugin/rules/), registered in [plugin/index.ts](plugin/index.ts) and enabled in [oxlintrc.json](oxlintrc.json). The checker excludes this skill's own directory in changed-lines mode, but `check.ts` stays clean under its own check (`anti-slop <skill-dir>/check.ts`).
+[plugin/](plugin/) is a vendored copy of upstream's `skills/install-anti-slop/assets/anti-slop` (commit `6d53855`, rules written against oxlint 1.78.0--keep `oxlint` and `@oxlint/plugins` in [package.json](package.json) at the same version as each other). Upstream intends the copy to be owned and edited; tune rules here rather than re-syncing blindly. New rules follow upstream's shape: a `defineRule` module under [plugin/rules/](plugin/rules/), registered in [plugin/index.ts](plugin/index.ts) and enabled in [oxlintrc.json](oxlintrc.json). The checker excludes this skill's own directory in changed-lines mode, but `check.ts` stays clean under its own check (`no-slop-ts <skill-dir>/check.ts`).
