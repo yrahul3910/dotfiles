@@ -5,7 +5,7 @@ always: false
 ---
 # Python
 
-Source: personal code-style rules (~/.pi/agent/skills/code-style/references/python.md).
+Source: personal code-style rules (~/.agents/skills/code-style/references/python.md).
 
 - [R1] Avoid dicts for structured data: new readers have no context for the valid keys, and typos hide. Prefer a TypedDict, Pydantic model, or dataclass.
 - [R2] Prefer the walrus operator over an assignment followed by a separate check when it collapses two lines into one clear one.
