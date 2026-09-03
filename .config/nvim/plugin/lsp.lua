@@ -204,7 +204,6 @@ local servers = {
   biome = {},
   tailwindcss = {},
   zls = {},
-  ocamllsp = {},
 }
 
 -- Ensure the servers and tools above are installed

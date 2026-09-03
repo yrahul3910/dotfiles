@@ -234,13 +234,9 @@ nmap('<leader>cl', function()
     cterm = { underline = true },
   })
 end, '[C]olorscheme [L]ight')
-nmap('<leader>cd', function()
-  vim.cmd 'colorscheme catppuccin'
-end, '[C]olorscheme [D]ark')
 
 -- substitutions
 nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute Smart [Q]uotes')
-nmap('<leader>sc', '<C-w>v<C-w>l/=====<CR>', '[S]how Git [C]onflicts: split window')
 
 -- vim.pack
 nmap('<leader>pu', function()
