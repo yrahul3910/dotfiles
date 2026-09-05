@@ -33,3 +33,5 @@ __pycache__/
 .config/zed/prompts
 .config/lnav
 node_modules/
+.config/opencode/service.json
+.config/tokentracker/machine-id
