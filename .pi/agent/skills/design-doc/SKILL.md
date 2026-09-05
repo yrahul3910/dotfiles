@@ -1,6 +1,6 @@
 ---
 name: design-doc
-description: Write a design doc, RFC, or architecture proposal with adversarial review. Use whenever the user asks for a design document, an RFC, an evaluation of approaches with a recommendation, or to think through a significant technical decision before implementing it.
+description: Write an explicit design document, RFC, or consequential architecture proposal with adversarial review. Use for decisions with material ownership, compatibility, migration, or operational consequences. Do not activate for ordinary comparisons, syntax questions, or small implementation choices.
 ---
 
 # Design doc with adversarial review
@@ -18,7 +18,7 @@ This is the one workflow where slow and thorough beats fast. Call set_reasoning_
   - Migration and operational impact (CI time, maintenance, lock-in)
   - Risks, open questions, rollout
   - Well-argued prose, not bullet salad.
-4. **Adversarial loop.** Spawn the critic agent (Agent tool, subagent_type: "critic") with the full draft and pointers to the relevant code. For every finding: fix it, or rebut it with reasoning recorded in the doc. Do not skip or soften this phase.
+4. **Adversarial review.** Spawn one critic (Agent tool, subagent_type: "critic") with the full draft and pointers to the relevant code. For every finding: fix it, or rebut it with reasoning recorded in the doc. Request another review only when a material change or unresolved finding warrants it. Use a multi-model swarm only when requested. Do not skip or soften the critic review.
 5. **Deliver.** Save the doc as markdown (under docs/ if the repo has an obvious place, otherwise ask). Summarize what the critic caught and what you rebutted.
 
 ## Design document style guide

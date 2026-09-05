@@ -1,11 +1,16 @@
 {
-  "name": "pi-extensions",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "lint": "oxlint ."
-  },
-  "devDependencies": {
-    "oxlint": "^1.79.0"
-  }
+    "name": "pi-extensions",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "oxlint .",
+        "test": "bun test effort/ cwd-and-fish/ tokens-per-second/",
+        "check": "tsc -p tsconfig.checks.json && bun run test"
+    },
+    "devDependencies": {
+        "oxlint": "^1.79.0",
+        "@earendil-works/pi-coding-agent": "0.84.4",
+        "@types/node": "22.19.19",
+        "typescript": "5.9.3"
+    }
 }

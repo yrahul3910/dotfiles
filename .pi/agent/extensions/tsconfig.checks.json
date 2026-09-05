@@ -1,0 +1,4 @@
+{
+    "extends": "./tsconfig.json",
+    "include": ["cwd-and-fish/*.ts", "effort/*.ts", "tokens-per-second/*.ts"]
+}

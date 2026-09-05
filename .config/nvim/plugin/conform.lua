@@ -20,18 +20,12 @@ require('conform').setup {
   formatters_by_ft = {
     lua = { 'stylua' },
     javascript = { 'prettier', stop_after_first = true },
-    typescript = { 'prettier', 'biome', stop_after_first = false },
-    typescriptreact = { 'prettier', 'biome', stop_after_first = false },
-    python = { 'black', 'ruff', stop_after_first = false },
+    typescript = { 'prettier', 'biome', stop_after_first = true },
+    typescriptreact = { 'prettier', 'biome', stop_after_first = true },
+    python = { 'black', 'ruff_format', stop_after_first = true },
     json = { 'prettier', stop_after_first = false },
     jsonc = { 'prettier', stop_after_first = false },
     c = { 'clang-format', stop_after_first = true },
     cpp = { 'clang-format', stop_after_first = true },
-    -- Conform can also run multiple formatters sequentially
-    -- python = { "isort", "black" },
-    --
-    -- You can use a sub-list to tell conform to run *until* a formatter
-    -- is found.
-    -- javascript = { { "prettierd", "prettier" } },
   },
 }
