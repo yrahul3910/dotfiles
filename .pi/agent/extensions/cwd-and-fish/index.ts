@@ -3,7 +3,10 @@ import { access, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
-import type { ExtensionAPI, BashOperations } from "@earendil-works/pi-coding-agent";
+import type {
+    ExtensionAPI,
+    BashOperations,
+} from "@earendil-works/pi-coding-agent";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
 
 let previousCwd: string | undefined;
@@ -28,17 +31,24 @@ function resolveFishPath(): string | null {
         }
     }
 
-    const which = spawnSync("which", ["fish"], { encoding: "utf8", timeout: 2_000 });
-    const found = which.status === 0 ? which.stdout.trim().split(/\r?\n/)[0] : undefined;
+    const which = spawnSync("which", ["fish"], {
+        encoding: "utf8",
+        timeout: 2_000,
+    });
+    const found =
+        which.status === 0 ? which.stdout.trim().split(/\r?\n/)[0] : undefined;
     cachedFishPath = found && existsSync(found) ? found : null;
     return cachedFishPath;
 }
 
 function createFishOperations(): BashOperations {
     return {
-        async exec(command, cwd, { signal, timeout, env }) {
+        async exec(command, cwd, { onData, signal, timeout, env }) {
             const fish = resolveFishPath();
-            if (!fish) throw new Error("Could not find fish. Set PI_FISH_PATH to your fish binary.");
+            if (!fish)
+                throw new Error(
+                    "Could not find fish. Set PI_FISH_PATH to your fish binary.",
+                );
 
             await access(cwd, constants.F_OK);
             if (signal?.aborted) throw new Error("aborted");
@@ -50,28 +60,33 @@ function createFishOperations(): BashOperations {
                 stdio: ["ignore", "pipe", "pipe"],
                 windowsHide: true,
             });
+            child.stdout.on("data", onData);
+            child.stderr.on("data", onData);
 
             let timedOut = false;
             let timeoutHandle: NodeJS.Timeout | undefined;
-            const abort = () => process.kill(child.pid, "SIGKILL");
+            const abort = () => child.kill("SIGKILL");
 
             try {
                 if (timeout !== undefined && timeout > 0) {
                     timeoutHandle = setTimeout(() => {
                         timedOut = true;
-                        process.kill(child.pid, "SIGKILL");
+                        abort();
                     }, timeout * 1000);
                 }
 
                 if (signal) {
                     if (signal.aborted) abort();
-                    else signal.addEventListener("abort", abort, { once: true });
+                    else
+                        signal.addEventListener("abort", abort, { once: true });
                 }
 
-                const exitCode = await new Promise<number | null>((resolvePromise, reject) => {
-                    child.once("error", reject);
-                    child.once("close", (code) => resolvePromise(code));
-                });
+                const exitCode = await new Promise<number | null>(
+                    (resolvePromise, reject) => {
+                        child.once("error", reject);
+                        child.once("close", (code) => resolvePromise(code));
+                    },
+                );
 
                 if (signal?.aborted) throw new Error("aborted");
                 if (timedOut) throw new Error(`timeout:${timeout}`);
@@ -94,7 +109,10 @@ function stripMatchingQuotes(value: string): string {
     if (value.length >= 2) {
         const first = value[0];
         const last = value[value.length - 1];
-        if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+        if (
+            (first === '"' && last === '"') ||
+            (first === "'" && last === "'")
+        ) {
             return value.slice(1, -1);
         }
     }
@@ -106,7 +124,9 @@ function resolveCdArg(args: string): string {
     if (!trimmed) return homedir();
     if (trimmed === "-" && previousCwd) return previousCwd;
     const expanded = expandHome(trimmed);
-    return isAbsolute(expanded) ? resolve(expanded) : resolve(process.cwd(), expanded);
+    return isAbsolute(expanded)
+        ? resolve(expanded)
+        : resolve(process.cwd(), expanded);
 }
 
 function setProcessCwd(target: string) {
@@ -123,18 +143,28 @@ function syncProcessCwd(cwd: string) {
 
 function formatPath(path: string): string {
     const home = homedir();
-    return path === home ? "~" : path.startsWith(`${home}/`) ? `~/${path.slice(home.length + 1)}` : path;
+    return path === home
+        ? "~"
+        : path.startsWith(`${home}/`)
+          ? `~/${path.slice(home.length + 1)}`
+          : path;
 }
 
 function completeDirectories(prefix: string) {
     try {
         const raw = prefix.trimStart();
         const expanded = expandHome(raw || ".");
-        const absolutePrefix = isAbsolute(expanded) ? expanded : resolve(process.cwd(), expanded);
-        const baseDir = raw.endsWith("/") ? absolutePrefix : dirname(absolutePrefix);
+        const absolutePrefix = isAbsolute(expanded)
+            ? expanded
+            : resolve(process.cwd(), expanded);
+        const baseDir = raw.endsWith("/")
+            ? absolutePrefix
+            : dirname(absolutePrefix);
         const needle = raw.endsWith("/") ? "" : basename(absolutePrefix);
         return readdirSync(baseDir, { withFileTypes: true })
-            .filter((entry) => entry.isDirectory() && entry.name.startsWith(needle))
+            .filter(
+                (entry) => entry.isDirectory() && entry.name.startsWith(needle),
+            )
             .slice(0, 100)
             .map((entry) => {
                 const value = join(baseDir, entry.name);
@@ -152,8 +182,12 @@ export default function (pi: ExtensionAPI) {
         try {
             syncProcessCwd(ctx.cwd);
         } catch (error) {
-            const message = error instanceof Error ? error.message : String(error);
-            ctx.ui.notify(`Could not sync process cwd to session cwd: ${message}`, "error");
+            const message =
+                error instanceof Error ? error.message : String(error);
+            ctx.ui.notify(
+                `Could not sync process cwd to session cwd: ${message}`,
+                "error",
+            );
         }
     });
 
@@ -189,7 +223,8 @@ export default function (pi: ExtensionAPI) {
 
             const target = resolveCdArg(args);
             const info = await stat(target);
-            if (!info.isDirectory()) throw new Error(`Not a directory: ${target}`);
+            if (!info.isDirectory())
+                throw new Error(`Not a directory: ${target}`);
 
             const oldProcessCwd = process.cwd();
             setProcessCwd(target);
@@ -203,22 +238,34 @@ export default function (pi: ExtensionAPI) {
                 let targetSessionFile: string | undefined;
                 const currentSessionFile = ctx.sessionManager.getSessionFile();
                 if (currentSessionFile && existsSync(currentSessionFile)) {
-                    targetSessionFile = SessionManager.forkFrom(currentSessionFile, target).getSessionFile();
+                    targetSessionFile = SessionManager.forkFrom(
+                        currentSessionFile,
+                        target,
+                    ).getSessionFile();
                 } else {
                     const targetSession = SessionManager.create(target);
-                    targetSession.appendCustomEntry("cd", { createdBy: "cwd-and-fish", target });
+                    targetSession.appendCustomEntry("cd", {
+                        createdBy: "cwd-and-fish",
+                        target,
+                    });
                     targetSessionFile = targetSession.getSessionFile();
                 }
 
                 if (!targetSessionFile) {
-                    ctx.ui.notify(`Process cwd: ${formatPath(target)} (session is not persisted)`, "info");
+                    ctx.ui.notify(
+                        `Process cwd: ${formatPath(target)} (session is not persisted)`,
+                        "info",
+                    );
                     return;
                 }
 
                 const result = await ctx.switchSession(targetSessionFile, {
                     withSession: async (newCtx) => {
                         syncProcessCwd(target);
-                        newCtx.ui.notify(`Changed cwd to ${formatPath(target)}`, "info");
+                        newCtx.ui.notify(
+                            `Changed cwd to ${formatPath(target)}`,
+                            "info",
+                        );
                     },
                 });
 

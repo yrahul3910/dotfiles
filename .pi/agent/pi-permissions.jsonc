@@ -17,7 +17,7 @@
       "uv run ruff format",
       "gh run view",
       "no-sloppy",
-      "anti-slop",
+      "no-slop-ts",
     ],
     "registryOverrides": {
       "jj": {
@@ -52,6 +52,7 @@
     "ask_user": "allow",
     "bg_start": "allow",
     "bg_status": "allow",
+    "bg_list": "allow",
     "get_subagent_result": "allow",
     "steer_subagent": "allow",
     "set_reasoning_effort": "allow",

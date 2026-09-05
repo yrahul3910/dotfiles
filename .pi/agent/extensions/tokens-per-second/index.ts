@@ -1,6 +1,7 @@
 import type { Usage } from "@earendil-works/pi-ai";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
+import { TurnTiming } from "./turn-timing.ts";
 
 const CHARS_PER_TOKEN = 4;
 
@@ -25,6 +26,46 @@ export default function (pi: ExtensionAPI) {
     let streamedCharacters = 0;
     let tokensPerSecond: number | undefined;
     let requestFooterRender: (() => void) | undefined;
+    let timing = new TurnTiming();
+    let isRunning = false;
+    let providerFailed = false;
+
+    pi.on("before_agent_start", () => {
+        timing.start(performance.now());
+        isRunning = true;
+        providerFailed = false;
+        requestFooterRender?.();
+    });
+    pi.on("tool_execution_start", (event) => {
+        timing.toolStarted(event.toolCallId, performance.now());
+        requestFooterRender?.();
+    });
+    pi.on("tool_execution_end", (event) => {
+        timing.toolEnded(event.toolCallId, performance.now());
+        requestFooterRender?.();
+    });
+    pi.on("ui_prompt_start", () => {
+        timing.promptStarted(performance.now());
+        requestFooterRender?.();
+    });
+    pi.on("ui_prompt_end", () => {
+        timing.promptEnded(performance.now());
+        requestFooterRender?.();
+    });
+    pi.on("agent_settled", (_event, ctx) => {
+        if (!isRunning) return;
+        isRunning = false;
+        timing.finish(performance.now());
+        const result = timing.snapshot(performance.now());
+        if (result) pi.appendEntry("turn-timing", result);
+        if (providerFailed) {
+            ctx.ui.notify(
+                "Provider request failed. Switch with /model or retry when ready; preserve completed tool results when continuing.",
+                "error",
+            );
+        }
+        requestFooterRender?.();
+    });
 
     const updateRate = (tokens: number, startedAt: number) => {
         const elapsedSeconds = Math.max(
@@ -36,14 +77,20 @@ export default function (pi: ExtensionAPI) {
     };
 
     pi.on("session_start", (_event, ctx) => {
+        timing = new TurnTiming();
+        isRunning = false;
         ctx.ui.setFooter((tui, theme, footerData) => {
             const unsubscribe = footerData.onBranchChange(() =>
                 tui.requestRender(),
             );
             requestFooterRender = () => tui.requestRender();
+            const refresh = setInterval(() => {
+                if (isRunning) tui.requestRender();
+            }, 1000);
 
             return {
                 dispose() {
+                    clearInterval(refresh);
                     unsubscribe();
                     requestFooterRender = undefined;
                 },
@@ -152,6 +199,22 @@ export default function (pi: ExtensionAPI) {
                         ),
                         theme.fg("dim", statsLine),
                     ];
+                    const turn = timing.snapshot(performance.now());
+                    if (turn) {
+                        const first =
+                            turn.firstTextMs === undefined
+                                ? "pending"
+                                : `${(turn.firstTextMs / 1000).toFixed(1)}s`;
+                        lines.push(
+                            truncateToWidth(
+                                theme.fg(
+                                    "dim",
+                                    `Turn ${(turn.elapsedMs / 1000).toFixed(1)}s | first text ${first} | tools ${(turn.toolMs / 1000).toFixed(1)}s | input ${(turn.inputMs / 1000).toFixed(1)}s | provider errors ${turn.providerErrors}`,
+                                ),
+                                width,
+                            ),
+                        );
+                    }
                     const statuses = Array.from(
                         footerData.getExtensionStatuses().entries(),
                     )
@@ -185,6 +248,8 @@ export default function (pi: ExtensionAPI) {
         )
             return;
         streamedCharacters += event.assistantMessageEvent.delta.length;
+        if (event.assistantMessageEvent.delta.length > 0)
+            timing.textReceived(performance.now());
         updateRate(
             Math.ceil(streamedCharacters / CHARS_PER_TOKEN),
             responseStartedAt,
@@ -192,6 +257,10 @@ export default function (pi: ExtensionAPI) {
     });
 
     pi.on("message_end", (event) => {
+        if (event.message.role === "assistant") {
+            providerFailed = event.message.stopReason === "error";
+            if (providerFailed) timing.providerFailed();
+        }
         if (
             event.message.role !== "assistant" ||
             responseStartedAt === undefined

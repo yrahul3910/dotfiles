@@ -10,7 +10,7 @@
  *
  * Manual override: alt+e opens a picker to pin a level or return to auto
  * (alt+digit chords are taken by tmux window bindings). /effort <level|auto>
- * does the same without the UI. Pinning pauses auto-routing until released.
+ * does the same without the UI. Pins are saved in the session until released.
  * The editor border color always shows the current level.
  */
 
@@ -25,6 +25,7 @@ const LEVELS = ["minimal", "low", "medium", "high", "xhigh"] as const;
 type Level = (typeof LEVELS)[number];
 
 const BASELINE: Level = "low";
+const PIN_ENTRY = "effort-pin";
 
 export default function (pi: ExtensionAPI) {
     // When the user pins a level, auto-reset and the model's tool both stand
@@ -35,32 +36,52 @@ export default function (pi: ExtensionAPI) {
         pinned ? `${pinned} (pinned)` : `auto, at ${pi.getThinkingLevel()}`;
 
     const applyChoice = (choice: string, ctx: ExtensionContext) => {
+        const selected = LEVELS.find((level) => level === choice);
         if (choice === "auto") {
             pinned = null;
             pi.setThinkingLevel(BASELINE);
+            pi.appendEntry(PIN_ENTRY, null);
             ctx.ui.notify(`effort: auto (baseline ${BASELINE})`);
-        } else if ((LEVELS as readonly string[]).includes(choice)) {
-            pinned = choice as Level;
+        } else if (selected) {
+            pinned = selected;
             pi.setThinkingLevel(pinned);
-            ctx.ui.notify(`effort: ${choice} (pinned -- 'auto' to release)`);
+            pi.appendEntry(PIN_ENTRY, pinned);
+            ctx.ui.notify(
+                `effort: ${pinned} pinned; effective ${pi.getThinkingLevel()} ('auto' to release)`,
+            );
         } else {
             ctx.ui.notify(`effort: ${describeState()}`);
         }
     };
 
-    pi.on("session_start", async () => {
-        if (!pinned) pi.setThinkingLevel(BASELINE);
+    pi.on("session_start", async (_event, ctx) => {
+        pinned = null;
+        for (const entry of ctx.sessionManager.getBranch().toReversed()) {
+            if (entry.type === "custom" && entry.customType === PIN_ENTRY) {
+                pinned = LEVELS.find((level) => level === entry.data) ?? null;
+                break;
+            }
+        }
+        pi.setThinkingLevel(pinned ?? BASELINE);
     });
 
     pi.on("before_agent_start", async () => {
-        if (!pinned) pi.setThinkingLevel(BASELINE);
+        pi.setThinkingLevel(pinned ?? BASELINE);
+    });
+
+    pi.on("model_select", (_event, ctx) => {
+        if (pinned === null) return;
+        pi.setThinkingLevel(pinned);
+        ctx.ui.notify(
+            `effort: ${pinned} pinned; effective ${pi.getThinkingLevel()}`,
+        );
     });
 
     pi.registerTool({
         name: "set_reasoning_effort",
         label: "Reasoning effort",
         description:
-            "Set your own reasoning effort for the rest of this user turn. " +
+            "Set your own reasoning effort for the rest of this user turn unless the user pinned it. " +
             `Effort resets to '${BASELINE}' at the start of every user turn, ` +
             "so set it again when a new turn continues nontrivial work.",
         promptSnippet: "Set your own reasoning effort for the current task",
@@ -82,7 +103,7 @@ export default function (pi: ExtensionAPI) {
                     content: [
                         {
                             type: "text",
-                            text: `Effort is pinned to '${pinned}' by the user; not changed.`,
+                            text: `Effort is pinned to '${pinned}' by the user; effective level is '${pi.getThinkingLevel()}'.`,
                         },
                     ],
                     details: params,
@@ -93,7 +114,7 @@ export default function (pi: ExtensionAPI) {
                 content: [
                     {
                         type: "text",
-                        text: `Reasoning effort set to '${params.level}' for this turn.`,
+                        text: `Requested '${params.level}' for this turn; effective level is '${pi.getThinkingLevel()}'.`,
                     },
                 ],
                 details: params,

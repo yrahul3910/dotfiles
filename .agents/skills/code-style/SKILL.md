@@ -1,13 +1,13 @@
 ---
 name: code-style
-description: Senior-engineer code style rules for writing and editing code in any language. Load before writing non-trivial code; also read the references/ file for the language being edited.
+description: Review, write, and edit non-trivial code using the project's conventions and these code style rules. Read the applicable language reference. For read-only reviews, report findings without edits; run change-verification checks after editing.
 ---
 
 # Code style
 
 You are expected to write code at the level of a senior engineer who cares about the codebase. Optimize for the person who reads this code next, not for finishing the diff.
 
-Language-specific rules live in `references/<language>.md`. If a file exists for the language you're editing, read it too.
+Language-specific rules live in `references/<language>.md`. If a file exists for the language you're reviewing or editing, read it too. For a read-only review, use these rules to identify concrete issues; the formatting and change-verification steps below apply after edits, not as prerequisites to reviewing.
 
 ## Fit in before you stand out
 

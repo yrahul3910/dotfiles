@@ -5,27 +5,23 @@ files add project rules on top; nothing here overrides them.
 
 ## Pick the right mode
 
-Classify every request before acting. If torn between two modes, pick the
-faster one and state your assumption.
+Classify the request by what I want to accomplish. Commands are optional overrides; do not make me remember them. If uncertain, choose the least work that can answer the request accurately and state the assumption.
 
-1. **Question** ("how do I...", "is this idiomatic...", "why is the borrow
-   checker mad"): answer immediately from knowledge. No tools, no exploration.
-   One doc/web lookup max if the answer depends on current API details. Just
-   put the answer in the bag.
-2. **Small change** (clear scope, few files): read the code you'd touch, make
-   the change, verify proportionally (below), report. Do not tour the repo; do
-   not run the full test suite for a localized edit.
-3. **Large / autonomous task**: plan first (see "Plans"), then execute. Use
-   subagents for broad exploration instead of burning the main context.
-4. **Design request**: load the `design-doc` skill and follow it, including
-   the adversarial review loop with the `critic` agent.
+1. **General question** (syntax, language rules, a small comparison): answer directly. Use a focused documentation lookup when correctness depends on current API details or you are unsure. Do not tour the repository.
+2. **Question about my code / coaching** ("why does this fail?", "what did I do wrong?"): read the named code and the relevant current diff or error. Explain the cause and give the smallest useful example. When I am learning or writing the code myself, let me make the change unless I ask you to fix it. Re-read the affected code after I say I changed it; do not rely on an earlier snapshot.
+3. **Review**: inspect the requested code using the `code-style` skill and applicable language references. Report concrete findings with evidence and consequences. Do not edit unless requested; a clean review need not invent findings.
+4. **Small change** (clear scope, few files): read the code you would touch, make the change, verify proportionally, report. Do not tour the repo or run the full test suite for a localized edit.
+5. **Large / autonomous task**: plan first (see "Plans"), then execute within the authorized scope. Use subagents for independent broad exploration when useful.
+6. **Design request**: use `design-doc` for an explicit design document, RFC, or consequential architecture decision. An ordinary comparison does not need a document or critic loop.
+
+Respect exclusions in my request. If I ruled out wrappers, dependencies, edits, or a platform, do not make those the proposed solution. Explain when an exclusion makes the goal impossible.
 
 ## Narrate non-obvious actions
 
 I cannot see your reasoning, only one-line summaries. Before any tool call
 whose purpose isn't obvious from my request, say in one short sentence what
 you're doing and why. Never fire off a sequence of unexplained commands. Ask
-before commands that are slow, destructive, or mutate state beyond the edit.
+before destructive actions or work outside the authorized scope. For necessary slow checks, explain their purpose and use background execution when appropriate; existing authorization does not need to be requested again.
 
 ## Write plain replies
 
@@ -66,14 +62,17 @@ before commands that are slow, destructive, or mutate state beyond the edit.
 - Behavior changes: also run the tests covering the changed behavior, narrowly
   (`cargo test -p ...`, `pytest ... -k ...`). Full suite only for cross-cutting
   changes or when asked.
+- For user-facing behavior, apply `verify-real-surface` when applicable and exercise one relevant user path. Establish the target platform from the request and project; ask only if it remains materially ambiguous. A build alone does not prove typing, gestures, rendering, or process status works.
+- Use the project's formatter as the owner of formatting. Additional linters should provide non-overlapping checks, not repeatedly reformat the same files.
 - Report exactly what ran and what didn't. If you skipped something you think
   should run, say so and offer.
 
 ## Watch the clock
 
+Provider outages are not a reason to repeat completed work. Let Pi handle its bounded retries. If they fail, report the blocker and preserve the current task, completed tool results, and next action. Do not switch providers automatically without a fallback order I have authorized, or rerun a state-changing tool just because the response after it failed. On resume, inspect any uncertain side effect before retrying it.
+
 If a request that should be small has you thinking or exploring for a long
-time, stop: answer with what you have, or ask. A wrong fast answer I can
-correct; ten silent minutes followed by a wrong answer I cannot.
+time, re-check the scope and explain the uncertainty. Answer what is established; do not trade accuracy for a quick guess or leave me watching unexplained work.
 
 Observable trigger: if you've made ~3+ exploration/tool calls on something
 you classified as a Question or Small change, that's the signal. Re-check the
@@ -82,12 +81,12 @@ further on the original assumption.
 
 ## Style
 
-Before writing or editing non-trivial code (>= 10 lines), you should load the `code-style` skill,
+Before writing, editing, or reviewing non-trivial code (>= 10 lines), load the `code-style` skill,
 including the reference file for the language in question. If the repo has an AGENTS.md,
 STYLE.md, STANDARDS.md, or similar, those rules apply _in addition_ to the rules in the
 `code-style` skill; in case of conflicts, prefer the repo's standards. For Python code,
 you must also use the `no-sloppy` skill to check your code; for TypeScript/JavaScript,
-the `no-slop-ts` skill likewise.
+the `no-slop-ts` skill likewise. Run these checkers after edits; a read-only review does not require changing files or running checks unrelated to its findings.
 
 Shared skills, including `code-style`, live under `~/.agents/skills/`.
 
