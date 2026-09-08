@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "lint": "oxlint .",
-        "test": "bun test effort/ cwd-and-fish/ tokens-per-second/",
+        "test": "bun test effort/ cwd-and-fish/ tokens-per-second/ pr-review/",
         "check": "tsc -p tsconfig.checks.json && bun run test"
     },
     "devDependencies": {

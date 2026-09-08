@@ -21,6 +21,7 @@ concurrency:
 
 jobs:
   review:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -31,13 +32,16 @@ jobs:
       - name: Check out pull request
         uses: actions/checkout@v4
         with:
+          ref: \${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Check out Pi configuration
         uses: actions/checkout@v4
         with:
           repository: yrahul3910/dotfiles
           path: .pi-review-config
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -51,11 +55,17 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install --yes stow
+          sudo apt-get install --yes stow ripgrep fd-find
           pi_home="\${RUNNER_TEMP}/pi-review-home"
           mkdir -p "\${pi_home}/.pi" "\${pi_home}/.agents"
           stow --dir=".pi-review-config" --target="\${pi_home}/.pi" .pi
           stow --dir=".pi-review-config" --target="\${pi_home}/.agents" .agents
+
+          models_path="\${pi_home}/.pi/agent/models.json"
+          jq '.providers.openrouter.models |= map(
+            if .id == "z-ai/glm-5.3:nitro" then .reasoning = true else . end
+          )' "\${models_path}" > "\${RUNNER_TEMP}/pi-review-models.json"
+          cp "\${RUNNER_TEMP}/pi-review-models.json" "\${models_path}"
 
       - name: Review pull request
         id: review
@@ -63,11 +73,11 @@ jobs:
         env:
           BASE_SHA: \${{ github.event.pull_request.base.sha }}
           HEAD_SHA: \${{ github.event.pull_request.head.sha }}
-          HOME: \${{ runner.temp }}/pi-review-home
-          MODAL_API_KEY: \${{ secrets.MODAL_API_KEY }}
+          PI_CODING_AGENT_DIR: \${{ runner.temp }}/pi-review-home/.pi/agent
+          OPENROUTER_API_KEY: \${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          if [[ -z "\${MODAL_API_KEY}" ]]; then
-            echo "The MODAL_API_KEY repository secret is not configured" >&2
+          if [[ -z "\${OPENROUTER_API_KEY}" ]]; then
+            echo "The OPENROUTER_API_KEY repository secret is not configured" >&2
             exit 1
           fi
 
@@ -75,14 +85,18 @@ jobs:
           review_path="\${RUNNER_TEMP}/pi-review.md"
           git diff --no-ext-diff --unified=80 "\${BASE_SHA}...\${HEAD_SHA}" > "\${diff_path}"
 
-          pi \
-            --print \
-            --no-session \
-            --no-extensions \
-            --approve \
-            --tools read,grep,find,ls \
-            "Review this pull request. Use every applicable available skill, especially code-style and language-specific guidance. The piped input is the PR diff and the checkout contains the proposed code. Focus on concrete correctness, security, maintainability, and regression risks. Do not execute code or claim checks ran. Return GitHub Markdown with findings ordered by severity and precise file and line references. If there are no substantive findings, say so. Keep the review under 6,000 characters." \
-            < "\${diff_path}" \
+          pi \\
+            --provider openrouter \\
+            --model z-ai/glm-5.3:nitro \\
+            --thinking high \\
+            --print \\
+            --no-session \\
+            --no-extensions \\
+            --no-approve \\
+            --skill "\${RUNNER_TEMP}/pi-review-home/.agents/skills" \\
+            --tools read,grep,find,ls \\
+            "Review this pull request. Use every applicable available skill, especially code-style and language-specific guidance. The piped input is the PR diff and the checkout contains the proposed code. Focus on concrete correctness, security, maintainability, and regression risks. Do not execute code or claim checks ran. Return GitHub Markdown with findings ordered by severity and precise file and line references. If there are no substantive findings, say so. Keep the review under 6,000 characters." \\
+            < "\${diff_path}" \\
             > "\${review_path}"
 
           if [[ ! -s "\${review_path}" ]]; then
@@ -104,19 +118,21 @@ jobs:
           } > "\${comment_path}"
 
           comment_id="$(
-            gh api --paginate \
-              "/repos/\${GITHUB_REPOSITORY}/issues/\${PR_NUMBER}/comments" \
-              --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- pi-review -->"))) | .id' \
-              | tail -n 1
+            gh api \\
+              --paginate "/repos/\${GITHUB_REPOSITORY}/issues/\${PR_NUMBER}/comments" \\
+              --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- pi-review -->"))) | .id' \\
+            | tail -n 1
           )"
 
           if [[ -n "\${comment_id}" ]]; then
-            gh api --method PATCH \
-              "/repos/\${GITHUB_REPOSITORY}/issues/comments/\${comment_id}" \
+            gh api \\
+              --method PATCH \\
+              "/repos/\${GITHUB_REPOSITORY}/issues/comments/\${comment_id}"\\
               --raw-field "body=$(<"\${comment_path}")"
           else
-            gh api --method POST \
-              "/repos/\${GITHUB_REPOSITORY}/issues/\${PR_NUMBER}/comments" \
+            gh api \\
+              --method POST \\
+              "/repos/\${GITHUB_REPOSITORY}/issues/\${PR_NUMBER}/comments" \\
               --raw-field "body=$(<"\${comment_path}")"
           fi
 `;
@@ -193,7 +209,7 @@ export default function prReview(pi: ExtensionAPI) {
             const verb =
                 result.kind === "unchanged" ? "Already configured" : "Wrote";
             ctx.ui.notify(
-                `${verb} ${relative(repoRoot, result.path)}. Add MODAL_API_KEY as a repository Actions secret.`,
+                `${verb} ${relative(repoRoot, result.path)}. Add OPENROUTER_API_KEY as a repository Actions secret.`,
                 "info",
             );
         },
