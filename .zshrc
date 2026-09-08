@@ -19,6 +19,12 @@ export PYTHONPATH=$PYTHONPATH:.
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 export RUSTC_WRAPPER=sccache
 
+if [ "$(uname)" = "Linux" ]; then
+    export QT_QPA_PLATFORM=wayland
+elif [ "${QT_QPA_PLATFORM:-}" = "wayland" ]; then
+    unset QT_QPA_PLATFORM
+fi
+
 if [ "$(uname)" = "Darwin" ]; then
     export HOMEBREW_NO_AUTO_UPDATE=1
     export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin

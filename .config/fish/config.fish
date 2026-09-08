@@ -37,7 +37,11 @@ set -gx HOMEBREW_NO_AUTO_UPDATE 1
 set -x RUSTC_WRAPPER sccache
 set -x ELECTRON_OZONE_PLATFORM_HINT auto
 set -x PYTHONSTARTUP ~/.pythonrc
-set -gx QT_QPA_PLATFORM wayland
+if test (uname) = Linux
+    set -gx QT_QPA_PLATFORM wayland
+else if test "$QT_QPA_PLATFORM" = wayland
+    set -e QT_QPA_PLATFORM
+end
 
 fish_vi_key_bindings
 
