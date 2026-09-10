@@ -17,6 +17,7 @@
   "packages": [
     "npm:@tintinweb/pi-subagents",
     "npm:pi-mcp-extension",
+    "npm:pi-voice-stt",
     "git:github.com/yrahul3910/pi-permission-system"
   ],
   "theme": "light/dark",
