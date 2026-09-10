@@ -9,6 +9,35 @@
     * Linear
     * Firecrawl
 * Permissions, via `github.com/yrahul3910/pi-permission-system`, a fork that adds vouching, potentially dangerous subcommand/option registry, and some other protections. The configured `codex/background-command-permissions` branch also routes `bg_start` through bash policy, including its working directory and protected paths. A tool-level allow does not approve every background command.
+* `pi-voice-stt` - speech to text using either a local model or OpenRouter (see `stt.json`). To set up local transcription, follow the instructions for [`macos-speech-server`](https://github.com/dokterbob/macos-speech-server). For Linux, see [`qwen3-asr`](https://github.com/Quantatirsk/qwen3-asr#local-development) or whisper.cpp:
+
+```sh
+git clone https://github.com/ggml-org/whisper.cpp
+cd whisper.cpp
+
+cmake -B build -DGGML_CUDA=1
+cmake --build build -j --config Release
+
+./models/download-ggml-model.sh large-v3-turbo
+
+./build/bin/whisper-server \
+  --host 127.0.0.1 \
+  -m models/ggml-large-v3-turbo.bin
+```
+
+On Linux, `pi-voice-stt` will likely use `ffmpeg` through PipeWire/PulseAudio, so inspect sources with
+
+```
+pactl list short sources
+# or, for pipewire
+wpctl status
+```
+
+and then
+
+```
+wpctl set-default 53
+```
 
 ### In this repo
 
