@@ -236,7 +236,7 @@ nmap('<leader>cl', function()
 end, '[C]olorscheme [L]ight')
 
 -- substitutions
-nmap('<leader>sq', [[ :%s/“\|”/"/g<CR> ]], '[S]ubstitute Smart [Q]uotes')
+nmap('<leader>sq', [[ :%s/“\|”/"/g | %s/‘\|’/'/g<CR> ]], '[S]ubstitute Smart [Q]uotes')
 
 -- vim.pack
 nmap('<leader>pu', function()
