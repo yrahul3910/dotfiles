@@ -2,5 +2,6 @@
     "debugLog": false,
     "permissionReviewLog": true,
     "yoloMode": false,
-    "desktopNotifications": true
+    "desktopNotifications": true,
+    "forwardedPromptTimeoutSeconds": null
 }
