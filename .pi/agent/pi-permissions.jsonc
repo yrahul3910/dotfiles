@@ -4,6 +4,8 @@
   // commands (rg, grep, cat, git log, ...) are allowed by the built-in
   // safe-command registry, and .env/.ssh/key files are denied by built-in
   // protected paths — no per-command deny globs needed anymore.
+  "desktopNotifications": true,
+  "forwardedPromptTimeoutSeconds": null,
   "bash": {
     "allow": [
       "cargo clippy",
