@@ -1,4 +1,4 @@
-model_provider = "anthropic"
+model_provider = "openai"
 embedding_provider = "voyageai"
 reranker_provider = "voyageai"
 max_concurrent_requests = 5
@@ -19,7 +19,7 @@ embedding_model = "qwen3-embedding"
 embedding_dims = 4096
 
 [openai]
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 max_tokens = 128000
 embedding_model = "text-embedding-3-large"
 embedding_dims = 1536
