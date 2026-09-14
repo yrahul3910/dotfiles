@@ -1,7 +1,5 @@
 {
-  "jsPlugins": [
-    { "name": "anti-slop", "specifier": "./plugin/index.ts" }
-  ],
+  "jsPlugins": [{ "name": "anti-slop", "specifier": "./plugin/index.ts" }],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -14,7 +12,7 @@
     "anti-slop/no-object-parameters": "error",
     "anti-slop/no-reflect-apply": "error",
     "anti-slop/no-reflect-get": "error",
-    "anti-slop/no-runtime-typeof": "error",
+    "anti-slop/no-runtime-typeof": ["error", { "allowInTypeGuards": true }],
     "anti-slop/no-shape-in-symbol-names": "error",
     "anti-slop/no-unknown-parameters": "off",
     "anti-slop/no-unknown-returns": "off",

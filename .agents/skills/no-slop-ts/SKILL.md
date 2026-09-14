@@ -5,24 +5,25 @@ description: Deterministic anti-slop pass for TypeScript/JavaScript. After writi
 
 # No-slop-ts (TypeScript/JavaScript)
 
-A deterministic slop check for TS/JS code you just wrote--the sibling of the `no-sloppy` skill for Python. Two layers, both driven by [oxlintrc.json](oxlintrc.json) so the same standard applies regardless of the
-project's own lint setup:
+A deterministic slop check for TS/JS code you just wrote--the sibling of the `no-sloppy` skill for Python. Two layers, both driven by [oxlintrc.json](oxlintrc.json) so the same standard applies regardless of the project's own lint setup:
 
 1. **Oxlint overlay** - the `correctness` category at error and `suspicious` at warn.
 2. **anti-slop rules** - the oxlint jsPlugin from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop), vendored in [plugin/](plugin/). Twelve generic rules run at error; they reject low-evidence typing patterns:
-  - `no-chained-type-assertions` -- `x as object as User` fabricates evidence
-  - `no-conditional-empty-object-spread` -- `...(cond ? { x } : {})`
-  - `no-known-value-widening` -- explicit broad types that discard known value evidence (use inference or `satisfies`)
-  - `no-module-mocking` -- `vi.mock`/`jest.mock`; use real dependency seams
-  - `no-object-parameters` -- the broad `object` type on inputs
-  - `no-reflect-apply` / `no-reflect-get` -- use typed calls/access
-  - `no-runtime-typeof` -- parse at the I/O boundary instead of ad hoc `typeof` narrowing
-  - `no-shape-in-symbol-names` -- no `Shape` suffix names
-  - `no-unsafe-dictionary-type` -- `Record<string, unknown|any|object|{}>`
-  - `no-widen-then-assert` -- widening a known value and asserting it back
-  - `require-safety-comment-for-type-assertion` -- each non-`as const` assertion needs a `// SAFETY: <checked invariant>` comment.
 
-  The upstream `no-unknown-parameters`, `no-unknown-returns`, and `no-unknown-type-aliases` rules remain vendored but are disabled locally. `unknown` is the type-safe choice when a value still needs validation or narrowing; the checker should reject fabricated evidence, not honest uncertainty.
+   - `no-chained-type-assertions` -- `x as object as User` fabricates evidence
+   - `no-conditional-empty-object-spread` -- `...(cond ? { x } : {})`
+   - `no-known-value-widening` -- explicit broad types that discard known value evidence (use inference or `satisfies`)
+   - `no-module-mocking` -- `vi.mock`/`jest.mock`; use real dependency interfaces
+   - `no-object-parameters` -- the broad `object` type on inputs
+   - `no-reflect-apply` / `no-reflect-get` -- use typed calls/access
+   - `no-runtime-typeof` -- parse at the I/O boundary instead of ad hoc `typeof` narrowing; the local config enables `allowInTypeGuards` for explicitly annotated type predicates and assertion functions. Ordinary nested functions are not exempt; type-level `typeof` is unaffected.
+   - `no-shape-in-symbol-names` -- no structural suffixes (`UserShape`, `user_shape`, `USER_SHAPE`). Standalone `Shape`/`shape` and names such as `shapeArea`, `reshape`, and `misshapen` are allowed.
+   - `no-unsafe-dictionary-type` -- `Record<string, unknown|any|object|{}>`
+   - `no-widen-then-assert` -- widening a known value and asserting it back
+   - `require-safety-comment-for-type-assertion` -- each non-`as const` assertion needs a `// SAFETY: <checked invariant>` comment.
+
+   The upstream `no-unknown-parameters`, `no-unknown-returns`, and `no-unknown-type-aliases` rules remain vendored but are disabled locally. `unknown` is the type-safe choice when a value still needs validation or narrowing; the checker should reject fabricated evidence, not honest uncertainty.
+
 3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override).
 
 Needs `git` and `bun`; oxlint comes from this skill's own node_modules (`bun install` here once -- setup.sh does this on new machines).
@@ -44,7 +45,7 @@ Findings have two levels: **errors** fail the check (exit 1); **warnings** are i
 ## Interpreting findings
 
 - Fix errors in code you wrote; treat warnings as advisory. Don't silence findings with disable comments -- a suppression (`// oxlint-disable-next-line anti-slop/no-runtime-typeof`) is only acceptable when the rule is genuinely wrong for the case, narrowly scoped, and commented with why.
-- `require-safety-comment-for-type-assertion` is satisfied by a `// SAFETY: ...` comment stating the checked invariant immediately before the assertion--but first try to remove the assertion: prefer inference, `as const`, `satisfies`, named owner contracts, and parsing at the I/O boundary.
+- A necessary type assertion needs a preceding `// SAFETY: ...` comment stating the checked invariant. The checker only recognizes the marker; review whether the invariant actually justifies the assertion. First try to remove the assertion: prefer inference, `as const`, `satisfies`, named owner contracts, and parsing at the I/O boundary. A safety comment does not exempt chained assertions.
 - This overlay is advisory for your diff; the project's own lint config still governs the codebase. Where the two disagree on style (not correctness), the project wins--follow its config and ignore the overlay finding.
 
 ## Maintaining the vendored plugin
