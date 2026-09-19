@@ -124,21 +124,21 @@ export default function (pi: ExtensionAPI): void {
         }
 
         const container = new Container();
-        const box = new Box(1, 1, (text: string) => theme.bg("customMessageBg", text));
+        const box = new Box(1, 1);
 
-        box.addChild(new Text(`${theme.fg("accent", "🐱")} ${theme.bold("Random Cat")}`, 0, 0));
+        box.addChild(new Text(theme.fg("customMessageLabel", theme.bold("\u{1F431} Random Cat")), 0, 0));
 
         const image = new Image(
             data.base64,
             data.mimeType,
-            { fallbackColor: (str: string) => theme.fg("dim", str) },
+            { fallbackColor: (str: string) => str },
             { maxWidthCells: 60, maxHeightCells: 24 },
         );
         box.addChild(image);
 
         if (expanded && data.sourceUrl) {
             box.addChild(new Spacer(1));
-            box.addChild(new Text(theme.fg("dim", `Source: ${data.sourceUrl}`), 0, 0));
+            box.addChild(new Text(`Source: ${data.sourceUrl}`, 0, 0));
         }
 
         container.addChild(box);
