@@ -17,6 +17,13 @@ Language-specific rules live in `references/<language>.md`. If a file exists for
 
 However: if there is a nicer way and the effort to change it is not significant, it's worth bringing it up to the user.
 
+## Line wrapping
+
+- **Unnecessary manual wraps are errors, including in docstrings, comments, and documentation.** Keep a statement, expression, signature, import, or short prose paragraph on one line when it fits comfortably within the project's configured linter line-length limit. Use 120 columns for code, comments, and docstrings when no limit is configured. Do not invent an 80-column or 88-column target.
+- A code pseudo-wrap splits a logical line even though joining it, including indentation, would leave at least 20 columns below that limit. Prose pseudo-wraps break a paragraph at least 20 columns early when the next word still fits within the limit, even if the whole paragraph needs multiple lines. Fix these errors before finishing; they are not advisory style suggestions. Apply this to docstrings and documentation as well as executable code.
+- Preserve structural line breaks: separate paragraphs, lists, tables, headings, doctests, code examples, and literal string content whose newlines affect behavior. Preserve breaks required by syntax or an active project formatter or lint rule. Docstrings and prose comments are not blanket exceptions. A trailing comma, nearby manually wrapped text, or personal preference alone does not justify a pseudo-wrap.
+- **Markdown uses the longest source line that passes the active linter.** If a Markdown linter enforces a maximum, fill each prose line to that limit before wrapping at a word boundary. If no linter limit applies, keep each entire paragraph or list item on one source line, regardless of length. Do not apply the 120-column fallback to Markdown. The editor's soft wrapping handles display width.
+
 ## Don't reinvent or duplicate
 
 - **Search before you write.** Before adding a helper, grep for an existing one. Most "utility" functions you're about to write already exist somewhere in the repo or its dependencies.
@@ -93,10 +100,6 @@ This is the part that separates competent from good.
 
 ## Before you call it done
 
-- Verify proportionally to the risk: formatter + linter on changed files and a
-  typecheck/build of the affected package, always. Behavior changes also get
-  the tests covering the changed behavior, run narrowly (`cargo test -p ...`,
-  `pytest ... -k ...`). The full suite only for cross-cutting changes or when
-  asked.
+- Verify proportionally to the risk: formatter + linter on changed files and a typecheck/build of the affected package, always. Behavior changes also get the tests covering the changed behavior, run narrowly (`cargo test -p ...`, `pytest ... -k ...`). The full suite only for cross-cutting changes or when asked.
 - Report honestly: if something fails or you skipped a step, say so with the output--don't claim green when it's not.
 - Re-read your own diff as a reviewer would. If anything in it would make *you* leave a comment, fix it first.

@@ -208,11 +208,11 @@ def main() -> int:
 
     if args.paths:
         paths = (
-            git("ls-files", "--exclude-standard", "--", *map(str, args.paths))
+            git("ls-files", "--cached", "--others", "--exclude-standard", "--", *map(str, args.paths))
             .strip()
             .splitlines()
         )
-        scope = {Path(path): [WHOLE_FILE] for path in paths}
+        scope = {Path(path).resolve(): [WHOLE_FILE] for path in paths}
     else:
         scope = changed_lines(args.base)
         if args.all:

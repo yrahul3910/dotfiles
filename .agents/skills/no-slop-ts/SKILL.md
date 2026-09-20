@@ -8,13 +8,14 @@ description: Deterministic anti-slop pass for TypeScript/JavaScript. After writi
 A deterministic slop check for TS/JS code you just wrote--the sibling of the `no-sloppy` skill for Python. Two layers, both driven by [oxlintrc.json](oxlintrc.json) so the same standard applies regardless of the project's own lint setup:
 
 1. **Oxlint overlay** - the `correctness` category at error and `suspicious` at warn.
-2. **anti-slop rules** - the oxlint jsPlugin from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop), vendored in [plugin/](plugin/). Twelve generic rules run at error; they reject low-evidence typing patterns:
+2. **anti-slop rules** - the oxlint jsPlugin from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop), vendored in [plugin/](plugin/). Thirteen generic rules run at error; they reject low-evidence typing patterns and unnecessary manual wrapping:
 
    - `no-chained-type-assertions` -- `x as object as User` fabricates evidence
    - `no-conditional-empty-object-spread` -- `...(cond ? { x } : {})`
    - `no-known-value-widening` -- explicit broad types that discard known value evidence (use inference or `satisfies`)
    - `no-module-mocking` -- `vi.mock`/`jest.mock`; use real dependency interfaces
    - `no-object-parameters` -- the broad `object` type on inputs
+   - `no-pseudo-wraps` -- unnecessary code continuations, plus premature wrapping in JSDoc and prose comments. The default margin is 20 columns below the configured linter limit (120 if none is configured). This is an error, not a warning.
    - `no-reflect-apply` / `no-reflect-get` -- use typed calls/access
    - `no-runtime-typeof` -- parse at the I/O boundary instead of ad hoc `typeof` narrowing; the local config enables `allowInTypeGuards` for explicitly annotated type predicates and assertion functions. Ordinary nested functions are not exempt; type-level `typeof` is unaffected.
    - `no-shape-in-symbol-names` -- no structural suffixes (`UserShape`, `user_shape`, `USER_SHAPE`). Standalone `Shape`/`shape` and names such as `shapeArea`, `reshape`, and `misshapen` are allowed.
@@ -44,6 +45,10 @@ Findings have two levels: **errors** fail the check (exit 1); **warnings** are i
 
 ## Interpreting findings
 
+- Apply [code-style's line-wrapping rule](../code-style/SKILL.md#line-wrapping) to code, docstrings, comments, and documentation. The checker covers calls, imports, expressions, JSDoc, and prose comments. It checks a code continuation's joined length, including indentation. For prose, it checks whether a line ends at least 20 columns early while the next word still fits. Structural documentation breaks, literal multiline content, and braced layouts remain intact. Project-required formatting is a valid exception; personal preference and existing pseudo-wraps are not.
+- Review Markdown manually. Fill each prose line to the active Markdown linter's limit before wrapping at a word boundary. With no applicable limit, keep the entire paragraph or list item on one source line, regardless of length. Do not use the 120-column fallback for Markdown; the editor soft-wraps it.
+- `no-pseudo-wraps` reads active ESLint `max-len`, `@stylistic/max-len`, and `@stylistic/js/max-len` limits. The project's installed ESLint resolves executable configs, inheritance, and per-file overrides. Simple JSON configs also work without ESLint installed; configs needing resolution fail with an installation instruction. With no explicit limit, the rule uses 120. For other lint tools, check their configured threshold during review.
+- Configure `anti-slop/no-pseudo-wraps` as `["error", { "fallbackLineLength": 120, "margin": 20 }]` in the overlay to change its defaults. Set `maxLineLength` to an explicit limit when automatic ESLint discovery does not apply; it overrides discovery. `fallbackLineLength` applies only when no explicit linter limit exists. `margin` controls how far below the limit a wrap becomes an error.
 - Fix errors in code you wrote; treat warnings as advisory. Don't silence findings with disable comments -- a suppression (`// oxlint-disable-next-line anti-slop/no-runtime-typeof`) is only acceptable when the rule is genuinely wrong for the case, narrowly scoped, and commented with why.
 - A necessary type assertion needs a preceding `// SAFETY: ...` comment stating the checked invariant. The checker only recognizes the marker; review whether the invariant actually justifies the assertion. First try to remove the assertion: prefer inference, `as const`, `satisfies`, named owner contracts, and parsing at the I/O boundary. A safety comment does not exempt chained assertions.
 - This overlay is advisory for your diff; the project's own lint config still governs the codebase. Where the two disagree on style (not correctness), the project wins--follow its config and ignore the overlay finding.

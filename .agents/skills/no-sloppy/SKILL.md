@@ -20,6 +20,7 @@ A deterministic slop check for Python code you just wrote, in two layers:
   - `SLOP009` entire function body wrapped in a broad, swallowing try/except (warning; narrow or re-raising handlers exempt)
   - `SLOP010` import fallback shims (`except ImportError: x = None` or a fallback import) (warning; re-raising handlers exempt)
   - `SLOP011` marketing adjectives in comments/docstrings ("robust", "production-ready", "battle-tested") (heuristic)
+  - `SLOP014` unnecessary code continuations, plus premature wrapping in docstrings and prose comments, at least 20 columns below the configured linter limit (120 if none is configured) (error)
 
 No runtime dependencies; needs `git` and `ruff` (falls back to `uvx ruff`).
 
@@ -39,6 +40,9 @@ Findings have three levels: **errors** fail the check (exit 1); **warnings** are
 
 ## Interpreting findings
 
+- Apply [code-style's line-wrapping rule](../code-style/SKILL.md#line-wrapping) to code, docstrings, comments, and documentation. `SLOP014` checks complete logical code lines, including calls, signatures, imports, and expressions. It also checks docstrings and prose comments for lines ending at least 20 columns early while the next word still fits. Structural documentation breaks, literal multiline content, blank-line grouping, and literal container layouts remain intact. Project-required formatting is a valid exception; a trailing comma, personal preference, and existing pseudo-wraps are not.
+- Review Markdown manually. Fill each prose line to the active Markdown linter's limit before wrapping at a word boundary. With no applicable limit, keep the entire paragraph or list item on one source line, regardless of length. Do not use the 120-column fallback for Markdown; the editor soft-wraps it.
+- `SLOP014` uses the nearest explicit Ruff, Flake8, or Pylint line limit, including Ruff's `extend` chain and `lint.pycodestyle.max-line-length`. With no explicit limit, it uses 120. For other lint tools, check their configured threshold during review. The overlay's bundled 120-column config does not override the project's threshold for this rule.
 - Fix errors in code you wrote; treat warnings as advisory style feedback worth a look. Don't silence findings with `noqa` -- a suppression is only acceptable when the rule is genuinely wrong for the case, narrowly scoped, and commented with why.
 - Both layers honor `# noqa` comments: `# noqa: SLOP001` (or any ruff code) suppresses that rule on the line; a bare `# noqa` suppresses everything. Prefer explicit codes -- a bare `# noqa` that only suppresses SLOP rules looks unused to ruff and trips RUF100.
 - This overlay is advisory for your diff; the project's own lint config still governs the codebase. Where the two disagree on style (not correctness), the project wins -- follow its config and ignore the overlay finding.
