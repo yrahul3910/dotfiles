@@ -17,8 +17,9 @@
  *   /novim  — Restore default editor
  */
 
-import { CustomEditor, type ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { matchesKey, truncateToWidth, visibleWidth, type TUI } from "@mariozechner/pi-tui";
+import { CustomEditor, type ExtensionAPI, type ExtensionContext } from "@earendil-works/pi-coding-agent";
+import { getPrompts, loadPromptHistory } from "./prompt-history/history.ts";
+import { matchesKey, truncateToWidth, visibleWidth, type TUI } from "@earendil-works/pi-tui";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -1539,9 +1540,25 @@ function clamp(v: number, lo: number, hi: number): number {
 export default function (pi: ExtensionAPI) {
     let vimEnabled = true;
 
-    pi.on("session_start", (_event, ctx) => {
+    async function installEditor(
+        ctx: ExtensionContext,
+        includeCurrent: boolean,
+    ) {
+        const prompts = await loadPromptHistory(ctx);
+        if (includeCurrent)
+            prompts.push(...getPrompts(ctx.sessionManager.getBranch()));
+        ctx.ui.setEditorComponent((tui, theme, kb) => {
+            const editor = vimEnabled
+                ? new VimEditor(tui, theme, kb)
+                : new CustomEditor(tui, theme, kb);
+            for (const prompt of prompts) editor.addToHistory(prompt);
+            return editor;
+        });
+    }
+
+    pi.on("session_start", async (event, ctx) => {
         if (!ctx.hasUI || !vimEnabled) return;
-        ctx.ui.setEditorComponent((tui, theme, kb) => new VimEditor(tui, theme, kb));
+        await installEditor(ctx, event.reason === "reload");
     });
 
     pi.on("session_shutdown", () => {
@@ -1554,7 +1571,7 @@ export default function (pi: ExtensionAPI) {
         description: "Enable vim mode",
         handler: async (_args, ctx) => {
             vimEnabled = true;
-            ctx.ui.setEditorComponent((tui, theme, kb) => new VimEditor(tui, theme, kb));
+            await installEditor(ctx, true);
             ctx.ui.setStatus("vim", "\x1b[1;44;97m VIM \x1b[0m");
             ctx.ui.notify("Vim mode enabled", "info");
         },
@@ -1564,7 +1581,7 @@ export default function (pi: ExtensionAPI) {
         description: "Disable vim mode, restore default editor",
         handler: async (_args, ctx) => {
             vimEnabled = false;
-            ctx.ui.setEditorComponent(undefined);
+            await installEditor(ctx, true);
             ctx.ui.setStatus("vim", undefined);
             // Restore cursor shape to terminal default
             process.stdout.write(CURSOR.default);

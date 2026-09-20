@@ -4,6 +4,7 @@
   "defaultModel": "gpt-6-astra",
   "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
+  "promptHistoryScope": "project",
   "transport": "auto",
   "retry": {
     "enabled": true,
@@ -25,5 +26,6 @@
   "collapseChangelog": true,
   "enableInstallTelemetry": false,
   "enableAnalytics": false,
-  "steeringMode": "all"
+  "steeringMode": "all",
+  "tuiMode": "fullscreen"
 }
