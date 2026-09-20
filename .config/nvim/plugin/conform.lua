@@ -19,8 +19,8 @@ require('conform').setup {
   end,
   formatters_by_ft = {
     lua = { 'stylua' },
-    javascript = { 'prettier', stop_after_first = true },
-    typescript = { 'prettier', 'biome', stop_after_first = true },
+    javascript = { 'prettier', 'oxfmt', stop_after_first = false },
+    typescript = { 'prettier', 'oxfmt', stop_after_first = false },
     typescriptreact = { 'prettier', 'biome', stop_after_first = true },
     python = { 'black', 'ruff_format', stop_after_first = true },
     json = { 'prettier', stop_after_first = false },
