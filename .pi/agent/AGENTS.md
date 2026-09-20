@@ -25,8 +25,8 @@ before destructive actions or work outside the authorized scope. For necessary s
 
 ## Write plain replies
 
-- Apply the `unslop` skill to substantial replies and prose artifacts. Direct
-  answers and short status updates should stay short without a separate pass.
+- Apply the `unslop` skill to substantial replies and prose artifacts. Direct answers and short status updates should stay short without a separate pass.
+- When writing or editing Markdown, follow the source-line and wrapping policy in `~/.agents/skills/unslop/SKILL.md#markdown`.
 - Remove all mannered prose: no stock openings, praise, fake enthusiasm,
   throat-clearing, or generic conclusions.
 - Prefer concrete claims, ordinary words, active voice, and the real name of
