@@ -207,18 +207,26 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.paths:
+        # --cached plus --others: tracked and untracked files alike, ignored ones excluded.
         paths = (
-            git("ls-files", "--cached", "--others", "--exclude-standard", "--", *map(str, args.paths))
+            git(
+                "ls-files",
+                "--cached",
+                "--others",
+                "--exclude-standard",
+                "--",
+                *map(str, args.paths),
+            )
             .strip()
             .splitlines()
         )
+        # Resolved like ruff's reported filenames, so both layers agree on file identity.
         scope = {Path(path).resolve(): [WHOLE_FILE] for path in paths}
     else:
         scope = changed_lines(args.base)
         if args.all:
             scope = {path: [WHOLE_FILE] for path in scope}
 
-    # T201 suppressions below: print is this CLI's output channel
     if not scope:
         print("no-sloppy: no changed Python files")  # noqa: T201
         return 0

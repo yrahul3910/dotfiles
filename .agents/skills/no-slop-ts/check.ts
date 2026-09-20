@@ -68,7 +68,13 @@ function git(...args: string[]): string {
   }
 }
 
-/** Map changed source files (absolute paths) to their changed line ranges. */
+/**
+ * Map changed source files (absolute paths) to their changed line ranges, new-side and inclusive.
+ *
+ * Covers staged and unstaged edits against `base` plus untracked files, which map to the whole
+ * file. Paths that no longer exist, declaration files, and this skill's own sources are dropped.
+ * A git failure exits the process.
+ */
 function changedLines(base: string): Map<string, [number, number][]> {
   const root = git("rev-parse", "--show-toplevel").trim();
   const pathspecs = EXTENSIONS.map((ext) => `*.${ext}`);
@@ -76,6 +82,7 @@ function changedLines(base: string): Map<string, [number, number][]> {
 
   const diff = git("-C", root, "diff", "-U0", base, "--", ...pathspecs);
   let current: string | null = null;
+
   for (const line of diff.split("\n")) {
     if (line.startsWith("+++ ")) {
       const name = line.slice(4);
@@ -102,6 +109,7 @@ function changedLines(base: string): Map<string, [number, number][]> {
       changed.delete(path);
     }
   }
+
   return changed;
 }
 
@@ -144,6 +152,7 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
   );
 
   let raw: { diagnostics?: OxlintDiagnostic[] };
+
   try {
     raw = JSON.parse(proc.stdout);
   } catch {
@@ -152,6 +161,7 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
   }
 
   const findings: Finding[] = [];
+
   for (const diag of raw.diagnostics ?? []) {
     const label = diag.labels?.[0];
     if (!label) continue; // no span to anchor a finding to
@@ -166,10 +176,17 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
       level: diag.severity === "warning" ? "warn" : "error",
     });
   }
+
   return findings;
 }
 
-/** Render a rustc-style block with the offending source line. */
+/**
+ * Render one finding as a rustc-style block: header, location, and the offending source line
+ * with a caret span under it, plus the help text when the finding has one.
+ *
+ * `lineText` is undefined when the file could not be read; the block then has no source excerpt.
+ * The caret span is clipped to the end of the line.
+ */
 function render(finding: Finding, lineText: string | undefined, color: boolean): string {
   const label = finding.level === "warn" ? "warning" : "error";
   const tint = color ? LEVEL_COLORS[finding.level] : "";
@@ -207,8 +224,10 @@ function main(): number {
   let effect: boolean | null = null;
 
   const argv = process.argv.slice(2);
+
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
+
     if (arg === "--base") base = argv[++i] ?? base;
     else if (arg === "--all") all = true;
     else if (arg === "--strict") strict = true;
@@ -224,6 +243,7 @@ function main(): number {
   }
 
   let scope: Map<string, [number, number][]>;
+
   if (paths.length > 0) {
     scope = new Map<string, [number, number][]>(paths.map((p) => [resolve(p), [WHOLE_FILE]]));
   } else {
@@ -247,6 +267,7 @@ function main(): number {
     .toSorted((a, b) => a.path.localeCompare(b.path) || a.line - b.line || a.column - b.column);
 
   const color = colorEnabled();
+
   if (findings.length === 0) {
     const [green, reset] = color ? [GREEN, RESET] : ["", ""];
     console.log(`${green}no-slop-ts: clean (${targets.length} path(s) checked)${reset}`);
@@ -257,13 +278,16 @@ function main(): number {
   const blocks = findings.map((finding) => {
     if (!sources.has(finding.path)) {
       let lines: string[] = [];
+
       try {
         if (statSync(finding.path).isFile()) lines = readFileSync(finding.path, "utf-8").split("\n");
       } catch {
         // unreadable file: render without the source line
       }
+
       sources.set(finding.path, lines);
     }
+
     const lineText = sources.get(finding.path)?.[finding.line - 1];
     return render(finding, lineText, color);
   });

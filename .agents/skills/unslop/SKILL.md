@@ -80,4 +80,4 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 
 ### Markdown
 
-32. Do not split lines (bullet points, lists, etc.) into 80-column lines unless there is very explicitly a linter that is active in that project that disallows it. Individual lines, paragraphs, bullet points, etc. should run on in a single line in the file.
+32. Write Markdown prose on one source line per paragraph or list item and let editors soft-wrap. Do not manually hard-wrap to a guessed 80/90-column target. If an actually enforced project linter or formatter imposes a line-length limit, wrap using its maximum permitted width, not a shorter invented target. Preserve separate paragraphs (including those within list items), list items, headings, tables, code fences, and deliberate hard breaks. Do not unwrap code examples or literal output.

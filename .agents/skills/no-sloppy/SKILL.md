@@ -20,6 +20,8 @@ A deterministic slop check for Python code you just wrote, in two layers:
   - `SLOP009` entire function body wrapped in a broad, swallowing try/except (warning; narrow or re-raising handlers exempt)
   - `SLOP010` import fallback shims (`except ImportError: x = None` or a fallback import) (warning; re-raising handlers exempt)
   - `SLOP011` marketing adjectives in comments/docstrings ("robust", "production-ready", "battle-tested") (heuristic)
+  - `SLOP012` a multi-line block (`if`/`for`/`while`/`try`/`with`/`match`/`def`/`class`) with no blank line before or after it; short guards whose whole body is one simple statement are exempt, and a docstring never needs a blank line after it
+  - `SLOP013` one-line docstring on a function that is 20+ lines long or has 2+ `raise` sites (warning)
   - `SLOP014` unnecessary code continuations, plus premature wrapping in docstrings and prose comments, at least 20 columns below the configured linter limit (120 if none is configured) (error)
 
 No runtime dependencies; needs `git` and `ruff` (falls back to `uvx ruff`).

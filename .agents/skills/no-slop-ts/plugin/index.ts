@@ -9,10 +9,12 @@ import { noPseudoWrapsRule } from "./rules/no-pseudo-wraps.ts";
 import { noReflectApplyRule } from "./rules/no-reflect-apply.ts";
 import { noReflectGetRule } from "./rules/no-reflect-get.ts";
 import { noRuntimeTypeofRule } from "./rules/no-runtime-typeof.ts";
+import { noThinJsdocRule } from "./rules/no-thin-jsdoc.ts";
 import { noForbiddenTermInSymbolNamesRule } from "./rules/no-shape-in-symbol-names.ts";
 import { noUnknownParametersRule } from "./rules/no-unknown-parameters.ts";
 import { noUnknownReturnsRule } from "./rules/no-unknown-returns.ts";
 import { noUnknownTypeAliasesRule } from "./rules/no-unknown-type-aliases.ts";
+import { noUnpaddedBlocksRule } from "./rules/no-unpadded-blocks.ts";
 import { noUnsafeDictionaryTypeRule } from "./rules/no-unsafe-dictionary-type.ts";
 import { noWidenThenAssertRule } from "./rules/no-widen-then-assert.ts";
 import { requireSafetyCommentForTypeAssertionRule } from "./rules/require-safety-comment-for-type-assertion.ts";
@@ -32,9 +34,11 @@ const antiSlopPlugin = eslintCompatPlugin({
 		"no-runtime-typeof": noRuntimeTypeofRule,
 		"no-unsafe-dictionary-type": noUnsafeDictionaryTypeRule,
 		"no-shape-in-symbol-names": noForbiddenTermInSymbolNamesRule,
+		"no-thin-jsdoc": noThinJsdocRule,
 		"no-unknown-parameters": noUnknownParametersRule,
 		"no-unknown-returns": noUnknownReturnsRule,
 		"no-unknown-type-aliases": noUnknownTypeAliasesRule,
+		"no-unpadded-blocks": noUnpaddedBlocksRule,
 		"no-widen-then-assert": noWidenThenAssertRule,
 		"require-safety-comment-for-type-assertion": requireSafetyCommentForTypeAssertionRule,
 	},

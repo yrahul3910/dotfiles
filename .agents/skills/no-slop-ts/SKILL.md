@@ -25,6 +25,11 @@ A deterministic slop check for TS/JS code you just wrote--the sibling of the `no
 
    The upstream `no-unknown-parameters`, `no-unknown-returns`, and `no-unknown-type-aliases` rules remain vendored but are disabled locally. `unknown` is the type-safe choice when a value still needs validation or narrowing; the checker should reject fabricated evidence, not honest uncertainty.
 
+   Two local rules, not from upstream, enforce the layout half of the `code-style` skill:
+
+   - `no-unpadded-blocks` (error) -- every multi-line `if`, loop, `try`, `switch`, function, class, interface, enum, namespace, class member with a body, or function-valued `const` needs a blank line before and after it. Short guards whose whole body is one simple statement are exempt, as is the first or last member of a body.
+   - `no-thin-jsdoc` (warn) -- a one-line JSDoc on a function that is 20+ lines long or throws in 2+ places; document the contract instead.
+
 3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override).
 
 Needs `git` and `bun`; oxlint comes from this skill's own node_modules (`bun install` here once -- setup.sh does this on new machines).
@@ -41,7 +46,7 @@ no-slop-ts --strict     # warnings also fail the check
 no-slop-ts PATH...      # explicit files/dirs, whole-file (dirs recurse)
 ```
 
-Findings have two levels: **errors** fail the check (exit 1); **warnings** are informational (exit 0, unless `--strict`). The level comes from the severity in [oxlintrc.json](oxlintrc.json)--anti-slop rules and the correctness category are errors, the suspicious category warns. The default mode reports only findings on lines changed relative to `--base` (staged, unstaged, and untracked), so output is about the code just written, not the surrounding codebase. Declaration files (`.d.ts`) are skipped.
+Findings have two levels: **errors** fail the check (exit 1); **warnings** are informational (exit 0, unless `--strict`). The level comes from the severity in [oxlintrc.json](oxlintrc.json)--anti-slop rules and the correctness category are errors, the suspicious category and `no-thin-jsdoc` warn. The default mode reports only findings on lines changed relative to `--base` (staged, unstaged, and untracked), so output is about the code just written, not the surrounding codebase. Declaration files (`.d.ts`) are skipped.
 
 ## Interpreting findings
 
@@ -55,4 +60,4 @@ Findings have two levels: **errors** fail the check (exit 1); **warnings** are i
 
 ## Maintaining the vendored plugin
 
-[plugin/](plugin/) is a vendored copy of upstream's `skills/install-anti-slop/assets/anti-slop` (commit `6d53855`, rules written against oxlint 1.78.0--keep `oxlint` and `@oxlint/plugins` in [package.json](package.json) at the same version as each other). Upstream intends the copy to be owned and edited; tune rules here rather than re-syncing blindly. New rules follow upstream's shape: a `defineRule` module under [plugin/rules/](plugin/rules/), registered in [plugin/index.ts](plugin/index.ts) and enabled in [oxlintrc.json](oxlintrc.json). The checker excludes this skill's own directory in changed-lines mode, but `check.ts` stays clean under its own check (`no-slop-ts <skill-dir>/check.ts`).
+[plugin/](plugin/) is a vendored copy of upstream's `skills/install-anti-slop/assets/anti-slop` (commit `6d53855`, rules written against oxlint 1.78.0--keep `oxlint` and `@oxlint/plugins` in [package.json](package.json) at the same version as each other). Upstream intends the copy to be owned and edited; tune rules here rather than re-syncing blindly. New rules follow upstream's shape: a `defineRule` module under [plugin/rules/](plugin/rules/), registered in [plugin/index.ts](plugin/index.ts) and enabled in [oxlintrc.json](oxlintrc.json); `no-unpadded-blocks` and `no-thin-jsdoc` are local additions in that shape. The checker excludes this skill's own directory in changed-lines mode, but `check.ts` stays clean under its own check (`no-slop-ts <skill-dir>/check.ts`).
