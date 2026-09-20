@@ -81,6 +81,12 @@ Pi retries a failed request at most twice, with provider-level retries disabled.
 
 The footer shows total turn time, time until the first visible text, foreground tool time, time waiting for UI input, and provider error count. Input includes permission dialogs and other questions. Overlapping tools count once, and background jobs can outlive the turn, so their full duration is not included. The measurements are saved as `turn-timing` session entries for later comparison.
 
+## Scrolling and prompt history
+
+Start Pi with `pi --tui-mode fullscreen` (or choose fullscreen in `/settings`). `Ctrl+U` and `Ctrl+D` scroll the transcript by half a page; `End` returns to live output. tmux passes `Ctrl+U` through in alternate-screen apps and keeps its shell scrollback binding elsewhere. To avoid printing the transcript when fullscreen Pi exits, set `"fullscreenExitOutput": "resume-hint"` in `settings.json`.
+
+`promptHistoryScope` in the existing `~/.pi/agent/settings.json` controls Up/Down prompt recall: `"project"` (default) reads saved sessions for the same working directory, `"global"` reads all projects, and `"session"` keeps Pi's session-only behavior. Trusted `.pi/settings.json` files can override it. Run `/reload` after changing it. History uses Pi's 100-entry editor limit, adds current-session prompts last, and works with both the Vim editor's insert mode and `/novim`. It reads saved user-message text, not a separate raw-input log, so expanded templates can appear in recalled prompts. No history is added to model context until submitted.
+
 ## Config checks
 
 From `.pi/agent/extensions`, run `bun install --ignore-scripts` and `bun run check`. This checks types and exercises `/effort` through Pi sessions, fish output delivery, and timing accounting without calling a model provider. The development SDK version matches the Pi version used to verify this config; update it when upgrading Pi.
