@@ -179,6 +179,8 @@ export default function (pi: ExtensionAPI) {
     const fishOperations = createFishOperations();
 
     pi.on("session_start", async (_event, ctx) => {
+        // In-process children share process.cwd() with the interactive parent.
+        if (!ctx.hasUI) return;
         try {
             syncProcessCwd(ctx.cwd);
         } catch (error) {
@@ -191,10 +193,9 @@ export default function (pi: ExtensionAPI) {
         }
     });
 
-    // Extra guard for resumed sessions: make process.cwd() match the active session
-    // before agent tools run, so tools that rely on process cwd do not write to the
-    // directory pi was originally launched from.
+    // Resumed interactive sessions must keep /cd and directory completion aligned.
     pi.on("before_agent_start", async (_event, ctx) => {
+        if (!ctx.hasUI) return;
         try {
             syncProcessCwd(ctx.cwd);
         } catch {
@@ -202,10 +203,8 @@ export default function (pi: ExtensionAPI) {
         }
     });
 
-    pi.on("user_bash", (_event) => {
-        // Honor /cd by using the Node process cwd, which this extension keeps in sync
-        // with resumed sessions and updates from the /cd command.
-        const cwd = process.cwd();
+    pi.on("user_bash", (_event, ctx) => {
+        const cwd = ctx.cwd;
         return {
             operations: {
                 exec(command, _cwd, options) {

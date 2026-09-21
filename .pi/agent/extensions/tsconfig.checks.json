@@ -5,6 +5,7 @@
         "effort/*.ts",
         "tokens-per-second/*.ts",
         "pr-review/*.ts",
-        "prompt-history/*.ts"
+        "prompt-history/*.ts",
+        "cat/*.ts"
     ]
 }
