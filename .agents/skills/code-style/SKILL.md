@@ -56,6 +56,24 @@ However: if there is a nicer way and the effort to change it is not significant,
 - **No changelog comments** (`// added X`, `// fixed bug`). Git records history.
 - **Delete commented-out code.** It's dead weight; git remembers it.
 - No comment that just paraphrases the function name. The name is the comment. Either write a real docstring, or don't write one at all.
+- **A one-line docstring on a non-trivial function is a caption, not documentation.** If the function runs longer than about twenty lines, raises or throws in more than one place, or returns something the name does not fully explain, one sentence cannot state the contract. Write the summary line, a blank line, then what callers get back, what is guaranteed, and how it fails. "Resolve overrides using the project's own installation" above a function that returns a column limit and throws in three places tells the next reader nothing they can rely on. `no-sloppy` (SLOP013) and `no-slop-ts` (`anti-slop/no-thin-jsdoc`) warn on this.
+
+### Docstrings and API documentation
+
+The most important stylistic guides when writing docs are that they MUST be natural and provide sufficient details for readers. You should assume that the docs will be read by future *human* maintainers, and in the case of APIs/library functions, through their LSP (such as when they hover over the symbol in their editor). Unless you are in the rare circumstance that the surrounding code has the same tone and/or you are writing code where the problem requires it for some reason, you should NEVER write docs that have a sterile feeling. Function/class/etc. docs are *not* the place to write prose that sounds like it's from a technical report. There is literally no reason to optimize for brevity.
+
+- Open with the operation or purpose. Imperative mood is appropriate only within the opening line or sentence, whichever is longer. The opening line/sentence does not *need* to be in the imperative mood unless the linter mandates it. After that, make responsibility explicit. "The current conversation remains active if saving fails" states a guarantee provided by the function. "Callers should keep the current conversation active if saving fails" or "You should keep the current conversation active if saving fails" gives caller guidance. Both belong in documentation when accurate; a bare "Keep the current conversation active" leaves the reader guessing who is responsible.
+- Put referenced code identifiers in backticks, including arguments, variables, fields, functions, and types. Use documentation links when they help readers navigate to a referenced declaration.
+- Describe what callers can rely on: units, boundaries, ordering, mutation, failure outcomes, and relevant constraints. Distinguish returned data from side effects. These are possible topics, not a mandatory checklist for every function.
+- Connect non-obvious choices to their reasons or consequences. A small example is useful when it resolves ambiguity; a walkthrough of the implementation usually is not.
+- Give nontrivial private helpers the same care as public APIs when their contracts are subtle. Let detail follow complexity, without mandatory sections, repeated type information, or padding.
+- Descriptive prose need not be stiff or impersonal. Direct address such as "you should" is welcome when it makes caller guidance clearer. Keep the wording natural while distinguishing advice, requirements, and guarantees.
+
+For example, a file-writing function could explain its failure guarantee without narrating each filesystem call:
+
+> Atomically replace `path` with the JSON representation of `value`.
+>
+> A temporary file in the same directory keeps the previous destination intact if writing fails. Readers see either the old file or the complete replacement.
 
 ## Characters and punctuation
 
