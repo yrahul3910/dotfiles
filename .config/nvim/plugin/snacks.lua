@@ -46,6 +46,25 @@ end, '[F]ind [B]uffers')
 nmap('<leader>fh', function()
   Snacks.picker.help()
 end, '[F]ind [H]elp')
+nmap('<leader>fs', function()
+  Snacks.picker.lsp_workspace_symbols {
+    filter = {
+      default = {
+        'Class',
+        'Constructor',
+        'Enum',
+        'Function',
+        'Interface',
+        'Method',
+        'Module',
+        'Namespace',
+        'Package',
+        'Struct',
+        'Trait',
+      },
+    },
+  }
+end, '[F]ind [S]ymbols')
 nmap('<leader>fr', function()
   Snacks.picker.resume()
 end, '[F]ind [R]esume')
@@ -59,5 +78,21 @@ nmap('<leader>go', function()
   Snacks.picker.lsp_outgoing_calls()
 end, '[G]o to [O]utgoing calls')
 nmap('<leader>ws', function()
-  Snacks.picker.lsp_symbols()
-end, '[W]orkspace [S]ymbols')
+  Snacks.picker.lsp_symbols {
+    filter = {
+      default = {
+        'Class',
+        'Constructor',
+        'Enum',
+        'Function',
+        'Interface',
+        'Method',
+        'Module',
+        'Namespace',
+        'Package',
+        'Struct',
+        'Trait',
+      },
+    },
+  }
+end, '[D]ocument [S]ymbols')

@@ -29,8 +29,9 @@ Here are the keybindings. Some come from Kickstart, but most are custom.
     * In here, you can use `<C-q>` to move results to the quickfix list.
   * `fG` finds across all files (except those in gitignore), but has glob support. This is slower than `fg`, though, so it's a trade-off.
   * `fh` searches the help sections.
+  * `fs` searches symbols across the workspace.
   * `fr` resumes the previous search.
-  * `ws` searches the workspace symbols.
+  * `ws` searches document symbols in the current file.
 
 ## Git
 
