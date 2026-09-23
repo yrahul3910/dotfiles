@@ -1,6 +1,13 @@
 import { defineRule } from "@oxlint/plugins";
 import type { ESTree } from "@oxlint/plugins";
 
+/** Return whether an identifier names a statically accessed member owned by another value. */
+function isBorrowedMemberName(node: ESTree.Node): boolean {
+  const parent = node.parent;
+  if (parent === null || parent.type !== "MemberExpression") return false;
+  return parent.property === node && parent.computed === false;
+}
+
 export const noForbiddenTermInSymbolNamesRule = defineRule({
   meta: {
     type: "problem",
@@ -14,10 +21,8 @@ export const noForbiddenTermInSymbolNamesRule = defineRule({
     },
   },
   createOnce(context) {
-    const reportForbiddenSymbolName = (
-      node: ESTree.Node & { name: string },
-    ) => {
-      if (!/(?:.+Shape|_shape|_SHAPE)$/.test(node.name)) return;
+    const reportForbiddenSymbolName = (node: ESTree.Node & { name: string }) => {
+      if (!/(?:.+Shape|_shape|_SHAPE)$/.test(node.name) || isBorrowedMemberName(node)) return;
       context.report({
         node,
         messageId: "forbiddenSymbolName",
