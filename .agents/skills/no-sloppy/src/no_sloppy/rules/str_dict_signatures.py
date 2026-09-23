@@ -1,7 +1,7 @@
 """SLOP004: str-keyed dict args/returns are usually a shape wanting a name.
 
-Concrete dict types only: choosing abstract `Mapping`/`MutableMapping`
-usually signals deliberately dynamic keys, so those are exempt.
+Concrete dict types only: choosing abstract `Mapping`/`MutableMapping` usually signals deliberately dynamic keys, so
+those are exempt.
 """
 
 import ast
@@ -22,12 +22,15 @@ def _signature_annotations(tree: ast.Module) -> Iterator[ast.expr]:
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef):
             args = node.args
+
             for arg in [*args.posonlyargs, *args.args, *args.kwonlyargs]:
                 if arg.annotation is not None:
                     yield arg.annotation
+
             for arg in (args.vararg, args.kwarg):
                 if arg is not None and arg.annotation is not None:
                     yield arg.annotation
+
             if node.returns is not None:
                 yield node.returns
 
@@ -39,6 +42,7 @@ def _str_dicts(annotation: ast.expr) -> Iterator[tuple[ast.Subscript, bool]]:
             continue
         if tail_name(node.value) not in DICT_NAMES:
             continue
+
         match node.slice:
             case ast.Tuple(elts=[key, value, *_]) if tail_name(key) == "str":
                 yield node, tail_name(value) in SHAPELESS_VALUES

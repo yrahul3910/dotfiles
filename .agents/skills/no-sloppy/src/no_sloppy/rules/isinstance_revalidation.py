@@ -1,10 +1,9 @@
 """SLOP008: don't isinstance-check what the annotation already guarantees.
 
-An `isinstance(x, T)` (or `type(x) is T`) on a parameter annotated `x: T`
-re-derives evidence the signature already states; trust the annotation and
-let the type checker enforce it. Only vacuous checks are flagged: narrowing
-a union (`x: int | None` checked with `isinstance(x, int)`) is legitimate
-and stays silent, as does anything syntactically unresolvable.
+An `isinstance(x, T)` (or `type(x) is T`) on a parameter annotated `x: T` re-derives evidence the signature already
+states; trust the annotation and let the type checker enforce it. Only vacuous checks are flagged: narrowing a union
+(`x: int | None` checked with `isinstance(x, int)`) is legitimate and stays silent, as does anything syntactically
+unresolvable.
 """
 
 import ast
@@ -26,6 +25,7 @@ def _type_names(node: ast.expr) -> set[str] | None:
     None means the form is unsupported; callers bail instead of guessing.
     """
     result: set[str] | None
+
     match node:
         case ast.Constant(value=None):
             result = {"None"}
@@ -46,23 +46,26 @@ def _type_names(node: ast.expr) -> set[str] | None:
             result = _joined(list(elts))
         case _:
             result = None
+
     return result
 
 
 def _joined(parts: list[ast.expr]) -> set[str] | None:
     """Union _type_names over parts; None if any part is unsupported."""
     out: set[str] = set()
+
     for part in parts:
-        names = _type_names(part)
-        if names is None:
+        if (names := _type_names(part)) is None:
             return None
         out |= names
+
     return out
 
 
 def _scope_nodes(body: list[ast.stmt]) -> Iterator[ast.AST]:
     """Yield every node in the body without descending into nested scopes."""
     stack: list[ast.AST] = list(body)
+
     while stack:
         node = stack.pop()
         if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef | ast.Lambda | ast.ClassDef):
@@ -85,9 +88,11 @@ def isinstance_revalidation(
     for func in funcs:
         args = func.args
         params: dict[str, tuple[set[str], str]] = {}
+
         for arg in [*args.posonlyargs, *args.args, *args.kwonlyargs]:
             if arg.annotation is not None and (names := _type_names(arg.annotation)):
                 params[arg.arg] = (names, ast.unparse(arg.annotation))
+
         if not params:
             continue
 
@@ -105,8 +110,8 @@ def isinstance_revalidation(
                     continue
 
             annotated, annotation_src = params[pname]
-            checked_names = _type_names(checked)
-            if checked_names is not None and annotated <= checked_names:
+
+            if (checked_names := _type_names(checked)) is not None and annotated <= checked_names:
                 findings.append(
                     Finding(
                         path,

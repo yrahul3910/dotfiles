@@ -1,10 +1,8 @@
 """SLOP006: plain ASCII only -- no emoji, smart punctuation, or decoration.
 
-Accented Latin letters (and combining marks) are allowed outright: they
-decompose to an ASCII base letter and usually spell a name. Other non-ASCII
-letters, marks, and digits may be legitimate natural-language content, so
-they only warn; everything else (emoji, smart punctuation, arrows, box
-drawing, invisible format characters) is an error.
+Accented Latin letters (and combining marks) are allowed outright: they decompose to an ASCII base letter and usually
+spell a name. Other non-ASCII letters, marks, and digits may be legitimate natural-language content, so they only warn;
+everything else (emoji, smart punctuation, arrows, box drawing, invisible format characters) is an error.
 """
 
 import re
@@ -23,12 +21,13 @@ NON_ASCII_RUN = re.compile(r"[^\x00-\x7f]+")
 
 def _classify(ch: str) -> Literal["ok", "warn", "error"]:
     """Sort a character into allowed accent, tolerable text, or slop."""
-    category = unicodedata.category(ch)
-    if category.startswith("M"):
+    if (category := unicodedata.category(ch)).startswith("M"):
         return "ok"
+
     if category.startswith("L"):
         base = unicodedata.normalize("NFKD", ch)[0]
         return "ok" if base.isascii() else "warn"
+
     return "warn" if category.startswith("N") else "error"
 
 
@@ -41,10 +40,12 @@ def non_ascii(
 ) -> list[Finding]:
     """Flag non-ASCII runs; emoji and smart punctuation are errors."""
     findings = []
+
     for lineno, line in enumerate(source.splitlines(), start=1):
         for match in NON_ASCII_RUN.finditer(line):
             run = match.group()
             classes = [_classify(ch) for ch in run]
+
             if "error" in classes:
                 level = "error"
             elif "warn" in classes:
@@ -71,4 +72,5 @@ def non_ascii(
                     level=level,
                 )
             )
+
     return findings

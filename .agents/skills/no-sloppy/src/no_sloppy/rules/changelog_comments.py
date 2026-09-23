@@ -1,9 +1,8 @@
 """SLOP007: no changelog comments -- describe the code, not the diff.
 
-Comments that narrate a change ("now uses X", "previously...", "kept for
-backwards compatibility") document history the reader can't see and git
-already records. Pattern-matched, so this is a heuristic: expect the
-occasional false positive and judge each finding.
+Comments that narrate a change ("now uses X", "previously...", "kept for backwards compatibility") document history the
+reader can't see and git already records. Pattern-matched, so this is a heuristic: expect the occasional false positive
+and judge each finding.
 """
 
 import re
@@ -44,12 +43,13 @@ def changelog_comments(
 ) -> list[Finding]:
     """Flag comments that narrate the change instead of the code."""
     findings = []
+
     for tok in tokens:
         if tok.type != tokenize.COMMENT:
             continue
+
         for pattern in CHANGELOG_PATTERNS:
-            match = pattern.search(tok.string)
-            if match:
+            if match := pattern.search(tok.string):
                 findings.append(
                     Finding(
                         path,
@@ -64,4 +64,5 @@ def changelog_comments(
                     )
                 )
                 break
+
     return findings

@@ -1,10 +1,8 @@
 """SLOP009: don't wrap an entire function body in a broad, swallowing try.
 
-A function whose whole body is one `try` with an `except Exception` (or
-bare except) that never re-raises can't fail visibly -- errors become
-`None`s and log lines. Scope the try to the statements that can actually
-fail. BLE001 flags the broad catch itself; this rule flags the shape.
-Narrow handlers (`except FileNotFoundError: return DEFAULT`) are a
+A function whose whole body is one `try` with an `except Exception` (or bare except) that never re-raises can't fail
+visibly -- errors become `None`s and log lines. Scope the try to the statements that can actually fail. BLE001 flags the
+broad catch itself; this rule flags the shape. Narrow handlers (`except FileNotFoundError: return DEFAULT`) are a
 legitimate idiom and stay silent, as do handlers that re-raise.
 """
 

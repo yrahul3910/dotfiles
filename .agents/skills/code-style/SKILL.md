@@ -9,6 +9,94 @@ You are expected to write code at the level of a senior engineer who cares about
 
 Language-specific rules live in `references/<language>.md`. If a file exists for the language you're reviewing or editing, read it too. For a read-only review, use these rules to identify concrete issues; the formatting and change-verification steps below apply after edits, not as prerequisites to reviewing.
 
+## Blank lines are not optional
+
+This is the rule agents break most often, so it comes first and it is enforced mechanically in both directions. `no-sloppy` and `no-slop-ts` fail the check on a missing blank line (SLOP012, `no-slop-ts/no-unpadded-blocks`) and on a blank line that separates nothing (SLOP015, `no-slop-ts/no-excess-padding`), and warn on long unbroken runs (SLOP016, `no-slop-ts/no-dense-runs`). Dense code with no vertical whitespace is rejected in review even when it works. It applies even when the surrounding file is dense; matching a wall of code is not fitting in, it is spreading the problem.
+
+- **Every multi-line block gets a blank line before it and a blank line after it.** A block is any compound statement that spans more than one line: `if`/`else`, `for`, `while`, `try`, `with`, `match`/`switch`, a nested `def`/`function`, a `class`. In TS/JS it also covers an object `type`, a function-valued `const`, and any statement holding a multi-line callback: `items.forEach((item) => { ... })`, `describe(...)`/`it(...)`, `new Promise((resolve) => { ... })`. The first statement in a body needs nothing above it and the last needs nothing below it. Everywhere else, both sides.
+- **Setup goes above the block, then a blank line.** `result = []` followed directly by `for ...` is a violation. The variables a loop or branch needs are one group; the loop is the next group.
+- **A comment that introduces a block sits directly on top of it.** The blank line goes above the comment, never between the comment and the code it describes. A gap holding only a comment is still a missing blank line, and a blank line under a comment is padding.
+- **The only exemption is a short guard**: an `if` with no `else`, or a loop, whose header and single simple body statement fit on one line each (`if x is None:` / `return`, `if (!ok) throw new Error(...)`, `for (const p of paths) seen.add(p)`). Guards may stack against their neighbours. A wrapped condition, a body statement that wraps (a multi-line `raise` or `throw`), two body statements, a nested block, or an `else` makes it a block that gets padded. A `with` is never a guard. Overload signatures (`@overload`, TS overload declarations) stack against each other and their implementation.
+- **Never write more than about eight consecutive statements without a blank line.** If you have, you skipped a seam. Find it: setup, loop, check, result. Uniform runs (all imports, all assignments or declarations, repeated calls on the same object such as `parser.add_argument(...)`) are one group however long they are.
+- **Blank lines separate groups; they are not padding.** One blank line, not two, inside a body. No blank line directly under a header or `{`, directly above a closing `}`, or between a clause's body and its `else`/`elif`/`except`/`finally`. A body of at most three one-line simple statements reads as one group, so it gets no internal blank line at all. The blank lines are for the reader's eye, not for stretching a short function.
+
+Wrong, in either language:
+
+```python
+    findings = []
+    logical = []
+    for token in tokens:
+        if token.type in SKIPPED:
+            continue
+        if token.type != tokenize.NEWLINE:
+            if token.type != tokenize.NL:
+                logical.append(token)
+            continue
+        if logical:
+            findings.append(summarise(logical))
+        logical = []
+    return findings
+```
+
+```ts
+  let config: LintConfig = {};
+  if (configPath && eslint) {
+    const result = spawnSync(eslint, ["--print-config", filename]);
+    if (result.status !== 0) throw new Error(result.stderr);
+    config = JSON.parse(result.stdout);
+  }
+  let limit = 120;
+  for (const name of RULE_NAMES) {
+    const setting = config.rules?.[name];
+    if (setting !== undefined) limit = Math.min(limit, setting);
+  }
+  limits.set(filename, limit);
+  return limit;
+```
+
+Right:
+
+```python
+    findings = []
+    logical = []
+
+    for token in tokens:
+        if token.type in SKIPPED:
+            continue
+
+        if token.type != tokenize.NEWLINE:
+            if token.type != tokenize.NL:
+                logical.append(token)
+            continue
+
+        if logical:
+            findings.append(summarise(logical))
+        logical = []
+
+    return findings
+```
+
+```ts
+  let config: LintConfig = {};
+
+  if (configPath && eslint) {
+    const result = spawnSync(eslint, ["--print-config", filename]);
+    if (result.status !== 0) throw new Error(result.stderr);
+
+    config = JSON.parse(result.stdout);
+  }
+
+  let limit = 120;
+
+  for (const name of RULE_NAMES) {
+    const setting = config.rules?.[name];
+    if (setting !== undefined) limit = Math.min(limit, setting);
+  }
+
+  limits.set(filename, limit);
+  return limit;
+```
+
 ## Fit in before you stand out
 
 - **Read the surrounding code first.** Match its naming, structure, error handling, logging, and idioms. Local consistency beats any external "best practice." When in Rome.
@@ -16,6 +104,13 @@ Language-specific rules live in `references/<language>.md`. If a file exists for
 - **Use the repo's established way of doing things.** If there's already a pattern for config, HTTP calls, dates, validation, or DI, use it. Introducing a second way to do the same thing is a regression even if your way is "nicer."
 
 However: if there is a nicer way and the effort to change it is not significant, it's worth bringing it up to the user.
+
+## Line wrapping
+
+- **Unnecessary manual wraps are errors, including in docstrings, comments, and documentation.** Keep a statement, expression, signature, import, or short prose paragraph on one line when it fits comfortably within the project's configured linter line-length limit. Use 120 columns for code, comments, and docstrings when no limit is configured. Do not invent an 80-column or 88-column target.
+- A code pseudo-wrap splits a logical line even though joining it, including indentation, would leave at least 20 columns below that limit. Prose pseudo-wraps break a paragraph at least 20 columns early when the next word still fits within the limit, even if the whole paragraph needs multiple lines. Fix these errors before finishing; they are not advisory style suggestions. Apply this to docstrings and documentation as well as executable code.
+- Preserve structural line breaks: separate paragraphs, lists, tables, headings, doctests, code examples, and literal string content whose newlines affect behavior. A comprehension with a filter or a second `for` may put each clause (`for ...`, `if ...`) on its own line; that is structure, not a wrap. Preserve breaks required by syntax or an active project formatter or lint rule. Docstrings and prose comments are not blanket exceptions. A trailing comma, nearby manually wrapped text, or personal preference alone does not justify a pseudo-wrap.
+- **Markdown uses the longest source line that passes the active linter.** If a Markdown linter enforces a maximum, fill each prose line to that limit before wrapping at a word boundary. If no linter limit applies, keep each entire paragraph or list item on one source line, regardless of length. Do not apply the 120-column fallback to Markdown. The editor's soft wrapping handles display width.
 
 ## Don't reinvent or duplicate
 
@@ -56,7 +151,7 @@ However: if there is a nicer way and the effort to change it is not significant,
 - **No changelog comments** (`// added X`, `// fixed bug`). Git records history.
 - **Delete commented-out code.** It's dead weight; git remembers it.
 - No comment that just paraphrases the function name. The name is the comment. Either write a real docstring, or don't write one at all.
-- **A one-line docstring on a non-trivial function is a caption, not documentation.** If the function runs longer than about twenty lines, raises or throws in more than one place, or returns something the name does not fully explain, one sentence cannot state the contract. Write the summary line, a blank line, then what callers get back, what is guaranteed, and how it fails. "Resolve overrides using the project's own installation" above a function that returns a column limit and throws in three places tells the next reader nothing they can rely on. `no-sloppy` (SLOP013) and `no-slop-ts` (`anti-slop/no-thin-jsdoc`) warn on this.
+- **A one-line docstring on a non-trivial function is a caption, not documentation.** If the function runs longer than about twenty lines, raises or throws in more than one place, or returns something the name does not fully explain, one sentence cannot state the contract. Write the summary line, a blank line, then what callers get back, what is guaranteed, and how it fails. "Resolve overrides using the project's own installation" above a function that returns a column limit and throws in three places tells the next reader nothing they can rely on. `no-sloppy` (SLOP013) and `no-slop-ts` (`no-slop-ts/no-thin-jsdoc`) warn on this.
 
 ### Docstrings and API documentation
 
