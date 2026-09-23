@@ -153,6 +153,7 @@ function usesEffect(): boolean {
     // SAFETY: only probed for an "effect" key; a malformed manifest lands in the catch.
     const pkg = JSON.parse(readFileSync(manifest, "utf-8")) as Record<string, Record<string, string>>;
     const sections = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
+
     return sections.some((section) => pkg[section] !== undefined && "effect" in pkg[section]);
   } catch {
     return false;
@@ -330,6 +331,7 @@ function main(): number {
   if (findings.length === 0) {
     const [green, reset] = color ? [GREEN, RESET] : ["", ""];
     console.log(`${green}no-slop-ts: clean (${targets.length} path(s) checked)${reset}`);
+
     return 0;
   }
 
@@ -347,6 +349,7 @@ function main(): number {
 
   const fileCount = new Set(findings.map((f) => f.path)).size;
   console.log(`\nno-slop-ts: ${counts.join(", ")} in ${fileCount} file(s)`);
+
   return errors > 0 || (warns > 0 && strict) ? 1 : 0;
 }
 

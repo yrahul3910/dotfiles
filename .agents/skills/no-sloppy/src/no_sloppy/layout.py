@@ -35,6 +35,8 @@ KEYWORDS: dict[type[ast.stmt], str] = {
     ast.ClassDef: "class",
 }
 COMPOUND = tuple(KEYWORDS)
+# A `return` directly under this many statements or more gets its own paragraph (SLOP012), even in a short body.
+RETURN_GROUP = 2
 BODY_KINDS: dict[type[ast.AST], BodyKind] = {
     ast.Module: "module",
     ast.ClassDef: "class",

@@ -38,6 +38,7 @@ export function lineLength(filename: string): number | undefined {
     configPath ??= ESLINT_CONFIG_FILES.map((name) => join(directory, name)).find(existsSync);
 
     const manifest = join(directory, "package.json");
+
     if (configPath === undefined && existsSync(manifest)) {
       const pkg: { eslintConfig?: LintConfig } = JSON.parse(readFileSync(manifest, "utf8"));
       if (pkg.eslintConfig) configPath = manifest;
@@ -50,8 +51,10 @@ export function lineLength(filename: string): number | undefined {
   }
 
   let config: LintConfig = {};
+
   if (configPath && eslint) {
-    // ESLint evaluates executable configs and per-file overrides; reading their source cannot determine this file's limit.
+    // ESLint evaluates executable configs and per-file overrides; reading their source cannot determine this file's
+    // limit.
     const result = spawnSync(process.execPath, [eslint, "--print-config", filename], {
       cwd: dirname(configPath),
       encoding: "utf8",
@@ -77,6 +80,7 @@ export function lineLength(filename: string): number | undefined {
   }
 
   const configured: number[] = [];
+
   for (const name of ["@stylistic/max-len", "@stylistic/js/max-len", "max-len"]) {
     const setting = config.rules?.[name];
     const severity = Array.isArray(setting) ? setting[0] : setting;
@@ -89,5 +93,6 @@ export function lineLength(filename: string): number | undefined {
 
   const limit = configured.length > 0 ? Math.min(...configured) : undefined;
   if (limit !== undefined) limits.set(filename, limit);
+
   return limit;
 }

@@ -60,6 +60,7 @@ def _forwarded(func: ast.FunctionDef | ast.AsyncFunctionDef) -> str | None:
     arguments = [arg.value if isinstance(arg, ast.Starred) else arg for arg in call.args]
     arguments += [keyword.value for keyword in call.keywords]
     forwards = all(isinstance(arg, ast.Name) and arg.id in params for arg in arguments)
+
     return ast.unparse(call.func) if forwards else None
 
 

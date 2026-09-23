@@ -50,6 +50,7 @@ function family(node: ESTree.Node): string | null {
 
       const call = expression.type === "CallExpression" || expression.type === "AwaitExpression";
       const name = call ? root(expression) : null;
+
       return name === null ? null : `call:${name}`;
     }
     default:

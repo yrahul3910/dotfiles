@@ -38,7 +38,7 @@ class PaddingTests(unittest.TestCase):
                 data = load(path)
                 if data is None:
                     return None
-                return data
+                use(data)
         """
         long = """
             def f(path):
@@ -208,6 +208,63 @@ class PaddingTests(unittest.TestCase):
         assert self.lines(stretched, "SLOP015") == [4]
         assert self.lines(four, "SLOP015") == []
         assert self.lines(guarded, "SLOP015") == []
+
+    def test_return_after_two_statements_gets_its_own_paragraph(self):
+        crowded = """
+            def save(raw, path):
+                config = normalize(raw)
+                cache.set(path, config)
+                return config
+        """
+        padded = crowded.replace("config)\n                return", "config)\n\n                return")
+        [(line, message)] = self.findings(crowded, "SLOP012")
+        assert line == 5
+        assert "`return`" in message
+        assert self.findings(padded, "SLOP012") == []
+        assert self.findings(padded, "SLOP015") == []
+
+    def test_guards_count_toward_the_group(self):
+        source = """
+            def value(path):
+                data = load(path)
+                if not data:
+                    return None
+                return data.value
+        """
+        assert self.lines(source, "SLOP012") == [6]
+
+    def test_return_under_one_statement_or_a_block_stays(self):
+        for source in (
+            "def f(x):\n    y = x + 1\n    return y\n",
+            "def f(x):\n    for item in x:\n        use(item)\n        log(item)\n\n    return sum(x)\n",
+            "def f(x):\n    if x is None:\n        return 0\n    if x < 0:\n        raise ValueError(x)\n"
+            "    return x\n",
+        ):
+            with self.subTest(source=source):
+                assert self.findings(source, "SLOP012") == []
+
+    def test_crowded_return_blank_goes_above_its_comment(self):
+        source = """
+            def save(raw, path):
+                config = normalize(raw)
+                cache.set(path, config)
+                # Hand back the normalized copy.
+                return config
+        """
+        [(line, message)] = self.findings(source, "SLOP012")
+        assert line == 5
+        assert "above the comment" in message
+
+    def test_short_body_blank_goes_above_the_return(self):
+        source = """
+            def save(raw, path):
+                config = normalize(raw)
+
+                cache.set(path, config)
+
+                return config
+        """
+        assert self.lines(source, "SLOP015") == [4]
 
     def test_dense_runs_warn_unless_uniform(self):
         mixed = "def f(a):\n" + "".join(f"    use(a{i})\n    x{i} = a\n" for i in range(5)) + "    return a\n"

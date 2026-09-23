@@ -88,7 +88,7 @@ test("short guards stack but long guards are blocks", () => {
     "  if (!data) {",
     "    return path;",
     "  }",
-    "  return data;",
+    "  use(data);",
     "}",
   );
   const long = lines(
@@ -165,7 +165,6 @@ test("pragmas and top-level comments may float", () => {
     "",
     "  console.log(items);",
     "  log(items);",
-    "  return items;",
     "}",
   );
   assert.deepEqual(lint(source), []);
@@ -208,10 +207,58 @@ test("short bodies of one-line statements need no blank line", () => {
   assert.deepEqual(lint(four), []);
 });
 
+test("a return after two or more statements gets its own paragraph", () => {
+  const crowded = lines(
+    "export function save(raw: Raw, path: string): Config {",
+    "  const config = normalize(raw);",
+    "  cache.set(path, config);",
+    "  return config;",
+    "}",
+  );
+  const padded = crowded.replace("config);\n  return", "config);\n\n  return");
+  const guarded = lines(
+    "export function value(path: string): string | null {",
+    "  const data = load(path);",
+    "  if (!data) return null;",
+    "  return data.value;",
+    "}",
+  );
+
+  assert.deepEqual(lint(crowded), ["no-unpadded-blocks:4"]);
+  assert.deepEqual(lint(padded), []);
+  assert.deepEqual(lint(guarded), ["no-unpadded-blocks:4"]);
+});
+
+test("a return under one statement, a block, or a dispatch chain stays", () => {
+  for (const source of [
+    lines("export function size(text: string): number {", "  const n = text.length;", "  return n;", "}"),
+    lines(
+      "export function name(node: Node): string | null {",
+      "  if (node.type === \"Identifier\") return node.name;",
+      "  if (node.type === \"Literal\") throw new Error(\"literal\");",
+      "  return null;",
+      "}",
+    ),
+    lines(
+      "export function total(items: number[]): number {",
+      "  for (const item of items) {",
+      "    use(item);",
+      "    log(item);",
+      "  }",
+      "",
+      "  return items.length;",
+      "}",
+    ),
+  ]) {
+    assert.deepEqual(lint(source), [], source);
+  }
+});
+
 test("long runs warn unless uniform", () => {
   const mixed = lines(
     "export function f(a: number): number {",
     ...Array.from({ length: 5 }, (_, i) => `  use(a);\n  const x${i} = a;`),
+    "",
     "  return a;",
     "}",
   );
