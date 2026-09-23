@@ -17,21 +17,29 @@ function collectInferTypeParameterNames(
 	names: Set<string>,
 ): void {
 	if (node.type === "TSInferType") names.add(node.typeParameter.name.name);
-	const record = node as unknown as Readonly<Record<string, unknown>>;
-	for (const key of visitorKeys[node.type] ?? []) {
-		const value = record[key];
-		if (isNode(value)) {
-			collectInferTypeParameterNames(value, visitorKeys, names);
-			continue;
-		}
-		if (!Array.isArray(value)) continue;
-		for (const child of value) {
+
+	const fields = new Set(visitorKeys[node.type]);
+
+	for (const [key, value] of Object.entries(node)) {
+		if (!fields.has(key)) continue;
+
+		const children: unknown[] = Array.isArray(value) ? value : [value];
+
+		for (const child of children) {
 			if (isNode(child)) collectInferTypeParameterNames(child, visitorKeys, names);
 		}
 	}
 }
 
-/** Collect type binders that are in scope at a node and can shadow module aliases. */
+/**
+ * Collect the names of the type parameters in scope at `node`, which hide any module-level type alias of the same name.
+ *
+ * The walk goes from `node` up to the program. It gathers the type parameters of every enclosing generic declaration
+ * (function, method, class, interface, type alias), the key of an enclosing mapped type when `node` sits in its `as`
+ * clause or value type, and the `infer` names declared in an enclosing conditional type's extends clause when `node`
+ * sits in its true branch. `visitorKeys` drives the search for those `infer` declarations. The result is a fresh set,
+ * which callers use to skip aliases that a local binder shadows.
+ */
 export function lexicalTypeParameterNames(
 	node: ESTree.Node,
 	visitorKeys: VisitorKeys,

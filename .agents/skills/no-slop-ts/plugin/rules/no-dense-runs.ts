@@ -48,7 +48,8 @@ function family(node: ESTree.Node): string | null {
       const { expression } = node;
       if (expression.type === "AssignmentExpression") return "assign";
 
-      const name = expression.type === "CallExpression" || expression.type === "AwaitExpression" ? root(expression) : null;
+      const call = expression.type === "CallExpression" || expression.type === "AwaitExpression";
+      const name = call ? root(expression) : null;
       return name === null ? null : `call:${name}`;
     }
     default:
@@ -104,7 +105,8 @@ export const noDenseRunsRule = defineRule({
     },
     messages: {
       denseRun:
-        "{{count}} statements in a row without a blank line; find the seams (setup, loop, check, result) and separate the groups.",
+        "{{count}} statements in a row without a blank line; " +
+        "find the seams (setup, loop, check, result) and separate the groups.",
     },
   },
   createOnce(context) {
