@@ -43,12 +43,12 @@ Paths below are under `plugin/`.
 
 In `oxlintrc.json`: `no-unknown-parameters`, `no-unknown-returns`, and `no-unknown-type-aliases` stay off (`unknown` is the honest type for unvalidated values); `no-array-filter-map` is off (`.filter().map()` is idiomatic, and the suggested rewrites trade readability for a gain that matters only on large arrays); `no-runtime-typeof` allows type guards; `no-reduce-accumulator-copy` runs at error with its native companion `oxc/no-accumulating-spread`.
 
-In `oxlintrc.effect.json`: only `no-service-constructor-imports` is enabled. `no-manual-effect-error-tag`, `no-manual-tag-comparison`, `no-manual-tagged-construction`, and `prefer-effect-match` are vendored and registered but off pending a decision.
+In `oxlintrc.effect.json`: `no-service-constructor-imports`, `no-manual-effect-error-tag`, and `no-manual-tagged-construction` run at error; they catch real type-precision and identity mistakes (a broad handler that branches on `_tag` keeps the full error type; a hand-built `{ _tag: ... }` skips the value's constructor). `no-manual-tag-comparison` and `prefer-effect-match` are off: a `switch` on `_tag` with a `never` check and a chained literal ternary are acceptable house style, not mistakes.
 
 ## Pending
 
-- Whether to enable the four new Effect rules in `oxlintrc.effect.json`.
+Nothing.
 
 ## Verification (2026-09-23)
 
-`bun test tests/` passes (29 tests), including `tests/vendored.test.ts`, which pins the merged behavior: upstream's `typeof` existence-probe and borrowed-member exemptions, the local `allowInTypeGuards` option and suffix-only name matching, the safety-comment `markers` option, the accumulator-copy rules at error, `no-array-filter-map` off, and the Effect overlay loading with the new rules registered. The whole skill (`check.ts`, `plugin/`, `tests/`) is clean under its own check.
+`bun test tests/` passes (29 tests), including `tests/vendored.test.ts`, which pins the merged behavior: upstream's `typeof` existence-probe and borrowed-member exemptions, the local `allowInTypeGuards` option and suffix-only name matching, the safety-comment `markers` option, the accumulator-copy rules at error, `no-array-filter-map` off, and the Effect overlay's enabled and disabled rules. The whole skill (`check.ts`, `plugin/`, `tests/`) is clean under its own check.
