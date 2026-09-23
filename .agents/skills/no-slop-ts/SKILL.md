@@ -8,7 +8,7 @@ description: Deterministic anti-slop pass for TypeScript/JavaScript. After writi
 A deterministic slop check for TS/JS code you just wrote--the sibling of the `no-sloppy` skill for Python. Two layers, both driven by [oxlintrc.json](oxlintrc.json) so the same standard applies regardless of the project's own lint setup:
 
 1. **Oxlint overlay** - the `correctness` category at error and `suspicious` at warn.
-2. **anti-slop rules** - the oxlint jsPlugin from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop), vendored in [plugin/](plugin/). Twelve generic rules run at error; they reject low-evidence typing patterns:
+2. **anti-slop rules** - the oxlint jsPlugin from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop), vendored in [plugin/](plugin/). Fourteen generic rules run at error; they reject low-evidence typing patterns and unnecessary manual wrapping:
 
    - `no-chained-type-assertions` -- `x as object as User` fabricates evidence
    - `no-conditional-empty-object-spread` -- `...(cond ? { x } : {})`
@@ -21,8 +21,9 @@ A deterministic slop check for TS/JS code you just wrote--the sibling of the `no
    - `no-unsafe-dictionary-type` -- `Record<string, unknown|any|object|{}>`
    - `no-widen-then-assert` -- widening a known value and asserting it back
    - `require-safety-comment-for-type-assertion` -- each non-`as const` assertion needs a `// SAFETY: <checked invariant>` comment.
+   - `no-reduce-accumulator-copy` -- a reducer that copies its growing accumulator each step (`Object.assign({}, acc, ...)`, `acc.concat(...)`), which is quadratic; mutate a fresh accumulator instead. Oxlint's native `oxc/no-accumulating-spread` covers the `[...acc, item]` form alongside it.
 
-   The upstream `no-unknown-parameters`, `no-unknown-returns`, and `no-unknown-type-aliases` rules remain vendored but are disabled locally. `unknown` is the type-safe choice when a value still needs validation or narrowing; the checker should reject fabricated evidence, not honest uncertainty.
+   The upstream `no-unknown-parameters`, `no-unknown-returns`, and `no-unknown-type-aliases` rules remain vendored but are disabled locally. `unknown` is the type-safe choice when a value still needs validation or narrowing; the checker should reject fabricated evidence, not honest uncertainty. Upstream's `no-array-filter-map` is vendored but off too: `.filter().map()` is idiomatic, and its suggested rewrites trade readability for a gain that matters only on large arrays. Upstream's `require-readable-spacing` is not vendored at all, since it contradicts the local blank-line rules below.
 
    Four local rules, not from upstream, enforce the layout half of the `code-style` skill:
 
@@ -31,7 +32,7 @@ A deterministic slop check for TS/JS code you just wrote--the sibling of the `no
    - `no-dense-runs` (warn) -- more than eight statements in a row without a blank line, unless they are uniform (all imports, all declarations or assignments, or all calls on one root such as `app.use` or `expect`).
    - `no-thin-jsdoc` (warn) -- a one-line JSDoc on a function that is 20+ lines long or throws in 2+ places; document the contract instead.
 
-3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override).
+3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override). Upstream's tagged-value and `Match` rules are vendored and registered but not yet enabled.
 
 Needs `git` and `bun`; oxlint comes from this skill's own node_modules (`bun install` here once -- setup.sh does this on new machines).
 
@@ -61,4 +62,4 @@ Findings have two levels: **errors** fail the check (exit 1); **warnings** are i
 
 ## Maintaining the vendored plugin
 
-[plugin/](plugin/) is a vendored copy of upstream's `skills/install-anti-slop/assets/anti-slop` (commit `6d53855`, rules written against oxlint 1.78.0--keep `oxlint` and `@oxlint/plugins` in [package.json](package.json) at the same version as each other). Upstream intends the copy to be owned and edited; tune rules here rather than re-syncing blindly. New rules follow upstream's shape: a `defineRule` module under [plugin/rules/](plugin/rules/), registered in [plugin/index.ts](plugin/index.ts) and enabled in [oxlintrc.json](oxlintrc.json); `no-unpadded-blocks`, `no-excess-padding`, `no-dense-runs`, and `no-thin-jsdoc` are local additions in that shape, and the three blank-line rules share their layout model in [plugin/shared/vertical-layout.ts](plugin/shared/vertical-layout.ts). Run the rule tests with `bun test tests/`. The checker excludes this skill's own directory in changed-lines mode, but `check.ts` stays clean under its own check (`no-slop-ts <skill-dir>/check.ts`).
+[plugin/](plugin/) is a vendored copy of upstream's `skills/install-anti-slop/assets/anti-slop` (baseline commit `c44ef22`, rules written against oxlint 1.78.0--keep `oxlint` and `@oxlint/plugins` in [package.json](package.json) at the same version as each other). [UPSTREAM.md](UPSTREAM.md) records the baseline, what was left out, and every local change; update it with each merge. Upstream intends the copy to be owned and edited; tune rules here, and bring upstream changes in with a three-way merge from the recorded baseline rather than by re-syncing blindly. New rules follow upstream's shape: a `defineRule` module under [plugin/rules/](plugin/rules/), registered in [plugin/index.ts](plugin/index.ts) and enabled in [oxlintrc.json](oxlintrc.json); `no-unpadded-blocks`, `no-excess-padding`, `no-dense-runs`, and `no-thin-jsdoc` are local additions in that shape, and the three blank-line rules share their layout model in [plugin/shared/vertical-layout.ts](plugin/shared/vertical-layout.ts). Run the rule tests with `bun test tests/`. The checker excludes this skill's own directory in changed-lines mode, but `check.ts` stays clean under its own check (`no-slop-ts <skill-dir>/check.ts`).
