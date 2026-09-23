@@ -8,19 +8,20 @@ are padding instead:
 - a blank line between a comment and the code it describes; the comment sits directly on its code
 - two or more blank lines in a row inside a function or class; one is enough (module level follows PEP 8)
 - any blank line in a function or control-flow body of at most three one-line simple statements, which reads as
-  one group however it is spaced
+  one group however it is spaced; the one exception is the blank line above a `return` that follows two statements,
+  which SLOP012 requires
 
 Each finding anchors on the blank line to delete (or, for a detached comment, to move above the comment).
 """
 
+import ast
 from typing import TYPE_CHECKING
 
-from no_sloppy.layout import COMPOUND, Body, Lines, bodies, visual_start
+from no_sloppy.layout import COMPOUND, RETURN_GROUP, Body, Lines, bodies, visual_start
 
 from . import Finding, rule
 
 if TYPE_CHECKING:
-    import ast
     import tokenize
     from collections.abc import Iterator
     from pathlib import Path
@@ -71,7 +72,7 @@ def _detached(lines: Lines, body: Body, run: tuple[int, int], region: tuple[int,
     while lines.comments.get(top - 1) == body.column:
         top -= 1
 
-    if where == "between" and top == region[0]:
+    if where in {"between", "return"} and top == region[0]:
         return "Blank line between a comment and the code it describes; move it above the comment"
 
     return "Blank line between a comment and the code it describes; delete it so the comment sits on its code"
@@ -82,8 +83,9 @@ def _check_region(
 ) -> Iterator[tuple[int, str]]:
     """Excess blank lines in one gap of `body`, as (line to anchor on, message) pairs.
 
-    `where` is "opening" for the gap under the header, "between" for a gap between siblings, and "closing" for the
-    gap above the next clause, whose keyword is `closer`.
+    `where` is "opening" for the gap under the header, "between" for a gap between siblings, "return" for the gap
+    above a `return` that follows two or more siblings (whose blank line SLOP012 requires, so it never counts as
+    stretching), and "closing" for the gap above the next clause, whose keyword is `closer`.
     """
     first, last = region
 
@@ -110,8 +112,9 @@ def _regions(lines: Lines, body: Body) -> Iterator[tuple[tuple[int, int], str, s
     if body.opener is not None:
         yield (body.opener + 1, visual_start(lines, body.stmts[0]) - 1), "opening", None
 
-    for prev, stmt in zip(body.stmts, body.stmts[1:], strict=False):
-        yield ((prev.end_lineno or prev.lineno) + 1, visual_start(lines, stmt) - 1), "between", None
+    for index, (prev, stmt) in enumerate(zip(body.stmts, body.stmts[1:], strict=False), start=1):
+        where = "return" if isinstance(stmt, ast.Return) and index >= RETURN_GROUP else "between"
+        yield ((prev.end_lineno or prev.lineno) + 1, visual_start(lines, stmt) - 1), where, None
 
     if body.closer is not None:
         last = body.stmts[-1]

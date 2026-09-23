@@ -34,6 +34,7 @@ function lint(source: string, options: RuleOptions = {}, eslintConfig?: string) 
     const report: { diagnostics: { code: string; severity: string; labels: { span: { line: number } }[] }[] } =
       JSON.parse(result.stdout);
     const findings = report.diagnostics.filter((finding) => finding.code.includes("no-pseudo-wraps"));
+
     return { status: result.status, findings };
   } finally {
     rmSync(directory, { recursive: true, force: true });

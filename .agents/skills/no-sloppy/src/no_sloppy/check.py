@@ -267,6 +267,7 @@ def main() -> int:
 
     green, reset = (GREEN, RESET) if color else ("", "")
     print(f"{green}no-sloppy: clean ({len(files)} path(s) checked){reset}")  # noqa: T201
+
     return 0
 
 

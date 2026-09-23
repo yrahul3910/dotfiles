@@ -29,6 +29,7 @@ function docOwner(fn: FunctionNode): ESTree.Node | null {
   const wrapper = owner.parent;
   const exported =
     wrapper !== null && (wrapper.type === "ExportNamedDeclaration" || wrapper.type === "ExportDefaultDeclaration");
+
   return exported ? wrapper : owner;
 }
 
@@ -43,6 +44,7 @@ function thinJsdoc(sourceCode: SourceCode, owner: ESTree.Node): ESTree.Comment |
     .map((line) => line.replace(/^\s*\*+\s?/u, "").trim())
     .filter((line) => line !== "");
   const [only, ...more] = content;
+
   return only !== undefined && more.length === 0 && !only.startsWith("@") ? comment : null;
 }
 

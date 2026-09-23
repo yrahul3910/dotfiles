@@ -175,6 +175,7 @@ function usesEffect(): boolean {
       "peerDependencies",
       "optionalDependencies",
     ];
+
     return sections.some(
       (section) => pkg[section] !== undefined && "effect" in pkg[section],
     );
@@ -384,6 +385,7 @@ function main(): number {
     console.log(
       `${green}no-slop-ts: clean (${targets.length} path(s) checked)${reset}`,
     );
+
     return 0;
   }
 
@@ -403,6 +405,7 @@ function main(): number {
 
   const fileCount = new Set(findings.map((f) => f.path)).size;
   console.log(`\nno-slop-ts: ${counts.join(", ")} in ${fileCount} file(s)`);
+
   return errors > 0 || (warns > 0 && strict) ? 1 : 0;
 }
 

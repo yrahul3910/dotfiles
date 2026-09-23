@@ -43,6 +43,10 @@ const PRAGMA = new RegExp(`^\\s*(?:${PRAGMA_PREFIXES.join("|")})`);
 
 const FUNCTION_TYPES = new Set(["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]);
 
+// A `return` directly under this many statements or more gets its own paragraph (no-unpadded-blocks), even in a
+// short body.
+export const RETURN_GROUP = 2;
+
 function isNode(value: unknown): value is ESTree.Node {
   return typeof value === "object" && value !== null && "type" in value && typeof value.type === "string";
 }
@@ -83,6 +87,7 @@ function nestedBody(node: ESTree.Node, parent: ESTree.Node | null, keys: Visitor
 
     if (parent.callee === node) return "IIFE";
     const name = calleeName(parent.callee);
+
     return name === null ? "callback" : `\`${name}\` callback`;
   }
 

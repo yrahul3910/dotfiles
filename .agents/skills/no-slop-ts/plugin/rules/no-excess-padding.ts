@@ -1,12 +1,14 @@
 import { defineRule } from "@oxlint/plugins";
 
-import { bodyVisitors } from "../shared/vertical-layout.ts";
+import { RETURN_GROUP, bodyVisitors } from "../shared/vertical-layout.ts";
 
 import type { Context } from "@oxlint/plugins";
 import type { Body, Layout } from "../shared/vertical-layout.ts";
 
 type MessageId = "startOfBody" | "endOfBody" | "detachedMove" | "detachedDelete" | "repeated" | "stretched";
-type Region = { first: number; last: number; where: "opening" | "between" | "closing" };
+// "return" marks the gap above a `return` that follows two or more siblings, whose blank line no-unpadded-blocks
+// requires.
+type Region = { first: number; last: number; where: "opening" | "between" | "return" | "closing" };
 
 const MAX_STRETCHED = 3;
 
@@ -42,7 +44,8 @@ function regions(layout: Layout, body: Body): Region[] {
     const previous = statements[index - 1];
     if (previous === undefined) return;
 
-    gaps.push({ first: previous.loc.end.line + 1, last: layout.visualStart(node) - 1, where: "between" });
+    const where = node.type === "ReturnStatement" && index >= RETURN_GROUP ? "return" : "between";
+    gaps.push({ first: previous.loc.end.line + 1, last: layout.visualStart(node) - 1, where });
   });
 
   if (closer !== null) gaps.push({ first: last.loc.end.line + 1, last: closer - 1, where: "closing" });
@@ -73,7 +76,7 @@ function detached(layout: Layout, body: Body, region: Region, start: number): Me
   while (layout.comment(top - 1)) top--;
 
   // A comment right under the previous statement needs the blank line above it instead.
-  return region.where === "between" && top === region.first ? "detachedMove" : "detachedDelete";
+  return region.where !== "opening" && top === region.first ? "detachedMove" : "detachedDelete";
 }
 
 /**
@@ -126,7 +129,8 @@ function checkBody(context: Context, layout: Layout, body: Body): void {
  * instead: a blank line directly inside a body's opening or closing brace (or under a `case x:` line); a blank line
  * between a comment and the code it describes; two or more blank lines in a row anywhere in a body; and any blank
  * line in a function or control-flow block of at most three one-line simple statements, which reads as one group
- * however it is spaced. Each finding anchors on the blank line to delete (or, for a detached comment, to move above
+ * however it is spaced (except the blank line above a `return` that follows two statements, which no-unpadded-blocks
+ * requires). Each finding anchors on the blank line to delete (or, for a detached comment, to move above
  * the comment).
  */
 export const noExcessPaddingRule = defineRule({
