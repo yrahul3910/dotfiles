@@ -24,8 +24,22 @@ export interface Body {
 }
 
 // Tool directives are not prose about the code below them, so they may sit anywhere.
-const PRAGMA =
-  /^\s*(?:@ts-|eslint|oxlint|prettier-ignore|biome-ignore|istanbul|c8\s|#(?:end)?region|global\s|@jsx|@vitest-environment|@jest-environment|\/\s*<reference)/;
+const PRAGMA_PREFIXES = [
+  "@ts-",
+  "eslint",
+  "oxlint",
+  "prettier-ignore",
+  "biome-ignore",
+  "istanbul",
+  "c8\\s",
+  "#(?:end)?region",
+  "global\\s",
+  "@jsx",
+  "@vitest-environment",
+  "@jest-environment",
+  "\\/\\s*<reference",
+];
+const PRAGMA = new RegExp(`^\\s*(?:${PRAGMA_PREFIXES.join("|")})`);
 
 const FUNCTION_TYPES = new Set(["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]);
 
@@ -238,8 +252,10 @@ export class Layout {
 
     const body = guardBody(node);
     const span = node.loc.end.line - node.loc.start.line;
-    const short = body?.type === "BlockStatement" ? span <= 2 && body.loc.start.line === node.loc.start.line : span <= 1;
-    return !short;
+    if (body?.type !== "BlockStatement") return span > 1;
+
+    // A braced guard is short when `{` ends its header line and its one statement takes the next line.
+    return span > 2 || body.loc.start.line !== node.loc.start.line;
   }
 }
 

@@ -139,7 +139,8 @@ export const noExcessPaddingRule = defineRule({
       startOfBody: "Blank line at the start of a body; the first statement sits directly under its opening line.",
       endOfBody: "Blank line at the end of a body; the closing brace sits directly under the last statement.",
       detachedMove: "Blank line between a comment and the code it describes; move it above the comment.",
-      detachedDelete: "Blank line between a comment and the code it describes; delete it so the comment sits on its code.",
+      detachedDelete:
+        "Blank line between a comment and the code it describes; delete it so the comment sits on its code.",
       repeated: "{{count}} blank lines in a row; one blank line separates groups.",
       stretched: "Unnecessary blank line; a body of {{count}} one-line statements reads as one group.",
     },

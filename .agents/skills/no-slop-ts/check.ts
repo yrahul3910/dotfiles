@@ -1,11 +1,10 @@
 #!/usr/bin/env bun
 // no-slop-ts - deterministic slop check for TypeScript/JavaScript.
 //
-// Runs an oxlint overlay (oxlintrc.json in this directory) plus the vendored
-// anti-slop jsPlugin rules from https://github.com/dmmulroy/anti-slop,
-// independent of the project's own lint setup. By default only findings on
-// lines changed relative to HEAD are reported (staged, unstaged, and
-// untracked files), so output is about the code just written.
+// Runs an oxlint overlay (oxlintrc.json in this directory) plus the vendored anti-slop jsPlugin rules from
+// https://github.com/dmmulroy/anti-slop, independent of the project's own lint setup. By default only findings that
+// touch lines changed relative to HEAD are reported (staged, unstaged, and untracked files), so output is about the
+// code just written.
 //
 // Usage:
 //     no-slop-ts                 # changed files, findings on changed lines only
@@ -15,11 +14,10 @@
 //     no-slop-ts --effect        # force the Effect rules on (--no-effect: off)
 //     no-slop-ts PATH...         # explicit files/dirs, whole-file findings
 //
-// The Effect rule group is enabled automatically when the repo's root
-// package.json declares a direct `effect` dependency.
+// The Effect rule group is enabled automatically when the repo's root package.json declares a direct `effect`
+// dependency.
 //
-// Requires bun and git; oxlint comes from this skill's own node_modules
-// (bun install in this directory).
+// Requires bun and git; oxlint comes from this skill's own node_modules (bun install in this directory).
 
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
@@ -103,9 +101,8 @@ function git(...args: string[]): string {
 /**
  * Map changed source files (absolute paths) to their changed line ranges, new-side and inclusive.
  *
- * Covers staged and unstaged edits against `base` plus untracked files, which map to the whole
- * file. Paths that no longer exist, declaration files, and this skill's own sources are dropped.
- * A git failure exits the process.
+ * Covers staged and unstaged edits against `base` plus untracked files, which map to the whole file. Paths that no
+ * longer exist, declaration files, and this skill's own sources are dropped. A git failure exits the process.
  */
 function changedLines(base: string): Map<string, [number, number][]> {
   const root = git("rev-parse", "--show-toplevel").trim();
@@ -343,9 +340,11 @@ function main(): number {
   const warns = findings.length - errors;
   const style = (level: Level) => (color ? LEVEL_COLORS[level] : "");
   const reset = color ? RESET : "";
+
   const counts = [];
   if (errors) counts.push(`${style("error")}${errors} error(s)${reset}`);
   if (warns) counts.push(`${style("warn")}${warns} warning(s)${reset}`);
+
   const fileCount = new Set(findings.map((f) => f.path)).size;
   console.log(`\nno-slop-ts: ${counts.join(", ")} in ${fileCount} file(s)`);
   return errors > 0 || (warns > 0 && strict) ? 1 : 0;

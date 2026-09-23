@@ -40,7 +40,7 @@ function lint(source: string): string[] {
 
     const report: { diagnostics: Diagnostic[] } = JSON.parse(result.stdout);
     return report.diagnostics
-      .map((diagnostic) => ({ rule: diagnostic.code.replace(/^.*\((.+)\)$/, "$1"), line: diagnostic.labels[0]?.span.line }))
+      .map(({ code, labels }) => ({ rule: code.replace(/^.*\((.+)\)$/, "$1"), line: labels[0]?.span.line }))
       .toSorted((left, right) => (left.line ?? 0) - (right.line ?? 0))
       .map(({ rule, line }) => `${rule}:${line}`);
   } finally {
@@ -188,7 +188,13 @@ test("blank lines at the edges of a body and repeated blank lines are padding", 
 });
 
 test("short bodies of one-line statements need no blank line", () => {
-  const stretched = lines("export function f(text: string): number {", "  const n = text.length;", "", "  return n;", "}");
+  const stretched = lines(
+    "export function f(text: string): number {",
+    "  const n = text.length;",
+    "",
+    "  return n;",
+    "}",
+  );
   const four = lines(
     "export function f(text: string): number {",
     "  const n = text.length;",

@@ -3,6 +3,12 @@ import { defineRule } from "@oxlint/plugins";
 import type { ESTree } from "@oxlint/plugins";
 
 type RuntimeFunction = ESTree.ArrowFunctionExpression | ESTree.Function;
+type RuntimeTypeofOptions = { allowInTypeGuards?: boolean };
+
+/** Whether a configured rule option is an options object, as the schema requires; oxlint passes options unparsed. */
+function isRuntimeTypeofOptions(value: unknown): value is RuntimeTypeofOptions {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
 function isRuntimeFunction(node: ESTree.Node): node is RuntimeFunction {
 	return (
@@ -47,18 +53,15 @@ export const noRuntimeTypeofRule = defineRule({
 		defaultOptions: [{ allowInTypeGuards: false }],
 	},
 	createOnce(context) {
+		let guardsAllowed = false;
+
 		return {
-			UnaryExpression(node) {
+			Program() {
 				const option = context.options?.[0];
-				const allowInTypeGuards =
-					typeof option === "object" &&
-					option !== null &&
-					!Array.isArray(option) &&
-					option.allowInTypeGuards === true;
-				if (
-					node.operator === "typeof" &&
-					(!allowInTypeGuards || !isInsideTypeGuard(node))
-				) {
+				guardsAllowed = isRuntimeTypeofOptions(option) && option.allowInTypeGuards === true;
+			},
+			UnaryExpression(node) {
+				if (node.operator === "typeof" && (!guardsAllowed || !isInsideTypeGuard(node))) {
 					context.report({ node, messageId: "runtimeTypeof" });
 				}
 			},

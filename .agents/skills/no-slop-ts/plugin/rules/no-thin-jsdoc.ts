@@ -65,10 +65,9 @@ function check(context: Context, fn: FunctionNode, throws: number): void {
 /**
  * Flag a one-line JSDoc on a function whose contract needs more than a caption.
  *
- * A long function, or one with several `throw` sites, cannot be documented by a single sentence:
- * the reader needs to know what comes back, what is guaranteed, and how it fails. Short functions
- * with an obvious contract keep their one-liners. Advisory, because writing the contract needs
- * judgement about what it actually is.
+ * A long function, or one with several `throw` sites, cannot be documented by a single sentence: the reader needs to
+ * know what comes back, what is guaranteed, and how it fails. Short functions with an obvious contract keep their
+ * one-liners. Advisory, because writing the contract needs judgement about what it actually is.
  */
 export const noThinJsdocRule = defineRule({
   meta: {
@@ -78,7 +77,8 @@ export const noThinJsdocRule = defineRule({
     },
     messages: {
       thinJsdoc:
-        "One-line JSDoc on a {{reason}} function; a caption cannot state the contract. Say what callers get back, what is guaranteed, and how it fails.",
+        "One-line JSDoc on a {{reason}} function; a caption cannot state the contract. " +
+        "Say what callers get back, what is guaranteed, and how it fails.",
     },
   },
   createOnce(context) {

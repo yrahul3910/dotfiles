@@ -64,10 +64,7 @@ export const noUnknownReturnsRule = defineRule({
       const name = referencedAliasName(type);
       if (name === null || visited.has(name) || shadowedAliases.has(name)) return false;
       const alias = aliases.get(name);
-      if (
-        alias === undefined ||
-        (alias.typeParameters !== null && alias.typeParameters !== undefined)
-      ) {
+      if (alias === undefined || (alias.typeParameters !== null && alias.typeParameters !== undefined)) {
         return false;
       }
       const nextVisited = new Set(visited);
