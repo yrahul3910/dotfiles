@@ -108,6 +108,23 @@ test("safety comments accept the default marker, or only the configured markers"
   }
 });
 
-test("the Effect overlay still loads with the new Effect rules registered", () => {
-  assert.deepEqual(lint("export const value = 1;\n", ["no-service-constructor-imports"], "oxlintrc.effect.json"), []);
+test("the Effect overlay enforces tagged-error handlers and constructors, not Match style", () => {
+  const source = lines(
+    'export const recovered = Effect.catchAll((error) => error._tag === "NotFound" ? recover : Effect.fail(error));',
+    'export const ready = { _tag: "Ready", payload };',
+    'export const isReady = value._tag === "Ready";',
+    'export const label = kind === "a" ? first : kind === "b" ? second : fallback;',
+    'export const handled = Effect.catchTag("NotFound", () => recover);',
+  );
+  const rules = [
+    "no-manual-effect-error-tag",
+    "no-manual-tagged-construction",
+    "no-manual-tag-comparison",
+    "prefer-effect-match",
+  ];
+
+  assert.deepEqual(lint(source, rules, "oxlintrc.effect.json"), [
+    "no-manual-effect-error-tag:1",
+    "no-manual-tagged-construction:2",
+  ]);
 });

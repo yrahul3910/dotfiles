@@ -33,7 +33,7 @@ A deterministic slop check for TS/JS code you just wrote--the sibling of the `no
    - `no-dense-runs` (warn) -- more than eight statements in a row without a blank line, unless they are uniform (all imports, all declarations or assignments, or all calls on one root such as `app.use` or `expect`).
    - `no-thin-jsdoc` (warn) -- a one-line JSDoc on a function that is 20+ lines long or throws in 2+ places; document the contract instead.
 
-3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override). Upstream's tagged-value and `Match` rules are vendored and registered but not yet enabled.
+3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override). The same overlay enables `no-manual-effect-error-tag` (branch with `Effect.catchTag` rather than on `_tag` inside a broad handler) and `no-manual-tagged-construction` (build tagged values with their constructor, not a `{ _tag: ... }` literal). Upstream's `no-manual-tag-comparison` and `prefer-effect-match` are vendored but off; `switch` on `_tag` and chained literal ternaries stay acceptable.
 
 Needs `git` and `bun`; oxlint comes from this skill's own node_modules (`bun install` here once -- setup.sh does this on new machines).
 
