@@ -290,6 +290,30 @@ end
 
 nmap('<leader>yf', copy_git_file_path, '[Y]ank [F]ilename')
 
+vim.keymap.set({ 'n', 'x' }, '<leader>yl', function()
+  local file_path = vim.fn.expand '%:.'
+  if file_path == '' then
+    return
+  end
+
+  local first_line = vim.fn.line '.'
+  local last_line = first_line
+  local mode = vim.fn.mode()
+
+  if mode == 'v' or mode == 'V' or mode == '\22' then
+    local anchor = vim.fn.line 'v'
+    first_line, last_line = math.min(first_line, anchor), math.max(first_line, anchor)
+  end
+
+  local location = file_path .. ':' .. first_line
+
+  if last_line ~= first_line then
+    location = location .. '-' .. last_line
+  end
+
+  vim.fn.setreg('+', location)
+end, { desc = '[Y]ank file and [L]ine' })
+
 -- function totally_harmless_dont_worry()
 --   local click_pos = vim.fn.getmousepos()
 --   local target_win = click_pos.winid
