@@ -18,12 +18,14 @@ const functionBoundaryTypes = new Set([
 function unwrapExpressionParentheses(expression: ESTree.Expression): ESTree.Expression {
   let current = expression;
   while (current.type === "ParenthesizedExpression") current = current.expression;
+
   return current;
 }
 
 function unwrapTypeParentheses(type: ESTree.TSType): ESTree.TSType {
   let current = type;
   while (current.type === "TSParenthesizedType") current = current.typeAnnotation;
+
   return current;
 }
 
@@ -38,6 +40,7 @@ function isUnknownOrAnyType(type: ESTree.TSType): boolean {
 
 function isBroadRecordKeyType(type: ESTree.TSType): boolean {
   const unwrapped = unwrapTypeParentheses(type);
+
   if (
     unwrapped.type === "TSStringKeyword" ||
     unwrapped.type === "TSNumberKeyword" ||
@@ -45,6 +48,7 @@ function isBroadRecordKeyType(type: ESTree.TSType): boolean {
   ) {
     return true;
   }
+
   if (unwrapped.type === "TSUnionType") return unwrapped.types.every(isBroadRecordKeyType);
   return unwrapped.type === "TSTypeReference" && typeReferenceName(unwrapped) === "PropertyKey";
 }
@@ -60,6 +64,7 @@ function isBroadRecordType(type: ESTree.TSType): boolean {
 
     if (typeReferenceName(unwrapped) !== "Record") return false;
     const parameters = unwrapped.typeArguments?.params ?? [];
+
     return (
       parameters.length === 2 &&
       parameters[0] !== undefined &&
@@ -72,6 +77,7 @@ function isBroadRecordType(type: ESTree.TSType): boolean {
   if (unwrapped.type !== "TSTypeLiteral" || unwrapped.members.length !== 1) return false;
   const [member] = unwrapped.members;
   const [parameter] = member?.type === "TSIndexSignature" ? member.parameters : [];
+
   return (
     member?.type === "TSIndexSignature" &&
     member.parameters.length === 1 &&
@@ -85,6 +91,7 @@ function broadTypeKind(type: ESTree.TSType): BroadTypeKind | null {
   const unwrapped = unwrapTypeParentheses(type);
   if (unwrapped.type === "TSUnknownKeyword" || unwrapped.type === "TSAnyKeyword") return "top";
   if (unwrapped.type === "TSObjectKeyword") return "object";
+
   return isBroadRecordType(unwrapped) ? "record" : null;
 }
 
@@ -121,6 +128,7 @@ function typesHaveSameSyntax(
 
 function isDefinitelyObjectType(type: ESTree.TSType): boolean {
   const unwrapped = unwrapTypeParentheses(type);
+
   switch (unwrapped.type) {
     case "TSArrayType":
     case "TSConstructorType":
@@ -147,10 +155,12 @@ function isDefinitelyNarrowerRecordType(type: ESTree.TSType): boolean {
   }
 
   if (unwrapped.type !== "TSTypeReference") return false;
+
   if (typeReferenceName(unwrapped) === "Readonly") {
     const [inner] = unwrapped.typeArguments?.params ?? [];
     return inner !== undefined && isDefinitelyNarrowerRecordType(inner);
   }
+
   if (typeReferenceName(unwrapped) !== "Record") return false;
 
   const parameters = unwrapped.typeArguments?.params ?? [];
@@ -161,10 +171,12 @@ function isDefinitelyNarrowerRecordType(type: ESTree.TSType): boolean {
 
 function functionBoundary(node: ESTree.Node): ESTree.Node | null {
   let current = node.parent;
+
   while (current !== null && current.type !== "Program") {
     if (functionBoundaryTypes.has(current.type)) return current;
     current = current.parent;
   }
+
   return null;
 }
 
@@ -185,6 +197,7 @@ function resolvedVariableForIdentifier(
     );
     if (reference !== undefined) return reference.resolved;
   }
+
   return null;
 }
 
@@ -194,6 +207,7 @@ function variableDeclarator(variable: Variable): ESTree.VariableDeclarator | nul
       return definition.node;
     }
   }
+
   return null;
 }
 
@@ -233,6 +247,7 @@ function knownValueEvidence(
     (identifier) => identifier.typeAnnotation !== null && identifier.typeAnnotation !== undefined,
   );
   const annotation = annotatedIdentifier?.typeAnnotation?.typeAnnotation;
+
   if (annotation !== undefined && annotatedIdentifier !== undefined) {
     if (functionBoundary(annotatedIdentifier) !== boundary || broadTypeKind(annotation) !== null) {
       return null;
@@ -241,6 +256,7 @@ function knownValueEvidence(
   }
 
   const declarator = variableDeclarator(variable);
+
   if (
     declarator === null ||
     declarator.parent.type !== "VariableDeclaration" ||
@@ -270,6 +286,7 @@ function widenedBinding(
   readonly boundary: ESTree.Node | null;
 } | null {
   const declarator = variableDeclarator(variable);
+
   if (
     declarator === null ||
     declarator.parent.type !== "VariableDeclaration" ||
@@ -295,6 +312,7 @@ function widenedBinding(
       ? assertedExpression(initializerAssertion)
       : declarator.init;
   const evidence = knownValueEvidence(originalExpression, scopes, boundary, new Set([variable]));
+
   return evidence === null ? null : { broadKind, evidence, declaredAt: declarator.end, boundary };
 }
 
@@ -334,6 +352,7 @@ export const noWidenThenAssertRule = defineRule({
       const variable = resolvedVariableForIdentifier(scopes, expression);
       if (variable === null) return;
       const widened = widenedBinding(variable, scopes);
+
       if (
         widened === null ||
         node.start <= widened.declaredAt ||

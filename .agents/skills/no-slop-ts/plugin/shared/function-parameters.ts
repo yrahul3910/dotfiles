@@ -43,6 +43,7 @@ export function functionParameterBindingName(
 
 	const sourceText = sourceCode.getText(parameter);
 	const annotationStart = parameter.typeAnnotation?.start;
+
 	return annotationStart === undefined
 		? sourceText
 		: sourceText.slice(0, annotationStart - parameter.start).trimEnd();

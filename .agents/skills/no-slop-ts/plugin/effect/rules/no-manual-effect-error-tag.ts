@@ -24,12 +24,11 @@ export const noManualEffectErrorTagRule = defineRule({
 		return {
 			BinaryExpression(node) {
 				const tagMember = tagMemberFromComparison(node);
-				if (
-					tagMember === undefined ||
-					!isInsideBroadEffectHandler(node)
-				) {
+
+				if (tagMember === undefined || !isInsideBroadEffectHandler(node)) {
 					return;
 				}
+
 				context.report({
 					node,
 					messageId: isReasonTagMember(tagMember) ? "reason" : "tag",
@@ -42,6 +41,7 @@ export const noManualEffectErrorTagRule = defineRule({
 				) {
 					return;
 				}
+
 				context.report({
 					node,
 					messageId: isReasonTagMember(node.discriminant) ? "reason" : "tag",

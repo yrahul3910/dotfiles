@@ -12,20 +12,22 @@ const oxlint = join(skill, "node_modules/oxlint/bin/oxlint");
 type Diagnostic = { code: string; labels: { span: { line: number } }[] };
 
 /**
- * Lint `source` with the skill's own overlay config (or `config`, a file in the skill directory) and return
- * `rule:line` for each finding from `rules`, in line order.
+ * Lint `source` with the skill's own overlay config (or `config`, a file in the skill directory or an absolute path)
+ * and return `rule:line` for each finding from `rules`, in line order.
  *
  * Going through the real overlay checks that the vendored rules are registered and configured the way the checker runs
  * them, not only that they work in isolation.
  */
 function lint(source: string, rules: string[], config = "oxlintrc.json"): string[] {
+  // `config` is relative to the skill directory unless it is absolute.
   const directory = mkdtempSync(join(tmpdir(), "vendored-"));
   mkdirSync(join(directory, ".git"));
 
   try {
     writeFileSync(join(directory, "sample.ts"), source);
 
-    const result = spawnSync(process.execPath, [oxlint, "-c", join(skill, config), "--format", "json", "sample.ts"], {
+    const args = [oxlint, "-c", resolve(skill, config), "--format", "json", "sample.ts"];
+    const result = spawnSync(process.execPath, args, {
       cwd: directory,
       encoding: "utf8",
     });
@@ -80,6 +82,30 @@ test("accumulator copies are errors; filter/map chains stay allowed", () => {
   const rules = ["no-reduce-accumulator-copy", "no-accumulating-spread", "no-array-filter-map"];
 
   assert.deepEqual(lint(source, rules), ["no-reduce-accumulator-copy:1", "no-accumulating-spread:2"]);
+});
+
+test("safety comments accept the default marker, or only the configured markers", () => {
+  const source = lines(
+    "// SAFETY: validated by the schema above.",
+    "export const first = raw as User;",
+    "// CHECKED: validated by the schema above.",
+    "export const second = raw as User;",
+  );
+  const rule = "require-safety-comment-for-type-assertion";
+  const directory = mkdtempSync(join(tmpdir(), "markers-"));
+  const custom = join(directory, "markers.json");
+
+  try {
+    // A whitespace-only marker satisfies the schema but is dropped, leaving only CHECKED.
+    const plugin = { name: "anti-slop", specifier: join(skill, "plugin/index.ts") };
+    const rules = { [`anti-slop/${rule}`]: ["error", { markers: ["CHECKED", " "] }] };
+    writeFileSync(custom, JSON.stringify({ jsPlugins: [plugin], rules }));
+
+    assert.deepEqual(lint(source, [rule]), [`${rule}:4`]);
+    assert.deepEqual(lint(source, [rule], custom), [`${rule}:2`]);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });
 
 test("the Effect overlay still loads with the new Effect rules registered", () => {

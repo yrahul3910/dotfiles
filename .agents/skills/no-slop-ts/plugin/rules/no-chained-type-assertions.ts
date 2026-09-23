@@ -12,6 +12,7 @@ function unwrapParenthesizedExpression(expression: ESTree.Expression): ESTree.Ex
   while (current.type === "ParenthesizedExpression") {
     current = current.expression;
   }
+
   return current;
 }
 

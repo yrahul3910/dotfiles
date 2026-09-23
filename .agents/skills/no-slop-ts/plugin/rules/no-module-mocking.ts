@@ -16,6 +16,7 @@ function isTestFrameworkObject(
   expression: ESTree.Expression,
 ): expression is ESTree.IdentifierReference {
   if (expression.type !== "Identifier") return false;
+
   if (
     (expression.name === "vi" || expression.name === "jest") &&
     sourceCode.isGlobalReference(expression)
@@ -27,12 +28,14 @@ function isTestFrameworkObject(
   if (variable === null || variable.defs.length === 0) {
     return expression.name === "vi" || expression.name === "jest";
   }
+
   return variable.defs.some((definition) => {
     if (definition.type !== "ImportBinding" || definition.parent?.type !== "ImportDeclaration") {
       return false;
     }
     const source = definition.parent.source.value;
     const name = importedName(definition.node);
+
     return (source === "vitest" && name === "vi") || (source === "@jest/globals" && name === "jest");
   });
 }
@@ -51,6 +54,7 @@ function moduleMockCall(sourceCode: SourceCode, callee: ESTree.Expression): bool
     : property.type === "Identifier"
       ? property.name
       : null;
+
   return method !== null && moduleMockMethods.has(method);
 }
 

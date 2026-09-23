@@ -47,23 +47,27 @@ export function lexicalTypeParameterNames(
 	const names = new Set<string>();
 	let descendant: ESTree.Node = node;
 	let current: ESTree.Node | null = node;
+
 	while (current !== null && current.type !== "Program") {
 		if ("typeParameters" in current) {
 			for (const parameter of current.typeParameters?.params ?? []) {
 				names.add(parameter.name.name);
 			}
 		}
+
 		if (
 			current.type === "TSMappedType" &&
 			(descendant === current.nameType || descendant === current.typeAnnotation)
 		) {
 			names.add(current.key.name);
 		}
+
 		if (current.type === "TSConditionalType" && descendant === current.trueType) {
 			collectInferTypeParameterNames(current.extendsType, visitorKeys, names);
 		}
 		descendant = current;
 		current = current.parent;
 	}
+
 	return names;
 }

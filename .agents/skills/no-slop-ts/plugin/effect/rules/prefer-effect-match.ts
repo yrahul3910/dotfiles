@@ -2,6 +2,11 @@ import { defineRule, type ESTree } from "@oxlint/plugins";
 
 const equalityOperators = new Set(["==", "===", "!=", "!=="]);
 
+/** Whether `node` is a literal, counting a template literal without substitutions. */
+function isLiteral(node: ESTree.Node): boolean {
+	return node.type === "Literal" || (node.type === "TemplateLiteral" && node.expressions.length === 0);
+}
+
 export const preferEffectMatchRule = defineRule({
 	meta: {
 		type: "problem",
@@ -15,10 +20,6 @@ export const preferEffectMatchRule = defineRule({
 		},
 	},
 	createOnce(context) {
-		const isLiteral = (node: ESTree.Node): boolean =>
-			node.type === "Literal" ||
-			(node.type === "TemplateLiteral" && node.expressions.length === 0);
-
 		const comparedValue = (node: ESTree.Expression): string | undefined => {
 			if (
 				node.type !== "BinaryExpression" ||
@@ -26,6 +27,7 @@ export const preferEffectMatchRule = defineRule({
 			) {
 				return undefined;
 			}
+
 			if (isLiteral(node.left)) return context.sourceCode.getText(node.right);
 			if (isLiteral(node.right)) return context.sourceCode.getText(node.left);
 			return undefined;
@@ -39,6 +41,7 @@ export const preferEffectMatchRule = defineRule({
 
 				let alternate = node.alternate;
 				let literalChecks = 1;
+
 				while (alternate.type === "ConditionalExpression") {
 					if (comparedValue(alternate.test) !== value) return;
 					literalChecks += 1;

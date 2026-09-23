@@ -12,6 +12,7 @@ export function unwrapArrayExpression(node: ESTree.Node): ESTree.Node {
   ) {
     node = node.expression;
   }
+
   return node;
 }
 
@@ -20,12 +21,19 @@ export function resolveArrayBinding(sourceCode: SourceCode, node: ESTree.Node): 
   node = unwrapArrayExpression(node);
   if (node.type !== "Identifier") return null;
   let scope: Scope | null = sourceCode.getScope(node);
+
   while (scope !== null) {
     const variable = scope.set.get(node.name);
     if (variable !== undefined) return variable;
     scope = scope.upper;
   }
+
   return null;
+}
+
+/** Whether `node` is a string literal, which names a member statically when used as a computed key. */
+function isStringLiteral(node: ESTree.Node): node is ESTree.StringLiteral {
+  return node.type === "Literal" && typeof node.value === "string";
 }
 
 /** Read static method names, including computed string literals, without evaluating expressions. */
@@ -38,9 +46,10 @@ export function arrayMethodTarget(
   if (!node.computed && property.type === "Identifier") {
     return { name: property.name, object: node.object };
   }
-  if (node.computed && property.type === "Literal" && typeof property.value === "string") {
+  if (node.computed && isStringLiteral(property)) {
     return { name: property.value, object: node.object };
   }
+
   return null;
 }
 
@@ -56,7 +65,16 @@ function isArrayAnnotation(type: ESTree.TSType): boolean {
   );
 }
 
-/** Recognize local array evidence; unknown receivers and iterator pipelines are deliberately excluded. */
+/**
+ * Whether `node` is provably an array from local evidence alone, so array-method rules can report it without type
+ * information.
+ *
+ * The evidence is an array literal; the result of `map`, `filter`, `flatMap`, `slice`, `concat`, `toSorted`,
+ * `toReversed`, or `toSpliced` called on a known array; or an identifier whose binding is annotated with an array or
+ * tuple type, or is a `const` never reassigned and initialized with a known array. Parentheses, optional chains, and
+ * type-only wrappers are looked through. Everything else counts as unknown, including unannotated parameters, iterator
+ * pipelines, and reassigned bindings, so the answer errs toward `false`. `visited` stops cycles between aliases.
+ */
 export function isKnownArrayExpression(
   sourceCode: SourceCode,
   node: ESTree.Node,
@@ -64,6 +82,7 @@ export function isKnownArrayExpression(
 ): boolean {
   node = unwrapArrayExpression(node);
   if (node.type === "ArrayExpression") return true;
+
   if (node.type === "CallExpression") {
     const method = arrayMethodTarget(node.callee);
     return (
@@ -72,15 +91,18 @@ export function isKnownArrayExpression(
       isKnownArrayExpression(sourceCode, method.object, visited)
     );
   }
+
   if (node.type !== "Identifier") return false;
   const variable = resolveArrayBinding(sourceCode, node);
   if (variable === null || visited.has(variable)) return false;
   visited.add(variable);
   if (variable.references.some(reference => reference.isWrite() && !reference.init)) return false;
+
   for (const identifier of variable.identifiers) {
     const annotation = identifier.typeAnnotation?.typeAnnotation;
     if (annotation !== undefined) return isArrayAnnotation(annotation);
   }
+
   for (const definition of variable.defs) {
     if (
       definition.type === "Variable" && definition.node.type === "VariableDeclarator" &&
@@ -90,5 +112,6 @@ export function isKnownArrayExpression(
       return isKnownArrayExpression(sourceCode, definition.node.init, visited);
     }
   }
+
   return false;
 }

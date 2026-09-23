@@ -5,6 +5,7 @@ import type { ESTree } from "@oxlint/plugins";
 function isBorrowedMemberName(node: ESTree.Node): boolean {
   const parent = node.parent;
   if (parent === null || parent.type !== "MemberExpression") return false;
+
   return parent.property === node && parent.computed === false;
 }
 
