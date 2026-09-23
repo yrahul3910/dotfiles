@@ -8,6 +8,7 @@ import { test } from "node:test";
 
 const skill = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const oxlint = join(skill, "node_modules/oxlint/bin/oxlint");
+const lines = (...rows: string[]) => rows.join("\n");
 type RuleOptions = { maxLineLength?: number; fallbackLineLength?: number; margin?: number };
 
 function lint(source: string, options: RuleOptions = {}, eslintConfig?: string) {
@@ -49,7 +50,7 @@ test("short continuations fail as errors", () => {
     assert.equal(result.status, 1);
     assert.equal(result.findings.length, 1);
     assert.equal(result.findings[0].severity, "error");
-    assert.equal(result.findings[0].labels[0].span.line, 2);
+    assert.equal(result.findings[0].labels[0].span.line, 1);
   }
 });
 
@@ -65,12 +66,52 @@ test("doc comments and prose comments reject early wrapping, including long para
   }
 });
 
+test("one finding per wrapped paragraph or statement", () => {
+  const paragraph = "// Return the selected item\n// from the collection when\n// the item satisfies the predicate.";
+  assert.equal(lint(paragraph).findings.length, 1);
+  assert.equal(lint(`${paragraph}\n//\n${paragraph}`).findings.length, 2);
+  assert.equal(lint("const result = transform(\n  inner(\n    value,\n  ),\n);").findings.length, 1);
+});
+
+test("a comment on the first or last line does not protect a wrap", () => {
+  for (const source of [
+    "const result = transform( // Explain the call.\n  value,\n);",
+    "const result = transform(\n  value,\n  /* why */ option);",
+  ]) {
+    assert.equal(lint(source).findings.length, 1, source);
+  }
+});
+
 test("chains too long for one line may break once per link", () => {
   for (const source of [
-    "const ready =\n  firstCondition.isSatisfied() ||\n  secondCondition.isSatisfied() ||\n  thirdCondition.isSatisfied() ||\n  fourth.ok;",
-    "const ok = (\n  (first.value !== null &&\n    first.value !== undefined) ||\n  second.value.params.length > 0 ||\n  third.flag\n);",
-    "const result = someObject\n  .firstMethodName(argumentOne)\n  .secondMethodName(argumentTwo)\n  .thirdMethodName(argumentThree);",
-    'const label = kind === "alpha"\n  ? firstLongerValueName\n  : kind === "beta"\n    ? secondLongerValueName\n    : thirdLongerValueName;',
+    lines(
+      "const ready =",
+      "  firstCondition.isSatisfied() ||",
+      "  secondCondition.isSatisfied() ||",
+      "  thirdCondition.isSatisfied() ||",
+      "  fourth.ok;",
+    ),
+    lines(
+      "const ok = (",
+      "  (first.value !== null &&",
+      "    first.value !== undefined) ||",
+      "  second.value.params.length > 0 ||",
+      "  third.flag",
+      ");",
+    ),
+    lines(
+      "const result = someObject",
+      "  .firstMethodName(argumentOne)",
+      "  .secondMethodName(argumentTwo)",
+      "  .thirdMethodName(argumentThree);",
+    ),
+    lines(
+      'const label = kind === "alpha"',
+      "  ? firstLongerValueName",
+      '  : kind === "beta"',
+      "    ? secondLongerValueName",
+      "    : thirdLongerValueName;",
+    ),
   ]) {
     assert.equal(lint(source).findings.length, 0, source);
   }

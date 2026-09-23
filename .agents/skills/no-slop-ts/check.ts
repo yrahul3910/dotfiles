@@ -38,17 +38,49 @@ const BLUE = "\x1b[1;34m";
 const GREEN = "\x1b[1;32m";
 const LEVEL_COLORS = { error: "\x1b[1;31m", warn: "\x1b[1;33m" };
 
+// A multi-line excerpt longer than MAX_EXCERPT keeps EXCERPT_EDGE lines at each end.
+const MAX_EXCERPT = 12;
+const EXCERPT_EDGE = 5;
+
 type Level = keyof typeof LEVEL_COLORS;
 
 interface Finding {
   path: string; // absolute
   line: number;
+  endLine: number; // last line the finding covers
   column: number;
   span: number; // caret width on the start line
   code: string;
   message: string;
   help?: string;
   level: Level;
+}
+
+interface Source {
+  bytes: Buffer;
+  lines: string[];
+}
+
+const sources = new Map<string, Source | null>();
+
+/** Read `path` once and cache it; null when it is not a readable file. */
+function readSource(path: string): Source | null {
+  if (!sources.has(path)) {
+    let source: Source | null = null;
+
+    try {
+      if (statSync(path).isFile()) {
+        const bytes = readFileSync(path);
+        source = { bytes, lines: bytes.toString("utf-8").split("\n") };
+      }
+    } catch {
+      // unreadable file: the finding renders without an excerpt
+    }
+
+    sources.set(path, source);
+  }
+
+  return sources.get(path) ?? null;
 }
 
 function colorEnabled(): boolean {
@@ -165,9 +197,17 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
   for (const diag of raw.diagnostics ?? []) {
     const label = diag.labels?.[0];
     if (!label) continue; // no span to anchor a finding to
+
+    // Span offsets count UTF-8 bytes. A span that ends just after a newline stops on the line before.
+    const path = resolve(diag.filename);
+    const { offset, length } = label.span;
+    const covered = readSource(path)?.bytes.subarray(offset, offset + length).toString("utf-8") ?? "";
+    const breaks = covered.replace(/\n$/, "").split("\n").length - 1;
+
     findings.push({
-      path: resolve(diag.filename),
+      path,
       line: label.span.line,
+      endLine: label.span.line + breaks,
       column: label.span.column,
       span: label.span.length,
       code: diag.code.replace(/^([\w-]+)\((.+)\)$/, "$1/$2"),
@@ -181,38 +221,56 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
 }
 
 /**
- * Render one finding as a rustc-style block: header, location, and the offending source line
- * with a caret span under it, plus the help text when the finding has one.
+ * Render one finding as a rustc-style block: header, location, and the source lines the finding covers, plus the help
+ * text when the finding has one.
  *
- * `lineText` is undefined when the file could not be read; the block then has no source excerpt.
- * The caret span is clipped to the end of the line.
+ * `lines` holds the file's lines and is undefined when the file could not be read; the block then has no excerpt. A
+ * single-line finding gets a caret span under its columns, clipped to the end of the line. A multi-line finding prints
+ * every line it covers, eliding the middle once there are more than `MAX_EXCERPT` of them so both ends stay visible.
  */
-function render(finding: Finding, lineText: string | undefined, color: boolean): string {
+function render(finding: Finding, lines: string[] | undefined, color: boolean): string {
   const label = finding.level === "warn" ? "warning" : "error";
   const tint = color ? LEVEL_COLORS[finding.level] : "";
   const accent = color ? BLUE : "";
   const bold = color ? BOLD : "";
   const reset = color ? RESET : "";
   const rel = relative(process.cwd(), finding.path) || finding.path;
-  const indent = " ".repeat(String(finding.line).length);
+  const last = Math.min(finding.endLine, lines?.length ?? 0);
 
+  const covered = Array.from({ length: Math.max(last - finding.line + 1, 0) }, (_, i) => finding.line + i);
+  const elided = [...covered.slice(0, EXCERPT_EDGE), null, ...covered.slice(-EXCERPT_EDGE)];
+  const numbers = covered.length > MAX_EXCERPT ? elided : covered;
+
+  const width = Math.max(String(last || finding.line).length, numbers.includes(null) ? 3 : 1);
+  const gutter = `${" ".repeat(width)} ${accent}|${reset}`;
   const out = [
     `${tint}${label}[${finding.code}]${reset}${bold}: ${finding.message}${reset}`,
     `  ${accent}-->${reset} ${rel}:${finding.line}:${finding.column}`,
   ];
 
-  if (lineText !== undefined) {
-    const display = lineText.replaceAll("\t", " ");
-    const width = Math.max(Math.min(finding.span, display.length - finding.column + 1), 1);
-    const num = String(finding.line);
-    out.push(
-      `${indent} ${accent}|${reset}`,
-      `${accent}${num} |${reset} ${display}`,
-      `${indent} ${accent}|${reset} ${" ".repeat(finding.column - 1)}${tint}${"^".repeat(width)}${reset}`,
-    );
+  if (lines !== undefined && numbers.length > 0) {
+    out.push(gutter);
+
+    for (const number of numbers) {
+      if (number === null) {
+        out.push(`${accent}${"...".padStart(width)}${reset}`);
+        continue;
+      }
+
+      const text = (lines[number - 1] ?? "").replaceAll("\t", " ");
+      out.push(`${accent}${String(number).padStart(width)} |${reset} ${text}`);
+    }
+
+    if (numbers.length > 1) {
+      out.push(gutter);
+    } else {
+      const display = (lines[finding.line - 1] ?? "").replaceAll("\t", " ");
+      const span = Math.max(Math.min(finding.span, display.length - finding.column + 1), 1);
+      out.push(`${gutter} ${" ".repeat(finding.column - 1)}${tint}${"^".repeat(span)}${reset}`);
+    }
   }
 
-  if (finding.help) out.push(`${indent} ${accent}=${reset} help: ${finding.help}`);
+  if (finding.help) out.push(`${" ".repeat(width)} ${accent}=${reset} help: ${finding.help}`);
   return out.join("\n");
 }
 
@@ -259,11 +317,15 @@ function main(): number {
   }
 
   const targets = [...scope.keys()].toSorted();
+
+  // A multi-line finding counts when any line it covers changed.
+  const touched = (f: Finding) => {
+    const ranges = scope.get(f.path) ?? [WHOLE_FILE];
+    return ranges.some(([lo, hi]) => f.line <= hi && lo <= f.endLine);
+  };
+
   const findings = runOxlint(targets, effect ?? usesEffect())
-    .filter((f) => {
-      const ranges = scope.get(f.path) ?? [WHOLE_FILE];
-      return ranges.some(([lo, hi]) => f.line >= lo && f.line <= hi);
-    })
+    .filter(touched)
     .toSorted((a, b) => a.path.localeCompare(b.path) || a.line - b.line || a.column - b.column);
 
   const color = colorEnabled();
@@ -274,23 +336,7 @@ function main(): number {
     return 0;
   }
 
-  const sources = new Map<string, string[]>();
-  const blocks = findings.map((finding) => {
-    if (!sources.has(finding.path)) {
-      let lines: string[] = [];
-
-      try {
-        if (statSync(finding.path).isFile()) lines = readFileSync(finding.path, "utf-8").split("\n");
-      } catch {
-        // unreadable file: render without the source line
-      }
-
-      sources.set(finding.path, lines);
-    }
-
-    const lineText = sources.get(finding.path)?.[finding.line - 1];
-    return render(finding, lineText, color);
-  });
+  const blocks = findings.map((finding) => render(finding, readSource(finding.path)?.lines, color));
   console.log(blocks.join("\n\n"));
 
   const errors = findings.filter((f) => f.level === "error").length;
