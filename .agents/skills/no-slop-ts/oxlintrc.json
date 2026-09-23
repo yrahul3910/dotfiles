@@ -1,10 +1,21 @@
 {
-  "jsPlugins": [{ "name": "anti-slop", "specifier": "./plugin/index.ts" }],
+  "jsPlugins": [{ "name": "anti-slop", "specifier": "./plugin/index.ts" }, "@stylistic/eslint-plugin"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
   },
   "rules": {
+    "@stylistic/max-len": [
+      "warn",
+      {
+        "code": 120,
+        "tabWidth": 8,
+        "ignoreUrls": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
+      }
+    ],
     "anti-slop/no-array-filter-map": "off",
     "anti-slop/no-chained-type-assertions": "error",
     "anti-slop/no-conditional-empty-object-spread": "error",

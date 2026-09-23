@@ -108,6 +108,17 @@ test("safety comments accept the default marker, or only the configured markers"
   }
 });
 
+test("lines over 120 columns warn, except long strings", () => {
+  const comment = `// ${"word ".repeat(24)}`;
+  const source = lines(
+    `export const message = "${"x".repeat(120)}";`,
+    `export const total = first + second; ${comment}`,
+    `export const short = first + second; // ${"word ".repeat(10)}`,
+  );
+
+  assert.deepEqual(lint(source, ["max-len"]), ["max-len:2"]);
+});
+
 test("the Effect overlay enforces tagged-error handlers and constructors, not Match style", () => {
   const source = lines(
     'export const recovered = Effect.catchAll((error) => error._tag === "NotFound" ? recover : Effect.fail(error));',

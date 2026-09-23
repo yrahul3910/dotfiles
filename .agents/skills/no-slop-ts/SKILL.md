@@ -7,7 +7,7 @@ description: Deterministic anti-slop pass for TypeScript/JavaScript. After writi
 
 A deterministic slop check for TS/JS code you just wrote--the sibling of the `no-sloppy` skill for Python. Two layers, both driven by [oxlintrc.json](oxlintrc.json) so the same standard applies regardless of the project's own lint setup:
 
-1. **Oxlint overlay** - the `correctness` category at error and `suspicious` at warn.
+1. **Oxlint overlay** - the `correctness` category at error and `suspicious` at warn, plus `@stylistic/max-len` (from `@stylistic/eslint-plugin`, since oxlint has no line-length rule of its own) at warn: lines over 120 columns, counting a tab as 8, unless a string, template literal, regex, or URL is what makes them long. Like no-sloppy's `E501`, the limit is fixed at 120; where a project configures its own, the project wins.
 2. **anti-slop rules** - the oxlint jsPlugin from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop), vendored in [plugin/](plugin/). Fourteen generic rules run at error; they reject low-evidence typing patterns and unnecessary manual wrapping:
 
    - `no-chained-type-assertions` -- `x as object as User` fabricates evidence
@@ -35,7 +35,7 @@ A deterministic slop check for TS/JS code you just wrote--the sibling of the `no
 
 3. **Effect rules (opt-in)** -- `anti-slop-effect/no-service-constructor-imports` via [oxlintrc.effect.json](oxlintrc.effect.json), enabled automatically when the repo's root package.json declares a direct `effect` dependency (`--effect`/`--no-effect` override). The same overlay enables `no-manual-effect-error-tag` (branch with `Effect.catchTag` rather than on `_tag` inside a broad handler) and `no-manual-tagged-construction` (build tagged values with their constructor, not a `{ _tag: ... }` literal). Upstream's `no-manual-tag-comparison` and `prefer-effect-match` are vendored but off; `switch` on `_tag` and chained literal ternaries stay acceptable.
 
-Needs `git` and `bun`; oxlint comes from this skill's own node_modules (`bun install` here once -- setup.sh does this on new machines).
+Needs `git` and `bun`; oxlint and `@stylistic/eslint-plugin` come from this skill's own node_modules (`bun install` here once -- setup.sh does this on new machines).
 
 ## Usage
 
@@ -49,7 +49,7 @@ no-slop-ts --strict     # warnings also fail the check
 no-slop-ts PATH...      # explicit files/dirs, whole-file (dirs recurse)
 ```
 
-Findings have two levels: **errors** fail the check (exit 1); **warnings** are informational (exit 0, unless `--strict`). The level comes from the severity in [oxlintrc.json](oxlintrc.json)--anti-slop rules and the correctness category are errors; the suspicious category, `no-dense-runs`, and `no-thin-jsdoc` warn. The default mode reports only findings that touch lines changed relative to `--base` (staged, unstaged, and untracked), so output is about the code just written, not the surrounding codebase. A multi-line finding (a wrapped statement, a prose paragraph) is reported when any of its lines changed, and prints all of its lines, eliding the middle of long spans. Declaration files (`.d.ts`) are skipped.
+Findings have two levels: **errors** fail the check (exit 1); **warnings** are informational (exit 0, unless `--strict`). The level comes from the severity in [oxlintrc.json](oxlintrc.json)--anti-slop rules and the correctness category are errors; the suspicious category, `@stylistic/max-len`, `no-dense-runs`, and `no-thin-jsdoc` warn. The default mode reports only findings that touch lines changed relative to `--base` (staged, unstaged, and untracked), so output is about the code just written, not the surrounding codebase. A multi-line finding (a wrapped statement, a prose paragraph) is reported when any of its lines changed, and prints all of its lines, eliding the middle of long spans. Declaration files (`.d.ts`) are skipped.
 
 ## Interpreting findings
 

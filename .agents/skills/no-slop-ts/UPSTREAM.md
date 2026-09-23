@@ -32,7 +32,7 @@ Paths below are under `plugin/`.
 - `rules/no-shape-in-symbol-names.ts`: flags only structural suffixes (`UserShape`, `user_shape`, `USER_SHAPE`) instead of any `shape` substring. Upstream's exemption for members of other values (`schema.innerShape`) is merged in.
 - `shared/lexical-type-parameters.ts`: walks child fields with `Object.entries` and the visitor keys instead of an `as unknown as Record` cast, and documents `lexicalTypeParameterNames`.
 - `shared/dictionary-types.ts`: renames `arguments_` to `typeArguments`.
-- Every vendored file: blank lines added wherever the local layout rules require them, and statements that fit within 120 columns joined onto one line. These are layout-only changes, made in their own commit so a future merge can tell them apart.
+- Every vendored file: blank lines added wherever the local layout rules require them, statements that fit within 120 columns joined onto one line, and no line longer than 120 columns. These are layout-only changes, made in their own commit so a future merge can tell them apart.
 - `rules/require-safety-comment-for-type-assertion.ts`: parses its `markers` option through type guards (`isSafetyCommentOptions`, `isMarker`) instead of inline `typeof` checks, with the same behavior.
 - `shared/array-method.ts`: a local `isStringLiteral` guard replaces an inline `typeof` check, and `isKnownArrayExpression` documents what counts as array evidence.
 - `effect/shared/tagged-values.ts`: `propertyName` uses the file's own `isStringLiteral` guard instead of an inline `typeof` check.

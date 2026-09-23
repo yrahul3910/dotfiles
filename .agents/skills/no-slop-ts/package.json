@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@oxlint/plugins": "1.78.0",
+    "@stylistic/eslint-plugin": "5.10.0",
     "oxlint": "1.78.0"
   }
 }

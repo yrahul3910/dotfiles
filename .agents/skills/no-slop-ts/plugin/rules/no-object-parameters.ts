@@ -56,7 +56,9 @@ export const noObjectParametersRule = defineRule({
 				context.report({
 					node: annotation.typeAnnotation,
 					messageId: "objectParameter",
-					data: { parameter: functionParameterBindingName(parameter, context.sourceCode) },
+					data: {
+						parameter: functionParameterBindingName(parameter, context.sourceCode),
+					},
 				});
 			}
 		};

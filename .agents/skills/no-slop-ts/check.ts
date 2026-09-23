@@ -208,7 +208,7 @@ function runOxlint(paths: string[], effect: boolean): Finding[] {
       endLine: label.span.line + breaks,
       column: label.span.column,
       span: label.span.length,
-      code: diag.code.replace(/^([\w-]+)\((.+)\)$/, "$1/$2"),
+      code: diag.code.replace(/^([@\w/-]+)\((.+)\)$/, "$1/$2"),
       message: diag.message,
       help: diag.help,
       level: diag.severity === "warning" ? "warn" : "error",

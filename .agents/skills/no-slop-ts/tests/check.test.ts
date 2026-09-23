@@ -55,3 +55,8 @@ test("long spans elide their middle lines", () => {
   assert.match(output, /\.\.\.\n 26 \| \/\/ line 26 of/);
   assert.doesNotMatch(output, /line 6 of|line 25 of/);
 });
+
+test("scoped plugin rules are named the way a disable comment needs them", () => {
+  const output = check("", `export const total = first + second; // ${"word ".repeat(24)}\n`, ["sample.ts"]);
+  assert.match(output, /warning\[@stylistic\/max-len\]/);
+});
