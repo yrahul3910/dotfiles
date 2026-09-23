@@ -32,6 +32,12 @@ Paths below are under `plugin/`.
 - `rules/no-shape-in-symbol-names.ts`: flags only structural suffixes (`UserShape`, `user_shape`, `USER_SHAPE`) instead of any `shape` substring. Upstream's exemption for members of other values (`schema.innerShape`) is merged in.
 - `shared/lexical-type-parameters.ts`: walks child fields with `Object.entries` and the visitor keys instead of an `as unknown as Record` cast, and documents `lexicalTypeParameterNames`.
 - `shared/dictionary-types.ts`: renames `arguments_` to `typeArguments`.
+- Every vendored file: blank lines added wherever the local layout rules require them, and statements that fit within 120 columns joined onto one line. These are layout-only changes, made in their own commit so a future merge can tell them apart.
+- `rules/require-safety-comment-for-type-assertion.ts`: parses its `markers` option through type guards (`isSafetyCommentOptions`, `isMarker`) instead of inline `typeof` checks, with the same behavior.
+- `shared/array-method.ts`: a local `isStringLiteral` guard replaces an inline `typeof` check, and `isKnownArrayExpression` documents what counts as array evidence.
+- `effect/shared/tagged-values.ts`: `propertyName` uses the file's own `isStringLiteral` guard instead of an inline `typeof` check.
+- `shared/type-alias-resolution.ts`: looks child fields up in a map built with `Object.entries` instead of an `as unknown as Record` cast (keeping visitor-key order), renames `arguments_` to `typeArguments`, and documents `resolvedTypeMatches`.
+- `effect/rules/prefer-effect-match.ts`: `isLiteral` moves to module scope, since it captures nothing.
 
 ## Local configuration
 
@@ -41,8 +47,8 @@ In `oxlintrc.effect.json`: only `no-service-constructor-imports` is enabled. `no
 
 ## Pending
 
-- The vendored upstream code does not yet meet the local layout rules (missing blank lines, dense runs, wraps) and has a few other self-check findings (inline `typeof` in helpers, an `as unknown as Record` cast in `plugin/shared/type-alias-resolution.ts`, `arguments_` there too, two thin JSDoc comments). Cleaning them up is a separate, mechanical change; do it as its own commit so a future merge can recognize it.
+- Whether to enable the four new Effect rules in `oxlintrc.effect.json`.
 
 ## Verification (2026-09-23)
 
-`bun test tests/` passes (28 tests), including `tests/vendored.test.ts`, which pins the merged behavior: upstream's `typeof` existence-probe and borrowed-member exemptions, the local `allowInTypeGuards` option and suffix-only name matching, the accumulator-copy rules at error, `no-array-filter-map` off, and the Effect overlay loading with the new rules registered.
+`bun test tests/` passes (29 tests), including `tests/vendored.test.ts`, which pins the merged behavior: upstream's `typeof` existence-probe and borrowed-member exemptions, the local `allowInTypeGuards` option and suffix-only name matching, the safety-comment `markers` option, the accumulator-copy rules at error, `no-array-filter-map` off, and the Effect overlay loading with the new rules registered. The whole skill (`check.ts`, `plugin/`, `tests/`) is clean under its own check.

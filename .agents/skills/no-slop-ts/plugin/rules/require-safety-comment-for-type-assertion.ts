@@ -22,15 +22,24 @@ function isConstAssertion(node: TypeAssertion): boolean {
   );
 }
 
+type SafetyCommentOptions = { markers?: unknown };
+
+/** Whether a configured rule option is an options object; oxlint passes options unparsed. */
+function isSafetyCommentOptions(value: unknown): value is SafetyCommentOptions {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** Whether `value` can serve as a safety marker: a string with something besides whitespace. */
+function isMarker(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
 function configuredSafetyMarkers(option: unknown): readonly string[] {
-  if (typeof option !== "object" || option === null || !("markers" in option)) {
-    return DEFAULT_SAFETY_MARKERS;
-  }
-  const configured = option.markers;
+  const configured = isSafetyCommentOptions(option) ? option.markers : undefined;
   if (!Array.isArray(configured)) return DEFAULT_SAFETY_MARKERS;
-  const markers = configured.flatMap((marker) =>
-    typeof marker === "string" && marker.trim().length > 0 ? [marker.trim()] : [],
-  );
+
+  const markers = configured.flatMap((marker) => (isMarker(marker) ? [marker.trim()] : []));
+
   return markers.length > 0 ? markers : DEFAULT_SAFETY_MARKERS;
 }
 
@@ -38,10 +47,7 @@ function markerPattern(markers: readonly string[]): RegExp {
   const alternation = markers
     .map((marker) => marker.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`))
     .join("|");
-  return new RegExp(
-    String.raw`(?:^|[^\p{L}\p{N}_])(?:${alternation})\s*:\s*\S`,
-    "u",
-  );
+  return new RegExp(String.raw`(?:^|[^\p{L}\p{N}_])(?:${alternation})\s*:\s*\S`, "u");
 }
 
 function hasSafetyJustificationBefore(
@@ -63,8 +69,10 @@ function hasSafetyComment(
   pattern: RegExp,
 ): boolean {
   let current: ESTree.Node = node;
+
   while (true) {
     if (hasSafetyJustificationBefore(sourceCode, current, node, pattern)) return true;
+
     if (commentOwnerKinds.has(current.type)) {
       const exportDeclaration = current.parent;
       return (
@@ -73,6 +81,7 @@ function hasSafetyComment(
         hasSafetyJustificationBefore(sourceCode, exportDeclaration, node, pattern)
       );
     }
+
     if (current.parent.type === "Program") return false;
     current = current.parent;
   }

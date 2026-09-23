@@ -20,12 +20,14 @@ function isRuntimeFunction(node: ESTree.Node): node is RuntimeFunction {
 
 function isInsideTypeGuard(node: ESTree.Node): boolean {
 	let current: ESTree.Node | null = node.parent;
+
 	while (current !== null && current.type !== "Program") {
 		if (isRuntimeFunction(current)) {
 			return current.returnType?.typeAnnotation.type === "TSTypePredicate";
 		}
 		current = current.parent;
 	}
+
 	return false;
 }
 
@@ -35,6 +37,7 @@ function isExistenceProbe(node: ESTree.UnaryExpression): boolean {
 	if (parent.type !== "BinaryExpression") return false;
 	if (!["===", "!==", "==", "!="].includes(parent.operator)) return false;
 	const other = parent.left === node ? parent.right : parent.left;
+
 	return other.type === "Literal" && other.value === "undefined";
 }
 

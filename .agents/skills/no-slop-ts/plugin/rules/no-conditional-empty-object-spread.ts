@@ -6,6 +6,7 @@ function unwrapParentheses(node: ESTree.Expression): ESTree.Expression {
   while (current.type === "ParenthesizedExpression") {
     current = current.expression;
   }
+
   return current;
 }
 

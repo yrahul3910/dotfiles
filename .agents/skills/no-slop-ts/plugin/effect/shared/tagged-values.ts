@@ -41,6 +41,7 @@ const isBroadEffectCatchCall = (
 
 export const isInsideBroadEffectHandler = (node: ESTree.Node): boolean => {
 	let current: ESTree.Node | null | undefined = node.parent;
+
 	while (current !== null && current !== undefined) {
 		if (
 			current.type === "ArrowFunctionExpression" ||
@@ -51,8 +52,10 @@ export const isInsideBroadEffectHandler = (node: ESTree.Node): boolean => {
 				current.parent.arguments.includes(current)
 			);
 		}
+
 		current = current.parent;
 	}
+
 	return false;
 };
 
@@ -71,12 +74,11 @@ export const propertyName = (
 	if (!property.computed && property.key.type === "Identifier") {
 		return property.key.name;
 	}
-	if (
-		property.key.type === "Literal" &&
-		typeof property.key.value === "string"
-	) {
+
+	if (isStringLiteral(property.key)) {
 		return property.key.value;
 	}
+
 	return undefined;
 };
 
@@ -86,6 +88,7 @@ export const isMatchPatternObject = (node: ESTree.ObjectExpression): boolean => 
 		return false;
 	}
 	const callee = call.callee;
+
 	return (
 		callee.type === "MemberExpression" &&
 		callee.object.type === "Identifier" &&

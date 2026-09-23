@@ -41,6 +41,7 @@ export const noUnknownReturnsRule = defineRule({
           return matches(resolved.typeAnnotation);
         }
         if (resolved.type === "TSUnionType") return resolved.types.some(matches);
+
         if (
           resolved.type !== "TSTypeReference" ||
           resolved.typeName.type !== "Identifier" ||
@@ -49,6 +50,7 @@ export const noUnknownReturnsRule = defineRule({
         ) {
           return false;
         }
+
         const value = resolved.typeArguments?.params[0];
         return value !== undefined && matches(value);
       });
@@ -62,10 +64,7 @@ export const noUnknownReturnsRule = defineRule({
 
     return {
       Program(node) {
-        environment = createTypeAliasEnvironment(
-          node,
-          context.sourceCode.visitorKeys,
-        );
+        environment = createTypeAliasEnvironment(node, context.sourceCode.visitorKeys);
       },
       ArrowFunctionExpression: checkReturnType,
       FunctionDeclaration: checkReturnType,
