@@ -1,11 +1,9 @@
 """SLOP011: no self-praise in comments or docstrings.
 
-Adjectives that advertise the code instead of describing it (see WORDS for
-the list) say nothing a reader can verify and usually arrive with freshly
-generated code. Word-list matching over comments and docstrings only --
-regular strings are user-facing content and stay out of scope. Some of
-these words are legitimate terms of art in some domains, hence heuristic
-level: judge each finding.
+Adjectives that advertise the code instead of describing it (see WORDS for the list) say nothing a reader can verify and
+usually arrive with freshly generated code. Word-list matching over comments and docstrings only -- regular strings are
+user-facing content and stay out of scope. Some of these words are legitimate terms of art in some domains, hence
+heuristic level: judge each finding.
 """
 
 import ast
@@ -90,6 +88,7 @@ def marketing_adjectives(
             ]
 
     src_lines = source.splitlines()
+
     for start, end in _docstring_spans(tree):
         for lineno in range(start, min(end, len(src_lines)) + 1):
             findings += [

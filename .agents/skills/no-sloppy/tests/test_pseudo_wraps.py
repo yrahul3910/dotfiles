@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from no_sloppy.rules import run_rules
-from no_sloppy.rules.pseudo_wraps import line_length
+from no_sloppy.line_limit import line_length
+from no_sloppy.rules import Finding, run_rules
 
 
 class PseudoWrapTests(unittest.TestCase):
@@ -21,17 +21,42 @@ class PseudoWrapTests(unittest.TestCase):
         return [finding for finding in run_rules([self.path]) if finding.code == "SLOP014"]
 
     def test_short_continuations_are_errors(self):
-        for source in (
-            "result = transform(\n    value,\n    option,\n)\n",
-            "def process(\n    value: str,\n) -> str:\n    return value\n",
-            "from package import (\n    first, second,\n)\n",
-            "result = (\n    first + second\n)\n",
+        for source, end in (
+            ("result = transform(\n    value,\n    option,\n)\n", 4),
+            ("def process(\n    value: str,\n) -> str:\n    return value\n", 3),
+            ("from package import (\n    first, second,\n)\n", 3),
+            ("result = (\n    first + second\n)\n", 3),
         ):
             with self.subTest(source=source):
-                findings = self.findings(source)
-                assert len(findings) == 1
-                assert findings[0].level == "error"
-                assert findings[0].start_line == 2
+                [finding] = self.findings(source)
+                assert finding.level == "error"
+                assert (finding.start_line, finding.end_line) == (1, end)
+
+    def test_comments_on_the_first_or_last_line_move_when_joined(self):
+        for source in (
+            "result = run(  # noqa: S603\n    command, check=False\n)\n",
+            "result = run(\n    command, check=False\n)  # Explain the call.\n",
+            "# Explain the call.\nresult = run(\n    command, check=False\n)\n",
+        ):
+            with self.subTest(source=source):
+                assert len(self.findings(source)) == 1
+
+    def test_noqa_anywhere_in_the_span_suppresses(self):
+        assert self.findings("result = transform(\n    value,\n)  # noqa: SLOP014\n") == []
+
+    def test_multi_line_findings_render_every_line_and_elide_long_middles(self):
+        short = Finding(Path("example.py"), 2, 1, "SLOP014", "wrap", end_line=4)
+        long = Finding(Path("example.py"), 1, 1, "SLOP014", "wrap", end_line=30)
+        source = [f"line {number}" for number in range(1, 31)]
+
+        rendered = short.render(source).splitlines()
+        assert [line.split("| ")[-1] for line in rendered[3:6]] == ["line 2", "line 3", "line 4"]
+        assert not any("^" in line for line in rendered)
+
+        rendered = long.render(source).splitlines()
+        shown = [line.split("| ")[-1] for line in rendered if "| line" in line]
+        assert shown == [f"line {number}" for number in (1, 2, 3, 4, 5, 26, 27, 28, 29, 30)]
+        assert any(line.strip() == "..." for line in rendered)
 
     def test_preserves_meaningful_layout(self):
         for source in (
@@ -54,6 +79,7 @@ class PseudoWrapTests(unittest.TestCase):
 
     def test_configured_threshold_can_be_lower_or_higher(self):
         source = 'result = transform(\n    "' + "x" * 60 + '"\n)\n'
+
         for limit in (80, 100, 120, 160):
             (self.root / "ruff.toml").write_text(f"line-length = {limit}\n")
             assert line_length(self.path) == limit
@@ -104,7 +130,8 @@ line after it (D202 forbids one), and the clauses of one statement
 (`else`, `except`, `case`) are not this rule's concern.
 """
 '''
-        assert [finding.start_line for finding in self.findings(source)] == list(range(4, 11))
+        [finding] = self.findings(source)
+        assert (finding.start_line, finding.end_line) == (3, 10)
 
     def test_docstrings_and_prose_comments(self):
         for source in (

@@ -1,10 +1,9 @@
 """SLOP010: no import fallback shims unless optional support was asked for.
 
-`try: import x / except ImportError: x = None` (or a fallback import) is
-optional-dependency handling that rarely matches the actual requirement --
-it defers the failure from import time, where the message is clear, to
-first use, where it isn't. Import the dependency plainly and fail loudly.
-Handlers that re-raise (e.g. with an install hint) stay silent.
+`try: import x / except ImportError: x = None` (or a fallback import) is optional-dependency handling that rarely
+matches the actual requirement -- it defers the failure from import time, where the message is clear, to first use,
+where it isn't. Import the dependency plainly and fail loudly. Handlers that re-raise (e.g. with an install hint) stay
+silent.
 """
 
 import ast

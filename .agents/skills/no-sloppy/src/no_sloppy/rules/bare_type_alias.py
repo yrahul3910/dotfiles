@@ -65,9 +65,8 @@ def _is_strong_type_expr(node: ast.expr) -> bool:
 def _is_type_expr(node: ast.expr) -> bool:
     """Whether the RHS of an assignment is clearly a type expression.
 
-    A `|` union counts only when at least one operand is unambiguous type
-    syntax and every operand could plausibly be a type reference; this keeps
-    runtime unions like `d1 | d2` or `RE_A | RE_B` out.
+    A `|` union counts only when at least one operand is unambiguous type syntax and every operand could plausibly be a
+    type reference; this keeps runtime unions like `d1 | d2` or `RE_A | RE_B` out.
     """
     if _is_strong_type_expr(node):
         return True
