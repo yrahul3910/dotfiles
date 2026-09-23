@@ -73,6 +73,8 @@ test("preserve syntax, content, paragraphs, and documentation structure", () => 
     "const item = {\n  first: 1,\n  second: 2,\n};",
     "/** First paragraph.\n *\n * Second paragraph. */",
     "/**\n * @param item The item to process.\n * @returns The selected result.\n */",
+    "/**\n * Return the selected item.\n */",
+    "/**\n * " + "word ".repeat(22) + "\n * last words.\n */",
     "/**\n * ```ts\n * const result = process(item);\n * console.log(result);\n * ```\n */",
     "/**\n *     const result = process(item);\n *     console.log(result);\n */",
     "/**\n * - First list item.\n * - Second list item.\n */",

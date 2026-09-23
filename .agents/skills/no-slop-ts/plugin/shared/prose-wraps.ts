@@ -5,7 +5,9 @@ export function proseWrapLines(lines: string[], limit: number, margin: number): 
   const findings: number[] = [];
   let fenced = false;
 
-  const content = lines.map((line) => line.replace(/^\s*(?:\/\*\*?|\/\/|\*) ?/, "").replace(/\*\/\s*$/, ""));
+  // Strip the closer first, so a lone ` */` line is empty rather than a stray `/` that reads as the next word.
+  const content = lines.map((line) => line.replace(/\*\/\s*$/, "").replace(/^\s*(?:\/\*\*?|\/\/|\*) ?/, ""));
+
   for (let index = 0; index + 1 < lines.length; index++) {
     const current = content[index];
     const next = content[index + 1];
