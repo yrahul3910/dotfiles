@@ -65,6 +65,21 @@ test("doc comments and prose comments reject early wrapping, including long para
   }
 });
 
+test("chains too long for one line may break once per link", () => {
+  for (const source of [
+    "const ready =\n  firstCondition.isSatisfied() ||\n  secondCondition.isSatisfied() ||\n  thirdCondition.isSatisfied() ||\n  fourth.ok;",
+    "const ok = (\n  (first.value !== null &&\n    first.value !== undefined) ||\n  second.value.params.length > 0 ||\n  third.flag\n);",
+    "const result = someObject\n  .firstMethodName(argumentOne)\n  .secondMethodName(argumentTwo)\n  .thirdMethodName(argumentThree);",
+    'const label = kind === "alpha"\n  ? firstLongerValueName\n  : kind === "beta"\n    ? secondLongerValueName\n    : thirdLongerValueName;',
+  ]) {
+    assert.equal(lint(source).findings.length, 0, source);
+  }
+
+  for (const source of ["if (\n  first ||\n  second\n) run();", "const ok = first\n  .second()\n  .third();"]) {
+    assert.equal(lint(source).findings.length, 1, source);
+  }
+});
+
 test("preserve syntax, content, paragraphs, and documentation structure", () => {
   for (const source of [
     "const result = transform(value, option);",

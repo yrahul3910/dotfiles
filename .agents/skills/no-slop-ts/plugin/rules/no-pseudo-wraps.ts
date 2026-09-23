@@ -19,6 +19,35 @@ function isWrapOptions(value: unknown): value is WrapOptions {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/**
+ * Whether `node` is an inner link of a larger chain that is laid out as one unit: an operand of a binary or logical
+ * expression, a part of a ternary, or a call whose result is the object of the next call in a member chain.
+ *
+ * Only the outermost node of such a chain is measured. A chain too long for one line may break once per operand or
+ * per call; joining just its first two links would leave it half-wrapped, so the inner links never count on their own.
+ * Parentheses are looked through, so `(a || b) && c` is one chain.
+ */
+function isChainLink(node: ESTree.Node): boolean {
+  let child: ESTree.Node = node;
+  let parent = node.parent;
+
+  while (parent?.type === "ParenthesizedExpression") {
+    child = parent;
+    parent = parent.parent;
+  }
+
+  switch (parent?.type) {
+    case "BinaryExpression":
+    case "LogicalExpression":
+    case "ConditionalExpression":
+      return true;
+    case "MemberExpression":
+      return parent.object === child && parent.parent?.type === "CallExpression" && parent.parent.callee === parent;
+    default:
+      return false;
+  }
+}
+
 export const noPseudoWrapsRule = defineRule({
   meta: {
     type: "layout",
@@ -44,7 +73,7 @@ export const noPseudoWrapsRule = defineRule({
     function check(node: ESTree.Node) {
       const source = context.sourceCode;
       const tokens = source.getTokens(node);
-      if (tokens.length === 0) return;
+      if (tokens.length === 0 || isChainLink(node)) return;
 
       // Braced data and block bodies have meaningful structure; template and JSX newlines can affect rendered content.
       if (tokens.some((token) => ["{", "}", "=>"].includes(token.value)) && node.type !== "ImportDeclaration") return;
