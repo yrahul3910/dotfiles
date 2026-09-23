@@ -1,136 +1,94 @@
 import { defineRule } from "@oxlint/plugins";
 
+import { bodyVisitors } from "../shared/vertical-layout.ts";
+
 import type { Context, ESTree } from "@oxlint/plugins";
+import type { Body, Layout } from "../shared/vertical-layout.ts";
 
-function isFunctionWithBody(expression: ESTree.Expression): boolean {
-  return (
-    (expression.type === "FunctionExpression" || expression.type === "ArrowFunctionExpression") &&
-    expression.body !== null &&
-    expression.body.type === "BlockStatement"
-  );
-}
+const GUARD_HINT = " A guard is exempt only when its header and its one body statement each fit on one line.";
 
-/**
- * Keyword naming a block-like node, or null for simple statements, expressions, and fields.
- *
- * Block-like means the node owns a body: control flow, declarations with a body, class members
- * with a body, and a `const`/`let` whose single initializer is a function with a block body.
- * Export wrappers are looked through, so `export function f() {}` is a `function`.
- */
-function blockKeyword(node: ESTree.Node): string | null {
+/** Name of the function an overload signature declares, or null when `node` is not one. */
+function overloadName(node: ESTree.Node): string | null {
   switch (node.type) {
-    case "IfStatement":
-      return "if";
-    case "ForStatement":
-      return "for";
-    case "ForInStatement":
-      return "for...in";
-    case "ForOfStatement":
-      return "for...of";
-    case "WhileStatement":
-      return "while";
-    case "DoWhileStatement":
-      return "do...while";
-    case "TryStatement":
-      return "try";
-    case "SwitchStatement":
-      return "switch";
-    case "BlockStatement":
-      return "block";
-    case "FunctionDeclaration":
-      return "function";
-    case "ClassDeclaration":
-      return "class";
-    case "TSInterfaceDeclaration":
-      return "interface";
-    case "TSEnumDeclaration":
-      return "enum";
-    case "TSModuleDeclaration":
-      return "namespace";
+    case "TSDeclareFunction":
+      return node.id?.name ?? null;
     case "MethodDefinition":
-      return "method";
-    case "StaticBlock":
-      return "static";
-    case "PropertyDefinition":
-      return node.value !== null && isFunctionWithBody(node.value) ? "method" : null;
-    case "VariableDeclaration": {
-      const [only, ...more] = node.declarations;
-      const single = only !== undefined && more.length === 0 ? only.init : null;
-      return single !== null && isFunctionWithBody(single) ? "function" : null;
-    }
+      return node.value.type === "TSEmptyBodyFunctionExpression" && node.key.type === "Identifier"
+        ? node.key.name
+        : null;
     case "ExportNamedDeclaration":
-      return node.declaration === null ? null : blockKeyword(node.declaration);
-    case "ExportDefaultDeclaration":
-      return blockKeyword(node.declaration);
+      return node.declaration === null ? null : overloadName(node.declaration);
     default:
       return null;
   }
 }
 
-function isSimple(node: ESTree.Node): boolean {
-  return blockKeyword(node) === null || node.loc.start.line === node.loc.end.line;
-}
-
-/** Body of an `if` without `else` or of a loop, the only shapes that can be a short guard. */
-function guardBody(node: ESTree.Node): ESTree.Statement | null {
+/** Name of the function or method `node` implements, or null. */
+function implementationName(node: ESTree.Node): string | null {
   switch (node.type) {
-    case "IfStatement":
-      return node.alternate === null ? node.consequent : null;
-    case "ForStatement":
-    case "ForInStatement":
-    case "ForOfStatement":
-    case "WhileStatement":
-    case "DoWhileStatement":
-      return node.body;
+    case "FunctionDeclaration":
+      return node.id?.name ?? null;
+    case "MethodDefinition":
+      return node.key.type === "Identifier" ? node.key.name : null;
+    case "ExportNamedDeclaration":
+      return node.declaration === null ? null : implementationName(node.declaration);
+    case "ExportDefaultDeclaration":
+      return implementationName(node.declaration);
     default:
       return null;
   }
 }
 
-/** Whether `node` is a short guard: an `if` without `else`, or a loop, whose whole body is one simple statement. */
-function isGuard(node: ESTree.Node): boolean {
-  const body = guardBody(node);
-  if (body === null) return false;
-  if (body.type !== "BlockStatement") return isSimple(body);
+/** Report a missing blank line on `anchor`'s visual start, the line the blank line belongs above. */
+function reportMissing(
+  context: Context,
+  layout: Layout,
+  anchor: ESTree.Node,
+  messageId: "missingBefore" | "missingAfter",
+  block: ESTree.Node,
+): void {
+  const line = layout.visualStart(anchor);
+  const text = layout.lines[line - 1] ?? "";
+  const fix = layout.comment(line)
+    ? "add it above the comment, which belongs to the code below it"
+    : "separate logical blocks with a blank line";
 
-  const [only, ...more] = body.body;
-  return only !== undefined && more.length === 0 && isSimple(only);
+  context.report({
+    loc: { start: { line, column: text.length - text.trimStart().length }, end: { line, column: text.length } },
+    messageId,
+    data: { what: layout.label(block) ?? "block", fix, hint: layout.isGuardShaped(block) ? GUARD_HINT : "" },
+  });
 }
 
-function isBlock(node: ESTree.Node): boolean {
-  return blockKeyword(node) !== null && node.loc.end.line > node.loc.start.line && !isGuard(node);
-}
+function checkBody(context: Context, layout: Layout, { statements }: Body): void {
+  statements.forEach((node, index) => {
+    if (!layout.isBlock(node)) return;
 
-function checkSiblings(context: Context, siblings: readonly ESTree.Node[]): void {
-  const { lines } = context.sourceCode;
-  const blankBetween = (endLine: number, startLine: number): boolean =>
-    lines.slice(endLine, startLine - 1).some((line) => line.trim() === "");
+    const previous = statements[index - 1];
+    const overloaded = previous === undefined ? null : overloadName(previous);
+    const chained = overloaded !== null && overloaded === implementationName(node);
 
-  siblings.forEach((node, index) => {
-    const keyword = blockKeyword(node);
-    if (keyword === null || !isBlock(node)) return;
-
-    const previous = siblings[index - 1];
-    if (previous !== undefined && !blankBetween(previous.loc.end.line, node.loc.start.line)) {
-      context.report({ node, messageId: "missingBefore", data: { keyword } });
+    if (previous !== undefined && !chained && !layout.separated(previous, node)) {
+      reportMissing(context, layout, node, "missingBefore", node);
     }
 
     // A following block reports the same gap as its own "before" finding.
-    const following = siblings[index + 1];
-    if (following === undefined || isBlock(following)) return;
-    if (!blankBetween(node.loc.end.line, following.loc.start.line)) {
-      context.report({ node: following, messageId: "missingAfter", data: { keyword } });
-    }
+    const following = statements[index + 1];
+    if (following === undefined || layout.isBlock(following) || layout.separated(node, following)) return;
+
+    reportMissing(context, layout, following, "missingAfter", node);
   });
 }
 
 /**
  * Require a blank line before and after every multi-line block.
  *
- * A multi-line `if`, loop, `try`, `switch`, function, class, interface, enum, namespace, class
- * member with a body, or function-valued `const` is a logical block; running it straight into its
- * neighbours produces a wall of code. Short guards (one simple body statement, no `else`) are
- * exempt, as is the first or last member of a body.
+ * A multi-line `if`, loop, `try`, `switch`, function, class, interface, enum, namespace, object `type`, class member
+ * with a body, or statement holding a multi-line callback (`items.forEach(...)`, `describe(...)`, a function-valued
+ * `const`) is a logical block; running it straight into its neighbours produces a wall of code. Short guards (an
+ * `if` without `else`, or a loop, whose header and single body statement fit on one line each) are exempt, as are an
+ * implementation directly under its overload signatures and the first or last member of a body. A comment directly
+ * above a block belongs to it, so the blank line goes above the comment.
  */
 export const noUnpaddedBlocksRule = defineRule({
   meta: {
@@ -139,20 +97,11 @@ export const noUnpaddedBlocksRule = defineRule({
       description: "Require a blank line before and after every multi-line block.",
     },
     messages: {
-      missingBefore:
-        "No blank line before this multi-line `{{keyword}}` block; separate logical blocks with a blank line.",
-      missingAfter:
-        "No blank line after the multi-line `{{keyword}}` block above; separate logical blocks with a blank line.",
+      missingBefore: "No blank line before this multi-line {{what}}; {{fix}}.{{hint}}",
+      missingAfter: "No blank line after the multi-line {{what}} above; {{fix}}.{{hint}}",
     },
   },
   createOnce(context) {
-    return {
-      Program: (node) => checkSiblings(context, node.body),
-      BlockStatement: (node) => checkSiblings(context, node.body),
-      StaticBlock: (node) => checkSiblings(context, node.body),
-      TSModuleBlock: (node) => checkSiblings(context, node.body),
-      SwitchCase: (node) => checkSiblings(context, node.consequent),
-      ClassBody: (node) => checkSiblings(context, node.body),
-    };
+    return bodyVisitors(context, (layout, body) => checkBody(context, layout, body));
   },
 });
