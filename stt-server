@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Start the local speech-to-text server used by pi-voice-stt (built by setup.sh).
+# Serves POST /v1/audio/transcriptions on http://127.0.0.1:8080.
+set -e
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    cd "$HOME/projects/macos-speech-server"
+    exec .build/release/speech-server "$@"
+else
+    cd "$HOME/projects/whisper.cpp"
+    # whisper-server has no OpenAI route by default; remap its inference path so stt.json's
+    # endpoint works. --convert lets it accept non-WAV uploads via ffmpeg.
+    exec ./build/bin/whisper-server \
+        --host 127.0.0.1 --port 8080 \
+        --inference-path /v1/audio/transcriptions \
+        --convert \
+        -m models/ggml-large-v3-turbo.bin "$@"
+fi

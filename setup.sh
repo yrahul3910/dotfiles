@@ -67,7 +67,7 @@ elif [[ -f /etc/redhat-release ]]; then
     echo ""
     echo ">>> Detected Red Hat-based system, installing software..."
     echo ""
-    sudo dnf install -y zsh vim stow fish python3-neovim cmake fontconfig-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
+    sudo dnf install -y zsh vim stow fish python3-neovim cmake ffmpeg fontconfig-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
     sudo dnf install -y gcc gcc-c++ kernel-devel
 
     sudo dnf copr enable atim/lazygit -y
@@ -79,7 +79,7 @@ elif [[ -f /etc/arch-release ]]; then
     echo ">>> Detected Arch-based system, installing software..."
     echo ""
     sudo pacman -Syu
-    sudo pacman -S zsh vim stow fish neovim ripgrep fzf poppler zoxide yazi bat git-delta lazygit
+    sudo pacman -S zsh vim stow fish neovim ripgrep fzf poppler zoxide yazi bat git-delta lazygit cmake ffmpeg
 
 elif [[ -f /etc/debian_version ]]; then
     # Debian
@@ -93,7 +93,7 @@ elif [[ -f /etc/debian_version ]]; then
 
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
-    sudo apt-get install -y zsh vim build-essential stow poppler rust-bat ripgrep python3-pip git-delta
+    sudo apt-get install -y zsh vim build-essential cmake ffmpeg stow poppler rust-bat ripgrep python3-pip git-delta
 
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
@@ -142,7 +142,7 @@ fi
 
 echo 'export PATH="$PATH:~/.local/bin"' >> ~/.zshrc
 
-cp tmux-sessionizer /usr/local/bin
+cp tmux-sessionizer stt-server /usr/local/bin
 
 # On macOS, VS Code does not follow XDG conventions
 if defaults read com.apple.finder &>/dev/null; then
@@ -159,5 +159,34 @@ ln -s $HOME/configs/.pi/agent/skills/okf/scripts/okf.ts $HOME/.local/bin/okf
 uv tool install -e "$HOME/configs/.agents/skills/no-sloppy"
 bun install --cwd "$HOME/configs/.agents/skills/no-slop-ts" --frozen-lockfile
 ln -sf "$HOME/configs/.agents/skills/no-slop-ts/check.ts" "$HOME/.local/bin/no-slop-ts"
+
+# Local speech-to-text server for pi-voice-stt (see .pi/agent/README.md and stt.json).
+# Both backends serve /v1/audio/transcriptions on 127.0.0.1:8080; start with `stt-server`.
+echo ""
+echo ">>> Setting up local STT server..."
+echo ""
+mkdir -p "$HOME/projects"
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    # Swift package; needs Swift 6.2+ (Xcode 26 / matching CLT) on macOS 15+.
+    if [ ! -d "$HOME/projects/macos-speech-server" ]; then
+        git clone https://github.com/dokterbob/macos-speech-server "$HOME/projects/macos-speech-server"
+    fi
+    (cd "$HOME/projects/macos-speech-server" && swift build -c release)
+else
+    # whisper.cpp with CUDA when nvcc is available, otherwise CPU.
+    if [ ! -d "$HOME/projects/whisper.cpp" ]; then
+        git clone https://github.com/ggml-org/whisper.cpp "$HOME/projects/whisper.cpp"
+    fi
+    (
+        cd "$HOME/projects/whisper.cpp"
+        if command -v nvcc &>/dev/null; then
+            cmake -B build -DGGML_CUDA=1
+        else
+            cmake -B build
+        fi
+        cmake --build build -j --config Release
+        ./models/download-ggml-model.sh large-v3-turbo
+    )
+fi
 
 echo "\n\n===================\nDone! Please restart your terminal.\n===================="
