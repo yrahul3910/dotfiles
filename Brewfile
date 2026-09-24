@@ -45,10 +45,10 @@ brew "llvm"
 brew "lnav"
 # Language Server for the Lua language
 brew "lua-language-server"
+# Polyglot runtime and tool version manager; toolchains are pinned in .config/mise/config.toml
+brew "mise"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
 # Create, run, and share large language models (LLMs)
 brew "ollama"
 # Drop-in replacement for Terraform. Infrastructure as Code Tool
@@ -61,8 +61,6 @@ brew "pi-coding-agent"
 brew "poppler"
 # Protocol buffers (Google's data interchange format)
 brew "protobuf"
-# Interpreted, interactive, object-oriented programming language
-brew "python-freethreading"
 # Tools for and transforming and inspecting PDF files
 brew "qpdf"
 # Search tool like grep and The Silver Searcher

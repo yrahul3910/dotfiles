@@ -170,3 +170,6 @@ set -x PATH $HOME/go/bin $PATH
 
 set -gx GPG_TTY (tty)
 set -gx SOPS_AGE_KEY_FILE ~/.config/sops/age/keys.txt
+
+# Toolchains (Node, Rust, Python, uv) pinned in ~/.config/mise/config.toml
+command -q mise; and mise activate fish | source
