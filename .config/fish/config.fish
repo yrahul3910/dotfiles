@@ -150,6 +150,8 @@ if string match -q "Darwin" -- (uname)
     if test -f /opt/homebrew/bin/brew
       eval "$(/opt/homebrew/bin/brew shellenv)"
     end
+else if test -x /home/linuxbrew/.linuxbrew/bin/brew
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 end
 
 starship init fish | source

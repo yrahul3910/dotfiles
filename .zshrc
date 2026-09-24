@@ -25,9 +25,11 @@ elif [ "${QT_QPA_PLATFORM:-}" = "wayland" ]; then
     unset QT_QPA_PLATFORM
 fi
 
+export HOMEBREW_NO_AUTO_UPDATE=1
 if [ "$(uname)" = "Darwin" ]; then
-    export HOMEBREW_NO_AUTO_UPDATE=1
     export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 function mkcd () {
