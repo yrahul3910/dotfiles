@@ -9,6 +9,8 @@
           "id": "z-ai/glm-5.3:nitro",
           "name": "GLM 5.3 (OpenRouter Nitro)",
           "reasoning": true,
+          "contextWindow": 1048576,
+          "maxTokens": 131072,
           "compat": {
             "openRouterRouting": {
               "ignore": ["gmicloud", "friendli"],

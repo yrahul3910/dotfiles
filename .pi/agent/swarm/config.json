@@ -1,10 +1,11 @@
 {
   "rounds": 3,
+  "thinking": "high",
   "members": [
     {
       "name": "architect",
-      "model": null,
-      "persona": "You favor clean structure, explicit invariants, and long-term maintainability. You push back on hacks and hidden coupling."
+      "model": "openrouter/z-ai/glm-5.3:nitro",
+      "persona": "You favor clean structure, explicit invariants, and long-term maintainability. Name the invariants the design depends on and the exact place each one is enforced. Point at the coupling that makes the next likely change harder, and say what that change is. You push back on hacks and hidden coupling, but show the concrete cost rather than assert it."
     },
     {
       "name": "pragmatist",
