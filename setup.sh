@@ -14,7 +14,7 @@ if [[ "$OS" == "Linux" ]]; then
     fi
 fi
 
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/homebrew/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 step() {
     echo ""
@@ -58,20 +58,6 @@ install_rust() {
     . "$HOME/.cargo/env"
 }
 
-# On macOS, Node is installed via the Brewfile
-install_node() {
-    [[ "$OS" == "Darwin" ]] && return
-    export NVM_DIR="$HOME/.nvm"
-    if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
-        step "Installing Node and nvm..."
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | bash
-    fi
-    set +u
-    . "$NVM_DIR/nvm.sh"
-    [[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
-    nvm install 26
-    set -u
-}
 
 # On macOS, Ghostty (installed via the Brewfile) replaces Kitty
 install_kitty() {
@@ -82,19 +68,7 @@ install_kitty() {
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 }
 
-install_starship() {
-    have starship && return
-    step "Installing Starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-}
 
-# On macOS, zoxide is installed via the Brewfile
-install_zoxide() {
-    [[ "$OS" == "Darwin" ]] && return
-    have zoxide && return
-    step "Installing zoxide..."
-    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-}
 
 install_poetry() {
     have poetry && return
@@ -108,71 +82,34 @@ install_uv() {
     curl -LsSf https://astral.sh/uv/install.sh | sh
 }
 
-install_macos_packages() {
-    step "Detected macOS, installing software..."
-    if ! have brew; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    # Install all macOS packages (brews, casks, Go & Cargo tools) from the Brewfile
-    brew bundle --file="$REPO/Brewfile"
-}
-
-install_redhat_packages() {
-    step "Detected Red Hat-based system, installing software..."
-    sudo dnf install -y zsh vim stow fish python3-neovim cmake ffmpeg fontconfig-devel harfbuzz ripgrep fzf poppler yazi rust-bat git-delta
-    sudo dnf install -y gcc gcc-c++ kernel-devel
-    if ! have lazygit; then
-        sudo dnf copr enable atim/lazygit -y
-        sudo dnf install -y lazygit
-    fi
-}
-
-install_arch_packages() {
-    step "Detected Arch-based system, installing software..."
-    sudo pacman -Syu --noconfirm
-    sudo pacman -S --needed --noconfirm zsh vim stow fish neovim ripgrep fzf poppler zoxide yazi bat git-delta lazygit cmake ffmpeg
-}
-
-install_debian_packages() {
-    step "Detected Debian-based system, installing software..."
-    sudo apt-get update
-    sudo apt-get install -y zsh vim build-essential cmake ffmpeg stow poppler rust-bat ripgrep python3-pip git-delta
-
-    have yazi || cargo install --locked yazi-fm yazi-cli
-
-    if ! have lazygit; then
-        local version tmp
-        version=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-        tmp=$(mktemp -d)
-        curl -Lo "$tmp/lazygit.tar.gz" "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${version}_Linux_x86_64.tar.gz"
-        tar -C "$tmp" -xf "$tmp/lazygit.tar.gz" lazygit
-        sudo install "$tmp/lazygit" /usr/local/bin
-        rm -rf "$tmp"
-    fi
-
-    if ! have fish; then
-        sudo apt-get install -y software-properties-common python3-launchpadlib
-        sudo apt-add-repository -y ppa:fish-shell/release-3
-        sudo apt-get update
-        sudo apt-get install -y fish
-    fi
-}
-
-install_packages() {
-    case "$OS:$DISTRO" in
-        Darwin:*)      install_macos_packages ;;
-        Linux:redhat)  install_redhat_packages ;;
-        Linux:arch)    install_arch_packages ;;
-        Linux:debian)  install_debian_packages ;;
-        *)             echo "Unsupported system: $OS $DISTRO" >&2; exit 1 ;;
+# Homebrew on Linux needs a compiler and a few base tools from the distro.
+install_linux_bootstrap() {
+    step "Installing Homebrew prerequisites..."
+    case "$DISTRO" in
+        redhat) sudo dnf group install -y development-tools
+                sudo dnf install -y procps-ng curl file git ;;
+        arch)   sudo pacman -S --needed --noconfirm base-devel procps-ng curl file git ;;
+        debian) sudo apt-get update
+                sudo apt-get install -y build-essential procps curl file git ;;
+        *)      echo "Unsupported Linux distribution" >&2; exit 1 ;;
     esac
 }
 
-# On macOS, tree-sitter-cli is installed via the Brewfile
-install_tree_sitter() {
-    [[ "$OS" == "Darwin" ]] && return
-    have tree-sitter && return
-    cargo install --locked tree-sitter-cli
+install_homebrew() {
+    if ! have brew; then
+        step "Installing Homebrew..."
+        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    eval "$("$(command -v brew || echo /home/linuxbrew/.linuxbrew/bin/brew)" shellenv)"
+}
+
+# All packages (brews, casks, Go & Cargo tools) come from the Brewfile; casks and
+# macOS-only formulae are guarded with OS.mac? there.
+install_packages() {
+    [[ "$OS" == "Linux" ]] && install_linux_bootstrap
+    install_homebrew
+    step "Installing packages from the Brewfile..."
+    brew bundle --file="$REPO/Brewfile"
 }
 
 setup_dotfiles() {
@@ -182,22 +119,6 @@ setup_dotfiles() {
     (cd "$REPO" && stow .)
 }
 
-# On Linux, install neovim from the upstream tarball
-install_neovim() {
-    [[ "$OS" == "Linux" ]] || return 0
-    if [[ ! -x /opt/nvim-linux64/bin/nvim ]]; then
-        step "Installing neovim..."
-        local tmp
-        tmp=$(mktemp -d)
-        curl -Lo "$tmp/nvim-linux64.tar.gz" https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-        sudo rm -rf /opt/nvim
-        sudo tar -C /opt -xzf "$tmp/nvim-linux64.tar.gz"
-        rm -rf "$tmp"
-    fi
-    export PATH="$PATH:/opt/nvim-linux64/bin"
-    append_line_once 'export PATH="$PATH:/opt/nvim-linux64/bin"' "$HOME/.zshrc"
-    append_line_once 'export PATH="$PATH:/opt/nvim-linux64/bin"' "$HOME/.config/fish/config.fish"
-}
 
 setup_desktop() {
     if [[ "$OS" == "Linux" ]] && have gsettings; then
@@ -266,16 +187,11 @@ setup_stt_server() {
 
 main() {
     install_rust
-    install_node
     install_kitty
-    install_starship
-    install_zoxide
     install_poetry
     install_uv
     install_packages
-    install_tree_sitter
     setup_dotfiles
-    install_neovim
     setup_shell
     install_scripts
     setup_desktop

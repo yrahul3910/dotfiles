@@ -5,8 +5,6 @@ tap "oven-sh/bun"
 tap "withgraphite/tap"
 # Simple, modern, secure file encryption
 brew "age"
-# Perf monitoring CLI tool for Apple Silicon
-brew "asitop"
 # B2 Cloud Storage Command-Line Tools
 brew "b2-tools"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -47,8 +45,6 @@ brew "llvm"
 brew "lnav"
 # Language Server for the Lua language
 brew "lua-language-server"
-# Implementation of the Vulkan graphics and compute API on top of Metal
-brew "molten-vk"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
@@ -77,10 +73,10 @@ brew "scc"
 brew "sccache"
 # Editor of encrypted files
 brew "sops"
+# Cross-shell prompt for astronauts
+brew "starship"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
-# Send macOS User Notifications from the command-line
-brew "terminal-notifier"
 # Terminal multiplexer
 brew "tmux"
 # Vi 'workalike' with many additional features
@@ -97,6 +93,12 @@ brew "zig"
 brew "zoxide"
 # UNIX shell (command interpreter)
 brew "zsh"
+# Perf monitoring CLI tool for Apple Silicon
+brew "asitop" if OS.mac?
+# Implementation of the Vulkan graphics and compute API on top of Metal
+brew "molten-vk" if OS.mac?
+# Send macOS User Notifications from the command-line
+brew "terminal-notifier" if OS.mac?
 # EC2 Instance Selector is a tool to filter EC2 instance types based on resource criteria
 brew "aws/tap/ec2-instance-selector"
 # Check Homebrew packages for known vulnerabilities via osv.dev
@@ -105,52 +107,54 @@ brew "homebrew/brew-vulns/brew-vulns"
 brew "oven-sh/bun/bun", trusted: true
 # Allows you to manage your stacked changes and submit them for review on GitHub
 brew "withgraphite/tap/graphite", trusted: true
-# Multi-cloud backup application
-cask "arq"
-# Desktop password and login vault
-cask "bitwarden"
-# Calendar software focusing on flexibility and reliability
-cask "busycal"
-# E-books management software
-cask "calibre"
-# Disk space visualiser
-cask "daisydisk"
-# Universal database tool and SQL client
-cask "dbeaver-community"
-# Web browser
-cask "firefox"
-# Terminal emulator that uses platform-native UI and GPU acceleration
-cask "ghostty"
-# Graphically shows disk usage within a file system
-cask "grandperspective"
-# Vector graphics editor
-cask "inkscape"
-# Keyboard customiser
-cask "karabiner-elements"
-# Discover, download, and run local LLMs
-cask "lm-studio"
-# Clipboard manager
-cask "maccy"
-# Neovim Client
-cask "neovide-app"
-# Get up and running with large language models locally
-cask "ollama-app"
-# Image viewer
-cask "qview"
-# App switcher driven by the Right Command key
-cask "rcmd"
-# Customizable email client
-cask "thunderbird"
-# REST, GraphQL and gRPC client
-cask "yaak"
-# Multiplayer code editor
-cask "zed"
-# Gecko based web browser
-cask "zen"
-# Open-source markdown editor
-cask "zettlr"
-# Collect, organise, cite, and share research sources
-cask "zotero"
+if OS.mac?
+  # Multi-cloud backup application
+  cask "arq"
+  # Desktop password and login vault
+  cask "bitwarden"
+  # Calendar software focusing on flexibility and reliability
+  cask "busycal"
+  # E-books management software
+  cask "calibre"
+  # Disk space visualiser
+  cask "daisydisk"
+  # Universal database tool and SQL client
+  cask "dbeaver-community"
+  # Web browser
+  cask "firefox"
+  # Terminal emulator that uses platform-native UI and GPU acceleration
+  cask "ghostty"
+  # Graphically shows disk usage within a file system
+  cask "grandperspective"
+  # Vector graphics editor
+  cask "inkscape"
+  # Keyboard customiser
+  cask "karabiner-elements"
+  # Discover, download, and run local LLMs
+  cask "lm-studio"
+  # Clipboard manager
+  cask "maccy"
+  # Neovim Client
+  cask "neovide-app"
+  # Get up and running with large language models locally
+  cask "ollama-app"
+  # Image viewer
+  cask "qview"
+  # App switcher driven by the Right Command key
+  cask "rcmd"
+  # Customizable email client
+  cask "thunderbird"
+  # REST, GraphQL and gRPC client
+  cask "yaak"
+  # Multiplayer code editor
+  cask "zed"
+  # Gecko based web browser
+  cask "zen"
+  # Open-source markdown editor
+  cask "zettlr"
+  # Collect, organise, cite, and share research sources
+  cask "zotero"
+end
 go "github.com/spf13/cobra-cli"
 go "github.com/golangci/golangci-lint/v2/cmd/golangci-lint"
 cargo "cargo-audit"
