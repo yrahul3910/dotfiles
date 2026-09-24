@@ -12,7 +12,7 @@ curl -sSL https://raw.githubusercontent.com/yrahul3910/dotfiles/master/bootstrap
 
 Most important is probably the neovim config, which mostly works on macOS and Ubuntu.
 
-All packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. Casks and macOS-only formulae are guarded with `OS.mac?`. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs.
+All packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. Casks and macOS-only formulae are guarded with `OS.mac?`. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs. Language toolchains (Node, Rust, free-threaded Python, uv) are pinned in [`.config/mise/config.toml`](./.config/mise/config.toml) and installed with `mise install`; bump a pin there to update a machine.
 
 ## Requirements
 

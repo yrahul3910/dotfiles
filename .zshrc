@@ -10,7 +10,6 @@ setopt ignoreeof  # for tmux + karabiner
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export PATH="$HOME/.cargo/bin":$PATH
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
 export PATH="$HOME/go/bin":$PATH
 
@@ -92,7 +91,6 @@ alias '...'='cd ../../'
 alias olls="OLLAMA_FLASH_ATTENTION='1' OLLAMA_KV_CACHE_TYPE='q8_0' ollama serve"
 
 if [ "$(uname)" = "Darwin" ]; then
-    alias python3="python3.13"
     alias python3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/python3"
     alias pip3arm="/opt/homebrew/Cellar/python@3.13/3.13.*/bin/pip3"
     alias brewarm="/opt/homebrew/bin/brew"
@@ -242,9 +240,6 @@ type starship_zle-keymap-select >/dev/null || \
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-export SOPS_AGE_KEY_FILE ~/.config/sops/age/keys.txt
-. "$HOME/.cargo/env"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
+# Toolchains (Node, Rust, Python, uv) pinned in ~/.config/mise/config.toml
+command -v mise >/dev/null && eval "$(mise activate zsh)"

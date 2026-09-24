@@ -14,7 +14,7 @@ if [[ "$OS" == "Linux" ]]; then
     fi
 fi
 
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 step() {
     echo ""
@@ -51,12 +51,6 @@ install_bin() {
     fi
 }
 
-install_rust() {
-    have cargo && return
-    step "Installing Rust..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-    . "$HOME/.cargo/env"
-}
 
 
 # On macOS, Ghostty (installed via the Brewfile) replaces Kitty
@@ -70,17 +64,7 @@ install_kitty() {
 
 
 
-install_poetry() {
-    have poetry && return
-    step "Installing Poetry..."
-    curl -sSL https://install.python-poetry.org | python3 -
-}
 
-install_uv() {
-    have uv && return
-    step "Installing uv..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-}
 
 # Homebrew on Linux needs a compiler and a few base tools from the distro.
 install_linux_bootstrap() {
@@ -103,11 +87,22 @@ install_homebrew() {
     eval "$("$(command -v brew || echo /home/linuxbrew/.linuxbrew/bin/brew)" shellenv)"
 }
 
+# Node, Rust, Python, and uv are pinned in .config/mise/config.toml. This runs
+# before `brew bundle` because the Brewfile's cargo and uv entries need them.
+install_toolchains() {
+    have mise || brew install mise
+    step "Installing toolchains with mise..."
+    # Point at the repo copy: on a fresh machine stow has not linked ~/.config yet.
+    MISE_GLOBAL_CONFIG_FILE="$REPO/.config/mise/config.toml" mise install --yes
+    eval "$(mise activate bash --shims)"
+}
+
 # All packages (brews, casks, Go & Cargo tools) come from the Brewfile; casks and
 # macOS-only formulae are guarded with OS.mac? there.
 install_packages() {
     [[ "$OS" == "Linux" ]] && install_linux_bootstrap
     install_homebrew
+    install_toolchains
     step "Installing packages from the Brewfile..."
     brew bundle --file="$REPO/Brewfile"
 }
@@ -186,10 +181,7 @@ setup_stt_server() {
 }
 
 main() {
-    install_rust
     install_kitty
-    install_poetry
-    install_uv
     install_packages
     setup_dotfiles
     setup_shell

@@ -1,6 +1,5 @@
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"
-source "$HOME/.cargo/env"
-. "$HOME/.cargo/env"
+command -v mise >/dev/null && eval "$(mise activate bash)"
 alias python3="python3.12"
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
