@@ -74,7 +74,16 @@ install_linux_bootstrap() {
 install_homebrew() {
     if ! have brew; then
         step "Installing Homebrew..."
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # The installer only asks for your sudo password when stdin is a terminal,
+        # which it is not under bootstrap's `curl | bash`. Hand it the terminal when
+        # there is one; without one it runs unattended and needs passwordless sudo.
+        local installer
+        installer="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if { : </dev/tty; } 2>/dev/null; then
+            /bin/bash -c "$installer" </dev/tty
+        else
+            NONINTERACTIVE=1 /bin/bash -c "$installer"
+        fi
     fi
     eval "$("$(command -v brew || echo /home/linuxbrew/.linuxbrew/bin/brew)" shellenv)"
 }

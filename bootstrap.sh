@@ -1,70 +1,79 @@
 #!/bin/bash
+# Fresh-machine installer: installs git, clones this repo to ~/configs, and runs
+# setup.sh. Usage (see README):
+#   curl -sSL https://raw.githubusercontent.com/yrahul3910/dotfiles/master/bootstrap.sh | bash
 set -ex
 
-# Define the Git repository URL
 REPO_URL="https://github.com/yrahul3910/dotfiles/"
-
-# Define the directory where the repository will be cloned
 CLONE_DIR="$HOME/configs"
 
-if [ -z "$OSTYPE" ]; then
-  # Try to detect the OS using uname if OSTYPE is not set
-  case "$(uname -s)" in
-    Linux*)     OSTYPE=linux;;
-    Darwin*)    OSTYPE=darwin;;
-    *)          echo "Unknown operating system"; exit 1;;
-  esac
-fi
-
-# Check for OS type and install git if it is not already installed
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    # For Debian/Ubuntu-based systems
-    if command -v apt-get >/dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y git
-    # For RHEL-based systems
-    elif command -v yum >/dev/null; then
-        sudo yum update
-        sudo yum install -y git
-    elif command -v pacman >/dev/null; then
-        sudo pacman-key --init
-        sudo pacman-key --populate archlinux
-        sudo pacman -Syu
-        sudo pacman -Syu git
+# Homebrew's installer only asks for your password when stdin is a terminal. Under
+# `curl | bash` stdin is this script, so hand it the terminal when there is one;
+# without one (CI, a headless VM) it runs unattended and needs passwordless sudo.
+run_homebrew_installer() {
+    local installer
+    installer="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if { : </dev/tty; } 2>/dev/null; then
+        /bin/bash -c "$installer" </dev/tty
     else
-        echo "Package manager not recognized. Install git manually."
-        exit 1
+        NONINTERACTIVE=1 /bin/bash -c "$installer"
     fi
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    # Check if Homebrew is installed
-    if ! command -v brew >/dev/null; then
-        echo "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+}
+
+install_git() {
+    case "$(uname -s)" in
+        Linux)
+            # Under `curl | bash`, stdin is the script itself, so every package
+            # command must run without asking for confirmation.
+            if command -v apt-get >/dev/null; then
+                sudo apt-get update
+                sudo apt-get install -y git
+            elif command -v dnf >/dev/null; then
+                sudo dnf install -y git
+            elif command -v yum >/dev/null; then
+                sudo yum install -y git
+            elif command -v pacman >/dev/null; then
+                sudo pacman-key --init
+                sudo pacman-key --populate archlinux
+                # Arch does not support partial upgrades, so sync and upgrade together.
+                sudo pacman -Syu --needed --noconfirm git
+            else
+                echo "Package manager not recognized. Install git manually." >&2
+                exit 1
+            fi
+            ;;
+        Darwin)
+            # git comes with Homebrew's Command Line Tools install.
+            if ! command -v brew >/dev/null && [[ ! -x /opt/homebrew/bin/brew && ! -x /usr/local/bin/brew ]]; then
+                echo "Installing Homebrew..."
+                run_homebrew_installer
+            fi
+            # A fresh install is not on PATH yet in this shell.
+            eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"
+            brew install git
+            ;;
+        *)
+            echo "Unsupported operating system: $(uname -s)" >&2
+            exit 1
+            ;;
+    esac
+}
+
+main() {
+    install_git
+
+    if [ -d "$CLONE_DIR" ]; then
+        rm -rf "$CLONE_DIR"
     fi
-    # Install git using Homebrew
-    brew install git
-else
-    echo "Unsupported OS type: $OSTYPE"
-    exit 1
-fi
+    echo "Cloning the repository..."
+    git clone "$REPO_URL" "$CLONE_DIR"
 
-# Clone the repository
-if [ -d "$CLONE_DIR" ]; then
-    rm -rf "$CLONE_DIR"
-fi
-
-echo "Cloning the repository..."
-git clone "$REPO_URL" "$CLONE_DIR"
-
-# Check if the setup.sh script exists and is executable
-SETUP_SCRIPT="$CLONE_DIR/setup.sh"
-if [ -f "$SETUP_SCRIPT" ]; then
-    chmod +x "$SETUP_SCRIPT"
     echo "Running setup.sh from the repository..."
-    "$SETUP_SCRIPT"
-else
-    echo "setup.sh not found in the repository. Exiting..."
-    exit 1
-fi
+    "$CLONE_DIR/setup.sh"
 
-echo "Bootstrap completed successfully."
+    echo "Bootstrap completed successfully."
+}
+
+# Calling main last means bash has read the whole script before running any of it,
+# which matters when the script arrives through a pipe.
+main "$@"
