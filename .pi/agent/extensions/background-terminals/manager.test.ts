@@ -111,6 +111,11 @@ test("happy path: stdout and stderr captured separately, settles done, hook fire
     assert.equal(done.stdout.text, "out-line\n");
     assert.equal(done.stderr.text, "err-line\n");
     assert.ok(done.settledAt);
+
+    assert.ok(done.lastOutputAt);
+    assert.ok(done.lastOutputAt >= done.createdAt);
+    assert.ok(done.lastOutputAt <= done.settledAt);
+
     assert.deepEqual(settled, [
       { id: snap.id, status: "done", consumed: false },
     ]);

@@ -56,6 +56,25 @@ export const BG_STATUS_PARAMETER_DESCRIPTIONS = {
   id: 'Terminal id, e.g. "bt-1"',
 };
 
+export const BG_WATCH_TOOL_DESCRIPTION =
+  "Start or update periodic progress checks for a running background terminal. Returns immediately. " +
+  "Each check wakes you with elapsed time, time since the last output, and a short output tail, even when output is unchanged. " +
+  "Busy agents receive one pending check per terminal when idle. Exit and session shutdown cancel the watch. " +
+  "Set interval_seconds to 0 to cancel checks without stopping the process. " +
+  "A quiet command is not necessarily hung; inspect progress before deciding to use bg_kill.";
+
+export const BG_WATCH_PARAMETER_DESCRIPTIONS = {
+  id: 'Terminal id to watch, e.g. "bt-1"',
+  intervalSeconds:
+    "Seconds between checks (positive integer). Calling again replaces the interval. Use 0 to cancel the watch.",
+};
+
+export function buildWatchResult(id: string, intervalSeconds: number) {
+  return intervalSeconds === 0
+    ? `Stopped watching ${id}; the process continues running.`
+    : `Watching ${id} every ${intervalSeconds}s. Checks arrive when the agent is idle. Use bg_watch with interval_seconds: 0 to cancel.`;
+}
+
 export const BG_LIST_TOOL_DESCRIPTION =
   "List all background terminals (running and settled) with pid, elapsed time, exit status, and output sizes.";
 
@@ -120,6 +139,26 @@ export function buildStatusResult(snap: TerminalSnapshot) {
   if (snap.errorText) text += `\nError: ${snap.errorText}`;
   text += `\n\n${outputSection("stdout", snap.stdout, STATUS_STDOUT_MAX, STATUS_STDOUT_MAX_LINES)}`;
   text += `\n\n${outputSection("stderr", snap.stderr, STATUS_STDERR_MAX, STATUS_STDERR_MAX_LINES)}`;
+  return text;
+}
+
+export function buildWatchMessage(snap: TerminalSnapshot) {
+  const quietSeconds = Math.max(
+    0,
+    Math.floor((Date.now() - (snap.lastOutputAt ?? snap.createdAt)) / 1_000),
+  );
+  const activity =
+    snap.lastOutputAt === undefined
+      ? `No output yet (${quietSeconds}s since start).`
+      : `Last output ${quietSeconds}s ago.`;
+  let text = `Background terminal check: ${describeTerminal(snap)}\n${activity}`;
+  text += "\nInspect progress; use bg_kill if stuck, or bg_watch to adjust or cancel checks.";
+  if (snap.errorText) text += `\nError: ${snap.errorText}`;
+  text += `\n\n${outputSection("stdout", snap.stdout, RESULT_STDOUT_MAX, RESULT_STDOUT_MAX_LINES)}`;
+  if (snap.stderr.totalBytes > 0) {
+    text += `\n\n${outputSection("stderr", snap.stderr, RESULT_STDERR_MAX, RESULT_STDERR_MAX_LINES)}`;
+  }
+
   return text;
 }
 

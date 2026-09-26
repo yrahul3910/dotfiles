@@ -38,6 +38,8 @@ export interface TerminalSnapshot {
   readonly status: TerminalStatus;
   /** Date.now() at spawn. */
   readonly createdAt: number;
+  /** Date.now() when stdout or stderr last produced output. */
+  readonly lastOutputAt?: number;
   readonly timeoutSeconds?: number;
   /** True when the runtime limit initiated termination. */
   readonly timedOut?: boolean;

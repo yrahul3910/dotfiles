@@ -6,6 +6,7 @@
  * - bg_start: fire-and-forget spawn (command, title, working_dir). Max 8
  *   running at once. The model is notified exactly once when a process exits.
  * - bg_status: peek at one terminal's status + tail-truncated output.
+ * - bg_watch: periodic progress checks while a terminal runs.
  * - bg_list: list all tracked terminals (running and settled).
  * - bg_kill: SIGTERM→SIGKILL the whole process tree; returns final state.
  *
@@ -41,10 +42,14 @@ import {
   BG_START_TOOL_DESCRIPTION,
   BG_STATUS_PARAMETER_DESCRIPTIONS,
   BG_STATUS_TOOL_DESCRIPTION,
+  BG_WATCH_PARAMETER_DESCRIPTIONS,
+  BG_WATCH_TOOL_DESCRIPTION,
   buildKillReport,
   buildStartResult,
   buildStatusResult,
   buildTerminalResultMessage,
+  buildWatchMessage,
+  buildWatchResult,
   describeTerminal,
 } from "./src/prompt.ts";
 import { createDeferredResultDelivery } from "./src/result-delivery.ts";
@@ -55,6 +60,7 @@ import {
 } from "./src/runtime.ts";
 import { sanitizeText } from "./src/ui/output-view.ts";
 import { openTerminalPicker } from "./src/ui/ps.ts";
+import { createTerminalWatches, MAX_WATCH_INTERVAL_SECONDS } from "./src/watch.ts";
 
 const WIDGET_KEY = "background-terminals";
 
@@ -65,6 +71,27 @@ export default function (pi: ExtensionAPI) {
   let ui: ExtensionUIContext | undefined;
   let unsubStatus: (() => void) | undefined;
   const resultDelivery = createDeferredResultDelivery<TerminalSnapshot>();
+
+  const watches = createTerminalWatches({
+    isIdle: () => sessionContext?.isIdle() ?? false,
+    deliver: (snap) => {
+      try {
+        pi.sendMessage(
+          {
+            customType: "background-terminal-watch",
+            content: buildWatchMessage(snap),
+            display: true,
+            details: { id: snap.id, status: snap.status },
+          },
+          { deliverAs: "followUp", triggerTurn: true },
+        );
+        return true;
+      } catch (error) {
+        console.error("background-terminals: failed to deliver watch check", error);
+        return false;
+      }
+    },
+  });
 
   const getRuntime = () => (runtime ??= createTerminalRuntime());
 
@@ -155,6 +182,7 @@ export default function (pi: ExtensionAPI) {
   };
 
   const onSettled = (snap: TerminalSnapshot, consumed: boolean) => {
+    watches.cancel(snap.id);
     if (consumed) {
       // An in-flight bg_kill is returning this settlement itself.
       resultDelivery.consume([snap.id]);
@@ -178,7 +206,10 @@ export default function (pi: ExtensionAPI) {
   // Drain deferred results when the agent settles: together with the
   // isIdle() fast path above and the Map-keyed delivery (drain clears),
   // double delivery is structurally impossible — whoever drains first wins.
-  pi.on("agent_settled", flushResults);
+  pi.on("agent_settled", () => {
+    flushResults();
+    watches.flush();
+  });
 
   // /new, /resume, /fork, /reload, and quit all emit session_shutdown for
   // the old extension instance. Processes never survive a session
@@ -187,6 +218,7 @@ export default function (pi: ExtensionAPI) {
   // bounded so a wedged process cannot hang shutdown.
   pi.on("session_shutdown", async () => {
     sessionContext = undefined;
+    watches.clear();
     resultDelivery.clear();
     unsubStatus?.();
     unsubStatus = undefined;
@@ -304,6 +336,53 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.registerTool({
+    name: "bg_watch",
+    label: "Watch Background Terminal",
+    description: BG_WATCH_TOOL_DESCRIPTION,
+    promptSnippet:
+      "Schedule periodic progress checks for a background terminal, including when it is quiet",
+    parameters: Type.Object({
+      id: Type.String({ description: BG_WATCH_PARAMETER_DESCRIPTIONS.id }),
+      interval_seconds: Type.Integer({
+        minimum: 0,
+        maximum: MAX_WATCH_INTERVAL_SECONDS,
+        description: BG_WATCH_PARAMETER_DESCRIPTIONS.intervalSeconds,
+      }),
+    }),
+    async execute(_toolCallId, params) {
+      const manager = await getManager();
+      const snap = await runTool(getRuntime(), manager.status(params.id));
+
+      if (snap.status !== "running") {
+        watches.cancel(snap.id);
+        resultDelivery.consume([snap.id]);
+
+        return {
+          content: [{ type: "text", text: buildStatusResult(snap) }],
+          details: { id: snap.id, watching: false, intervalSeconds: 0 },
+        };
+      }
+
+      watches.set(snap.id, params.interval_seconds, () =>
+        manager.view.get(snap.id),
+      );
+      return {
+        content: [
+          {
+            type: "text",
+            text: buildWatchResult(snap.id, params.interval_seconds),
+          },
+        ],
+        details: {
+          id: snap.id,
+          watching: params.interval_seconds > 0,
+          intervalSeconds: params.interval_seconds,
+        },
+      };
+    },
+  });
+
+  pi.registerTool({
     name: "bg_list",
     label: "List Background Terminals",
     description: BG_LIST_TOOL_DESCRIPTION,
@@ -378,6 +457,19 @@ export default function (pi: ExtensionAPI) {
   });
 
   // --- Result message rendering ------------------------------------------
+
+  pi.registerMessageRenderer(
+    "background-terminal-watch",
+    (message, { expanded }) => {
+      const content = sanitizeText(Array.isArray(message.content) ? "" : message.content);
+      return new Markdown(
+        expanded ? content : (content.split("\n")[0] ?? ""),
+        0,
+        0,
+        getMarkdownTheme(),
+      );
+    },
+  );
 
   pi.registerMessageRenderer(
     "background-terminal-result",

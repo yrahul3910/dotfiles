@@ -77,6 +77,7 @@ interface MutableSnapshot extends TerminalSnapshot {
   signal?: string;
   errorText?: string;
   timedOut?: boolean;
+  lastOutputAt?: number;
 }
 
 interface Entry {
@@ -646,11 +647,13 @@ const makeManager = Effect.gen(function* () {
         // chunk boundaries.
         child.stdout?.setEncoding("utf8");
         child.stdout?.on("data", (chunk: string) => {
+          snapshot.lastOutputAt = Date.now();
           if (!stdoutBuf.push(chunk)) child.stdout?.pause();
           notify(id);
         });
         child.stderr?.setEncoding("utf8");
         child.stderr?.on("data", (chunk: string) => {
+          snapshot.lastOutputAt = Date.now();
           if (!stderrBuf.push(chunk)) child.stderr?.pause();
           notify(id);
         });
