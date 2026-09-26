@@ -14,6 +14,8 @@ Most important is probably the neovim config, which mostly works on macOS and Ub
 
 All packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. Casks and macOS-only formulae are guarded with `OS.mac?`. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs. Language toolchains (Node, Rust, free-threaded Python, uv) are pinned in [`.config/mise/config.toml`](./.config/mise/config.toml) and installed with `mise install`; bump a pin there to update a machine.
 
+Dotfiles are linked with `stow --no-folding --restow .`, so every directory under `~` is a real directory and only tracked files are symlinks. App state written next to tracked config (for example `~/.config/gh/` or `~/.pi/agent/sessions/`) stays in `~` rather than in this checkout. After adding a file to the repo, run `stow --no-folding --restow .` from `~/configs` (or re-run `setup.sh`) to link it. Paths that must never be linked go in `.stow-local-ignore`. The exception is `.pi/agent/extensions`, which `setup.sh` links as one directory because Pi resolves extension imports from the link path and needs the repo's `node_modules` next to each extension.
+
 ## Requirements
 
 * GNU Stow

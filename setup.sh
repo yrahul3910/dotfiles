@@ -107,11 +107,23 @@ install_packages() {
     brew bundle --file="$REPO/Brewfile"
 }
 
+# --no-folding links individual files and leaves every directory real, so app
+# state written next to tracked config stays in ~ instead of landing in the repo.
+# --restow makes re-runs pick up files added to the repo since the last run.
 setup_dotfiles() {
     step "Setting up dotfiles..."
     backup_if_real "$HOME/.zshrc"
-    backup_if_real "$HOME/.config"
-    (cd "$REPO" && stow .)
+    (cd "$REPO" && stow --no-folding --restow .)
+    # Pi extensions are code with their own node_modules, and Pi resolves imports
+    # from the link path, so this directory is one link (excluded in .stow-local-ignore).
+    local ext="$HOME/.pi/agent/extensions"
+    if [[ -L "$ext" || ! -e "$ext" ]]; then
+        mkdir -p "$HOME/.pi/agent"
+        ln -sfn "$REPO/.pi/agent/extensions" "$ext"
+    else
+        echo "$ext is a real directory; move it aside so it can be linked" >&2
+        exit 1
+    fi
 }
 
 
