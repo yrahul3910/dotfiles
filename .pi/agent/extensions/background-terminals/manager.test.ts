@@ -16,6 +16,7 @@ import type { TerminalSnapshot } from "./src/domain.ts";
 import {
   MAX_RUNNING,
   MAX_TRACKED,
+  MAX_TIMEOUT_SECONDS,
   TerminalManager,
   type TerminalManagerShape,
 } from "./src/manager.ts";
@@ -110,6 +111,11 @@ test("happy path: stdout and stderr captured separately, settles done, hook fire
     assert.equal(done.stdout.text, "out-line\n");
     assert.equal(done.stderr.text, "err-line\n");
     assert.ok(done.settledAt);
+
+    assert.ok(done.lastOutputAt);
+    assert.ok(done.lastOutputAt >= done.createdAt);
+    assert.ok(done.lastOutputAt <= done.settledAt);
+
     assert.deepEqual(settled, [
       { id: snap.id, status: "done", consumed: false },
     ]);
@@ -134,6 +140,137 @@ test("happy path: stdout and stderr captured separately, settles done, hook fire
         "err-line\n",
       );
     }
+  });
+});
+
+test(
+  "timeout stops a quiet process and delivers one unconsumed result",
+  { timeout: 8_000 },
+  async () => {
+    await withManager(async (manager, runtime) => {
+      const notifications: boolean[] = [];
+      manager.view.setOnSettled((_snap, consumed) =>
+        notifications.push(consumed),
+      );
+      const snap = await runTool(
+        runtime,
+        manager.start({
+          command: nodeCmd('process.stdout.write("ready\\n"); setInterval(() => {}, 1000);'),
+          title: "timeout",
+          cwd,
+          timeoutSeconds: 1,
+        }),
+      );
+      const { snap: done } = await settlement(manager, snap.id);
+
+      assert.equal(done.status, "killed");
+      assert.equal(done.timedOut, true);
+      assert.equal(done.timeoutSeconds, 1);
+      assert.match(done.stdout.text, /ready/);
+      assert.ok(done.settledAt);
+      assert.ok(done.settledAt - done.createdAt >= 900);
+      assert.deepEqual(notifications, [false]);
+
+      const pid = done.pid;
+      assert.ok(pid);
+      assert.ok(await pollUntil(() => processGone(pid)));
+    });
+  },
+);
+
+test(
+  "timeout escalates against a resistant descendant",
+  { skip: process.platform === "win32", timeout: 10_000 },
+  async () => {
+    await withManager(async (manager, runtime) => {
+      const snap = await runTool(
+        runtime,
+        manager.start({
+          command: `trap '' TERM; ${nodeCmd('process.on("SIGTERM", () => {}); console.log(process.pid); setInterval(() => {}, 1000);')} & wait`,
+          title: "timeout-tree",
+          cwd,
+          timeoutSeconds: 1,
+        }),
+      );
+      const { snap: done } = await settlement(manager, snap.id);
+      assert.equal(done.timedOut, true);
+      assert.equal(done.signal, "SIGKILL");
+      const descendantPid = Number(done.stdout.text.trim());
+      assert.ok(descendantPid > 0);
+      assert.ok(await pollUntil(() => processGone(descendantPid)));
+    });
+  },
+);
+
+test(
+  "natural exit and manual kill cancel timeouts while omitted limits keep running",
+  { timeout: 8_000 },
+  async () => {
+    await withManager(async (manager, runtime) => {
+      const natural = await runTool(
+        runtime,
+        manager.start({
+          command: nodeCmd(""),
+          title: "natural",
+          cwd,
+          timeoutSeconds: 1,
+        }),
+      );
+      await settlement(manager, natural.id);
+      const manual = await runTool(
+        runtime,
+        manager.start({
+          command: nodeCmd("setInterval(() => {}, 1000)"),
+          title: "manual",
+          cwd,
+          timeoutSeconds: 1,
+        }),
+      );
+      await runTool(runtime, manager.kill([manual.id]));
+      const unlimited = await runTool(
+        runtime,
+        manager.start({
+          command: nodeCmd("setInterval(() => {}, 1000)"),
+          title: "unlimited",
+          cwd,
+        }),
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1_200));
+
+      assert.equal(natural.status, "done");
+      assert.equal(natural.timedOut, undefined);
+      assert.equal(manual.status, "killed");
+      assert.equal(manual.timedOut, undefined);
+      assert.equal(unlimited.status, "running");
+    });
+  },
+);
+
+test("invalid timeouts fail before launching a process", async () => {
+  await withManager(async (manager, runtime) => {
+    for (const timeoutSeconds of [
+      0,
+      -1,
+      0.5,
+      NaN,
+      Infinity,
+      MAX_TIMEOUT_SECONDS + 1,
+    ]) {
+      await assert.rejects(
+        runTool(
+          runtime,
+          manager.start({
+            command: nodeCmd(""),
+            title: "invalid",
+            cwd,
+            timeoutSeconds,
+          }),
+        ),
+        /timeout_seconds must be an integer/,
+      );
+    }
+
+    assert.equal(manager.view.size(), 0);
   });
 });
 

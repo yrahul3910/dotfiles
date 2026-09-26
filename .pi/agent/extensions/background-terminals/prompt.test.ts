@@ -5,8 +5,11 @@ import {
   BG_START_PARAMETER_DESCRIPTIONS,
   BG_START_TOOL_DESCRIPTION,
   buildKillReport,
+  buildStartResult,
   buildStatusResult,
   buildTerminalResultMessage,
+  buildWatchMessage,
+  buildWatchResult,
 } from "./src/prompt.ts";
 
 test("start descriptions identify the platform-specific shell contract", () => {
@@ -106,6 +109,19 @@ test("completion message reports kill vs exit and omits empty stderr", () => {
   assert.match(failed, /stderr:\nboom/);
 });
 
+test("timeout is visible in start, status, and completion output", () => {
+  const terminal = snap({
+    status: "killed",
+    timedOut: true,
+    timeoutSeconds: 60,
+    signal: "SIGTERM",
+    exitCode: undefined,
+  });
+  assert.match(buildStartResult(terminal), /Runtime limit: 60s/);
+  assert.match(buildStatusResult(terminal), /timed out/);
+  assert.match(buildTerminalResultMessage(terminal), /timed out \(limit 60s; SIGTERM\)/);
+});
+
 test("completion output is a shorter tail than the detailed status view", () => {
   const output = Array.from(
     { length: 100 },
@@ -122,4 +138,34 @@ test("completion output is a shorter tail than the detailed status view", () => 
   assert.match(completion, /line-100/);
   assert.match(completion, /stdout truncated/);
   assert.match(status, /line-1\n/);
+});
+
+test("watch checks report output age and retain only a short tail", (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: 20_000 });
+  const output = Array.from(
+    { length: 100 },
+    (_, index) => `line-${index + 1}`,
+  ).join("\n");
+  const terminal = snap({
+    status: "running",
+    createdAt: 1_000,
+    settledAt: undefined,
+    lastOutputAt: 5_000,
+    stdout: view({ text: output, totalBytes: Buffer.byteLength(output) }),
+    stderr: view({ text: "warning", totalBytes: 7 }),
+  });
+  const message = buildWatchMessage(terminal);
+
+  assert.match(message, /Last output 15s ago/);
+  assert.match(message, /19s/);
+  assert.ok(!message.includes("line-1\n"));
+  assert.match(message, /line-100/);
+  assert.match(message, /stderr:\nwarning/);
+
+  assert.match(
+    buildWatchMessage({ ...terminal, lastOutputAt: undefined }),
+    /No output yet \(19s since start\)/,
+  );
+  assert.match(buildWatchResult("bt-1", 30), /every 30s/);
+  assert.match(buildWatchResult("bt-1", 0), /process continues running/);
 });
