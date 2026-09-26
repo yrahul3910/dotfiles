@@ -9,5 +9,16 @@ Brewfile
 .*.tar.xz
 tmux-sessionizer
 user.js
-terraform/
-launchd/
+^/terraform
+^/launchd
+# Build artifacts and OS noise that live inside the repo but must not be linked into ~
+node_modules
+__pycache__
+\.ruff_cache
+.*\.egg-info
+\.DS_Store
+setup-macos-defaults.sh
+stt-server
+\.venv
+^/\.pi/agent/extensions
+migrate-stow.sh
