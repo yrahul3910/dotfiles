@@ -1,0 +1,3 @@
+#!/bin/sh
+# Keep the links in ~ in step with the repo; see sync-links.sh.
+exec "$(git rev-parse --show-toplevel)/sync-links.sh"
