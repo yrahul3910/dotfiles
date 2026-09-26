@@ -25,6 +25,7 @@ const RESULT_STDERR_MAX_LINES = 20;
 export const BG_START_TOOL_DESCRIPTION =
   "Start a long-running shell command as a background terminal (executed via the platform shell — sh -c on POSIX, cmd.exe /d /s /c on Windows). " +
   "Fire-and-forget: this returns immediately with an id, and you get a message with the final output when the process exits. " +
+  "Optional timeout_seconds initiates process-tree termination after that many seconds (SIGTERM, then SIGKILL if needed); omitted means no runtime limit. " +
   "The process receives NO stdin (immediate EOF) and there is no way to send input later — interactive commands will not work; use bg_kill to stop a stuck one. " +
   `Terminals are session-scoped: they are killed when the session ends or reloads. Output shown to you is tail-truncated (stdout ${formatSize(STATUS_STDOUT_MAX)}, stderr ${formatSize(STATUS_STDERR_MAX)}); the full logs are captured to files and in the /ps viewer. ` +
   `Max ${MAX_RUNNING} background terminals can run at once.`;
@@ -36,6 +37,7 @@ export const BG_START_PROMPT_GUIDELINES = [
   "Use bg_start for commands expected to run long or indefinitely (servers, watch modes, long builds); use the regular bash tool for quick commands.",
   "bg_start processes receive no stdin — never start a command that requires interactive input.",
   "After bg_start, keep working; the exit result arrives automatically. Use bg_status only when you need current output before continuing.",
+  "Set timeout_seconds for commands with a known runtime budget so a stuck command is stopped automatically. Omit it for intentionally persistent servers or watchers.",
 ];
 
 export const BG_START_PARAMETER_DESCRIPTIONS = {
@@ -43,6 +45,8 @@ export const BG_START_PARAMETER_DESCRIPTIONS = {
     "Shell command line to run in the background (sh -c on POSIX, cmd.exe /d /s /c on Windows). It receives no stdin (EOF immediately); interactive commands will not work.",
   title: "Short human-readable name shown in listings and the UI",
   workingDir: "Working directory (default: current working directory)",
+  timeoutSeconds:
+    "Maximum runtime in whole seconds before stopping the process tree. Shutdown may take a few additional seconds. Omit for no runtime limit.",
 };
 
 export const BG_STATUS_TOOL_DESCRIPTION =
@@ -65,6 +69,9 @@ export const BG_KILL_PARAMETER_DESCRIPTIONS = {
 export function buildStartResult(snap: TerminalSnapshot) {
   return (
     `Started background terminal ${snap.id} "${snap.title}" (pid ${snap.pid ?? "?"}, ${snap.cwd}).\n` +
+    (snap.timeoutSeconds !== undefined
+      ? `Runtime limit: ${snap.timeoutSeconds}s.\n`
+      : "") +
     `It runs in the background with no stdin. You'll get a message when it exits, ` +
     `or use bg_status(id: "${snap.id}") to peek, bg_kill to stop it, bg_list to see all.`
   );
@@ -79,6 +86,9 @@ export function describeTerminal(snap: TerminalSnapshot) {
     snap.cwd,
     `stdout ${formatSize(snap.stdout.totalBytes)}, stderr ${formatSize(snap.stderr.totalBytes)}`,
   ];
+  if (snap.timeoutSeconds !== undefined)
+    details.push(`timeout ${snap.timeoutSeconds}s`);
+  if (snap.timedOut) details.push("timed out");
   return `${snap.id} [${snap.status}] "${snap.title}" (${details.join(", ")})`;
 }
 
@@ -115,8 +125,11 @@ export function buildStatusResult(snap: TerminalSnapshot) {
 
 /** The async completion follow-up injected into the model's context. */
 export function buildTerminalResultMessage(snap: TerminalSnapshot) {
-  const how =
-    snap.status === "killed" ? "was killed" : `exited (${formatExit(snap)})`;
+  const how = snap.timedOut
+    ? `timed out (limit ${snap.timeoutSeconds}s; ${formatExit(snap)})`
+    : snap.status === "killed"
+      ? "was killed"
+      : `exited (${formatExit(snap)})`;
   let text = `Background terminal ${snap.id} "${snap.title}" ${how} after ${formatElapsed(snap)}.`;
   if (snap.errorText) text += `\nError: ${snap.errorText}`;
   text += `\n\n${outputSection("stdout", snap.stdout, RESULT_STDOUT_MAX, RESULT_STDOUT_MAX_LINES)}`;

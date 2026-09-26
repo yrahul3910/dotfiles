@@ -5,6 +5,7 @@ import {
   BG_START_PARAMETER_DESCRIPTIONS,
   BG_START_TOOL_DESCRIPTION,
   buildKillReport,
+  buildStartResult,
   buildStatusResult,
   buildTerminalResultMessage,
 } from "./src/prompt.ts";
@@ -104,6 +105,22 @@ test("completion message reports kill vs exit and omits empty stderr", () => {
   );
   assert.match(failed, /exited \(exit 3\)/);
   assert.match(failed, /stderr:\nboom/);
+});
+
+test("timeout is visible in start, status, and completion output", () => {
+  const terminal = snap({
+    status: "killed",
+    timedOut: true,
+    timeoutSeconds: 60,
+    signal: "SIGTERM",
+    exitCode: undefined,
+  });
+  assert.match(buildStartResult(terminal), /Runtime limit: 60s/);
+  assert.match(buildStatusResult(terminal), /timed out/);
+  assert.match(
+    buildTerminalResultMessage(terminal),
+    /timed out \(limit 60s; SIGTERM\)/,
+  );
 });
 
 test("completion output is a shorter tail than the detailed status view", () => {

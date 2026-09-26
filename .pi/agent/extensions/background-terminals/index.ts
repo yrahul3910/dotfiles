@@ -29,6 +29,7 @@ import { getMarkdownTheme } from "@earendil-works/pi-coding-agent";
 import { Markdown, Text } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 import type { TerminalSnapshot } from "./src/domain.ts";
+import { MAX_TIMEOUT_SECONDS } from "./src/manager.ts";
 import { TerminalManager, type TerminalManagerShape } from "./src/manager.ts";
 import {
   BG_KILL_PARAMETER_DESCRIPTIONS,
@@ -129,6 +130,7 @@ export default function (pi: ExtensionAPI) {
             status: snap.status,
             exitCode: snap.exitCode,
             signal: snap.signal,
+            timedOut: snap.timedOut,
           },
         },
         // followUp: queued until the agent has no more tool calls — never
@@ -221,6 +223,13 @@ export default function (pi: ExtensionAPI) {
           description: BG_START_PARAMETER_DESCRIPTIONS.workingDir,
         }),
       ),
+      timeout_seconds: Type.Optional(
+        Type.Integer({
+          minimum: 1,
+          maximum: MAX_TIMEOUT_SECONDS,
+          description: BG_START_PARAMETER_DESCRIPTIONS.timeoutSeconds,
+        }),
+      ),
     }),
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
       const manager = await getManager();
@@ -239,12 +248,23 @@ export default function (pi: ExtensionAPI) {
         params.title.replace(/\s+/g, " ").trim().slice(0, 80) || "terminal";
       const snap = await runTool(
         getRuntime(),
-        manager.start({ command, title, cwd }),
+        manager.start({
+          command,
+          title,
+          cwd,
+          timeoutSeconds: params.timeout_seconds,
+        }),
       );
 
       return {
         content: [{ type: "text", text: buildStartResult(snap) }],
-        details: { id: snap.id, title: snap.title, cwd, pid: snap.pid },
+        details: {
+          id: snap.id,
+          title: snap.title,
+          cwd,
+          pid: snap.pid,
+          timeoutSeconds: snap.timeoutSeconds,
+        },
       };
     },
   });
@@ -368,6 +388,7 @@ export default function (pi: ExtensionAPI) {
         status?: string;
         exitCode?: number;
         signal?: string;
+        timedOut?: boolean;
       };
       const failed = details.status === "failed";
       const killed = details.status === "killed";
@@ -376,9 +397,11 @@ export default function (pi: ExtensionAPI) {
         : killed
           ? theme.fg("muted", "■")
           : theme.fg("success", "■");
-      const how = killed
-        ? "killed"
-        : (details.signal ?? `exit ${details.exitCode ?? "?"}`);
+      const how = details.timedOut
+        ? "timed out"
+        : killed
+          ? "killed"
+          : (details.signal ?? `exit ${details.exitCode ?? "?"}`);
       const header =
         `${icon} ` +
         theme.fg("accent", theme.bold(`terminal ${details.id ?? "?"}`)) +

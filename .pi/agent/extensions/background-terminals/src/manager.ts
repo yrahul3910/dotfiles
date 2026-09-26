@@ -37,6 +37,8 @@ import { OutputBuffer } from "./output.ts";
 
 export const MAX_RUNNING = 8;
 export const MAX_TRACKED = 32;
+/** Whole seconds that fit Node's signed 32-bit millisecond timer. */
+export const MAX_TIMEOUT_SECONDS = 2_147_483;
 const MAX_SETTLED_HISTORY = MAX_TRACKED * 4;
 /** In-memory retained cap per stream. */
 export const RETAINED_PER_STREAM = 2 * 1024 * 1024;
@@ -74,6 +76,7 @@ interface MutableSnapshot extends TerminalSnapshot {
   exitCode?: number;
   signal?: string;
   errorText?: string;
+  timedOut?: boolean;
 }
 
 interface Entry {
@@ -102,12 +105,14 @@ interface Entry {
   /** Completed exactly once when the entry settles. Kill callers and the scope
    * finalizer can all await the same result without missing a notification. */
   settled: Deferred.Deferred<void>;
+  timeout?: ReturnType<typeof setTimeout>;
 }
 
 export interface StartOptions {
   readonly command: string;
   readonly title: string;
   readonly cwd: string;
+  readonly timeoutSeconds?: number;
 }
 
 export interface KillResult {
@@ -331,7 +336,10 @@ const makeManager = Effect.gen(function* () {
   };
 
   const closeEntryScope = (entry: Entry) =>
-    Scope.close(entry.scope, Exit.void).pipe(Effect.ignore);
+    Effect.suspend(() => {
+      clearTimeout(entry.timeout);
+      return Scope.close(entry.scope, Exit.void).pipe(Effect.ignore);
+    });
 
   const pruneSettled = () => {
     if (entries.size <= MAX_TRACKED) return;
@@ -541,6 +549,16 @@ const makeManager = Effect.gen(function* () {
               message: "Background terminal manager is shutting down.",
             });
           }
+          if (
+            options.timeoutSeconds !== undefined &&
+            (!Number.isInteger(options.timeoutSeconds) ||
+              options.timeoutSeconds < 1 ||
+              options.timeoutSeconds > MAX_TIMEOUT_SECONDS)
+          ) {
+            return new SpawnError({
+              message: `timeout_seconds must be an integer between 1 and ${MAX_TIMEOUT_SECONDS}.`,
+            });
+          }
           if (runningCount() + reserved >= MAX_RUNNING) {
             return new ConcurrencyLimitError({
               message: `Max ${MAX_RUNNING} background terminals can run concurrently. Stop one with bg_kill before starting another.`,
@@ -594,6 +612,7 @@ const makeManager = Effect.gen(function* () {
           pid: child.pid,
           status: "running",
           createdAt: Date.now(),
+          timeoutSeconds: options.timeoutSeconds,
           get stdout() {
             return stdoutBuf.view();
           },
@@ -639,6 +658,7 @@ const makeManager = Effect.gen(function* () {
         // still emits 'close' afterwards (with a bogus errno as code), so
         // record the failure here and let the close path do the one settle.
         child.once("error", (error) => {
+          clearTimeout(entry.timeout);
           entry.processErrored = true;
           snapshot.errorText ??= boundedError(error);
           entry.exited = true;
@@ -647,6 +667,7 @@ const makeManager = Effect.gen(function* () {
         // Record code/signal on 'exit'; settle on 'close' so the completion
         // notification always carries the final flushed output.
         child.once("exit", (code, signal) => {
+          clearTimeout(entry.timeout);
           entry.exited = true;
           snapshot.exitCode = code ?? undefined;
           snapshot.signal = signal ?? undefined;
@@ -656,6 +677,7 @@ const makeManager = Effect.gen(function* () {
           scheduleExitCleanup(entry);
         });
         child.once("close", (code, signal) => {
+          clearTimeout(entry.timeout);
           entry.exited = true;
           entry.stdioClosed = true;
           // Only trust close's code/signal when 'exit' never fired (a spawn
@@ -721,6 +743,19 @@ const makeManager = Effect.gen(function* () {
           });
         }
         entries.set(id, entry);
+        if (options.timeoutSeconds !== undefined) {
+          entry.timeout = setTimeout(() => {
+            if (
+              entry.exited ||
+              entry.killSignaled ||
+              snapshot.status !== "running"
+            )
+              return;
+            snapshot.timedOut = true;
+            runCleanup(killEntry(entry));
+          }, options.timeoutSeconds * 1_000);
+          entry.timeout.unref();
+        }
         notify(id);
         return snapshot as TerminalSnapshot;
       });

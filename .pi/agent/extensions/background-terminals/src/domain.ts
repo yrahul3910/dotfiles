@@ -11,7 +11,7 @@ import { Data } from "effect";
 export type TerminalStatus = "running" | "done" | "failed" | "killed";
 // "done"   = exited with code 0
 // "failed" = exited non-zero, or a spawn-level runtime error after start
-// "killed" = terminated by bg_kill, the /ps UI, or session teardown
+// "killed" = terminated by bg_kill, timeout, the /ps UI, or session teardown
 
 /** Read-only view over one captured output stream (stdout or stderr). */
 export interface OutputView {
@@ -38,6 +38,9 @@ export interface TerminalSnapshot {
   readonly status: TerminalStatus;
   /** Date.now() at spawn. */
   readonly createdAt: number;
+  readonly timeoutSeconds?: number;
+  /** True when the runtime limit initiated termination. */
+  readonly timedOut?: boolean;
   /** Date.now() at settle (exit/kill). */
   readonly settledAt?: number;
   /** Set when the process exited via exit code (exactly one of exitCode/signal). */
