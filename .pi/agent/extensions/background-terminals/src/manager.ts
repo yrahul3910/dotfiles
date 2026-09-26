@@ -550,6 +550,7 @@ const makeManager = Effect.gen(function* () {
               message: "Background terminal manager is shutting down.",
             });
           }
+
           if (
             options.timeoutSeconds !== undefined &&
             (!Number.isInteger(options.timeoutSeconds) ||
@@ -744,21 +745,19 @@ const makeManager = Effect.gen(function* () {
           return yield* new SpawnError({
             message: "Background terminal manager shut down while starting.",
           });
-        }
+          }
         entries.set(id, entry);
+
         if (options.timeoutSeconds !== undefined) {
           entry.timeout = setTimeout(() => {
-            if (
-              entry.exited ||
-              entry.killSignaled ||
-              snapshot.status !== "running"
-            )
-              return;
+            if (entry.exited || entry.killSignaled || snapshot.status !== "running") return;
             snapshot.timedOut = true;
             runCleanup(killEntry(entry));
           }, options.timeoutSeconds * 1_000);
+
           entry.timeout.unref();
         }
+
         notify(id);
         return snapshot as TerminalSnapshot;
       });

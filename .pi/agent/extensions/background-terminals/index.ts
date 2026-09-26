@@ -471,17 +471,12 @@ export default function (pi: ExtensionAPI) {
     },
   );
 
-  pi.registerMessageRenderer(
+  pi.registerMessageRenderer<
+    Partial<Pick<TerminalSnapshot, "id" | "title" | "status" | "exitCode" | "signal" | "timedOut">>
+  >(
     "background-terminal-result",
     (message, { expanded }, theme) => {
-      const details = (message.details ?? {}) as {
-        id?: string;
-        title?: string;
-        status?: string;
-        exitCode?: number;
-        signal?: string;
-        timedOut?: boolean;
-      };
+      const details = message.details ?? {};
       const failed = details.status === "failed";
       const killed = details.status === "killed";
       const icon = failed

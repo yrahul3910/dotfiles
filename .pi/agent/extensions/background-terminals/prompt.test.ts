@@ -119,10 +119,7 @@ test("timeout is visible in start, status, and completion output", () => {
   });
   assert.match(buildStartResult(terminal), /Runtime limit: 60s/);
   assert.match(buildStatusResult(terminal), /timed out/);
-  assert.match(
-    buildTerminalResultMessage(terminal),
-    /timed out \(limit 60s; SIGTERM\)/,
-  );
+  assert.match(buildTerminalResultMessage(terminal), /timed out \(limit 60s; SIGTERM\)/);
 });
 
 test("completion output is a shorter tail than the detailed status view", () => {

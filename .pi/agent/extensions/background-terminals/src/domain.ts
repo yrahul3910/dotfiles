@@ -9,9 +9,8 @@
 import { Data } from "effect";
 
 export type TerminalStatus = "running" | "done" | "failed" | "killed";
-// "done"   = exited with code 0
-// "failed" = exited non-zero, or a spawn-level runtime error after start
-// "killed" = terminated by bg_kill, timeout, the /ps UI, or session teardown
+// Successful exits are done; nonzero exits or spawn errors are failed. Explicit stops, timeouts, and session teardown
+// are killed.
 
 /** Read-only view over one captured output stream (stdout or stderr). */
 export interface OutputView {

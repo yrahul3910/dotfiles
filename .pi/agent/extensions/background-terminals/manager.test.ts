@@ -155,15 +155,14 @@ test(
       const snap = await runTool(
         runtime,
         manager.start({
-          command: nodeCmd(
-            'process.stdout.write("ready\\n"); setInterval(() => {}, 1000);',
-          ),
+          command: nodeCmd('process.stdout.write("ready\\n"); setInterval(() => {}, 1000);'),
           title: "timeout",
           cwd,
           timeoutSeconds: 1,
         }),
       );
       const { snap: done } = await settlement(manager, snap.id);
+
       assert.equal(done.status, "killed");
       assert.equal(done.timedOut, true);
       assert.equal(done.timeoutSeconds, 1);
@@ -171,6 +170,7 @@ test(
       assert.ok(done.settledAt);
       assert.ok(done.settledAt - done.createdAt >= 900);
       assert.deepEqual(notifications, [false]);
+
       const pid = done.pid;
       assert.ok(pid);
       assert.ok(await pollUntil(() => processGone(pid)));
@@ -236,6 +236,7 @@ test(
         }),
       );
       await new Promise((resolve) => setTimeout(resolve, 1_200));
+
       assert.equal(natural.status, "done");
       assert.equal(natural.timedOut, undefined);
       assert.equal(manual.status, "killed");
@@ -268,6 +269,7 @@ test("invalid timeouts fail before launching a process", async () => {
         /timeout_seconds must be an integer/,
       );
     }
+
     assert.equal(manager.view.size(), 0);
   });
 });
