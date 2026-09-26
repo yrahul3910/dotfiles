@@ -11,7 +11,8 @@ setopt ignoreeof  # for tmux + karabiner
 
 # Path to your oh-my-zsh installation.
 export PATH="/Applications/Ghostty.app/Contents/MacOS/":$PATH
-export PATH="$HOME/go/bin":$PATH
+# uv tools, okf, and no-slop-ts install here
+export PATH="$HOME/.local/bin:$PATH"
 
 export PYTHONPATH=$PYTHONPATH:.
 
@@ -214,7 +215,6 @@ bindkey ^R history-incremental-search-backward
 
 export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
 export PATH="$PATH:~/.config/emacs/bin"
-export PATH="$PATH:/usr/local/go/bin"
 
 zstyle ':completion:*' completer _complete _ignored _expand_alias
 autoload -Uz compinit
@@ -241,5 +241,5 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
-# Toolchains (Node, Rust, Python, uv) pinned in ~/.config/mise/config.toml
+# Toolchains (Node, Rust, Python, uv) from ~/.config/mise/config.toml
 command -v mise >/dev/null && eval "$(mise activate zsh)"

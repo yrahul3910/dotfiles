@@ -1,0 +1,17 @@
+# Language toolchains, installed by `mise install` from setup.sh.
+# Everything tracks the newest release except Python; `mise upgrade` updates them.
+[tools]
+node = "latest"
+# rust-analyzer and rust-src are what editors need; the default profile omits them.
+rust = { version = "stable", components = ["rust-analyzer", "rust-src"] }
+# Pinned to a minor version: free-threaded wheels lag each new Python release,
+# so moving to the next minor should be a deliberate edit here.
+python = "3.14"
+uv = "latest"
+
+[settings]
+# mise exports RUSTUP_TOOLCHAIN, which outranks a project's rust-toolchain.toml.
+# Reading that file lets a project's own pin win inside its directory.
+idiomatic_version_file_enable_tools = ["rust"]
+# Download the free-threaded CPython build instead of the default GIL build.
+python.precompiled_flavor = "freethreaded+pgo+lto"

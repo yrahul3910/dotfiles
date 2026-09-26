@@ -1,11 +1,10 @@
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+# Homebrew on Linux, so mise, zoxide, and friends are on PATH in bash too
+[[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Toolchains (Node, Rust, Python, uv) from ~/.config/mise/config.toml
 command -v mise >/dev/null && eval "$(mise activate bash)"
-alias python3="python3.12"
 
-[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
-eval "$(atuin init bash)"
-
-. "$HOME/.local/bin/env"
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/ryedida/.lmstudio/bin"
@@ -13,7 +12,7 @@ export PATH="$PATH:/Users/ryedida/.lmstudio/bin"
 
 export PATH=$PATH:$HOME/Downloads/google-cloud-sdk/bin/
 
-eval "$(zoxide init bash)"
+command -v zoxide >/dev/null && eval "$(zoxide init bash)"
 
-# Added by Antigravity CLI installer
-export PATH="/Users/ryedida/.local/bin:$PATH"
+# uv tools, okf, and no-slop-ts install here (the Antigravity CLI does too)
+export PATH="$HOME/.local/bin:$PATH"

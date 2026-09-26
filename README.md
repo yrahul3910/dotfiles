@@ -12,7 +12,7 @@ curl -sSL https://raw.githubusercontent.com/yrahul3910/dotfiles/master/bootstrap
 
 Most important is probably the neovim config, which mostly works on macOS and Ubuntu.
 
-All packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. Casks and macOS-only formulae are guarded with `OS.mac?`. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs. Language toolchains (Node, Rust, free-threaded Python, uv) are pinned in [`.config/mise/config.toml`](./.config/mise/config.toml) and installed with `mise install`; bump a pin there to update a machine.
+All packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. Casks and macOS-only formulae are guarded with `OS.mac?`. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs. Language toolchains (Node, Rust, free-threaded Python, uv) are declared in [`.config/mise/config.toml`](./.config/mise/config.toml) and installed with `mise install`. They track the newest release, except Python, which stays on one minor version until you edit it; run `mise upgrade` to update a machine.
 
 Dotfiles are linked with `stow --no-folding --restow .`, so every directory under `~` is a real directory and only tracked files are symlinks. App state written next to tracked config (for example `~/.config/gh/` or `~/.pi/agent/sessions/`) stays in `~` rather than in this checkout. After adding a file to the repo, run `stow --no-folding --restow .` from `~/configs` (or re-run `setup.sh`) to link it. Paths that must never be linked go in `.stow-local-ignore`. The exception is `.pi/agent/extensions`, which `setup.sh` links as one directory because Pi resolves extension imports from the link path and needs the repo's `node_modules` next to each extension.
 
@@ -91,11 +91,10 @@ On macOS, home-row mods are implemented using Karabiner-Elements, which I find w
 
 ## kanata config
 
-You will probably want to change the device file location in `.config/kanata/config.kbd`. Also, if the following does not work, you may want to instead move the systemd config file to `/etc/systemd/system` instead (and in this case, remove `--user`).
+kanata is Linux-only here; on macOS, Karabiner-Elements does the remapping. `setup.sh` installs kanata from the Brewfile and gives it access to input devices through a udev rule and the `input` and `uinput` groups. Log out and back in once so the new groups apply, then start the user service:
 
 ```
 systemctl --user daemon-reload
-systemctl --user enable kanata.service
-systemctl --user start kanata.service
+systemctl --user enable --now kanata.service
 systemctl --user status kanata.service
 ```

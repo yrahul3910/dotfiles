@@ -6,6 +6,10 @@ vim.pack.add {
   },
 }
 
+-- Build the native fuzzy matcher if it's missing or stale. The library is keyed
+-- to blink.cmp's git commit, so this only builds after an install or update.
+require('blink.cmp').build():pwait()
+
 require('blink.cmp').setup(
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
