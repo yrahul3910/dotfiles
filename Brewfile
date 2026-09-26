@@ -16,6 +16,8 @@ brew "cargo-deny"
 brew "cargo-udeps"
 # Cargo subcommand for checking and applying updates to installed executables
 brew "cargo-update"
+# JSON Schema CLI
+brew "check-jsonschema"
 # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
 brew "clang-format"
 # Cross-platform make
@@ -115,10 +117,16 @@ if OS.mac?
   cask "arq"
   # Desktop password and login vault
   cask "bitwarden"
+  # File manager
+  cask "bloom"
   # Calendar software focusing on flexibility and reliability
   cask "busycal"
   # E-books management software
   cask "calibre"
+  # Terminal-based AI coding assistant
+  cask "claude-code@latest"
+  # OpenAI's coding agent that runs in your terminal
+  cask "codex"
   # Disk space visualiser
   cask "daisydisk"
   # Universal database tool and SQL client
@@ -145,6 +153,8 @@ if OS.mac?
   cask "rcmd"
   # Customizable email client
   cask "thunderbird"
+  # Menu bar toolkit with keep-awake, system monitor and volume mixer
+  cask "vorssaint"
   # REST, GraphQL and gRPC client
   cask "yaak"
   # Multiplayer code editor
@@ -157,6 +167,8 @@ if OS.mac?
   cask "zotero"
   # Audio metadata editor; replaces sacad. It must already be on your Apple account.
   mas "Metadatics", id: 554883654
+  # Image viewer
+  mas "Pixea", id: 1507782672
 end
 cargo "cargo-tarpaulin"
 cargo "zqa"

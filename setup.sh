@@ -157,21 +157,30 @@ setup_desktop() {
     fi
 }
 
+# fish is the login shell. .zshrc and .bashrc stay in the repo for the occasional
+# zsh or bash session, but setup never switches to them.
 setup_shell() {
-    local zsh current
-    zsh=$(command -v zsh)
+    local fish current
+    fish=$(command -v fish)
 
-    # Homebrew's zsh is not in /etc/shells, and chsh refuses unlisted shells.
-    grep -qxF "$zsh" /etc/shells || echo "$zsh" | sudo tee -a /etc/shells >/dev/null
+    # Homebrew's fish is not in /etc/shells, and chsh refuses unlisted shells.
+    grep -qxF "$fish" /etc/shells || echo "$fish" | sudo tee -a /etc/shells >/dev/null
 
     if [[ "$OS" == "Darwin" ]]; then
         current=$(dscl . -read "/Users/$(whoami)" UserShell | awk '{print $2}')
+    else
+        current=$(getent passwd "$(whoami)" | cut -d: -f7)
+    fi
+    # Already fish, possibly through another path to the same binary
+    # (for example /usr/local/bin/fish linking to Homebrew's).
+    [[ "$(realpath "$current" 2>/dev/null)" == "$(realpath "$fish")" ]] && return 0
+
+    if [[ "$OS" == "Darwin" ]]; then
         # sudo reuses the credentials cached for Homebrew; plain chsh would ask again.
-        [[ "$current" == "$zsh" ]] || sudo chsh -s "$zsh" "$(whoami)"
+        sudo chsh -s "$fish" "$(whoami)"
     else
         # chsh prompts for a password or is missing on some images; usermod is not.
-        current=$(getent passwd "$(whoami)" | cut -d: -f7)
-        [[ "$current" == "$zsh" ]] || sudo usermod -s "$zsh" "$(whoami)"
+        sudo usermod -s "$fish" "$(whoami)"
     fi
 }
 
