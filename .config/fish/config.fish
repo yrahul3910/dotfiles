@@ -29,7 +29,6 @@ set -g fish_color_user brgreen
 set -g fish_color_valid_path --underline
 
 set -x PATH $PATH /opt/homebrew/bin
-set -x PATH $PATH /usr/local/go/bin
 set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
@@ -166,10 +165,9 @@ set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
 
 set -x PATH $HOME/.local/bin $PATH
-set -x PATH $HOME/go/bin $PATH
 
 set -gx GPG_TTY (tty)
 set -gx SOPS_AGE_KEY_FILE ~/.config/sops/age/keys.txt
 
-# Toolchains (Node, Rust, Python, uv) pinned in ~/.config/mise/config.toml
+# Toolchains (Node, Rust, Python, uv) from ~/.config/mise/config.toml
 command -q mise; and mise activate fish | source

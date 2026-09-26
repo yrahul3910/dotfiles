@@ -26,13 +26,6 @@ have() {
     command -v "$1" &>/dev/null
 }
 
-# Append a line to a file unless it is already present verbatim.
-append_line_once() {
-    local line="$1" file="$2"
-    touch "$file"
-    grep -qxF -- "$line" "$file" || echo "$line" >> "$file"
-}
-
 # Move a real file or directory out of the way; leave symlinks alone.
 backup_if_real() {
     local path="$1"
@@ -42,16 +35,17 @@ backup_if_real() {
 }
 
 # Copy a file into /usr/local/bin, with sudo when the directory is not writable.
+# .tmux.conf calls tmux-sessionizer by this path. A fresh Apple Silicon Mac has no
+# /usr/local/bin at all, so create it first.
 install_bin() {
     local src="$1"
+    [[ -d /usr/local/bin ]] || sudo mkdir -p /usr/local/bin
     if [[ -w /usr/local/bin ]]; then
         install -m 755 "$src" /usr/local/bin/
     else
         sudo install -m 755 "$src" /usr/local/bin/
     fi
 }
-
-
 
 # On macOS, Ghostty (installed via the Brewfile) replaces Kitty
 install_kitty() {
@@ -62,19 +56,17 @@ install_kitty() {
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 }
 
-
-
-
-
-# Homebrew on Linux needs a compiler and a few base tools from the distro.
+# Homebrew on Linux needs a compiler and a few base tools from the distro. The
+# Brewfile's cargo entries also need pkg-config, OpenSSL headers, and protoc from
+# system paths: brew bundle narrows PATH, so Homebrew's own copies are not visible.
 install_linux_bootstrap() {
     step "Installing Homebrew prerequisites..."
     case "$DISTRO" in
-        redhat) sudo dnf group install -y development-tools
-                sudo dnf install -y procps-ng curl file git ;;
-        arch)   sudo pacman -S --needed --noconfirm base-devel procps-ng curl file git ;;
+        redhat) sudo dnf group install -y development-tools c-development
+                sudo dnf install -y procps-ng curl file git pkgconf-pkg-config openssl-devel protobuf-compiler protobuf-devel ;;
+        arch)   sudo pacman -Syu --needed --noconfirm base-devel procps-ng curl file git openssl protobuf ;;
         debian) sudo apt-get update
-                sudo apt-get install -y build-essential procps curl file git ;;
+                sudo apt-get install -y build-essential procps curl file git pkg-config libssl-dev protobuf-compiler libprotobuf-dev ;;
         *)      echo "Unsupported Linux distribution" >&2; exit 1 ;;
     esac
 }
@@ -87,24 +79,35 @@ install_homebrew() {
     eval "$("$(command -v brew || echo /home/linuxbrew/.linuxbrew/bin/brew)" shellenv)"
 }
 
-# Node, Rust, Python, and uv are pinned in .config/mise/config.toml. This runs
-# before `brew bundle` because the Brewfile's cargo and uv entries need them.
+# Homebrew plus stow, so dotfiles can be linked before anything else runs.
+install_base() {
+    [[ "$OS" == "Linux" ]] && install_linux_bootstrap
+    install_homebrew
+    have stow || brew install stow
+}
+
+# Node, Rust, Python, and uv come from .config/mise/config.toml, which stow has
+# linked into ~/.config by now. It must be the global config: brew bundle scrubs
+# the environment before running the Brewfile's cargo and uv entries, so their
+# shims only find toolchains through the normal ~/.config location.
 install_toolchains() {
     have mise || brew install mise
     step "Installing toolchains with mise..."
-    # Point at the repo copy: on a fresh machine stow has not linked ~/.config yet.
-    MISE_GLOBAL_CONFIG_FILE="$REPO/.config/mise/config.toml" mise install --yes
+    # brew bundle runs from inside the repo, where mise also sees this file as a
+    # project config; trust it so shims launched from there do not refuse to run.
+    mise trust --quiet "$REPO"
+    mise install --yes
     eval "$(mise activate bash --shims)"
 }
 
 # All packages (brews, casks, Go & Cargo tools) come from the Brewfile; casks and
-# macOS-only formulae are guarded with OS.mac? there.
+# macOS-only formulae are guarded with OS.mac? there. A failed entry, usually a
+# cargo crate that does not build, should not stop the rest of setup, so it is
+# recorded here and reported when main finishes.
+BUNDLE_FAILED=0
 install_packages() {
-    [[ "$OS" == "Linux" ]] && install_linux_bootstrap
-    install_homebrew
-    install_toolchains
     step "Installing packages from the Brewfile..."
-    brew bundle --file="$REPO/Brewfile"
+    brew bundle --file="$REPO/Brewfile" || BUNDLE_FAILED=1
 }
 
 # --no-folding links individual files and leaves every directory real, so app
@@ -112,7 +115,12 @@ install_packages() {
 # --restow makes re-runs pick up files added to the repo since the last run.
 setup_dotfiles() {
     step "Setting up dotfiles..."
-    backup_if_real "$HOME/.zshrc"
+    # Fresh images ship real files stow would refuse to replace, such as ~/.bashrc.
+    local target
+    for target in $(cd "$REPO" && stow -n --no-folding --restow . 2>&1 \
+            | grep -oE 'over existing target [^ ]+' | awk '{print $4}'); do
+        backup_if_real "$HOME/$target"
+    done
     (cd "$REPO" && stow --no-folding --restow .)
     # Pi extensions are code with their own node_modules, and Pi resolves imports
     # from the link path, so this directory is one link (excluded in .stow-local-ignore).
@@ -126,9 +134,10 @@ setup_dotfiles() {
     fi
 }
 
-
 setup_desktop() {
-    if [[ "$OS" == "Linux" ]] && have gsettings; then
+    # Servers can have gsettings without the GNOME schemas, so check for the schema.
+    if [[ "$OS" == "Linux" ]] && have gsettings \
+            && gsettings list-schemas | grep -qx org.gnome.desktop.interface; then
         gsettings set org.gnome.desktop.interface clock-show-weekday true
     fi
     if [[ "$OS" == "Darwin" ]]; then
@@ -140,11 +149,44 @@ setup_desktop() {
 }
 
 setup_shell() {
-    append_line_once 'export PATH="$PATH:~/.local/bin"' "$HOME/.zshrc"
-    local zsh
+    local zsh current
     zsh=$(command -v zsh)
-    if [[ "${SHELL:-}" != "$zsh" ]]; then
-        chsh -s "$zsh" "$(whoami)"
+
+    # Homebrew's zsh is not in /etc/shells, and chsh refuses unlisted shells.
+    grep -qxF "$zsh" /etc/shells || echo "$zsh" | sudo tee -a /etc/shells >/dev/null
+
+    if [[ "$OS" == "Darwin" ]]; then
+        current=$(dscl . -read "/Users/$(whoami)" UserShell | awk '{print $2}')
+        # sudo reuses the credentials cached for Homebrew; plain chsh would ask again.
+        [[ "$current" == "$zsh" ]] || sudo chsh -s "$zsh" "$(whoami)"
+    else
+        # chsh prompts for a password or is missing on some images; usermod is not.
+        current=$(getent passwd "$(whoami)" | cut -d: -f7)
+        [[ "$current" == "$zsh" ]] || sudo usermod -s "$zsh" "$(whoami)"
+    fi
+}
+
+# kanata reads real keyboards and writes to a virtual one through uinput. On Linux
+# that needs the uinput module, a udev rule opening /dev/uinput to the uinput
+# group, and membership in the input and uinput groups. Group changes apply from
+# the next login. Start it with `systemctl --user enable --now kanata`.
+setup_kanata() {
+    [[ "$OS" == "Linux" ]] || return 0
+    have kanata || return 0
+    step "Granting kanata access to input devices..."
+    getent group uinput >/dev/null || sudo groupadd --system uinput
+    sudo usermod -aG input,uinput "$(whoami)"
+    local rule='KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"'
+    local rule_file=/etc/udev/rules.d/99-kanata-uinput.rules
+    if [[ "$(cat "$rule_file" 2>/dev/null)" != "$rule" ]]; then
+        echo "$rule" | sudo tee "$rule_file" >/dev/null
+        sudo udevadm control --reload-rules
+    fi
+    echo uinput | sudo tee /etc/modules-load.d/uinput.conf >/dev/null
+    if sudo modprobe uinput; then
+        sudo udevadm trigger --sysname-match=uinput
+    else
+        echo "Could not load the uinput module; kanata will not work on this kernel." >&2
     fi
 }
 
@@ -170,23 +212,27 @@ setup_stt_server() {
     mkdir -p "$HOME/projects"
     if [[ "$OS" == "Darwin" ]]; then
         # Swift package; needs Swift 6.2+ (Xcode 26 / matching CLT) on macOS 15+.
-        if [[ ! -d "$HOME/projects/macos-speech-server" ]]; then
-            git clone https://github.com/dokterbob/macos-speech-server "$HOME/projects/macos-speech-server"
-        fi
-        (cd "$HOME/projects/macos-speech-server" && swift build -c release)
+        # Built once; delete .build to force a rebuild after pulling updates.
+        local dir="$HOME/projects/macos-speech-server"
+        [[ -x "$dir/.build/release/speech-server" ]] && return 0
+        [[ -d "$dir" ]] || git clone https://github.com/dokterbob/macos-speech-server "$dir"
+        (cd "$dir" && swift build -c release)
     else
-        # whisper.cpp with CUDA when nvcc is available, otherwise CPU.
-        if [[ ! -d "$HOME/projects/whisper.cpp" ]]; then
-            git clone https://github.com/ggml-org/whisper.cpp "$HOME/projects/whisper.cpp"
-        fi
+        # whisper.cpp with CUDA when nvcc is available, otherwise CPU. Built once;
+        # delete build/ to force a rebuild after pulling updates.
+        local dir="$HOME/projects/whisper.cpp"
+        [[ -d "$dir" ]] || git clone https://github.com/ggml-org/whisper.cpp "$dir"
         (
-            cd "$HOME/projects/whisper.cpp"
-            if have nvcc; then
-                cmake -B build -DGGML_CUDA=1
-            else
-                cmake -B build
+            cd "$dir"
+            if [[ ! -x build/bin/whisper-server ]]; then
+                if have nvcc; then
+                    cmake -B build -DGGML_CUDA=1
+                else
+                    cmake -B build
+                fi
+                cmake --build build -j --config Release
             fi
-            cmake --build build -j --config Release
+            # The download script skips a model that is already present.
             ./models/download-ggml-model.sh large-v3-turbo
         )
     fi
@@ -194,14 +240,22 @@ setup_stt_server() {
 
 main() {
     install_kitty
-    install_packages
+    install_base
     setup_dotfiles
+    install_toolchains
+    install_packages
     setup_shell
+    setup_kanata
     install_scripts
     setup_desktop
     setup_agent_skills
     setup_stt_server
 
+    if [[ "$BUNDLE_FAILED" == 1 ]]; then
+        printf '\n\nSetup finished, but some Brewfile entries failed to install.\n'
+        printf 'Scroll up to the brew bundle output, or run: brew bundle check --verbose --file=%s\n' "$REPO/Brewfile"
+        exit 1
+    fi
     printf '\n\n===================\nDone! Please restart your terminal.\n===================\n'
 }
 

@@ -1,8 +1,5 @@
-tap "aws/tap", trusted: true
-tap "homebrew/brew-vulns"
 tap "mohamedelashri/free-mac", "https://github.com/MohamedElashri/homebrew-free-mac"
 tap "oven-sh/bun"
-tap "withgraphite/tap"
 # Simple, modern, secure file encryption
 brew "age"
 # B2 Cloud Storage Command-Line Tools
@@ -13,16 +10,18 @@ brew "bat"
 brew "boost"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Cargo plugin for linting your dependencies
+brew "cargo-deny"
+# Find unused dependencies in Cargo.toml
+brew "cargo-udeps"
+# Cargo subcommand for checking and applying updates to installed executables
+brew "cargo-update"
 # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
 brew "clang-format"
 # Cross-platform make
 brew "cmake"
-# GNU File, Shell, and Text utilities
-brew "coreutils"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# Perl lib for reading and writing EXIF metadata
-brew "exiftool"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
@@ -35,14 +34,12 @@ brew "fzf"
 brew "gh"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
-# GNU implementation of the famous stream editor
-brew "gnu-sed"
+# Git-compatible distributed version control system
+brew "jj"
 # Simple terminal UI for git commands
 brew "lazygit"
 # Next-gen compiler infrastructure
 brew "llvm"
-# Curses-based tool for viewing and analyzing log files
-brew "lnav"
 # Language Server for the Lua language
 brew "lua-language-server"
 # Polyglot runtime and tool version manager; toolchains are pinned in .config/mise/config.toml
@@ -75,8 +72,12 @@ brew "sops"
 brew "starship"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
+# Opinionated Lua code formatter
+brew "stylua"
 # Terminal multiplexer
 brew "tmux"
+# Parser generator tool
+brew "tree-sitter-cli"
 # Vi 'workalike' with many additional features
 brew "vim"
 # Blazing fast terminal file manager written in Rust, based on async I/O
@@ -93,18 +94,22 @@ brew "zoxide"
 brew "zsh"
 # Perf monitoring CLI tool for Apple Silicon
 brew "asitop" if OS.mac?
+# GNU File, Shell, and Text utilities
+brew "coreutils" if OS.mac?
+# Reads and writes EXIF metadata; only needed by Bloom
+brew "exiftool" if OS.mac?
+# GNU implementation of the famous stream editor
+brew "gnu-sed" if OS.mac?
+# Mac App Store command-line interface, for the mas entries below
+brew "mas" if OS.mac?
 # Implementation of the Vulkan graphics and compute API on top of Metal
 brew "molten-vk" if OS.mac?
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier" if OS.mac?
-# EC2 Instance Selector is a tool to filter EC2 instance types based on resource criteria
-brew "aws/tap/ec2-instance-selector"
-# Check Homebrew packages for known vulnerabilities via osv.dev
-brew "homebrew/brew-vulns/brew-vulns"
+# Keyboard remapper; on macOS, Karabiner-Elements does this instead
+brew "kanata" if OS.linux?
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun", trusted: true
-# Allows you to manage your stacked changes and submit them for review on GitHub
-brew "withgraphite/tap/graphite", trusted: true
 if OS.mac?
   # Multi-cloud backup application
   cask "arq"
@@ -136,8 +141,6 @@ if OS.mac?
   cask "neovide-app"
   # Get up and running with large language models locally
   cask "ollama-app"
-  # Image viewer
-  cask "qview"
   # App switcher driven by the Right Command key
   cask "rcmd"
   # Customizable email client
@@ -152,19 +155,9 @@ if OS.mac?
   cask "zettlr"
   # Collect, organise, cite, and share research sources
   cask "zotero"
+  # Audio metadata editor; replaces sacad. It must already be on your Apple account.
+  mas "Metadatics", id: 554883654
 end
-go "github.com/spf13/cobra-cli"
-go "github.com/golangci/golangci-lint/v2/cmd/golangci-lint"
-cargo "cargo-audit"
-cargo "cargo-deny"
 cargo "cargo-tarpaulin"
-cargo "cargo-udeps"
-cargo "cargo-update"
-cargo "jj-cli"
-cargo "kanata"
-cargo "sacad"
-cargo "stylua"
-cargo "tree-sitter-cli"
-cargo "trunk"
 cargo "zqa"
 uv "basedpyright"

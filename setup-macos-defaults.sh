@@ -68,6 +68,4 @@ if defaults read com.apple.finder &>/dev/null; then
     defaults write com.apple.Terminal NewTabSettingsBehavior -int 1
     defaults write com.apple.Terminal NewTabWorkingDirectoryBehavior -int 1
 
-    # Spotlight: Don't index mounted volumes
-    sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array /Volumes
 fi
