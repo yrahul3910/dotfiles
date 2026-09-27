@@ -6,6 +6,9 @@
   // protected paths — no per-command deny globs needed anymore.
   "desktopNotifications": true,
   "forwardedPromptTimeoutSeconds": null,
+  "permissionMode": "ask",
+  "autoReviewer": "jev",
+  "yoloMode": false,
   "bash": {
     "allow": [
       "cargo clippy",
