@@ -131,6 +131,9 @@ setup_dotfiles() {
         backup_if_real "$HOME/$target"
     done
     (cd "$REPO" && stow --no-folding --restow .)
+    # From here on, git hooks keep the links in step after commits, pulls,
+    # checkouts, and rebases; see sync-links.sh.
+    git -C "$REPO" config core.hooksPath .githooks
     # Pi extensions are code with their own node_modules, and Pi resolves imports
     # from the link path, so this directory is one link (excluded in .stow-local-ignore).
     local ext="$HOME/.pi/agent/extensions"
@@ -150,9 +153,12 @@ setup_desktop() {
         gsettings set org.gnome.desktop.interface clock-show-weekday true
     fi
     if [[ "$OS" == "Darwin" ]]; then
-        # VS Code does not follow XDG conventions on macOS
-        mkdir -p "$HOME/Library/Application Support/Code/User"
-        cp "$REPO/.config/Code/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
+        # VS Code does not follow XDG conventions on macOS. Skip it when it is not
+        # installed, rather than leave a settings file for an app that is not there.
+        if [[ -d "/Applications/Visual Studio Code.app" || -d "$HOME/Applications/Visual Studio Code.app" ]]; then
+            mkdir -p "$HOME/Library/Application Support/Code/User"
+            cp "$REPO/.config/Code/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
+        fi
         "$REPO/setup-macos-defaults.sh"
     fi
 }

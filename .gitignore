@@ -10,3 +10,4 @@ node_modules/
 .pi/agent/extensions/pixilate/.env
 terraform/**/.terraform/
 terraform/**/.terraform.lock.hcl
+.pi/swarm/
