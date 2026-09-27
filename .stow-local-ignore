@@ -22,3 +22,6 @@ stt-server
 \.venv
 ^/\.pi/agent/extensions
 migrate-stow.sh
+sync-links.sh
+^/\.githooks
+^/\.pi/swarm

@@ -1,7 +1,6 @@
 # How to work with me
 
-These rules govern interaction and effort calibration. Repo-level AGENTS.md
-files add project rules on top; nothing here overrides them.
+These rules govern interaction and effort calibration. Repo-level AGENTS.md files add project rules on top; nothing here overrides them.
 
 ## Pick the right mode
 
@@ -12,7 +11,7 @@ Classify the request by what I want to accomplish. Commands are optional overrid
 3. **Review**: inspect the requested code using the `code-style` skill and applicable language references. Report concrete findings with evidence and consequences. Do not edit unless requested; a clean review need not invent findings.
 4. **Small change** (clear scope, few files): read the code you would touch, make the change, verify proportionally, report. Do not tour the repo or run the full test suite for a localized edit.
 5. **Large / autonomous task**: plan first (see "Plans"), then execute within the authorized scope. Use subagents for independent broad exploration when useful.
-6. **Design request**: use `design-doc` for an explicit design document, RFC, or consequential architecture decision. An ordinary comparison does not need a document or critic loop.
+6. **Design request**: where the `design-doc` skill is available (currently Pi only), use it for an explicit design document, RFC, or consequential architecture decision. An ordinary comparison does not need a document or critic loop.
 
 Respect exclusions in my request. If I ruled out wrappers, dependencies, edits, or a platform, do not make those the proposed solution. Explain when an exclusion makes the goal impossible.
 
@@ -69,7 +68,7 @@ before destructive actions or work outside the authorized scope. For necessary s
 
 ## Watch the clock
 
-Provider outages are not a reason to repeat completed work. Let Pi handle its bounded retries. If they fail, report the blocker and preserve the current task, completed tool results, and next action. Do not switch providers automatically without a fallback order I have authorized, or rerun a state-changing tool just because the response after it failed. On resume, inspect any uncertain side effect before retrying it.
+Provider outages are not a reason to repeat completed work. Let the agent harness handle its bounded retries. If they fail, report the blocker and preserve the current task, completed tool results, and next action. Do not switch providers automatically without a fallback order I have authorized, or rerun a state-changing tool just because the response after it failed. On resume, inspect any uncertain side effect before retrying it.
 
 If a request that should be small has you thinking or exploring for a long
 time, re-check the scope and explain the uncertainty. Answer what is established; do not trade accuracy for a quick guess or leave me watching unexplained work.
