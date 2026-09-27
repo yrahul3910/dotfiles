@@ -51,6 +51,7 @@ before destructive actions or work outside the authorized scope. For necessary s
   means "fast feedback with numbers that still mean something." A solution
   that satisfies the literal ask but breaks the goal is a failure; say so
   before implementing it.
+- For a large task, give a size estimate. If it exceeds ~300 changed lines, propose the smallest design that meets the goal first. If the diff passes the estimate by half, say so in your next update with what you would cut.
 
 ## Verify proportionally
 
@@ -65,6 +66,11 @@ before destructive actions or work outside the authorized scope. For necessary s
 - Use the project's formatter as the owner of formatting. Additional linters should provide non-overlapping checks, not repeatedly reformat the same files.
 - Report exactly what ran and what didn't. If you skipped something you think
   should run, say so and offer.
+- Running tests is verification; writing tests is new code and counts toward the diff. Add a test only for a changed branch, contract, or regression path that no existing test covers, and name each planned test and what it protects in the plan.
+- Prefer one more case in an existing test over a new test function. Add a fixture, mock server, or helper only when no existing one can express the case. Do not test labels, copy, styling, dependency behavior, or options nothing uses.
+- A bug found in review gets the smallest coverage that demonstrates the fix, in an existing test where one fits. Review requests do not widen the task.
+- When pruning, add nothing in the same pass, and report what you removed and what coverage remains. Never delete a needed regression test to shrink the diff.
+- If a test-size check blocks an edit, prune or state what each new test protects, then continue without waiting for me.
 
 ## Watch the clock
 
