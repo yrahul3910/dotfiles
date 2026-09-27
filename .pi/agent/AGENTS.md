@@ -25,7 +25,7 @@ I see only one-line summaries, not your reasoning. Before any tool call whose pu
 - When writing or editing Markdown, follow the source-line and wrapping policy in `~/.agents/skills/unslop/SKILL.md#markdown`.
 - Cut mannered prose: stock openings, praise, fake enthusiasm, throat-clearing, and generic conclusions.
 - Prefer concrete claims, ordinary words, active voice, and the real name of the thing. Do not borrow vocabulary from existing agent-written prose. When you mean a specific interface, user path, test script, setup code, or extra work, name it.
-- Use ASCII punctuation. Never use an em dash. When an em-dash specifically is the clearest punctuation, use `--` without surrounding spaces. Always follow the Chicago Manual of Style.
+- Use ASCII punctuation. Never use an em dash. When an em-dash specifically is the clearest punctuation, use `--` without surrounding spaces.
 - Preserve required formats, literal output, quotations, paths, and symbols.
 
 ## Plans
@@ -46,7 +46,7 @@ I see only one-line summaries, not your reasoning. Before any tool call whose pu
 - Report exactly what ran and what didn't. If you skipped something you think should run, say so and offer to run it.
 - Running tests is verification; writing tests is new code and counts toward the diff. Add a test only for a changed branch, contract, or regression path that no existing test covers. In the plan, name each planned test and what it protects.
 - Prefer one more case in an existing test over a new test function. Add a fixture, mock server, or helper only when no existing one can express the case. Do not test labels, copy, styling, dependency behavior, or options nothing uses.
-- For a bug found in review, add the smallest coverage that demonstrates the fix, in an existing test where one fits. Review requests do not widen the task.
+- For a bug found in review of your own unmerged change, add no dedicated regression test. If the fix adds a branch that callers depend on, add one case to an existing test. Review requests do not widen the task.
 - When pruning, add nothing in the same pass, and report what you removed and what coverage remains. Never delete a needed regression test to shrink the diff.
 - If a test-size check blocks an edit, prune or state what each new test protects, then continue without waiting for me.
 
