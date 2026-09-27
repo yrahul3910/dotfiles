@@ -1,12 +1,9 @@
 /**
  * Automatic reasoning-effort routing.
  *
- * The model classifies each request itself and sets its own thinking level
- * through the set_reasoning_effort tool. Every user turn starts back at the
- * cheap baseline, so a quick question after a hard task never burns minutes
- * of reasoning; escalating costs one fast round-trip at the start of a
- * nontrivial turn (the thinking level is re-read before every LLM call, so
- * the change applies immediately within the same agent loop).
+ * The model sets its own thinking level through set_reasoning_effort. UI sessions reset to the cheap baseline
+ * before each user turn; headless sessions, including subagents, keep their caller's level. Pi re-reads the
+ * thinking level before each LLM call, so a tool change takes effect within the same agent loop.
  *
  * Manual override: alt+e opens a picker to pin a level or return to auto
  * (alt+digit chords are taken by tmux window bindings). /effort <level|auto>
@@ -56,17 +53,21 @@ export default function (pi: ExtensionAPI) {
 
     pi.on("session_start", async (_event, ctx) => {
         pinned = null;
+
         for (const entry of ctx.sessionManager.getBranch().toReversed()) {
             if (entry.type === "custom" && entry.customType === PIN_ENTRY) {
                 pinned = LEVELS.find((level) => level === entry.data) ?? null;
                 break;
             }
         }
-        pi.setThinkingLevel(pinned ?? BASELINE);
+
+        if (pinned !== null || ctx.hasUI)
+            pi.setThinkingLevel(pinned ?? BASELINE);
     });
 
-    pi.on("before_agent_start", async () => {
-        pi.setThinkingLevel(pinned ?? BASELINE);
+    pi.on("before_agent_start", async (_event, ctx) => {
+        if (pinned !== null || ctx.hasUI)
+            pi.setThinkingLevel(pinned ?? BASELINE);
     });
 
     pi.on("model_select", (_event, ctx) => {
@@ -82,8 +83,9 @@ export default function (pi: ExtensionAPI) {
         label: "Reasoning effort",
         description:
             "Set your own reasoning effort for the rest of this user turn unless the user pinned it. " +
-            `Effort resets to '${BASELINE}' at the start of every user turn, ` +
-            "so set it again when a new turn continues nontrivial work.",
+            `In UI sessions, effort resets to '${BASELINE}' at the start of every user turn, ` +
+            "so set it again when a new turn continues nontrivial work. " +
+            "Headless sessions, including subagents, keep their caller's level until explicitly changed.",
         promptSnippet: "Set your own reasoning effort for the current task",
         promptGuidelines: [
             "Call set_reasoning_effort as your first action before nontrivial work: " +

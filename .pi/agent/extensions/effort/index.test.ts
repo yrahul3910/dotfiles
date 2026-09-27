@@ -12,7 +12,11 @@ import {
 } from "@earendil-works/pi-coding-agent";
 import effort from "./index.ts";
 
-async function openSession(directory: string, manager: SessionManager) {
+async function openSession(
+    directory: string,
+    manager: SessionManager,
+    options: { thinkingLevel?: "low" | "high"; interactive?: boolean } = {},
+) {
     const settingsManager = SettingsManager.inMemory({
         packages: [],
         retry: { enabled: false },
@@ -36,9 +40,66 @@ async function openSession(directory: string, manager: SessionManager) {
         resourceLoader,
         sessionManager: manager,
         model: getModel("anthropic", "claude-sonnet-4-5"),
+        thinkingLevel: options.thinkingLevel ?? "low",
     });
-    await session.bindExtensions({});
+
+    if (options.interactive) {
+        await session.bindExtensions({
+            uiContext: { ...session.extensionRunner.getUIContext() },
+            mode: "tui",
+        });
+    } else {
+        await session.bindExtensions({});
+    }
+
     return session;
+}
+
+for (const interactive of [false, true]) {
+    const description = interactive
+        ? "UI sessions reset to low"
+        : "headless sessions preserve requested high";
+
+    test(`${description} at startup and before successive turns`, async () => {
+        const directory = await mkdtemp(join(tmpdir(), "pi-effort-routing-"));
+        const manager = SessionManager.inMemory(directory);
+
+        try {
+            const session = await openSession(directory, manager, {
+                thinkingLevel: "high",
+                interactive,
+            });
+
+            try {
+                const expected = interactive ? "low" : "high";
+                assert.equal(session.thinkingLevel, expected);
+
+                for (const prompt of ["First task", "Follow-up task"]) {
+                    session.setThinkingLevel("high");
+                    await session.extensionRunner.emitBeforeAgentStart(
+                        prompt,
+                        undefined,
+                        "",
+                        { cwd: directory },
+                    );
+                    assert.equal(session.thinkingLevel, expected);
+                }
+
+                await session.prompt("/effort high");
+                await session.extensionRunner.emitBeforeAgentStart(
+                    "Pinned task",
+                    undefined,
+                    "",
+                    { cwd: directory },
+                );
+                assert.equal(session.thinkingLevel, "high");
+            } finally {
+                session.dispose();
+            }
+        } finally {
+            await rm(directory, { recursive: true, force: true });
+        }
+    });
 }
 
 test("effort commands survive session reconstruction and auto releases the pin", async () => {
