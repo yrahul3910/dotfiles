@@ -224,25 +224,7 @@ def main() -> int:
         return 0
 
     files = sorted(scope)
-<<<<<<< HEAD
-    py_files = [
-        f
-        for path in files
-        for f in ([path] if path.is_file() else sorted(path.rglob("*.py")))
-        if f.suffix == ".py"
-    ]
-    findings = [
-        f
-        for f in run_ruff(files) + run_rules(py_files)
-        if any(f.start_line in r for r in scope.get(f.path, [WHOLE_FILE]))
-    ]
-||||||| parent of 3c0ad97 (feat(no-sloppy): add padding and walrus rules, refine wrap checks)
-    findings = [
-        f for f in run_ruff(files) + run_rules(files) if any(f.start_line in r for r in scope.get(f.path, [WHOLE_FILE]))
-    ]
-=======
     findings = [f for f in run_ruff(files) + run_rules(files) if f.touches(scope.get(f.path, [WHOLE_FILE]))]
->>>>>>> 3c0ad97 (feat(no-sloppy): add padding and walrus rules, refine wrap checks)
     findings.sort(key=lambda f: (str(f.path), f.start_line, f.start_col))
 
     color = color_enabled()
