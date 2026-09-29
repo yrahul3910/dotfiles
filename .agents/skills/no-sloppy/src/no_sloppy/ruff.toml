@@ -16,6 +16,7 @@ external = ["SLOP"]
 ignore = [
   "D203",    # conflicts with D211 (blank line before class docstring)
   "D213",    # conflicts with D212 (summary on first line)
+  "D413",    # off in every pydocstyle convention; wants a blank line closing the docstring
   "N806",    # allow UPPER_CASE constants inside functions
   "TRY003",  # leads to a pile of one-off exception classes
   "FBT002",  # better fix is making boolean args required-positional
