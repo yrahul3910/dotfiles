@@ -1,10 +1,8 @@
 """No-sloppy checker for Python.
 
 Two layers:
-  1. A ruff overlay: `ruff check --config <package>/ruff.toml`, applied
-     independently of the project's own lint setup.
-  2. Custom rules for slop patterns ruff can't express, one module per rule
-     in the rules/ package, auto-discovered at runtime.
+  1. A ruff overlay: `ruff check --config <package>/ruff.toml`, applied independently of the project's own lint setup.
+  2. Custom rules for slop patterns ruff can't express, one module per rule in rules/, auto-discovered at runtime.
 
 By default only the lines changed relative to HEAD are reported (staged, unstaged, and untracked files), so findings are
 about the code just written, not the surrounding codebase.
@@ -12,7 +10,7 @@ about the code just written, not the surrounding codebase.
 Findings are errors, warnings, or heuristics: errors fail the check (exit 1); warnings are informational unless --strict
 promotes them; heuristics are best-effort hints that never affect the exit code.
 
-Usage:
+Examples:
     no-sloppy                 # changed .py files, findings on changed lines only
     no-sloppy --base <ref>    # diff against another ref (e.g. main)
     no-sloppy --all           # changed .py files, whole-file findings
@@ -216,7 +214,7 @@ def main() -> int:
     The code is 1 when any finding is an error, or a warning under `--strict`, and 0 otherwise; heuristics never count.
     When git or ruff fails, the run exits with status 1 and the tool's error instead of returning.
     """
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("paths", nargs="*", type=Path, help="files/dirs to check whole (default: changed files)")
     parser.add_argument("--base", default="HEAD", help="git ref to diff against (default: HEAD)")
     parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
