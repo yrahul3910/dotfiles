@@ -38,6 +38,7 @@ no-sloppy              # changed lines vs HEAD (default)
 no-sloppy --base main  # diff against another ref
 no-sloppy --all        # changed files, whole-file findings
 no-sloppy --strict     # warnings also fail the check
+no-sloppy --no-ruff    # custom rules only, skip the ruff overlay
 no-sloppy PATH...      # explicit files/dirs, whole-file (dirs recurse)
 ```
 

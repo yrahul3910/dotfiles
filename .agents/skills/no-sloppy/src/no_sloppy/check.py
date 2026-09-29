@@ -17,6 +17,7 @@ Usage:
     no-sloppy --base <ref>    # diff against another ref (e.g. main)
     no-sloppy --all           # changed .py files, whole-file findings
     no-sloppy --strict        # warnings also fail the check
+    no-sloppy --no-ruff       # custom rules only, skip the ruff overlay
     no-sloppy PATH...         # explicit files/dirs, whole-file findings
 
 Requires git and ruff (falls back to `uvx ruff`).
@@ -204,6 +205,7 @@ def main() -> int:
     parser.add_argument("--base", default="HEAD", help="git ref to diff against (default: HEAD)")
     parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
     parser.add_argument("--strict", action="store_true", help="exit nonzero on warnings too")
+    parser.add_argument("--no-ruff", action="store_true", help="custom rules only (syntax errors go unreported)")
     args = parser.parse_args()
 
     if args.paths:
@@ -232,7 +234,8 @@ def main() -> int:
         return 0
 
     files = sorted(scope)
-    findings = [f for f in run_ruff(files) + run_rules(files) if f.touches(scope.get(f.path, [WHOLE_FILE]))]
+    unfiltered = ([] if args.no_ruff else run_ruff(files)) + run_rules(files)
+    findings = [f for f in unfiltered if f.touches(scope.get(f.path, [WHOLE_FILE]))]
     findings.sort(key=lambda f: (str(f.path), f.start_line, f.start_col))
 
     color = color_enabled()
