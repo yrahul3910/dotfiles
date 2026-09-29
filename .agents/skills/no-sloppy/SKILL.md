@@ -39,6 +39,7 @@ no-sloppy --base main  # diff against another ref
 no-sloppy --all        # changed files, whole-file findings
 no-sloppy --strict     # warnings also fail the check
 no-sloppy --no-ruff    # custom rules only, skip the ruff overlay
+no-sloppy --summary    # finding counts per rule instead of each finding
 no-sloppy PATH...      # explicit files/dirs, whole-file (dirs recurse)
 ```
 
@@ -56,6 +57,6 @@ Findings have three levels: **errors** fail the check (exit 1); **warnings** are
 
 ## Adding custom rules
 
-Create a new module in `src/no_sloppy/rules/`--it is imported automatically, one rule per file. The blank-line rules (SLOP012, SLOP015, SLOP016) share a layout model in [src/no_sloppy/layout.py](src/no_sloppy/layout.py): bodies of sibling statements, their headers and clause boundaries, and each statement's visual start including attached comments. Each rule is a function `(path, source, tree, tokens) -> list[Finding]` decorated with `@rule` (imported `from . import Finding, rule`), where `tree` is the `ast` module tree and `tokens` the `tokenize` stream (comments included). Use the next free `SLOPxxx` code and list it in this file. Findings default to the error level; pass `level="warn"` to `Finding` for advisory rules, or `level="heuristic"` for pattern-matched rules where false positives are expected. Favor precision over recall: the consumer is an LLM mid-task, and noisy rules get ignored or cause fix-churn. Findings are automatically filtered to changed lines like ruff's. 
+Create a new module in `src/no_sloppy/rules/`--it is imported automatically, one rule per file. The blank-line rules (SLOP012, SLOP015, SLOP016) share a layout model in [src/no_sloppy/layout.py](src/no_sloppy/layout.py): bodies of sibling statements, their headers and clause boundaries, and each statement's visual start including attached comments. Each rule is a function `(path, source, tree, tokens) -> list[Finding]` decorated with `@rule` (imported `from . import Finding, rule`), where `tree` is the `ast` module tree and `tokens` the `tokenize` stream (comments included). Use the next free `SLOPxxx` code and list it in this file. The module name in kebab case (`banner_comments` becomes `banner-comments`) is the rule's name in `--summary` output. Findings default to the error level; pass `level="warn"` to `Finding` for advisory rules, or `level="heuristic"` for pattern-matched rules where false positives are expected. Favor precision over recall: the consumer is an LLM mid-task, and noisy rules get ignored or cause fix-churn. Findings are automatically filtered to changed lines like ruff's. 
 
 See [src/no_sloppy/rules/banner_comments.py](src/no_sloppy/rules/banner_comments.py) for the template.

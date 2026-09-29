@@ -41,6 +41,7 @@ class Finding:
     end_line: int | None = None
     end_col: int | None = None
     level: Level = "error"
+    rule_name: str | None = None
 
     @property
     def last_line(self) -> int:
@@ -185,8 +186,8 @@ def run_rules(py_files: list[Path]) -> list[Finding]:
     Importing each module in this package is what registers its rules, so that happens here (a no-op after the first
     call). A file that fails to parse or tokenize is skipped without a finding, because ruff already reports the
     syntax error. A `# noqa` on any line a finding covers suppresses it when it is bare or names the finding's code;
-    rules never handle noqa themselves. Findings come back grouped by file in rule-registration order, unsorted and not
-    yet filtered to changed lines.
+    rules never handle noqa themselves. Each finding's `rule_name` is its rule module's name in kebab case. Findings
+    come back grouped by file in rule-registration order, unsorted and not yet filtered to changed lines.
     """
     # Import every sibling module so its @rule registrations run.
     for mod in sorted(Path(__file__).parent.glob("*.py")):
@@ -210,7 +211,11 @@ def run_rules(py_files: list[Path]) -> list[Finding]:
         noqa = _suppressed_codes(tokens)
 
         for check in RULES:
+            rule_name = check.__module__.rpartition(".")[2].replace("_", "-")
+
             for finding in check(path, source, tree, tokens):
+                finding.rule_name = rule_name
+
                 # A noqa anywhere in a multi-line finding's span (a wrapped call's closing line, say) applies.
                 spanned = [noqa[line] for line in range(finding.start_line, finding.last_line + 1) if line in noqa]
 
