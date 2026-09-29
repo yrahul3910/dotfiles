@@ -37,7 +37,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "e51d8519c79c073c41107c108be97548c115455e",
+      "rev": "619cf2edd4f5b6cd9ed6cbe05560497fdd1e8223",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
     "diffview.nvim": {
