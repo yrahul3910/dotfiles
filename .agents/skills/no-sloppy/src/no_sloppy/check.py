@@ -24,6 +24,7 @@ Requires git and ruff (falls back to `uvx ruff`).
 """
 
 import argparse
+import ast
 import json
 import os
 import re
@@ -143,6 +144,22 @@ def run_ruff(files: list[Path]) -> list[Finding]:
     ]
 
 
+def syntax_errors(files: list[Path]) -> list[Finding]:
+    """Return a `syntax-error` finding for each of `files` that fails to parse.
+
+    The custom rules skip unparseable files and leave the report to ruff, so this stands in for ruff under `--no-ruff`.
+    """
+    findings: list[Finding] = []
+
+    for path in files:
+        try:
+            ast.parse(path.read_text(encoding="utf-8", errors="replace"))
+        except SyntaxError as exc:
+            findings.append(Finding(path, exc.lineno or 1, exc.offset or 1, "syntax-error", exc.msg))
+
+    return findings
+
+
 def git(*args: str) -> str:
     """Run a git command and return its stdout, exiting on failure."""
     if (exe := shutil.which("git")) is None:
@@ -205,7 +222,7 @@ def main() -> int:
     parser.add_argument("--base", default="HEAD", help="git ref to diff against (default: HEAD)")
     parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
     parser.add_argument("--strict", action="store_true", help="exit nonzero on warnings too")
-    parser.add_argument("--no-ruff", action="store_true", help="custom rules only (syntax errors go unreported)")
+    parser.add_argument("--no-ruff", action="store_true", help="custom rules only, skip the ruff overlay")
     args = parser.parse_args()
 
     if args.paths:
@@ -234,7 +251,7 @@ def main() -> int:
         return 0
 
     files = sorted(scope)
-    unfiltered = ([] if args.no_ruff else run_ruff(files)) + run_rules(files)
+    unfiltered = (syntax_errors(files) if args.no_ruff else run_ruff(files)) + run_rules(files)
     findings = [f for f in unfiltered if f.touches(scope.get(f.path, [WHOLE_FILE]))]
     findings.sort(key=lambda f: (str(f.path), f.start_line, f.start_col))
 
