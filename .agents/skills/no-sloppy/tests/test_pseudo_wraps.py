@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from no_sloppy.check import syntax_errors
 from no_sloppy.line_limit import line_length
 from no_sloppy.rules import Finding, run_rules
 
@@ -43,6 +44,12 @@ class PseudoWrapTests(unittest.TestCase):
 
     def test_noqa_anywhere_in_the_span_suppresses(self):
         assert self.findings("result = transform(\n    value,\n)  # noqa: SLOP014\n") == []
+
+    def test_syntax_errors_come_from_the_syntax_pass_not_the_rules(self):
+        self.path.write_text("value = 1\ndef broken(:\n")
+        assert run_rules([self.path]) == []
+        [finding] = syntax_errors([self.path])
+        assert (finding.code, finding.start_line) == ("syntax-error", 2)
 
     def test_multi_line_findings_render_every_line_and_elide_long_middles(self):
         short = Finding(Path("example.py"), 2, 1, "SLOP014", "wrap", end_line=4)
