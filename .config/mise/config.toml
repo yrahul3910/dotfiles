@@ -3,11 +3,12 @@
 [tools]
 node = "latest"
 # rust-analyzer and rust-src are what editors need; the default profile omits them.
-rust = { version = "stable", components = ["rust-analyzer", "rust-src"] }
+rust = { version = "latest", components = ["rust-analyzer", "rust-src"], mr_boxington = true }
 # Pinned to a minor version: free-threaded wheels lag each new Python release,
 # so moving to the next minor should be a deliberate edit here.
 python = "3.14"
 uv = "latest"
+mr-boxington = "latest"
 
 [settings]
 # mise exports RUSTUP_TOOLCHAIN, which outranks a project's rust-toolchain.toml.
