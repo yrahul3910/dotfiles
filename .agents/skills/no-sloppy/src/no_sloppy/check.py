@@ -15,6 +15,8 @@ Examples:
     no-sloppy --base <ref>    # diff against another ref (e.g. main)
     no-sloppy --all           # changed .py files, whole-file findings
     no-sloppy --strict        # warnings also fail the check
+    no-sloppy --no-ruff       # custom rules only, skip the ruff overlay
+    no-sloppy --summary       # finding counts per rule instead of each finding
     no-sloppy PATH...         # explicit files/dirs, whole-file findings
 
 Requires git and ruff (falls back to `uvx ruff`).
@@ -83,6 +85,33 @@ def render_report(findings: list[Finding], *, color: bool = False) -> str:
     return "\n\n".join(blocks)
 
 
+def render_summary(findings: list[Finding], *, color: bool = False) -> str:
+    """Render a table with one row per rule code and level, most findings first.
+
+    Each row counts the findings and the distinct files they fall in, so a rule that fires all over one file is easy to
+    tell from one spread across the codebase. A code whose findings carry different levels (SLOP006 reports both errors
+    and warnings) gets a row per level. Rows with equal counts sort by code. A rule shows as its code with its name in
+    parentheses, like `SLOP006(non-ascii)`, or as the bare code for syntax errors, which have no name.
+    """
+    groups: dict[tuple[str, Level], list[Finding]] = {}
+
+    for finding in findings:
+        rule = f"{finding.code}({finding.rule_name})" if finding.rule_name else finding.code
+        groups.setdefault((rule, finding.level), []).append(finding)
+
+    reset = RESET if color else ""
+    width = max([len("rule"), *(len(rule) for rule, _ in groups)])
+    lines = [f"{'rule':<{width}}  level      findings  files"]
+
+    for (rule, level), group in sorted(groups.items(), key=lambda item: (-len(item[1]), item[0])):
+        tint = LEVEL_COLORS[level] if color else ""
+        label = "warning" if level == "warn" else level
+        files = len({f.path for f in group})
+        lines.append(f"{rule:<{width}}  {tint}{label:<9}{reset}  {len(group):>8}  {files:>5}")
+
+    return "\n".join(lines)
+
+
 def ruff_cmd() -> list[str]:
     """Locate ruff, preferring a PATH install and falling back to uvx."""
     if ruff := shutil.which("ruff"):
@@ -136,6 +165,8 @@ def run_ruff(files: list[Path]) -> list[Finding]:
             end_line=(item.get("end_location") or {}).get("row"),
             end_col=(item.get("end_location") or {}).get("column"),
             level=level_for(item["code"] or "syntax-error"),
+            # Ruff's JSON has no rule name field, but the docs URL ends in it. Syntax errors have no URL.
+            rule_name=item["url"].rsplit("/", 1)[-1] if item["url"] else None,
         )
         for item in raw
     ]
@@ -220,6 +251,7 @@ def main() -> int:
     parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
     parser.add_argument("--strict", action="store_true", help="exit nonzero on warnings too")
     parser.add_argument("--no-ruff", action="store_true", help="custom rules only, skip the ruff overlay")
+    parser.add_argument("--summary", action="store_true", help="print finding counts per rule instead of each finding")
     args = parser.parse_args()
 
     if args.paths:
@@ -247,7 +279,8 @@ def main() -> int:
     color = color_enabled()
 
     if findings:
-        print(render_report(findings, color=color))  # noqa: T201
+        render = render_summary if args.summary else render_report
+        print(render(findings, color=color))  # noqa: T201
 
         styles = {level: tint if color else "" for level, tint in LEVEL_COLORS.items()}
         reset = RESET if color else ""
