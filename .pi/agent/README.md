@@ -36,6 +36,7 @@ wpctl set-default 53
 * `background-terminals` - background terminals.
 * `pixilate` - adds little pixel characters that roam around.
 * `pr-review` - installs a GitHub Actions workflow for automatic Pi PR reviews.
+* `recap/` - a `/recap` command, plus an automatic recap after a period of inactivity.
 
 ## Skills
 
@@ -73,9 +74,15 @@ Start Pi with `pi --tui-mode fullscreen` (or choose fullscreen in `/settings`). 
 
 `promptHistoryScope` in the existing `~/.pi/agent/settings.json` controls Up/Down prompt recall: `"project"` (default) reads saved sessions for the same working directory, `"global"` reads all projects, and `"session"` keeps Pi's session-only behavior. Trusted `.pi/settings.json` files can override it. Run `/reload` after changing it. History uses Pi's 100-entry editor limit, adds current-session prompts last, and works with both the Vim editor's insert mode and `/novim`. It reads saved user-message text, not a separate raw-input log, so expanded templates can appear in recalled prompts. No history is added to model context until submitted.
 
+## Recaps
+
+`/recap` asks the current model for three bullets: what the session is working on, what is done, and what is next. The recap appears in the transcript as a custom entry, so it never enters the model's context.
+
+`recapIdleMinutes` in `~/.pi/agent/settings.json` (5 here) also writes one automatically, once the agent has finished and the terminal has seen no keypresses for that many minutes, so it is waiting when you return. Each idle stretch gets at most one recap, sessions with fewer than three prompts are skipped, and starting a new run cancels a recap in progress. Set it to `0` or remove it to turn automatic recaps off; trusted `.pi/settings.json` files can override it. Run `/reload` after changing it.
+
 ## Config checks
 
-From `.pi/agent/extensions`, run `bun install --ignore-scripts` and `bun run check`. This checks types and exercises `/effort` through Pi sessions, fish output delivery, and timing accounting without calling a model provider. The development SDK version matches the Pi version used to verify this config; update it when upgrading Pi.
+From `.pi/agent/extensions`, run `bun install --ignore-scripts` and `bun run check`. This checks types and exercises `/effort` through Pi sessions, fish output delivery, timing accounting, and recaps against pi-ai's faux provider, without calling a real model provider. The development SDK version matches the Pi version used to verify this config; update it when upgrading Pi.
 
 Each of these extensions has its own directory with an `index.ts` entry point, its tests, and any supporting modules.
 
