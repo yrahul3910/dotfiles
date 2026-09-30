@@ -5,6 +5,7 @@
   "defaultThinkingLevel": "low",
   "editorPaddingX": 0,
   "promptHistoryScope": "project",
+  "recapIdleMinutes": 5,
   "transport": "auto",
   "retry": {
     "enabled": true,
