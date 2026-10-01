@@ -1,11 +1,12 @@
 """Regression cases for unnecessary wrapping and project-specific limits."""
 
+import contextvars
 import tempfile
 import unittest
 from pathlib import Path
 
 from no_sloppy.check import syntax_errors
-from no_sloppy.line_limit import line_length
+from no_sloppy.line_limit import line_length, use_ruff_config
 from no_sloppy.rules import Finding, run_rules
 
 
@@ -118,6 +119,18 @@ class PseudoWrapTests(unittest.TestCase):
         (self.root / "base.toml").write_text("[lint.pycodestyle]\nmax-line-length = 90\n")
         (self.root / "ruff.toml").write_text('extend = "base.toml"\nline-length = 160\n')
         assert line_length(self.path) == 90
+
+    def test_ruff_config_option_replaces_discovery(self):
+        (self.root / "ruff.toml").write_text("line-length = 80\n")
+        custom = self.root / "custom.toml"
+        custom.write_text("line-length = 150\n")
+        context = contextvars.copy_context()
+        context.run(use_ruff_config, custom)
+        assert context.run(line_length, self.path) == 150
+
+        custom.write_text("[lint]\nselect = ['E']\n")
+        context.run(use_ruff_config, custom)
+        assert context.run(line_length, self.path) == 80
 
     def test_noqa_is_honored(self):
         source = "# Return the selected item from the collection\n# when the predicate succeeds.\n"

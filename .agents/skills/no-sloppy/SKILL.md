@@ -7,7 +7,7 @@ description: Deterministic anti-slop pass for Python. After writing or editing P
 
 A deterministic slop check for Python code you just wrote, in two layers:
 
-1. **Ruff overlay** -- [ruff.toml](src/no_sloppy/ruff.toml) selects `ALL` rules with a short, deliberate ignore list and `max-args = 8`. The checker passes it via `--config`, so the same standard applies regardless of the project's own lint setup.
+1. **Ruff overlay** -- [ruff.toml](src/no_sloppy/ruff.toml) selects `ALL` rules with a short, deliberate ignore list and `max-args = 8`. The checker passes it via `--config`, so the same standard applies regardless of the project's own lint setup. `--ruff-config PATH` replaces it with another `ruff.toml`, or a `pyproject.toml` that has a `[tool.ruff]` table; a `pyproject.toml` without one is rejected, since ruff would silently lint with its defaults. Its line limit, when it sets one, also replaces the project's for `SLOP014` and `SLOP017`.
 2. **Custom rules** -- slop patterns ruff can't express (redundant comments, naming slop, silent fallbacks, ...). One module per rule in [src/no_sloppy/rules/](src/no_sloppy/rules/), auto-discovered at runtime. Current rules:
   - `SLOP001` banner/separator comments
   - `SLOP002` `from __future__ import annotations`
@@ -39,6 +39,7 @@ no-sloppy --base main  # diff against another ref
 no-sloppy --all        # changed files, whole-file findings
 no-sloppy --strict     # warnings also fail the check
 no-sloppy --no-ruff    # custom rules only, skip the ruff overlay
+no-sloppy --ruff-config PATH  # use PATH (ruff.toml or pyproject.toml) instead of the bundled overlay
 no-sloppy --summary    # finding counts per rule instead of each finding
 no-sloppy PATH...      # explicit files/dirs, whole-file (dirs recurse)
 ```
@@ -49,7 +50,7 @@ Findings have three levels: **errors** fail the check (exit 1); **warnings** are
 
 - Apply [code-style's line-wrapping rule](../code-style/SKILL.md#line-wrapping) to code, docstrings, comments, and documentation. `SLOP014` checks complete logical code lines, including calls, signatures, imports, and expressions. It also checks docstrings and prose comments for lines ending at least 20 columns early while the next word still fits. Structural documentation breaks, literal multiline content, blank-line grouping, literal container layouts, and comprehensions with a filter or second `for` that break only between clauses remain intact. A single comment on a wrapped statement's first or last line does not justify the wrap; it moves to the end of the joined line. Project-required formatting is a valid exception; a trailing comma, personal preference, and existing pseudo-wraps are not.
 - Review Markdown manually. Fill each prose line to the active Markdown linter's limit before wrapping at a word boundary. With no applicable limit, keep the entire paragraph or list item on one source line, regardless of length. Do not use the 120-column fallback for Markdown; the editor soft-wraps it.
-- `SLOP014` uses the nearest explicit Ruff, Flake8, or Pylint line limit, including Ruff's `extend` chain and `lint.pycodestyle.max-line-length`. With no explicit limit, it uses 120. For other lint tools, check their configured threshold during review. The overlay's bundled 120-column config does not override the project's threshold for this rule.
+- `SLOP014` uses the nearest explicit Ruff, Flake8, or Pylint line limit, including Ruff's `extend` chain and `lint.pycodestyle.max-line-length`. With no explicit limit, it uses 120. A `--ruff-config` file that sets a limit overrides all of these. For other lint tools, check their configured threshold during review. The overlay's bundled 120-column config does not override the project's threshold for this rule.
 - Fix errors in code you wrote; treat warnings as advisory style feedback worth a look. Don't silence findings with `noqa` -- a suppression is only acceptable when the rule is genuinely wrong for the case, narrowly scoped, and commented with why.
 - SLOP015 anchors on the blank line to delete, so it cannot carry a `# noqa`; if one is genuinely wrong, restructure rather than suppress. Both layers honor `# noqa` comments: `# noqa: SLOP001` (or any ruff code) suppresses that rule on the line; a bare `# noqa` suppresses everything. A SLOP finding that spans several lines is suppressed by a `# noqa` on any of them, such as a wrapped call's closing line. Prefer explicit codes -- a bare `# noqa` that only suppresses SLOP rules looks unused to ruff and trips RUF100.
 - This overlay is advisory for your diff; the project's own lint config still governs the codebase. Where the two disagree on style (not correctness), the project wins -- follow its config and ignore the overlay finding.
