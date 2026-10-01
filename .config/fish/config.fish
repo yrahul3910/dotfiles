@@ -102,15 +102,6 @@ function copyenv --description "Load encrypted secrets into this shell"
     echo "Secrets loaded."
 end
 
-function yy
-  set tmp (mktemp -t "yazi-cwd.XXXXXX")
-  yazi $argv --cwd-file="$tmp"
-  if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-    cd -- "$cwd"
-  end
-  rm -f -- "$tmp"
-end
-
 function tl
   sed -i --follow-symlinks -e "s/dark.conf/light.conf/g" ~/.config/kitty/kitty.conf 
   sed -i --follow-symlinks -e "s/GitHub Dark Default/Atom One Light/g" ~/.config/ghostty/config

@@ -42,15 +42,6 @@ function prdiff () {
     git --no-pager diff --word-diff=color --word-diff-regex="[A-Za-z0-9_]+|[^A-Za-z0-9_[:space:]]" "$@"
 }
 
-function yy() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-    yazi "$@" --cwd-file="$tmp"
-    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-	builtin cd -- "$cwd"
-    fi
-    rm -f -- "$tmp"
-}
-
 function up() {
     local count=${1:-1}
     # Check if the argument is a positive integer

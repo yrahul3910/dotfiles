@@ -30,7 +30,7 @@ Dotfiles are linked with `stow --no-folding --restow .`, so every directory unde
 * Shells: bash, fish, zsh
 * Terminals: Ghostty, kitty
 * VCS: git, jj
-* Other stuff: tmux, yazi, starship, editrc/inputrc, latexmk, prettier
+* Other stuff: tmux, starship, editrc/inputrc, latexmk, prettier
 
 ## Fish configuration
 
