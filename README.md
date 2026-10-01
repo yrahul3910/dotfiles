@@ -4,17 +4,17 @@ Config files for quick setup.
 
 ## Bootstrapping
 
-In theory, this should work:
+Run:
 
 ```sh
 curl -sSL https://raw.githubusercontent.com/yrahul3910/dotfiles/master/bootstrap.sh | bash
 ```
 
-Most important is probably the neovim config, which mostly works on macOS and Ubuntu.
+Most important is probably the neovim config, which is tested on macOS, Ubuntu, and Arch.
 
-All packages — CLI tools, casks, and Go/Cargo binaries — live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. Casks and macOS-only formulae are guarded with `OS.mac?`. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs. Language toolchains (Node, Rust, free-threaded Python, uv) are declared in [`.config/mise/config.toml`](./.config/mise/config.toml) and installed with `mise install`. They track the newest release, except Python, which stays on one minor version until you edit it; run `mise upgrade` to update a machine.
+All packages such as CLI tools, casks, and Go/Cargo binaries live in the [`Brewfile`](./Brewfile) and are installed with `brew bundle` on both macOS and Linux. On Linux, `setup.sh` first installs the distro packages Homebrew itself needs. Language toolchains (Node, Rust, free-threaded Python, uv) are declared in [`.config/mise/config.toml`](./.config/mise/config.toml) and installed with `mise install`. They track the newest release, except Python, which stays on one minor version until you edit it; run `mise upgrade` to update a machine.
 
-Dotfiles are linked with `stow --no-folding --restow .`, so every directory under `~` is a real directory and only tracked files are symlinks. App state written next to tracked config (for example `~/.config/gh/` or `~/.pi/agent/sessions/`) stays in `~` rather than in this checkout. Git hooks in `.githooks` run `sync-links.sh` after every commit, pull, checkout, and rebase, so added, renamed, and deleted files are linked or unlinked automatically. It also removes links left behind when a whole folder is deleted, which stow misses. For changes you have not committed yet, run `./sync-links.sh` yourself; `./sync-links.sh --dry-run` shows what it would do. `setup.sh` turns the hooks on in each new clone. Paths that must never be linked go in `.stow-local-ignore`. The exception is `.pi/agent/extensions`, which `setup.sh` links as one directory because Pi resolves extension imports from the link path and needs the repo's `node_modules` next to each extension.
+Dotfiles are linked with `stow --no-folding --restow .`, so every directory under `~` is a real directory and only tracked files are symlinks. Git hooks in `.githooks` run `sync-links.sh` after every commit, pull, checkout, and rebase, so added, renamed, and deleted files are linked or unlinked automatically. It also removes links left behind when a whole folder is deleted, which stow misses. For changes you have not committed yet, run `./sync-links.sh` yourself; `./sync-links.sh --dry-run` shows what it would do. `setup.sh` turns the hooks on in each new clone. Paths that must never be linked go in `.stow-local-ignore`. The exception is `.pi/agent/extensions`, which `setup.sh` links as one directory because Pi resolves extension imports from the link path and needs the repo's `node_modules` next to each extension.
 
 ## Requirements
 
@@ -22,42 +22,26 @@ Dotfiles are linked with `stow --no-folding --restow .`, so every directory unde
 
 ## Included configs
 
-* Neovim
-* Firefox `user.js` (move this to the right folder)
-* fish
-* zsh
-* kitty
-* Karabiner
-* yazi
-* git
-* pip
-* starship.rs
-* kanata
-
-## Installation
-
-First, checkout the repo to your `$HOME` directory:
-
-```sh
-git clone https://github.com/yrahul3910/dotfiles.git
-cd configs
-```
-
-Then, use GNU Stow to create symlinks to your configs:
-
-```sh
-stow .
-```
+* Agents: pi, Codex, Claude Code, OpenCode
+* Editors: Helix, Neovim, Zed
+* Firefox: `user.js` (move this to the right folder)
+* Keyboard remapping: Karabiner, kanata
+* Python: python, pip
+* Shells: bash, fish, zsh
+* Terminals: Ghostty, kitty
+* VCS: git, jj
+* Other stuff: tmux, yazi, starship, editrc/inputrc, latexmk, prettier
 
 ## Fish configuration
 
 `fish` is configured to use vim bindings, and `/` in normal mode searches command history using `fzf`. The following custom functions exist: 
 
+* `prdiff` shows a git diff between two refs (e.g., `prdiff origin/main..HEAD -- .`)
 * `mkcd` creates and goes into a new directory. 
 * `so` sources the fish config.
 * `up <number>` goes up a specified number of directories.
 * `tl` and `td` change to light and dark theme respectively.
-* `copyenv` copies `.env` from this repo (so you'll need one here) to wherever you are. Then, it checks if you're in a git repo. If so, it checks whether the `.gitignore` contains a `.env`; if not (or if there is no `.gitignore`), it adds it.
+* `copyenv` copies `.env` from this repo (so you'll need one here) to wherever you are. Then, it checks if you're in a git repo. If so, it checks whether the `.gitignore` contains a `.env`; if not (or if there is no `.gitignore`), it adds it. `envsource` uses the arg passed to it and sources the variables into the shell.
 
 ## Neovim configuration
 
