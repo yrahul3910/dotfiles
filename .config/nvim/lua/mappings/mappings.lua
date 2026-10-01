@@ -32,8 +32,6 @@ end
 if vim.g.neovide then
   imap('<C-v>', '<C-R>+', 'Paste from clipboard')
   imap('<D-v>', '<C-R>+', 'Paste from clipboard')
-  nmap('<C-v>', '"+p', 'Paste from clipboard')
-  vmap('<C-v>', '"+p', 'Paste from clipboard')
 
   nmap('<C-=>', function()
     vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
