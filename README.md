@@ -41,7 +41,7 @@ Dotfiles are linked with `stow --no-folding --restow .`, so every directory unde
 * `so` sources the fish config.
 * `up <number>` goes up a specified number of directories.
 * `tl` and `td` change to light and dark theme respectively.
-* `copyenv` copies `.env` from this repo (so you'll need one here) to wherever you are. Then, it checks if you're in a git repo. If so, it checks whether the `.gitignore` contains a `.env`; if not (or if there is no `.gitignore`), it adds it. `envsource` uses the arg passed to it and sources the variables into the shell.
+* `copyenv` uses `sops` to source env vars into the shell. `envsource` uses the arg passed to it and sources the variables into the shell.
 
 ## Neovim configuration
 

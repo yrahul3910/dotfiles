@@ -132,8 +132,6 @@ alias gcloud=$HOME/Downloads/google-cloud-sdk/bin/gcloud
 alias gsutil=$HOME/Downloads/google-cloud-sdk/bin/gcloud
 alias lg=lazygit
 alias diff=delta
-alias moss="~/moss.pl"
-alias '...'='cd ../../'
 alias l="ls --color=auto"
 alias ll="ls -l --color=auto"
 alias ls="ls --color=auto"
