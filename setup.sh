@@ -153,12 +153,6 @@ setup_desktop() {
         gsettings set org.gnome.desktop.interface clock-show-weekday true
     fi
     if [[ "$OS" == "Darwin" ]]; then
-        # VS Code does not follow XDG conventions on macOS. Skip it when it is not
-        # installed, rather than leave a settings file for an app that is not there.
-        if [[ -d "/Applications/Visual Studio Code.app" || -d "$HOME/Applications/Visual Studio Code.app" ]]; then
-            mkdir -p "$HOME/Library/Application Support/Code/User"
-            cp "$REPO/.config/Code/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
-        fi
         "$REPO/setup-macos-defaults.sh"
     fi
 }
