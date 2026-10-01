@@ -1,12 +1,15 @@
 """Line-length limits for the rules that measure lines (SLOP014, SLOP017).
 
 The project's own limit governs wrapping, not the overlay's bundled ruff config: a codebase formatted to 100 columns
-should not be told to fill lines to 120. `WRAP_MARGIN` is how far below that limit a line must end before a rule treats
-the break or split as needless, which keeps the rules quiet about lines that are merely close to full.
+should not be told to fill lines to 120. A config named with `--ruff-config` is different: it replaces the project's
+config for ruff, so its limit (see `use_ruff_config`) replaces the discovered one here too. `WRAP_MARGIN` is how far
+below that limit a line must end before a rule treats the break or split as needless, which keeps the rules quiet about
+lines that are merely close to full.
 """
 
 import configparser
 import tomllib
+from contextvars import ContextVar
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -14,6 +17,8 @@ if TYPE_CHECKING:
 
 DEFAULT_LINE_LENGTH = 120
 WRAP_MARGIN = 20
+
+_config_limit: ContextVar[int | None] = ContextVar("config_limit", default=None)
 
 
 def _ruff_limit(config: Path) -> int | None:
@@ -53,6 +58,18 @@ def _ruff_config(directory: Path) -> Path | None:
     return None
 
 
+def use_ruff_config(config: Path) -> None:
+    """Make `line_length` return `config`'s limit for every file, the way ruff's `--config` applies one config to all.
+
+    `config` is a Ruff config file (`ruff.toml`, `.ruff.toml`, or `pyproject.toml`), read as `line_length` reads a
+    discovered one: `lint.pycodestyle.max-line-length` beats `line-length`, and `extend` chains are followed. When it
+    sets neither, `line_length` keeps discovering the project's own limit. The setting lives in a `ContextVar`, so it
+    lasts for the rest of the current context, which for the CLI is the whole run. A cyclic `extend` chain or malformed
+    TOML raises, as in `line_length`.
+    """
+    _config_limit.set(_ruff_limit(config.resolve()))
+
+
 def line_length(path: Path) -> int:
     """Return the line-length limit the project explicitly configures for `path`, or `DEFAULT_LINE_LENGTH` without one.
 
@@ -63,9 +80,14 @@ def line_length(path: Path) -> int:
     configs further up are ignored, though Flake8 and Pylint settings there still count. Within a Ruff config,
     `lint.pycodestyle.max-line-length` beats `line-length`, and `extend` chains are followed.
 
+    A limit set through `use_ruff_config` skips the search entirely.
+
     A cyclic `extend` chain raises `ValueError`, and malformed TOML or INI raises its parser's error; neither is
     caught here, so a broken config fails the run instead of silently falling back.
     """
+    if (limit := _config_limit.get()) is not None:
+        return limit
+
     ruff_found = False
 
     for directory in path.resolve().parents:

@@ -2,6 +2,7 @@
 
 Two layers:
   1. A ruff overlay: `ruff check --config <package>/ruff.toml`, applied independently of the project's own lint setup.
+     `--ruff-config` swaps in another config file.
   2. Custom rules for slop patterns ruff can't express, one module per rule in rules/, auto-discovered at runtime.
 
 By default only the lines changed relative to HEAD are reported (staged, unstaged, and untracked files), so findings are
@@ -16,6 +17,7 @@ Examples:
     no-sloppy --all           # changed .py files, whole-file findings
     no-sloppy --strict        # warnings also fail the check
     no-sloppy --no-ruff       # custom rules only, skip the ruff overlay
+    no-sloppy --ruff-config PATH  # ruff.toml, or pyproject.toml with [tool.ruff], instead of the bundled overlay
     no-sloppy --summary       # finding counts per rule instead of each finding
     no-sloppy PATH...         # explicit files/dirs, whole-file findings
 
@@ -30,9 +32,11 @@ import re
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from .line_limit import use_ruff_config
 from .rules import LEVEL_COLORS, RESET, Finding, run_rules
 
 if TYPE_CHECKING:
@@ -123,14 +127,34 @@ def ruff_cmd() -> list[str]:
     sys.exit("no-sloppy: ruff not found on PATH (install ruff or uv)")
 
 
-def run_ruff(files: list[Path]) -> list[Finding]:
+def ruff_config(value: str) -> Path:
+    """Parse a `--ruff-config` value: a ruff config file, or a `pyproject.toml` with a `[tool.ruff]` table.
+
+    Ruff reads a `pyproject.toml` without that table as an empty config and lints with its defaults, so that case is
+    rejected here instead of passing silently. A missing file is rejected too. Malformed TOML raises `TOMLDecodeError`,
+    which argparse reports as an invalid value.
+    """
+    path = Path(value)
+
+    if not path.is_file():
+        msg = f"{value} is not a file"
+        raise argparse.ArgumentTypeError(msg)
+
+    if path.name == "pyproject.toml" and "ruff" not in tomllib.loads(path.read_text()).get("tool", {}):
+        msg = f"{value} has no [tool.ruff] table"
+        raise argparse.ArgumentTypeError(msg)
+
+    return path
+
+
+def run_ruff(files: list[Path], config: Path) -> list[Finding]:
     """Run the ruff overlay on `files` and return every finding it reports.
 
-    Ruff runs with the bundled overlay config (`RUFF_CONFIG`) rather than the project's own, and without its cache, so
-    the same standard applies everywhere. Nothing is filtered to changed lines here; the caller does that. Paths come
-    back resolved so they match the custom rules' paths, a file ruff cannot parse yields a finding coded
-    `syntax-error`, and each finding's level comes from `level_for`. Ruff's own exit status is ignored
-    (`--exit-zero`); the caller decides what fails the run.
+    Ruff runs with `config` (the bundled `RUFF_CONFIG` unless `--ruff-config` names another) rather than the project's
+    own discovered config, and without its cache, so the same standard applies everywhere. Nothing is filtered to
+    changed lines here; the caller does that. Paths come back resolved so they match the custom rules' paths, a file
+    ruff cannot parse yields a finding coded `syntax-error`, and each finding's level comes from `level_for`. Ruff's own
+    exit status is ignored (`--exit-zero`); the caller decides what fails the run.
 
     If ruff is not installed, or prints something other than a JSON report (it crashed, or the overlay config is
     unreadable), this exits the process with ruff's error output instead of returning.
@@ -139,7 +163,7 @@ def run_ruff(files: list[Path]) -> list[Finding]:
         *ruff_cmd(),
         "check",
         "--config",
-        str(RUFF_CONFIG),
+        str(config),
         "--output-format",
         "json",
         "--exit-zero",
@@ -250,7 +274,15 @@ def main() -> int:
     parser.add_argument("--base", default="HEAD", help="git ref to diff against (default: HEAD)")
     parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
     parser.add_argument("--strict", action="store_true", help="exit nonzero on warnings too")
-    parser.add_argument("--no-ruff", action="store_true", help="custom rules only, skip the ruff overlay")
+    ruff_options = parser.add_mutually_exclusive_group()
+    ruff_options.add_argument("--no-ruff", action="store_true", help="custom rules only, skip the ruff overlay")
+    ruff_options.add_argument(
+        "--ruff-config",
+        type=ruff_config,
+        metavar="PATH",
+        help="ruff.toml, or pyproject.toml with a [tool.ruff] table, to use instead of the bundled overlay; its line "
+        "limit also governs SLOP014 and SLOP017",
+    )
     parser.add_argument("--summary", action="store_true", help="print finding counts per rule instead of each finding")
     args = parser.parse_args()
 
@@ -279,8 +311,12 @@ def main() -> int:
         print("no-sloppy: no changed Python files")  # noqa: T201
         return 0
 
+    if args.ruff_config:
+        use_ruff_config(args.ruff_config)
+
     files = sorted(scope)
-    unfiltered = (syntax_errors(files) if args.no_ruff else run_ruff(files)) + run_rules(files)
+    ruff_findings = syntax_errors(files) if args.no_ruff else run_ruff(files, args.ruff_config or RUFF_CONFIG)
+    unfiltered = ruff_findings + run_rules(files)
     findings = [f for f in unfiltered if f.touches(scope.get(f.path, [WHOLE_FILE]))]
     findings.sort(key=lambda f: (str(f.path), f.start_line, f.start_col))
 
