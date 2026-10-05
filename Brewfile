@@ -66,8 +66,6 @@ brew "qpdf"
 brew "ripgrep"
 # Fast and accurate code counter with complexity and COCOMO estimates
 brew "scc"
-# Used as a compiler wrapper and avoids compilation when possible
-brew "sccache"
 # Editor of encrypted files
 brew "sops"
 # Cross-shell prompt for astronauts
