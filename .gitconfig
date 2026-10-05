@@ -19,6 +19,9 @@
 
 [delta]
     navigate = true
+    side-by-side = true
+    wrap-max-lines = unlimited
+
 
 [merge]
     conflictStyle = zdiff3
@@ -58,12 +61,6 @@
     ss = stash push -S
     ssh = stash show
     unfck = reset --hard HEAD
-
-[delta]
-    side-by-side = true
-
-[diff]
-    algorithm = histogram
 
 [commit]
     verbose = true
