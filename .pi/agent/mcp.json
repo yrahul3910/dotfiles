@@ -1,17 +1,10 @@
 {
   "mcpServers": {
     "linear": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
-      "url": "https://mcp.linear.app/mcp",
-      "auth": { "type": "oauth" }
+      "url": "https://mcp.linear.app/mcp"
     },
     "firecrawl": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.firecrawl.dev/v2/mcp-oauth"],
-      "url": "https://mcp.firecrawl.dev/v2/mcp-oauth",
-      "auth": { "type": "oauth" },
-      "lifecycle": "eager"
+      "url": "https://mcp.firecrawl.dev/v2/mcp-oauth"
     }
   }
 }
