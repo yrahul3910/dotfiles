@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.87.1",
+  "lastChangelogVersion": "1.0.0",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6-astra",
   "defaultThinkingLevel": "low",
@@ -18,7 +18,6 @@
   },
   "packages": [
     "npm:@tintinweb/pi-subagents",
-    "npm:pi-mcp-extension",
     "npm:pi-voice-stt",
     "git:github.com/yrahul3910/pi-permission-system"
   ],

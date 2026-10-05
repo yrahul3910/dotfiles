@@ -68,6 +68,7 @@
     "mcp_firecrawl_firecrawl_search": "allow",
     "mcp_firecrawl_firecrawl_scrape": "allow",
     "Agent": "allow",
+    "codemode": "allow",
   },
   "debug": false,
   "yoloBypassProtectedPaths": false,
