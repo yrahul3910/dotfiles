@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Pick a project with fzf, then open or focus a herdr workspace for it.
+set -euo pipefail
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    selected=$(
+        {
+            find \
+                ~/Desktop \
+                ~/projects \
+                ~/ \
+                ~/work \
+                -mindepth 1 -maxdepth 3 \
+                -path "$HOME/.cache" -prune -o \
+                -type d -print \
+                2>/dev/null || true
+        } | fzf
+    ) || exit 0
+fi
+[[ -z $selected ]] && exit 0
+
+label=$(basename "$selected" | tr . _)
+
+existing=$(herdr workspace list | jq -r --arg l "$label" \
+    '[.. | objects | select(.label? == $l) | .workspace_id][0] // empty')
+if [[ -n $existing ]]; then
+    herdr workspace focus "$existing" >/dev/null
+    exit 0
+fi
+
+created=$(herdr workspace create --cwd "$selected" --label "$label" --no-focus)
+workspace=$(jq -r '.result.workspace.workspace_id' <<<"$created")
+pane=$(jq -r '.result.root_pane.pane_id' <<<"$created")
+
+herdr pane run "$pane" pi >/dev/null
+herdr tab create --workspace "$workspace" --cwd "$selected" --no-focus >/dev/null
+third=$(herdr tab create --workspace "$workspace" --cwd "$selected" --no-focus \
+    | jq -r '.result.root_pane.pane_id')
+herdr pane run "$third" nvim >/dev/null
+herdr workspace focus "$workspace" >/dev/null

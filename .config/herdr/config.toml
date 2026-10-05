@@ -1,0 +1,49 @@
+onboarding = false
+
+[theme]
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+
+[keys]
+prefix = "ctrl+a"
+
+# Same directions as .tmux.conf: j is up, k is down.
+focus_pane_up = "prefix+j"
+focus_pane_down = "prefix+k"
+focus_pane_left = "prefix+h"
+focus_pane_right = "prefix+l"
+
+# tmux splits: % is right, " is down.
+split_vertical = "prefix+%"
+split_horizontal = "prefix+\""
+
+previous_tab = ["prefix+p", "ctrl+alt+h"]
+next_tab = ["prefix+n", "ctrl+alt+l"]
+switch_tab = ["prefix+1..9", "alt+1..9"]
+last_pane = "prefix+o"
+goto = "prefix+g"
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+
+[terminal]
+new_cwd = "follow"
+
+[ui]
+copy_on_select = false
+mouse_scroll_lines = 6
+confirm_close = true
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "~/.config/herdr/sessionizer"
+width = "60%"
+height = "60%"
+
+[[keys.command]]
+key = "alt+f"
+type = "popup"
+command = "~/.config/herdr/sessionizer"
+width = "60%"
+height = "60%"
