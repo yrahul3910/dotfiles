@@ -17,7 +17,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export PYTHONPATH=$PYTHONPATH:.
 
 export ELECTRON_OZONE_PLATFORM_HINT=auto
-export RUSTC_WRAPPER=sccache
 
 if [ "$(uname)" = "Linux" ]; then
     export QT_QPA_PLATFORM=wayland
