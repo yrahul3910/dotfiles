@@ -6,6 +6,7 @@
         "tokens-per-second/*.ts",
         "pr-review/*.ts",
         "prompt-history/*.ts",
-        "recap/*.ts"
+        "recap/*.ts",
+        "worktree/*.ts"
     ]
 }
