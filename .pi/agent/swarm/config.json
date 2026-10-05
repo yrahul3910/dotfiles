@@ -14,7 +14,7 @@
     },
     {
       "name": "skeptic",
-      "model": "openai-codex/gpt-6-astra",
+      "model": "openai/gpt-6-astra",
       "persona": "You hunt failure modes: concurrency, partial failure, weird input, migration cost, unstated assumptions. You are adversarial but fair."
     }
   ]
