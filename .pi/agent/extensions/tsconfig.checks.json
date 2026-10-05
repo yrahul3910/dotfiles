@@ -7,6 +7,7 @@
         "pr-review/*.ts",
         "prompt-history/*.ts",
         "cat/*.ts",
-        "recap/*.ts"
+        "recap/*.ts",
+        "worktree/*.ts"
     ]
 }

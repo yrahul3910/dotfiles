@@ -5,6 +5,7 @@ import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
 import type {
     ExtensionAPI,
+    ExtensionCommandContext,
     BashOperations,
 } from "@earendil-works/pi-coding-agent";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
@@ -175,6 +176,78 @@ function completeDirectories(prefix: string) {
     }
 }
 
+type WithSession = NonNullable<
+    NonNullable<
+        Parameters<ExtensionCommandContext["switchSession"]>[1]
+    >["withSession"]
+>;
+
+/**
+ * Move pi into `target`, carrying the conversation over, then run `onSwitched` in the replacement session.
+ *
+ * The process cwd changes before the switch because pi takes a new session's cwd from `process.cwd()` when the
+ * session file is not on disk yet, which is the case until the first assistant reply. A saved session is forked into
+ * `target`; an unsaved one is replaced by an empty session there. If the switch is cancelled or throws, the process
+ * cwd goes back to where it was.
+ *
+ * `onSwitched` does not run when there is nothing to switch: when `target` is already the session cwd, or when
+ * sessions are kept in memory. In both cases only the process cwd changes.
+ */
+export async function moveSessionTo(
+    ctx: ExtensionCommandContext,
+    target: string,
+    onSwitched: WithSession,
+) {
+    const oldProcessCwd = process.cwd();
+    setProcessCwd(target);
+
+    try {
+        if (target === ctx.cwd) {
+            ctx.ui.notify(`Process cwd: ${formatPath(target)}`, "info");
+            return;
+        }
+
+        let targetSessionFile: string | undefined;
+        const currentSessionFile = ctx.sessionManager.getSessionFile();
+
+        if (currentSessionFile && existsSync(currentSessionFile)) {
+            targetSessionFile = SessionManager.forkFrom(
+                currentSessionFile,
+                target,
+            ).getSessionFile();
+        } else {
+            const targetSession = SessionManager.create(target);
+            targetSession.appendCustomEntry("cd", {
+                createdBy: "cwd-and-fish",
+                target,
+            });
+            targetSessionFile = targetSession.getSessionFile();
+        }
+
+        if (!targetSessionFile) {
+            ctx.ui.notify(
+                `Process cwd: ${formatPath(target)} (session is not persisted)`,
+                "info",
+            );
+            return;
+        }
+
+        const result = await ctx.switchSession(targetSessionFile, {
+            withSession: async (newCtx) => {
+                syncProcessCwd(target);
+                await onSwitched(newCtx);
+            },
+        });
+
+        if (result.cancelled) {
+            setProcessCwd(oldProcessCwd);
+        }
+    } catch (error) {
+        setProcessCwd(oldProcessCwd);
+        throw error;
+    }
+}
+
 export default function (pi: ExtensionAPI) {
     const fishOperations = createFishOperations();
 
@@ -225,56 +298,12 @@ export default function (pi: ExtensionAPI) {
             if (!info.isDirectory())
                 throw new Error(`Not a directory: ${target}`);
 
-            const oldProcessCwd = process.cwd();
-            setProcessCwd(target);
-
-            try {
-                if (target === ctx.cwd) {
-                    ctx.ui.notify(`Process cwd: ${formatPath(target)}`, "info");
-                    return;
-                }
-
-                let targetSessionFile: string | undefined;
-                const currentSessionFile = ctx.sessionManager.getSessionFile();
-                if (currentSessionFile && existsSync(currentSessionFile)) {
-                    targetSessionFile = SessionManager.forkFrom(
-                        currentSessionFile,
-                        target,
-                    ).getSessionFile();
-                } else {
-                    const targetSession = SessionManager.create(target);
-                    targetSession.appendCustomEntry("cd", {
-                        createdBy: "cwd-and-fish",
-                        target,
-                    });
-                    targetSessionFile = targetSession.getSessionFile();
-                }
-
-                if (!targetSessionFile) {
-                    ctx.ui.notify(
-                        `Process cwd: ${formatPath(target)} (session is not persisted)`,
-                        "info",
-                    );
-                    return;
-                }
-
-                const result = await ctx.switchSession(targetSessionFile, {
-                    withSession: async (newCtx) => {
-                        syncProcessCwd(target);
-                        newCtx.ui.notify(
-                            `Changed cwd to ${formatPath(target)}`,
-                            "info",
-                        );
-                    },
-                });
-
-                if (result.cancelled) {
-                    setProcessCwd(oldProcessCwd);
-                }
-            } catch (error) {
-                setProcessCwd(oldProcessCwd);
-                throw error;
-            }
+            await moveSessionTo(ctx, target, async (newCtx) =>
+                newCtx.ui.notify(
+                    `Changed cwd to ${formatPath(target)}`,
+                    "info",
+                ),
+            );
         },
     });
 }
