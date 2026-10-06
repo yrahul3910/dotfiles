@@ -119,6 +119,14 @@ install_packages() {
     brew bundle --file="$REPO/Brewfile" || BUNDLE_FAILED=1
 }
 
+# herdr records plugins in ~/.config/herdr/plugins.json with absolute paths, so
+# they are installed here instead of linked.
+setup_herdr_plugins() {
+    have herdr || return 0
+    step "Installing herdr plugins..."
+    herdr plugin install abrose/herdr-numbered-workspaces --yes
+}
+
 # --no-folding links individual files and leaves every directory real, so app
 # state written next to tracked config stays in ~ instead of landing in the repo.
 # --restow makes re-runs pick up files added to the repo since the last run.
@@ -262,6 +270,7 @@ main() {
     setup_dotfiles
     install_toolchains
     install_packages
+    setup_herdr_plugins
     setup_shell
     setup_kanata
     install_scripts

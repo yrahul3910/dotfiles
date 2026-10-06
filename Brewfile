@@ -36,8 +36,12 @@ brew "fzf"
 brew "gh"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
 # Git-compatible distributed version control system
 brew "jj"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
 # Simple terminal UI for git commands
 brew "lazygit"
 # Next-gen compiler infrastructure

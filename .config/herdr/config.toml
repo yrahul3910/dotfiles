@@ -18,6 +18,7 @@ focus_pane_right = "prefix+l"
 split_vertical = "prefix+%"
 split_horizontal = "prefix+\""
 
+new_tab = "prefix+t"
 previous_tab = ["prefix+p", "ctrl+alt+h"]
 next_tab = ["prefix+n", "ctrl+alt+l"]
 switch_tab = ["prefix+1..9", "alt+1..9"]
@@ -26,6 +27,9 @@ goto = "prefix+g"
 reload_config = "prefix+r"
 resize_mode = "prefix+shift+r"
 
+[keys.indexed]
+workspaces = "cmd"
+
 [terminal]
 new_cwd = "follow"
 
@@ -33,6 +37,13 @@ new_cwd = "follow"
 copy_on_select = false
 mouse_scroll_lines = 6
 confirm_close = true
+
+# $num is reported by the abrose/herdr-numbered-workspaces plugin.
+[ui.sidebar.spaces]
+rows = [
+  ["$num", "state_icon", "workspace"],
+  ["branch", "git_status"],
+]
 
 [[keys.command]]
 key = "prefix+f"
