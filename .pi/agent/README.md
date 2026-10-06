@@ -47,20 +47,22 @@ one copy:
 
 * `no-slop-ts` - deterministic changed-line checks for TypeScript and JavaScript.
 * `code-style` - code-quality rules plus language-specific references.
+* `design-doc` - write design documents and run the `critic` review loop. Pi and Claude Code only: it needs a `critic` agent, so it lives under `~/.pi/agent/skills/` and `.claude/skills/design-doc` links to it.
 * `experiment-loop` - bounded, reproducible empirical research.
 * `grilling` - resolve material decisions before planning or implementing a large feature.
 * `no-sloppy` - deterministic changed-line checks for Python.
+* `okf` - read and maintain Open Knowledge Format bundles. Pi and Claude Code only: it lives under `~/.pi/agent/skills/` and `.claude/skills/okf` links to it.
 * `unslop` - remove mannered AI prose from substantial replies and documents.
 * `unattended-run` - verified, scoped work while the user is away.
 * `verify-real-surface` - prove behavior through the UI, CLI, or API people use.
 * `wait-what` - re-explain an answer in plain language.
 * `writing-for-agents` - write lean, predictable skills and agent instructions.
 
+`critic` is defined twice, in `.pi/agent/agents/critic.md` for Pi and `.claude/agents/critic.md` for Claude Code, because their frontmatter differs. When you change its instructions, copy the change to the other file.
+
 Pi-specific skills live under `~/.pi/agent/skills/`:
 
 * `background-terminals` - use the background-terminal extension.
-* `design-doc` - write design documents and run the `critic` review loop.
-* `okf` - read and maintain Open Knowledge Format bundles.
 
 ## Effort, retries, and timing
 

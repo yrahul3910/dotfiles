@@ -11,7 +11,7 @@ Classify the request by what I want to accomplish. Commands are optional overrid
 3. **Review**: inspect the requested code using the `code-style` skill and the applicable language references. Report concrete findings with evidence and consequences. Do not edit unless I ask. If the code is clean, say so instead of inventing findings.
 4. **Small change** (clear scope, few files): read the code you would touch, make the change, verify proportionally, report. Do not tour the repo or run the full test suite for a localized edit. Make the minimal change that does what was asked.
 5. **Large / autonomous task**: plan first (see "Plans"), then execute within the authorized scope. Use subagents for broad exploration that splits into independent parts.
-6. **Design request**: where the `design-doc` skill is available (currently Pi only), use it for an explicit design document, RFC, or consequential architecture decision. An ordinary comparison does not need a document or critic loop.
+6. **Design request**: where the `design-doc` skill is available, use it for an explicit design document, RFC, or consequential architecture decision. An ordinary comparison does not need a document or critic loop.
 
 Respect exclusions in my request. If I ruled out wrappers, dependencies, edits, or a platform, do not propose them as the solution. If an exclusion makes the goal impossible, say so and explain why.
 
