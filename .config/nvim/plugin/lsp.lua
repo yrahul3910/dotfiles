@@ -128,7 +128,6 @@ local servers = {
   clangd = {},
   gopls = {},
   ruff = {},
-  copilot = {},
   rust_analyzer = {
     settings = {
       ['rust-analyzer'] = {

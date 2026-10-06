@@ -17,6 +17,7 @@ if _G.myconfig.copilot_enabled then
     {
       src = 'https://github.com/zbirenbaum/copilot.lua',
     },
+    { src = 'https://github.com/copilotlsp-nvim/copilot-lsp' },
   }
 
   require('copilot').setup {
@@ -34,6 +35,15 @@ if _G.myconfig.copilot_enabled then
       enabled = true,
       auto_trigger = true,
       accept = false, -- disable built-in keymapping
+    },
+    nes = {
+      enabled = true,
+      auto_trigger = true,
+      keymap = {
+        accept_and_goto = '<Tab>',
+        accept = false,
+        dismiss = '<Esc>',
+      },
     },
   }
 end
