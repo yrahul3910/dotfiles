@@ -16,3 +16,4 @@ mr-boxington = "latest"
 idiomatic_version_file_enable_tools = ["rust"]
 # Download the free-threaded CPython build instead of the default GIL build.
 python.precompiled_flavor = "freethreaded+pgo+lto"
+minimum_release_age = "0s"
