@@ -210,8 +210,9 @@ zstyle ':completion:*' completer _complete _ignored _expand_alias
 autoload -Uz compinit
 compinit
 
-# Initialize zoxide if it exists
-if command -v zoxide > /dev/null; then
+# Initialize zoxide if it exists. Claude Code keeps the builtin cd: its shell
+# snapshot drops zoxide's chpwd hook, and a fuzzy cd can land in the wrong directory.
+if command -v zoxide > /dev/null && [[ -z "$CLAUDECODE" ]]; then
   eval "$(zoxide init --cmd cd zsh)"
 fi
 
