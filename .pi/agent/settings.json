@@ -18,7 +18,8 @@
   },
   "packages": [
     "npm:@tintinweb/pi-subagents",
-    "git:github.com/yrahul3910/pi-permission-system"
+    "git:github.com/yrahul3910/pi-permission-system",
+    "npm:pi-lsp-extension"
   ],
   "theme": "light/dark",
   "quietStartup": false,
