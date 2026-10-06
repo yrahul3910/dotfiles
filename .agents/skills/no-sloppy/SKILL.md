@@ -37,6 +37,8 @@ The checker is normally on PATH as `no-sloppy`, installed with `uv tool install 
 no-sloppy              # changed lines vs HEAD (default)
 no-sloppy --base main  # diff against another ref
 no-sloppy --all        # changed files, whole-file findings
+no-sloppy PATH...      # limit to paths, still changed lines only (--all: whole files)
+no-sloppy --select SLOP,E501  # only report codes with these prefixes
 no-sloppy --strict     # warnings also fail the check
 no-sloppy --no-ruff    # custom rules only, skip the ruff overlay
 no-sloppy --ruff-config PATH  # use PATH (ruff.toml or pyproject.toml) instead of the bundled overlay

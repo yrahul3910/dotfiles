@@ -147,14 +147,15 @@ def ruff_config(value: str) -> Path:
     return path
 
 
-def run_ruff(files: list[Path], config: Path) -> list[Finding]:
+def run_ruff(files: list[Path], config: Path, select: list[str] | None = None) -> list[Finding]:
     """Run the ruff overlay on `files` and return every finding it reports.
 
     Ruff runs with `config` (the bundled `RUFF_CONFIG` unless `--ruff-config` names another) rather than the project's
     own discovered config, and without its cache, so the same standard applies everywhere. Nothing is filtered to
     changed lines here; the caller does that. Paths come back resolved so they match the custom rules' paths, a file
     ruff cannot parse yields a finding coded `syntax-error`, and each finding's level comes from `level_for`. Ruff's own
-    exit status is ignored (`--exit-zero`); the caller decides what fails the run.
+    exit status is ignored (`--exit-zero`); the caller decides what fails the run. A non-empty `select` replaces the
+    config's rule selection, so ruff only runs those rules.
 
     If ruff is not installed, or prints something other than a JSON report (it crashed, or the overlay config is
     unreadable), this exits the process with ruff's error output instead of returning.
@@ -168,6 +169,7 @@ def run_ruff(files: list[Path], config: Path) -> list[Finding]:
         "json",
         "--exit-zero",
         "--no-cache",
+        *(["--select", ",".join(select)] if select else []),
         *map(str, files),
     ]
 
@@ -270,9 +272,19 @@ def main() -> int:
     When git or ruff fails, the run exits with status 1 and the tool's error instead of returning.
     """
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("paths", nargs="*", type=Path, help="files/dirs to check whole (default: changed files)")
+    parser.add_argument("paths", nargs="*", type=Path, help="limit the check to these files/dirs (default: whole repo)")
     parser.add_argument("--base", default="HEAD", help="git ref to diff against (default: HEAD)")
-    parser.add_argument("--all", action="store_true", help="report whole-file findings on changed files")
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="report whole-file findings (with paths: every .py file under them, not just changed ones)",
+    )
+    parser.add_argument(
+        "--select",
+        type=lambda value: [code.strip().upper() for code in value.split(",") if code.strip()],
+        metavar="CODES",
+        help="only run rules whose code starts with one of these comma-separated prefixes (e.g. SLOP,E501)",
+    )
     parser.add_argument("--strict", action="store_true", help="exit nonzero on warnings too")
     ruff_options = parser.add_mutually_exclusive_group()
     ruff_options.add_argument("--no-ruff", action="store_true", help="custom rules only, skip the ruff overlay")
@@ -286,17 +298,17 @@ def main() -> int:
     parser.add_argument("--summary", action="store_true", help="print finding counts per rule instead of each finding")
     args = parser.parse_args()
 
+    scope = changed_lines(args.base)
+
     if args.paths:
-        paths = (
-            git("ls-files", "--exclude-standard", "--", *map(str, args.paths))
-            .strip()
-            .splitlines()
-        )
-        scope = {Path(path): [WHOLE_FILE] for path in paths}
-    else:
-        scope = changed_lines(args.base)
+        roots = [path.resolve() for path in args.paths]
+        scope = {path: ranges for path, ranges in scope.items() if any(path.is_relative_to(root) for root in roots)}
+
         if args.all:
-            scope = {path: [WHOLE_FILE] for path in scope}
+            listed = git("ls-files", "--cached", "--others", "--exclude-standard", "--", *map(str, args.paths))
+            scope = {Path(name).resolve(): [WHOLE_FILE] for name in listed.splitlines() if name.endswith(".py")}
+    elif args.all:
+        scope = {path: [WHOLE_FILE] for path in scope}
 
     # T201 suppressions below: print is this CLI's output channel
     if not scope:
@@ -307,9 +319,23 @@ def main() -> int:
         use_ruff_config(args.ruff_config)
 
     files = sorted(scope)
-    ruff_findings = syntax_errors(files) if args.no_ruff else run_ruff(files, args.ruff_config or RUFF_CONFIG)
-    unfiltered = ruff_findings + run_rules(files)
+    # Ruff rejects SLOP codes, so hand it only the others; a SLOP-only selection skips ruff, and the reverse skips rules.
+    ruff_select = [code for code in args.select or [] if not code.startswith("SLOP")]
+    wants_rules = not args.select or any(code.startswith("SLOP") or "SLOP".startswith(code) for code in args.select)
+    wants_ruff = not args.select or bool(ruff_select)
+
+    ruff_findings: list[Finding] = []
+    if args.no_ruff:
+        ruff_findings = syntax_errors(files)
+    elif wants_ruff:
+        ruff_findings = run_ruff(files, args.ruff_config or RUFF_CONFIG, ruff_select)
+
+    unfiltered = ruff_findings + (run_rules(files) if wants_rules else [])
     findings = [f for f in unfiltered if f.touches(scope.get(f.path, [WHOLE_FILE]))]
+
+    if args.select:
+        findings = [f for f in findings if f.code.upper().startswith(tuple(args.select))]
+
     findings.sort(key=lambda f: (str(f.path), f.start_line, f.start_col))
 
     color = color_enabled()
