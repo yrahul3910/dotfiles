@@ -290,7 +290,7 @@ grapheme-width-method = unicode
 # 
 # Any additional colors specified via background, foreground, palette, etc.
 # will override the colors specified in the theme.
-theme = "light:Atom One Light,dark:GitHub Dark Default"
+theme = "light:Atom One Light,dark:GitHub Dark"
 
 # Background color for the window.
 # background = #282c34
@@ -1215,7 +1215,7 @@ window-title-font-family =
 # non-terminal windows within Ghostty.
 # 
 # This is currently only supported on macOS and Linux.
-window-theme = auto
+window-theme = system
 
 # The colorspace to use for the terminal window. The default is `srgb` but
 # this can also be set to `display-p3` to use the Display P3 colorspace.
