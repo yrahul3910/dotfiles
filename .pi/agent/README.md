@@ -39,6 +39,7 @@ This is currently disabled since it breaks the arrow key navigation functionalit
 * `pixilate` - adds little pixel characters that roam around.
 * `pr-review` - installs a GitHub Actions workflow for automatic Pi PR reviews.
 * `recap/` - a `/recap` command, plus an automatic recap after a period of inactivity.
+* `pr-babysit/` - watches a PR's CI and review bots, wakes the agent only on new feedback or failures, and gates pushes until everything working on the pushed head has settled.
 
 ## Skills
 
@@ -63,6 +64,7 @@ one copy:
 Pi-specific skills live under `~/.pi/agent/skills/`:
 
 * `background-terminals` - use the background-terminal extension.
+* `pr-babysit` - babysit a PR with the `pr-babysit` extension: fix feedback locally as it arrives and push once the PR settles.
 
 ## Effort, retries, and timing
 
