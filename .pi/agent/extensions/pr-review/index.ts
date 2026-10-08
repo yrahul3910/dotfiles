@@ -148,9 +148,7 @@ export async function installWorkflow(
     confirmReplace: (path: string) => Promise<boolean>,
 ): Promise<InstallResult> {
     const workflowPath = join(repoRoot, WORKFLOW_RELATIVE_PATH);
-    const existing = existsSync(workflowPath)
-        ? await readFile(workflowPath, "utf8")
-        : null;
+    const existing = existsSync(workflowPath) ? await readFile(workflowPath, "utf8") : null;
 
     if (existing === WORKFLOW_CONTENT) {
         return { kind: "unchanged", path: workflowPath };
@@ -171,20 +169,15 @@ export async function installWorkflow(
 
 export default function prReview(pi: ExtensionAPI) {
     pi.registerCommand("install-pi-review", {
-        description:
-            "Add the Pi pull-request review workflow to this repository",
+        description: "Add the Pi pull-request review workflow to this repository",
         handler: async (_args, ctx) => {
-            const gitRootResult = await pi.exec(
-                "git",
-                ["rev-parse", "--show-toplevel"],
-                { cwd: ctx.cwd, timeout: 5_000 },
-            );
+            const gitRootResult = await pi.exec("git", ["rev-parse", "--show-toplevel"], {
+                cwd: ctx.cwd,
+                timeout: 5_000,
+            });
 
             if (gitRootResult.code !== 0) {
-                ctx.ui.notify(
-                    "The current directory is not inside a Git repository",
-                    "error",
-                );
+                ctx.ui.notify("The current directory is not inside a Git repository", "error");
                 return;
             }
 
@@ -195,10 +188,7 @@ export default function prReview(pi: ExtensionAPI) {
             }
 
             const result = await installWorkflow(repoRoot, (path) =>
-                ctx.ui.confirm(
-                    "Replace existing Pi review workflow?",
-                    relative(repoRoot, path),
-                ),
+                ctx.ui.confirm("Replace existing Pi review workflow?", relative(repoRoot, path)),
             );
 
             if (result.kind === "cancelled") {
@@ -206,8 +196,7 @@ export default function prReview(pi: ExtensionAPI) {
                 return;
             }
 
-            const verb =
-                result.kind === "unchanged" ? "Already configured" : "Wrote";
+            const verb = result.kind === "unchanged" ? "Already configured" : "Wrote";
             ctx.ui.notify(
                 `${verb} ${relative(repoRoot, result.path)}. Add OPENROUTER_API_KEY as a repository Actions secret.`,
                 "info",

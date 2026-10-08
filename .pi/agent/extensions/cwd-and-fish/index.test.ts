@@ -46,8 +46,7 @@ test(
             try {
                 await session.bindExtensions({});
                 const chunks: string[] = [];
-                const command =
-                    "printf stdout-marker; printf stderr-marker >&2; string repeat -n 100000 x";
+                const command = "printf stdout-marker; printf stderr-marker >&2; string repeat -n 100000 x";
                 const intercepted = await session.extensionRunner.emitUserBash({
                     type: "user_bash",
                     command,
@@ -55,11 +54,9 @@ test(
                     excludeFromContext: true,
                 });
                 assert.ok(intercepted?.operations);
-                const result = await session.executeBash(
-                    command,
-                    (chunk) => chunks.push(chunk),
-                    { operations: intercepted.operations },
-                );
+                const result = await session.executeBash(command, (chunk) => chunks.push(chunk), {
+                    operations: intercepted.operations,
+                });
                 assert.equal(result.exitCode, 0);
                 const output = chunks.join("");
                 assert.ok(output.includes("stdout-marker"));

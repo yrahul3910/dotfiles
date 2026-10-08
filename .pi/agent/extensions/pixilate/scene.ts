@@ -1,11 +1,5 @@
 import { bitmapToPngBase64, type RGBA } from "./png";
-import {
-    CHARACTERS,
-    type CharacterSprite,
-    FLOWER,
-    FRONT_BUSH,
-    PALETTE,
-} from "./sprites";
+import { CHARACTERS, type CharacterSprite, FLOWER, FRONT_BUSH, PALETTE } from "./sprites";
 
 // The original guy sprite was 16 source pixels drawn across 10 terminal
 // cells; all cell<->pixel conversions keep that ratio.
@@ -16,9 +10,7 @@ const RENDER_SCALE = 4;
 const JUMP_ARC = [1, 3, 5, 6, 6, 5, 3, 1];
 const HOP_ARC = [1, 2, 2, 1, 0, 0];
 
-const MAX_SPRITE_HEIGHT = Math.max(
-    ...Object.values(CHARACTERS).map((sprite) => sprite.walk[0].length),
-);
+const MAX_SPRITE_HEIGHT = Math.max(...Object.values(CHARACTERS).map((sprite) => sprite.walk[0].length));
 const CANVAS_HEIGHT = MAX_SPRITE_HEIGHT + Math.max(...JUMP_ARC) + 1;
 
 function flip(rows: string[]): string[] {
@@ -31,17 +23,10 @@ function invertPixel(pixel: RGBA): RGBA {
 }
 
 function makeCanvas(width: number, height: number): string[][] {
-    return Array.from({ length: height }, () =>
-        Array.from({ length: width }, () => " "),
-    );
+    return Array.from({ length: height }, () => Array.from({ length: width }, () => " "));
 }
 
-function drawBitmap(
-    canvas: string[][],
-    bitmap: string[],
-    x: number,
-    y: number,
-): void {
+function drawBitmap(canvas: string[][], bitmap: string[], x: number, y: number): void {
     for (let row = 0; row < bitmap.length; row++) {
         const canvasRow = canvas[y + row];
         if (!canvasRow) continue;
@@ -200,9 +185,7 @@ export class Scene {
         this.widthCells = initialWidthCells;
         const sprites = characterNames
             .map((name) => CHARACTERS[name.trim().toLowerCase()])
-            .filter(
-                (sprite): sprite is CharacterSprite => sprite !== undefined,
-            );
+            .filter((sprite): sprite is CharacterSprite => sprite !== undefined);
         if (sprites.length === 0) sprites.push(CHARACTERS.bunny!);
 
         // Spread starting positions out and alternate initial headings so the
@@ -211,9 +194,7 @@ export class Scene {
             (sprite, index) =>
                 new Actor(
                     sprite,
-                    Math.floor(
-                        ((index + 0.5) * initialWidthCells) / sprites.length,
-                    ),
+                    Math.floor(((index + 0.5) * initialWidthCells) / sprites.length),
                     index % 2 === 0 ? 1 : -1,
                 ),
         );
@@ -237,12 +218,7 @@ export class Scene {
 
         // Background scenery first, then characters, then foreground scenery.
         for (const fraction of [0.18, 0.72]) {
-            drawBitmap(
-                canvas,
-                FLOWER,
-                Math.round(canvasWidth * fraction),
-                CANVAS_HEIGHT - FLOWER.length,
-            );
+            drawBitmap(canvas, FLOWER, Math.round(canvasWidth * fraction), CANVAS_HEIGHT - FLOWER.length);
         }
 
         for (const actor of this.actors) {
@@ -254,12 +230,7 @@ export class Scene {
             );
         }
 
-        drawBitmap(
-            canvas,
-            FRONT_BUSH,
-            Math.round(canvasWidth * 0.45),
-            CANVAS_HEIGHT - FRONT_BUSH.length,
-        );
+        drawBitmap(canvas, FRONT_BUSH, Math.round(canvasWidth * 0.45), CANVAS_HEIGHT - FRONT_BUSH.length);
 
         const themePalette = { ...PALETTE };
         if (terminalBackground === "dark") {

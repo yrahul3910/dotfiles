@@ -68,13 +68,8 @@ export class TurnTiming {
         const pending = end - this.lastAt;
         return {
             elapsedMs: end - this.startedAt,
-            firstTextMs:
-                this.firstTextAt === undefined
-                    ? undefined
-                    : this.firstTextAt - this.startedAt,
-            toolMs:
-                this.toolMs +
-                (this.promptDepth === 0 && this.tools.size > 0 ? pending : 0),
+            firstTextMs: this.firstTextAt === undefined ? undefined : this.firstTextAt - this.startedAt,
+            toolMs: this.toolMs + (this.promptDepth === 0 && this.tools.size > 0 ? pending : 0),
             inputMs: this.inputMs + (this.promptDepth > 0 ? pending : 0),
             providerErrors: this.errors,
         };

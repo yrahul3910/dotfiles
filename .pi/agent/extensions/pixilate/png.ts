@@ -46,8 +46,7 @@ export function bitmapToPngBase64(
         line[0] = 0; // PNG filter: none
         for (let x = 0; x < width; x++) {
             const char = sourceRow[Math.floor(x / scale)] ?? " ";
-            const pixel =
-                char === " " ? background : (palette[char] ?? background);
+            const pixel = char === " " ? background : (palette[char] ?? background);
             line.set(pixel, 1 + x * 4);
         }
         scanlines.push(line);

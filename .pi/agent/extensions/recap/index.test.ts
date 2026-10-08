@@ -4,11 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { test } from "node:test";
-import {
-    fauxAssistantMessage,
-    fauxProvider,
-    type Context,
-} from "@earendil-works/pi-ai";
+import { fauxAssistantMessage, fauxProvider, type Context } from "@earendil-works/pi-ai";
 import {
     createAgentSession,
     DefaultResourceLoader,
@@ -22,14 +18,8 @@ const RECAP = "- **Working on:** recap tests";
 
 test("idle recaps default to off, and project settings override global ones", () => {
     assert.equal(getRecapIdleMinutes({}, {}), 0);
-    assert.equal(
-        getRecapIdleMinutes({ recapIdleMinutes: 5, theme: "dark" }, {}),
-        5,
-    );
-    assert.equal(
-        getRecapIdleMinutes({ recapIdleMinutes: 5 }, { recapIdleMinutes: 0 }),
-        0,
-    );
+    assert.equal(getRecapIdleMinutes({ recapIdleMinutes: 5, theme: "dark" }, {}), 5);
+    assert.equal(getRecapIdleMinutes({ recapIdleMinutes: 5 }, { recapIdleMinutes: 0 }), 0);
     assert.throws(() => getRecapIdleMinutes({ recapIdleMinutes: -1 }, {}));
 });
 
@@ -37,10 +27,7 @@ test("recaps once per idle stretch and on /recap, without adding to the model co
     const directory = await mkdtemp(join(tmpdir(), "pi-recap-"));
     const previousAgentDir = process.env.PI_CODING_AGENT_DIR;
     process.env.PI_CODING_AGENT_DIR = directory;
-    await writeFile(
-        join(directory, "settings.json"),
-        JSON.stringify({ recapIdleMinutes: 0.001 }),
-    );
+    await writeFile(join(directory, "settings.json"), JSON.stringify({ recapIdleMinutes: 0.001 }));
 
     const faux = fauxProvider();
     const recapRequests: Context[] = [];
@@ -99,15 +86,10 @@ test("recaps once per idle stretch and on /recap, without adding to the model co
     const recaps = () =>
         session.sessionManager
             .getEntries()
-            .flatMap((entry) =>
-                entry.type === "custom" && entry.customType === "recap"
-                    ? [entry.data]
-                    : [],
-            );
+            .flatMap((entry) => (entry.type === "custom" && entry.customType === "recap" ? [entry.data] : []));
 
     try {
-        for (const prompt of ["first task", "second task", "third task"])
-            await session.prompt(prompt);
+        for (const prompt of ["first task", "second task", "third task"]) await session.prompt(prompt);
 
         // The threshold is 60 ms; wait several of them to show later timeouts add nothing.
         await sleep(500);
@@ -122,8 +104,7 @@ test("recaps once per idle stretch and on /recap, without adding to the model co
         session.dispose();
         await rm(directory, { recursive: true, force: true });
 
-        if (previousAgentDir === undefined)
-            delete process.env.PI_CODING_AGENT_DIR;
+        if (previousAgentDir === undefined) delete process.env.PI_CODING_AGENT_DIR;
         else process.env.PI_CODING_AGENT_DIR = previousAgentDir;
     }
 });

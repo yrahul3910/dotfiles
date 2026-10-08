@@ -6,33 +6,16 @@ import { getHistoryScope, getPrompts } from "./history.ts";
 describe("prompt history settings", () => {
     test("defaults to project and allows global or session scope", () => {
         assert.equal(getHistoryScope({}, {}), "project");
-        assert.equal(
-            getHistoryScope(
-                { promptHistoryScope: "global", theme: "dark" },
-                {},
-            ),
-            "global",
-        );
-        assert.equal(
-            getHistoryScope({ promptHistoryScope: "session" }, {}),
-            "session",
-        );
+        assert.equal(getHistoryScope({ promptHistoryScope: "global", theme: "dark" }, {}), "global");
+        assert.equal(getHistoryScope({ promptHistoryScope: "session" }, {}), "session");
     });
 
     test("project settings override global settings", () => {
-        assert.equal(
-            getHistoryScope(
-                { promptHistoryScope: "global" },
-                { promptHistoryScope: "project" },
-            ),
-            "project",
-        );
+        assert.equal(getHistoryScope({ promptHistoryScope: "global" }, { promptHistoryScope: "project" }), "project");
     });
 
     test("rejects invalid scopes", () => {
-        assert.throws(() =>
-            getHistoryScope({ promptHistoryScope: "typo" }, {}),
-        );
+        assert.throws(() => getHistoryScope({ promptHistoryScope: "typo" }, {}));
     });
 });
 

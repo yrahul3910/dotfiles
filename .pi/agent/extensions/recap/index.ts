@@ -41,10 +41,7 @@ const recapSettings = Type.Object({
 type RecapData = { text: string };
 
 /** Resolve the idle threshold in minutes, where project settings override global ones and 0 disables idle recaps. */
-export function getRecapIdleMinutes(
-    globalSettings: unknown,
-    projectSettings: unknown,
-) {
+export function getRecapIdleMinutes(globalSettings: unknown, projectSettings: unknown) {
     const global = Value.Parse(recapSettings, globalSettings);
     const project = Value.Parse(recapSettings, projectSettings);
 
@@ -56,30 +53,19 @@ function loadRecapIdleMinutes(ctx: ExtensionContext) {
         projectTrusted: ctx.isProjectTrusted(),
     });
     const errors = settings.drainErrors();
-    if (errors.length > 0)
-        throw new Error(errors.map((item) => item.error.message).join("\n"));
+    if (errors.length > 0) throw new Error(errors.map((item) => item.error.message).join("\n"));
 
-    return getRecapIdleMinutes(
-        settings.getGlobalSettings(),
-        settings.getProjectSettings(),
-    );
+    return getRecapIdleMinutes(settings.getGlobalSettings(), settings.getProjectSettings());
 }
 
 function conversationText(ctx: ExtensionContext) {
-    const { messages } = buildSessionContext(
-        ctx.sessionManager.getEntries(),
-        ctx.sessionManager.getLeafId(),
-    );
+    const { messages } = buildSessionContext(ctx.sessionManager.getEntries(), ctx.sessionManager.getLeafId());
     return serializeConversation(convertToLlm(messages));
 }
 
 function countPrompts(ctx: ExtensionContext) {
-    return ctx.sessionManager
-        .getBranch()
-        .filter(
-            (entry) =>
-                entry.type === "message" && entry.message.role === "user",
-        ).length;
+    return ctx.sessionManager.getBranch().filter((entry) => entry.type === "message" && entry.message.role === "user")
+        .length;
 }
 
 /**
@@ -89,11 +75,7 @@ function countPrompts(ctx: ExtensionContext) {
  * fresh cache key, so it cannot change the session or its provider cache. Throws when no model is selected, when the
  * provider reports an error, and when `signal` aborts the request.
  */
-async function generateRecap(
-    ctx: ExtensionContext,
-    conversation: string,
-    signal?: AbortSignal,
-) {
+async function generateRecap(ctx: ExtensionContext, conversation: string, signal?: AbortSignal) {
     if (!ctx.model) throw new Error("no model selected");
 
     const response = await ctx.modelRegistry.complete(
@@ -117,9 +99,7 @@ async function generateRecap(
     );
 
     if (response.stopReason === "error" || response.stopReason === "aborted")
-        throw new Error(
-            response.errorMessage ?? `request ${response.stopReason}`,
-        );
+        throw new Error(response.errorMessage ?? `request ${response.stopReason}`);
 
     return response.content
         .filter((block): block is TextContent => block.type === "text")
@@ -134,20 +114,13 @@ export default function (pi: ExtensionAPI) {
     let idleRecap: AbortController | undefined;
     let stopWatchingInput: (() => void) | undefined;
 
-    const writeRecap = async (
-        ctx: ExtensionContext,
-        conversation: string,
-        signal?: AbortSignal,
-    ) => {
+    const writeRecap = async (ctx: ExtensionContext, conversation: string, signal?: AbortSignal) => {
         try {
             const text = await generateRecap(ctx, conversation, signal);
-            if (!signal?.aborted)
-                pi.appendEntry<RecapData>(RECAP_ENTRY, { text });
+            if (!signal?.aborted) pi.appendEntry<RecapData>(RECAP_ENTRY, { text });
         } catch (error) {
-            const message =
-                error instanceof Error ? error.message : String(error);
-            if (!signal?.aborted)
-                ctx.ui.notify(`Recap failed: ${message}`, "error");
+            const message = error instanceof Error ? error.message : String(error);
+            if (!signal?.aborted) ctx.ui.notify(`Recap failed: ${message}`, "error");
         }
     };
 
@@ -168,28 +141,15 @@ export default function (pi: ExtensionAPI) {
         idleRecap?.abort();
     };
 
-    pi.registerEntryRenderer<RecapData>(
-        RECAP_ENTRY,
-        (entry, _options, theme) => {
-            if (!entry.data) return undefined;
+    pi.registerEntryRenderer<RecapData>(RECAP_ENTRY, (entry, _options, theme) => {
+        if (!entry.data) return undefined;
 
-            const box = new Box(1, 1, (text) =>
-                theme.bg("customMessageBg", text),
-            );
-            box.addChild(
-                new Text(
-                    theme.fg("customMessageLabel", theme.bold("Recap")),
-                    0,
-                    0,
-                ),
-            );
-            box.addChild(
-                new Markdown(entry.data.text, 0, 0, getMarkdownTheme()),
-            );
+        const box = new Box(1, 1, (text) => theme.bg("customMessageBg", text));
+        box.addChild(new Text(theme.fg("customMessageLabel", theme.bold("Recap")), 0, 0));
+        box.addChild(new Markdown(entry.data.text, 0, 0, getMarkdownTheme()));
 
-            return box;
-        },
-    );
+        return box;
+    });
 
     pi.on("session_start", (_event, ctx) => {
         idleMs = ctx.mode === "tui" ? loadRecapIdleMinutes(ctx) * 60_000 : 0;
@@ -202,8 +162,7 @@ export default function (pi: ExtensionAPI) {
     });
 
     pi.on("agent_settled", (_event, ctx) => {
-        if (idleMs > 0 && countPrompts(ctx) >= MIN_IDLE_RECAP_PROMPTS)
-            startIdleTimer(ctx);
+        if (idleMs > 0 && countPrompts(ctx) >= MIN_IDLE_RECAP_PROMPTS) startIdleTimer(ctx);
     });
 
     pi.on("agent_start", stopIdleRecap);
@@ -215,8 +174,7 @@ export default function (pi: ExtensionAPI) {
     });
 
     pi.registerCommand("recap", {
-        description:
-            "Recap what this session is working on, what is done, and what is next",
+        description: "Recap what this session is working on, what is done, and what is next",
         handler: async (_args, ctx) => {
             const conversation = conversationText(ctx);
 

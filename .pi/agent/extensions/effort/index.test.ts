@@ -56,9 +56,7 @@ async function openSession(
 }
 
 for (const interactive of [false, true]) {
-    const description = interactive
-        ? "UI sessions reset to low"
-        : "headless sessions preserve requested high";
+    const description = interactive ? "UI sessions reset to low" : "headless sessions preserve requested high";
 
     test(`${description} at startup and before successive turns`, async () => {
         const directory = await mkdtemp(join(tmpdir(), "pi-effort-routing-"));
@@ -76,22 +74,12 @@ for (const interactive of [false, true]) {
 
                 for (const prompt of ["First task", "Follow-up task"]) {
                     session.setThinkingLevel("high");
-                    await session.extensionRunner.emitBeforeAgentStart(
-                        prompt,
-                        undefined,
-                        "",
-                        { cwd: directory },
-                    );
+                    await session.extensionRunner.emitBeforeAgentStart(prompt, undefined, "", { cwd: directory });
                     assert.equal(session.thinkingLevel, expected);
                 }
 
                 await session.prompt("/effort high");
-                await session.extensionRunner.emitBeforeAgentStart(
-                    "Pinned task",
-                    undefined,
-                    "",
-                    { cwd: directory },
-                );
+                await session.extensionRunner.emitBeforeAgentStart("Pinned task", undefined, "", { cwd: directory });
                 assert.equal(session.thinkingLevel, "high");
             } finally {
                 session.dispose();

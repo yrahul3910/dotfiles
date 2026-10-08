@@ -18,9 +18,7 @@ function hexChannelTo8Bit(hex: string): number {
  *   "rgba:1e1e/1e1e/1e1e/ffff"  (some terminals/forks include alpha)
  */
 function parseOSC11Response(raw: string): RGBA {
-    const match = raw.match(
-        /rgba?:([0-9a-fA-F]+)\/([0-9a-fA-F]+)\/([0-9a-fA-F]+)(?:\/([0-9a-fA-F]+))?/,
-    );
+    const match = raw.match(/rgba?:([0-9a-fA-F]+)\/([0-9a-fA-F]+)\/([0-9a-fA-F]+)(?:\/([0-9a-fA-F]+))?/);
     if (!match) {
         throw `Could not parse OSC 11 response: ${JSON.stringify(raw)}`;
     }
@@ -54,16 +52,10 @@ function buildQuery(): string {
  * Queries the terminal's background color via OSC 11.
  * Must be run in a TTY (interactive terminal), not piped/redirected.
  */
-export function getTerminalBackgroundColor(
-    timeoutMs: number = 1000,
-): Promise<RGBA> {
+export function getTerminalBackgroundColor(timeoutMs: number = 1000): Promise<RGBA> {
     return new Promise((resolve, reject) => {
         if (!process.stdin.isTTY || !process.stdout.isTTY) {
-            reject(
-                new Error(
-                    "stdin/stdout is not a TTY - OSC 11 query requires an interactive terminal",
-                ),
-            );
+            reject(new Error("stdin/stdout is not a TTY - OSC 11 query requires an interactive terminal"));
             return;
         }
 

@@ -68,10 +68,7 @@ export default function (pi: ExtensionAPI) {
     });
 
     const updateRate = (tokens: number, startedAt: number) => {
-        const elapsedSeconds = Math.max(
-            (Date.now() - startedAt) / 1_000,
-            0.001,
-        );
+        const elapsedSeconds = Math.max((Date.now() - startedAt) / 1_000, 0.001);
         tokensPerSecond = tokens / elapsedSeconds;
         requestFooterRender?.();
     };
@@ -80,9 +77,7 @@ export default function (pi: ExtensionAPI) {
         timing = new TurnTiming();
         isRunning = false;
         ctx.ui.setFooter((tui, theme, footerData) => {
-            const unsubscribe = footerData.onBranchChange(() =>
-                tui.requestRender(),
-            );
+            const unsubscribe = footerData.onBranchChange(() => tui.requestRender());
             requestFooterRender = () => tui.requestRender();
             const refresh = setInterval(() => {
                 if (isRunning) tui.requestRender();
@@ -114,63 +109,42 @@ export default function (pi: ExtensionAPI) {
                     };
 
                     for (const entry of ctx.sessionManager.getEntries()) {
-                        if (
-                            entry.type === "message" &&
-                            entry.message.role === "assistant"
-                        ) {
+                        if (entry.type === "message" && entry.message.role === "assistant") {
                             addUsage(entry.message.usage);
                             const promptTokens =
                                 entry.message.usage.input +
                                 entry.message.usage.cacheRead +
                                 entry.message.usage.cacheWrite;
                             latestCacheHitRate =
-                                promptTokens > 0
-                                    ? (entry.message.usage.cacheRead /
-                                          promptTokens) *
-                                      100
-                                    : undefined;
+                                promptTokens > 0 ? (entry.message.usage.cacheRead / promptTokens) * 100 : undefined;
                         } else if (
                             entry.type === "message" &&
                             entry.message.role === "toolResult" &&
                             entry.message.usage
                         ) {
                             addUsage(entry.message.usage);
-                        } else if (
-                            (entry.type === "branch_summary" ||
-                                entry.type === "compaction") &&
-                            entry.usage
-                        ) {
+                        } else if ((entry.type === "branch_summary" || entry.type === "compaction") && entry.usage) {
                             addUsage(entry.usage);
                         }
                     }
 
                     const stats = [];
-                    if (totals.input)
-                        stats.push(`↑${formatTokens(totals.input)}`);
-                    if (totals.output)
-                        stats.push(`↓${formatTokens(totals.output)} •`);
-                    if (totals.cacheRead)
-                        stats.push(`R${formatTokens(totals.cacheRead)}`);
-                    if (totals.cacheWrite)
-                        stats.push(`W${formatTokens(totals.cacheWrite)}`);
-                    if (latestCacheHitRate !== undefined)
-                        stats.push(`CH${latestCacheHitRate.toFixed(1)}% •`);
+                    if (totals.input) stats.push(`↑${formatTokens(totals.input)}`);
+                    if (totals.output) stats.push(`↓${formatTokens(totals.output)} •`);
+                    if (totals.cacheRead) stats.push(`R${formatTokens(totals.cacheRead)}`);
+                    if (totals.cacheWrite) stats.push(`W${formatTokens(totals.cacheWrite)}`);
+                    if (latestCacheHitRate !== undefined) stats.push(`CH${latestCacheHitRate.toFixed(1)}% •`);
                     if (totals.cost) stats.push(`$${totals.cost.toFixed(3)} •`);
 
                     const contextUsage = ctx.getContextUsage();
-                    const contextWindow =
-                        contextUsage?.contextWindow ??
-                        ctx.model?.contextWindow ??
-                        0;
+                    const contextWindow = contextUsage?.contextWindow ?? ctx.model?.contextWindow ?? 0;
                     const context =
-                        contextUsage?.percent === null ||
-                        contextUsage === undefined
+                        contextUsage?.percent === null || contextUsage === undefined
                             ? `?/${formatTokens(contextWindow)} •`
                             : `${contextUsage.percent.toFixed(1)}%/${formatTokens(contextWindow)}`;
                     stats.push(context);
 
-                    if (tokensPerSecond !== undefined)
-                        stats.push(`• ${tokensPerSecond.toFixed(1)} tok/s`);
+                    if (tokensPerSecond !== undefined) stats.push(`• ${tokensPerSecond.toFixed(1)} tok/s`);
 
                     const left = stats.join(" ");
                     const model = ctx.model?.reasoning
@@ -180,31 +154,20 @@ export default function (pi: ExtensionAPI) {
                         footerData.getAvailableProviderCount() > 1 && ctx.model
                             ? `(${ctx.model.provider}) ${model}`
                             : model;
-                    const remaining =
-                        width - visibleWidth(left) - visibleWidth(provider);
+                    const remaining = width - visibleWidth(left) - visibleWidth(provider);
                     const statsLine =
-                        remaining >= 2
-                            ? `${left}${" ".repeat(remaining)}${provider}`
-                            : truncateToWidth(left, width);
+                        remaining >= 2 ? `${left}${" ".repeat(remaining)}${provider}` : truncateToWidth(left, width);
 
                     const branch = footerData.getGitBranch();
-                    const location = branch
-                        ? `${ctx.cwd} (${branch})`
-                        : ctx.cwd;
+                    const location = branch ? `${ctx.cwd} (${branch})` : ctx.cwd;
                     const lines = [
-                        truncateToWidth(
-                            theme.fg("dim", location),
-                            width,
-                            theme.fg("dim", "..."),
-                        ),
+                        truncateToWidth(theme.fg("dim", location), width, theme.fg("dim", "...")),
                         theme.fg("dim", statsLine),
                     ];
                     const turn = timing.snapshot(performance.now());
                     if (turn) {
                         const first =
-                            turn.firstTextMs === undefined
-                                ? "pending"
-                                : `${(turn.firstTextMs / 1000).toFixed(1)}s`;
+                            turn.firstTextMs === undefined ? "pending" : `${(turn.firstTextMs / 1000).toFixed(1)}s`;
                         lines.push(
                             truncateToWidth(
                                 theme.fg(
@@ -215,9 +178,7 @@ export default function (pi: ExtensionAPI) {
                             ),
                         );
                     }
-                    const statuses = Array.from(
-                        footerData.getExtensionStatuses().entries(),
-                    )
+                    const statuses = Array.from(footerData.getExtensionStatuses().entries())
                         .sort(([a], [b]) => a.localeCompare(b))
                         .map(([, text]) =>
                             text
@@ -225,8 +186,7 @@ export default function (pi: ExtensionAPI) {
                                 .replace(/ +/g, " ")
                                 .trim(),
                         );
-                    if (statuses.length > 0)
-                        lines.push(truncateToWidth(statuses.join(" "), width));
+                    if (statuses.length > 0) lines.push(truncateToWidth(statuses.join(" "), width));
                     return lines;
                 },
             };
@@ -242,18 +202,10 @@ export default function (pi: ExtensionAPI) {
     });
 
     pi.on("message_update", (event) => {
-        if (
-            event.assistantMessageEvent.type !== "text_delta" ||
-            responseStartedAt === undefined
-        )
-            return;
+        if (event.assistantMessageEvent.type !== "text_delta" || responseStartedAt === undefined) return;
         streamedCharacters += event.assistantMessageEvent.delta.length;
-        if (event.assistantMessageEvent.delta.length > 0)
-            timing.textReceived(performance.now());
-        updateRate(
-            Math.ceil(streamedCharacters / CHARS_PER_TOKEN),
-            responseStartedAt,
-        );
+        if (event.assistantMessageEvent.delta.length > 0) timing.textReceived(performance.now());
+        updateRate(Math.ceil(streamedCharacters / CHARS_PER_TOKEN), responseStartedAt);
     });
 
     pi.on("message_end", (event) => {
@@ -261,11 +213,7 @@ export default function (pi: ExtensionAPI) {
             providerFailed = event.message.stopReason === "error";
             if (providerFailed) timing.providerFailed();
         }
-        if (
-            event.message.role !== "assistant" ||
-            responseStartedAt === undefined
-        )
-            return;
+        if (event.message.role !== "assistant" || responseStartedAt === undefined) return;
         updateRate(event.message.usage.output, responseStartedAt);
     });
 }

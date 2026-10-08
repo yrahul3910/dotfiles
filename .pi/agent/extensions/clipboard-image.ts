@@ -20,18 +20,12 @@ const BASE64_SIGNATURES: Record<string, string> = {
 
 const MIN_BASE64_LENGTH = 100;
 
-export function detectBase64Image(
-    text: string,
-): { data: string; mimeType: string; remaining: string } | null {
+export function detectBase64Image(text: string): { data: string; mimeType: string; remaining: string } | null {
     const trimmed = text.trim();
 
     for (const [sig, mimeType] of Object.entries(BASE64_SIGNATURES)) {
         // Case 1: entire input is base64 image
-        if (
-            trimmed.startsWith(sig) &&
-            trimmed.length > MIN_BASE64_LENGTH &&
-            /^[A-Za-z0-9+/\n\r=]+$/.test(trimmed)
-        ) {
+        if (trimmed.startsWith(sig) && trimmed.length > MIN_BASE64_LENGTH && /^[A-Za-z0-9+/\n\r=]+$/.test(trimmed)) {
             return {
                 data: trimmed.replace(/[\n\r]/g, ""),
                 mimeType,
@@ -40,9 +34,7 @@ export function detectBase64Image(
         }
 
         // Case 2: base64 blob embedded in text
-        const regex = new RegExp(
-            `(${sig.replace("/", "\\/")}[A-Za-z0-9+/\\n\\r=]{${MIN_BASE64_LENGTH},})`,
-        );
+        const regex = new RegExp(`(${sig.replace("/", "\\/")}[A-Za-z0-9+/\\n\\r=]{${MIN_BASE64_LENGTH},})`);
         const match = trimmed.match(regex);
         if (match && match[1]) {
             const data = match[1].replace(/[\n\r]/g, "");
@@ -56,15 +48,13 @@ export function detectBase64Image(
 
 export default function (pi: ExtensionAPI) {
     pi.on("input", async (event, ctx) => {
-        if (event.source === "extension")
-            return { action: "continue" as const };
+        if (event.source === "extension") return { action: "continue" as const };
         if (!event.text) return { action: "continue" as const };
 
         const detected = detectBase64Image(event.text);
         if (!detected) return { action: "continue" as const };
 
-        const prompt =
-            detected.remaining || "Describe this image. What do you see?";
+        const prompt = detected.remaining || "Describe this image. What do you see?";
 
         ctx.ui.notify("📋 Base64 image detected — attaching to prompt", "info");
 

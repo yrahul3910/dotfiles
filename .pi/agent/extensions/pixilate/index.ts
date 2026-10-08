@@ -18,9 +18,7 @@ export default function (pi: ExtensionAPI) {
             background = classifyBackground(backgroundColor);
         } catch {}
 
-        const characterNames = (
-            process.env.PIXILATE_CHARACTERS ?? DEFAULT_CHARACTERS
-        ).split(",");
+        const characterNames = (process.env.PIXILATE_CHARACTERS ?? DEFAULT_CHARACTERS).split(",");
         const scene = new Scene(characterNames);
         let imageId: number | undefined;
 
@@ -41,16 +39,13 @@ export default function (pi: ExtensionAPI) {
                     imageId = image.getImageId();
 
                     const clearPreviousImage =
-                        previousImageId !== undefined &&
-                        getCapabilities().images === "kitty"
+                        previousImageId !== undefined && getCapabilities().images === "kitty"
                             ? deleteKittyImage(previousImageId)
                             : "";
 
                     return [
                         " ".repeat(width),
-                        ...lines.map((line, index) =>
-                            index === 0 ? `${clearPreviousImage}${line}` : line,
-                        ),
+                        ...lines.map((line, index) => (index === 0 ? `${clearPreviousImage}${line}` : line)),
                     ];
                 },
                 invalidate(): void {},

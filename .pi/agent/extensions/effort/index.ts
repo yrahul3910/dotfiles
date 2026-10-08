@@ -12,10 +12,7 @@
  */
 
 import { StringEnum } from "@earendil-works/pi-ai";
-import type {
-    ExtensionAPI,
-    ExtensionContext,
-} from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
 
 const LEVELS = ["minimal", "low", "medium", "high", "xhigh"] as const;
@@ -29,8 +26,7 @@ export default function (pi: ExtensionAPI) {
     // down until "auto" is picked again.
     let pinned: Level | null = null;
 
-    const describeState = () =>
-        pinned ? `${pinned} (pinned)` : `auto, at ${pi.getThinkingLevel()}`;
+    const describeState = () => (pinned ? `${pinned} (pinned)` : `auto, at ${pi.getThinkingLevel()}`);
 
     const applyChoice = (choice: string, ctx: ExtensionContext) => {
         const selected = LEVELS.find((level) => level === choice);
@@ -43,9 +39,7 @@ export default function (pi: ExtensionAPI) {
             pinned = selected;
             pi.setThinkingLevel(pinned);
             pi.appendEntry(PIN_ENTRY, pinned);
-            ctx.ui.notify(
-                `effort: ${pinned} pinned; effective ${pi.getThinkingLevel()} ('auto' to release)`,
-            );
+            ctx.ui.notify(`effort: ${pinned} pinned; effective ${pi.getThinkingLevel()} ('auto' to release)`);
         } else {
             ctx.ui.notify(`effort: ${describeState()}`);
         }
@@ -61,21 +55,17 @@ export default function (pi: ExtensionAPI) {
             }
         }
 
-        if (pinned !== null || ctx.hasUI)
-            pi.setThinkingLevel(pinned ?? BASELINE);
+        if (pinned !== null || ctx.hasUI) pi.setThinkingLevel(pinned ?? BASELINE);
     });
 
     pi.on("before_agent_start", async (_event, ctx) => {
-        if (pinned !== null || ctx.hasUI)
-            pi.setThinkingLevel(pinned ?? BASELINE);
+        if (pinned !== null || ctx.hasUI) pi.setThinkingLevel(pinned ?? BASELINE);
     });
 
     pi.on("model_select", (_event, ctx) => {
         if (pinned === null) return;
         pi.setThinkingLevel(pinned);
-        ctx.ui.notify(
-            `effort: ${pinned} pinned; effective ${pi.getThinkingLevel()}`,
-        );
+        ctx.ui.notify(`effort: ${pinned} pinned; effective ${pi.getThinkingLevel()}`);
     });
 
     pi.registerTool({
@@ -127,10 +117,7 @@ export default function (pi: ExtensionAPI) {
     pi.registerShortcut("alt+e", {
         description: "Pick reasoning effort (pin a level or return to auto)",
         handler: async (ctx) => {
-            const choice = await ctx.ui.select(
-                `Reasoning effort (now ${describeState()}):`,
-                ["auto", ...LEVELS],
-            );
+            const choice = await ctx.ui.select(`Reasoning effort (now ${describeState()}):`, ["auto", ...LEVELS]);
             if (choice) applyChoice(choice, ctx);
         },
     });
@@ -138,12 +125,8 @@ export default function (pi: ExtensionAPI) {
     pi.registerCommand("effort", {
         description: `Pin reasoning effort (${LEVELS.join("|")}) or return to auto`,
         getArgumentCompletions: (prefix) => {
-            const options = ["auto", ...LEVELS].filter((o) =>
-                o.startsWith(prefix),
-            );
-            return options.length > 0
-                ? options.map((o) => ({ value: o, label: o }))
-                : null;
+            const options = ["auto", ...LEVELS].filter((o) => o.startsWith(prefix));
+            return options.length > 0 ? options.map((o) => ({ value: o, label: o })) : null;
         },
         handler: async (args, ctx) => {
             applyChoice(args.trim(), ctx);
