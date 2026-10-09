@@ -33,6 +33,11 @@ set -x PATH $PATH /Applications/Ghostty.app/Contents/MacOS/
 
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 
+# See https://github.com/earendil-works/pi/issues/10573#issuecomment-6034485334
+if test "$TERM_PROGRAM" = herdr
+    set -gx PI_IMAGE_PROTOCOL kitty
+end
+
 set -x ELECTRON_OZONE_PLATFORM_HINT auto
 set -x PYTHONSTARTUP ~/.pythonrc
 if test (uname) = Linux
