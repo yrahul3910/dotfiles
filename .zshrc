@@ -24,6 +24,11 @@ elif [ "${QT_QPA_PLATFORM:-}" = "wayland" ]; then
     unset QT_QPA_PLATFORM
 fi
 
+# See https://github.com/earendil-works/pi/issues/10573#issuecomment-6034485334
+if [[ "$TERM_PROGRAM" == herdr ]]; then
+    export PI_IMAGE_PROTOCOL=kitty
+fi
+
 export HOMEBREW_NO_AUTO_UPDATE=1
 if [ "$(uname)" = "Darwin" ]; then
     export PATH=$PATH:/opt/local/bin:/opt/homebrew/bin
