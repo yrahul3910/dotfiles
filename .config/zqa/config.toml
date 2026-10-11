@@ -5,40 +5,33 @@ max_concurrent_requests = 5
 max_retries = 3
 
 [anthropic]
-model = "claude-sonnet-5"
-api_key = ""
+model = "claude-sonnet-5-5"
 max_tokens = 64000
-
-[ollama]
-model = "zai-org/glm-4.7-flash"
-model_small = "google/gemma-3-1b"
-#model = "qwen/qwen3-vl-4b"
-#model_small = "qwen3.5-0.8b-mlx"
-max_tokens = 8192
-embedding_model = "qwen3-embedding"
-embedding_dims = 4096
+reasoning_effort = "high"
 
 [openai]
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 max_tokens = 64000
 embedding_model = "text-embedding-3-large"
 embedding_dims = 3072
+reasoning_effort = "high"
 
 [gemini]
 model = "gemini-3.1-pro-preview"
 embedding_model = "gemini-embedding-2-preview"
 embedding_dims = 3072
+reasoning_effort = "high"
 
 [voyageai]
-reranker = "rerank-2.5"
+reranker = "rerank-3"
 embedding_model = "voyage-4-large"
 embedding_dims = 2048
-api_key = ""
 
 [cohere]
 reranker = "rerank-v4.0-pro"
-embedding_model = "embed-v4.0"
-embedding_dims = 1536
+embedding_model = "embed-v5.0-pro"
+embedding_dims = 2048
 
 [openrouter]
 model = "z-ai/glm-5.3:nitro"
+reasoning_effort = "high"
