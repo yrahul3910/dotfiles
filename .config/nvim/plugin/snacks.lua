@@ -48,7 +48,13 @@ nmap('<leader>fh', function()
 end, '[F]ind [H]elp')
 nmap('<leader>fs', function()
   Snacks.picker.lsp_workspace_symbols {
+    transform = function(item, ctx)
+      return ctx.filter:match(item)
+    end,
     filter = {
+      paths = {
+        [vim.fn.expand '~/.cargo/'] = false,
+      },
       default = {
         'Class',
         'Constructor',
