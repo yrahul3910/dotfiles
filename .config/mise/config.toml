@@ -6,7 +6,7 @@ node = "latest"
 rust = { version = "latest", components = ["rust-analyzer", "rust-src"], mr_boxington = true }
 # Pinned to a minor version: free-threaded wheels lag each new Python release,
 # so moving to the next minor should be a deliberate edit here.
-python = "3.14"
+python = "latest"
 uv = "latest"
 mr-boxington = "latest"
 
