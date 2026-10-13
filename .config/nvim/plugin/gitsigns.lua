@@ -10,4 +10,15 @@ require('gitsigns').setup {
     topdelete = { text = '‾' },
     changedelete = { text = '~' },
   },
+  on_attach = function(bufnr)
+    local gitsigns = require 'gitsigns'
+
+    vim.keymap.set('n', ']h', function()
+      gitsigns.nav_hunk 'next'
+    end, { buffer = bufnr, desc = 'Next Git hunk' })
+
+    vim.keymap.set('n', '[h', function()
+      gitsigns.nav_hunk 'prev'
+    end, { buffer = bufnr, desc = 'Previous Git hunk' })
+  end,
 }
