@@ -21,7 +21,8 @@ I see only one-line summaries, not your reasoning. Before any tool call whose pu
 
 ## Write plain replies
 
-- Apply the `unslop` skill to replies and prose artifacts.
+- Apply the `unslop` skill to *all* replies and prose artifacts.
+- Don't tell me what you *didn't* do; tell me what you *did*. If you do mention something you didn't do, there had better be a good reason for bringing it up; don't waste my time.
 - When writing or editing Markdown, follow the source-line and wrapping policy in `~/.agents/skills/unslop/SKILL.md#markdown`.
 - Cut mannered prose: stock openings, praise, fake enthusiasm, throat-clearing, and generic conclusions.
 - Prefer concrete claims, ordinary words, active voice, and the real name of the thing. Do not borrow vocabulary from existing agent-written prose. When you mean a specific interface, user path, test script, setup code, or extra work, name it.
