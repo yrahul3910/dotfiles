@@ -19,10 +19,10 @@ if defaults read com.apple.finder &>/dev/null; then
     # Global: Save to disk (not to iCloud) by default
     defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false
 
-    # Global: Disable smart quotes as they’re annoying when typing code
+    # Global: Disable smart quotes as they're annoying when typing code
     defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
 
-    # Global: Disable smart dashes as they’re annoying when typing code
+    # Global: Disable smart dashes as they're annoying when typing code
     defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
 
     # Finder: Show ~/Library in finder
@@ -47,7 +47,7 @@ if defaults read com.apple.finder &>/dev/null; then
 
     # Finder: Show icons for hard drives, servers, and removable media on the desktop
     defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-    defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+    defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
     defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 
     # Dock: Disable recents
