@@ -2,10 +2,13 @@
 # Everything tracks the newest release except Python; `mise upgrade` updates them.
 [tools]
 node = "latest"
-# rust-analyzer and rust-src are what editors need; the default profile omits them.
-rust = { version = "latest", components = ["rust-analyzer", "rust-src"], mr_boxington = true }
-# Pinned to a minor version: free-threaded wheels lag each new Python release,
-# so moving to the next minor should be a deliberate edit here.
+# rust-analyzer and rust-src are what editors need; the default profile omits them. The first entry is the default
+# toolchain. nightly is only there for `cargo +nightly fmt`, so it gets just rustfmt; mise keeps rustup's `nightly`
+# pointed at the dated nightly it installs.
+rust = [
+  { version = "latest", components = ["rust-analyzer", "rust-src"], mr_boxington = true },
+  { version = "nightly", profile = "minimal", components = ["rustfmt"] },
+]
 python = "latest"
 uv = "latest"
 mr-boxington = "latest"
