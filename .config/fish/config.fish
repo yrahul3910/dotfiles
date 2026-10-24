@@ -71,6 +71,14 @@ function mkcd
   cd $argv         # Change directory into the newly created one
 end
 
+function update_stuff
+    brew update -f && brew upgrade -y
+    mise upgrade
+    rustup self update
+
+    command -q cargo-install-update; and cargo install-update -a
+end
+
 function up --description "Move up directory tree by N levels (default: 1)"
   set -l count 1
 
