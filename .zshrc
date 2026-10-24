@@ -25,7 +25,7 @@ elif [ "${QT_QPA_PLATFORM:-}" = "wayland" ]; then
 fi
 
 # See https://github.com/earendil-works/pi/issues/10573#issuecomment-6034485334
-if [[ "$TERM_PROGRAM" == herdr ]]; then
+if [[ "$TERM_PROGRAM" == (herdr|rex) ]]; then
     export PI_IMAGE_PROTOCOL=kitty
 fi
 

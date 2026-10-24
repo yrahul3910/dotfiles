@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Pick a project with fzf, then open or reuse a Rex session for it and switch the app to it.
+# Usage: sessionizer [-c CLIENT] [DIR]. keys.lua passes -c with the client whose key opened the picker.
+# Switching needs Remote Control turned on in Rex's settings.
+set -euo pipefail
+
+# The picker closes when this script exits, so keep any failure on screen long enough to read it.
+trap 'read -rp "sessionizer: $BASH_COMMAND failed. Press Enter to close. " _' ERR
+
+client=
+if [[ ${1:-} == -c ]]; then
+    client=$2
+    shift 2
+fi
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    # Rex leaves a floating layer's default background transparent, so fzf paints the background of the themes in
+    # ~/.config/rex/themes (Atom One Light, GitHub Dark Default).
+    if [[ $(defaults read -g AppleInterfaceStyle 2>/dev/null) == Dark ]]; then
+        background='#0d1117'
+    else
+        background='#f9f9f9'
+    fi
+
+    # find fails when one of these directories is missing (no ~/work on some machines), and pipefail would then
+    # discard the pick as if fzf had been cancelled.
+    selected=$(
+        { find ~/Desktop ~/projects ~/ ~/work -mindepth 1 -maxdepth 1 -type d 2>/dev/null || true; } \
+            | fzf --layout=reverse --border=rounded --margin=0,20% --color="bg:$background"
+    ) || exit 0
+fi
+[[ -z $selected ]] && exit 0
+
+label=$(basename "$selected" | tr . _)
+session=$(rex ls --json | jq -r --arg l "$label" '[.sessions[] | select(.label == $l) | .session_id][0] // empty')
+window=
+
+if [[ -z $session ]]; then
+    # Same layout as tmux-sessionizer: nvim in tab 1, shells in tabs 2 and 3.
+    created=$(jq -n --arg label "$label" --arg cwd "$selected" '
+        def tab(extra): {layout: {block: {flavor: "com.superlogical.terminal.shell", options: ({cwd: $cwd} + extra)}}};
+        {label: $label, initial_windows: [tab({initial_input: "nvim\r"}), tab({}), tab({})]}
+    ' | rex api call session.create -)
+    session=$(jq -r '.session_id' <<<"$created")
+    window=$(jq -r '.initial_windows[0].window_id' <<<"$created")
+
+    # The connection that creates a session keeps its panes at 80x24 even after it exits. A claim made with
+    # own_block is released when its connection exits, which leaves the panes for the app to size.
+    jq -c '{block_ids: [.initial_windows[].block_ids[]]}' <<<"$created" \
+        | rex api call --session "$session" session.own_block - >/dev/null
+fi
+
+rex ${client:+-C "$client"} do session.select session_id="$session" ${window:+window_id="$window"}
