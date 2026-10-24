@@ -46,6 +46,14 @@ function prdiff () {
     git --no-pager diff --word-diff=color --word-diff-regex="[A-Za-z0-9_]+|[^A-Za-z0-9_[:space:]]" "$@"
 }
 
+function update_stuff() {
+    brew update -f && brew upgrade -y
+    mise upgrade
+    rustup self update
+
+    command -v cargo-install-update >/dev/null && cargo install-update -a
+}
+
 function up() {
     local count=${1:-1}
     # Check if the argument is a positive integer
