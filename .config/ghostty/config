@@ -63,6 +63,7 @@
 
 font-family = "Maple Mono"
 font-size = 14
+font-feature = calt,cv01,cv02,cv05,cv08,cv65,cv66,cv31,cv34,cv35,cv36,cv37,cv38,cv41
 adjust-underline-position = 6
 adjust-cell-height = 30%
 
