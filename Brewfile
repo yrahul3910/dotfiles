@@ -135,6 +135,8 @@ if OS.mac?
   cask "dbeaver-community"
   # Web browser
   cask "firefox"
+  # Monospace font used by the Ghostty and Rex terminals
+  cask "font-maple-mono"
   # Terminal emulator that uses platform-native UI and GPU acceleration
   cask "ghostty"
   # Graphically shows disk usage within a file system

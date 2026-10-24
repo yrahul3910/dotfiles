@@ -119,6 +119,13 @@ install_packages() {
     brew bundle --file="$REPO/Brewfile" || BUNDLE_FAILED=1
 }
 
+# Rex cannot turn on OpenType features, so macOS gets a Maple Mono NF build with them frozen in.
+# The build runs through uv, which install_toolchains provides.
+install_maple_mono_nf() {
+    [[ "$OS" == "Darwin" ]] || return 0
+    "$REPO/setup-maple-mono.sh"
+}
+
 # herdr records plugins in ~/.config/herdr/plugins.json with absolute paths, so
 # they are installed here instead of linked.
 setup_herdr_plugins() {
@@ -270,6 +277,7 @@ main() {
     setup_dotfiles
     install_toolchains
     install_packages
+    install_maple_mono_nf
     setup_herdr_plugins
     setup_shell
     setup_kanata
