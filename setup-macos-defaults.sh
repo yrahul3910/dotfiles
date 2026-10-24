@@ -68,4 +68,11 @@ if defaults read com.apple.finder &>/dev/null; then
     defaults write com.apple.Terminal NewTabSettingsBehavior -int 1
     defaults write com.apple.Terminal NewTabWorkingDirectoryBehavior -int 1
 
+    # Rex: terminal font and a steady cursor. Rex keeps these in its preferences, with no config-file setting.
+    defaults write com.superlogical.rex Workspace.terminalFontName -string "Maple Mono NF"
+    defaults write com.superlogical.rex Workspace.terminalFontPointSize -float 14
+    # Settings shows a zero, non-custom blink interval as Blink speed "Off".
+    defaults write com.superlogical.rex Workspace.terminalCursorBlinkIntervalMilliseconds -int 0
+    defaults write com.superlogical.rex Workspace.terminalCursorBlinkUsesCustomInterval -bool false
+
 fi
