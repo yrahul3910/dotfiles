@@ -48,6 +48,10 @@ l = {
     definition = ["log", "-r", "(main..@):: | (main..@)-"],
     doc = "Log pending changes"
 }
+lo = {
+    definition = ["log", "-T builtin_log_oneline"],
+    doc = "Log (oneline)"
+}
 p = {
     definition = [
         "util", "exec", "--", "bash", "-c", """
