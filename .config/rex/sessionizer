@@ -33,8 +33,34 @@ else
 fi
 [[ -z $selected ]] && exit 0
 
+# Print the session for the project at $2: one still labelled $1, or else one with a pane whose working directory is
+# the project. Agents that follow Rex's skill relabel sessions after their task, so the label alone misses sessions
+# they have worked in. Prints nothing when neither matches.
+find_session() {
+    local label=$1 dir=$2 id block url path
+
+    id=$(rex ls --json | jq -r --arg l "$label" '[.sessions[] | select(.label == $l) | .session_id][0] // empty')
+    if [[ -n $id ]]; then
+        echo "$id"
+        return
+    fi
+
+    for id in $(rex ls --json | jq -r '.sessions[].session_id'); do
+        for block in $(rex block ls -s "$id" --json | jq -r '.blocks[].block_id'); do
+            # A terminal reports its directory as a URL, such as file://host/Users/me/my%20project.
+            url=$(rex block call -s "$id" -b "$block" pwd '{}' 2>/dev/null | jq -r '.pwd // empty') || continue
+            path=/${url#file://*/}
+
+            if [[ -n $url && $(printf '%b' "${path//%/\\x}") == "$dir" ]]; then
+                echo "$id"
+                return
+            fi
+        done
+    done
+}
+
 label=$(basename "$selected" | tr . _)
-session=$(rex ls --json | jq -r --arg l "$label" '[.sessions[] | select(.label == $l) | .session_id][0] // empty')
+session=$(find_session "$label" "${selected%/}")
 window=
 
 if [[ -z $session ]]; then
