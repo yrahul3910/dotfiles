@@ -22,7 +22,7 @@ require('conform').setup {
     javascript = { 'prettier', 'oxfmt', stop_after_first = false },
     typescript = { 'prettier', 'oxfmt', stop_after_first = false },
     typescriptreact = { 'prettier', 'biome', stop_after_first = true },
-    python = { 'black', 'ruff_format', stop_after_first = true },
+    python = { 'ruff_format', stop_after_first = true },
     json = { 'prettier', stop_after_first = false },
     jsonc = { 'prettier', stop_after_first = false },
     c = { 'clang-format', stop_after_first = true },
