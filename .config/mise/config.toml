@@ -6,12 +6,10 @@ node = "latest"
 # toolchain. nightly is only there for `cargo +nightly fmt`, so it gets just rustfmt; mise keeps rustup's `nightly`
 # pointed at the dated nightly it installs.
 rust = [
-  { version = "latest", components = ["rust-analyzer", "rust-src"], mr_boxington = true },
-  { version = "nightly", profile = "minimal", components = ["rustfmt"] },
+  { version = "latest", components = ["rust-analyzer", "rust-src"] },
 ]
 python = "latest"
 uv = "latest"
-mr-boxington = "latest"
 
 [settings]
 # mise exports RUSTUP_TOOLCHAIN, which outranks a project's rust-toolchain.toml.
