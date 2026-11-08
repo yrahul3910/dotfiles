@@ -6,13 +6,11 @@ name = "Rahul Yedida"
 
 [revsets]
 bookmark-advance-to = 'closest_pushable(@)'
+git-sign-on-push = '~signed() & mine()'
 
 [signing]
 behavior = "drop"
 backend = "gpg"
-
-[git]
-sign-on-push = true
 
 [aliases]
 ba = {
