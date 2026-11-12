@@ -170,3 +170,7 @@ set -gx SOPS_AGE_KEY_FILE ~/.config/sops/age/keys.txt
 
 # Toolchains (Node, Rust, Python, uv) from ~/.config/mise/config.toml
 command -q mise; and mise activate fish | source
+
+if test -f "$HOME/.config/fish/work.fish"
+    source "$HOME/.config/fish/work.fish"
+end
