@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.0",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6-astra",
   "defaultThinkingLevel": "low",
@@ -27,5 +27,10 @@
   "enableInstallTelemetry": false,
   "enableAnalytics": false,
   "steeringMode": "all",
-  "tuiMode": "fullscreen"
+  "tuiMode": "fullscreen",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:@tintinweb/pi-subagents\",\"scope\":\"user\"}": "0.23.2",
+    "{\"source\":\"git:github.com/yrahul3910/pi-permission-system\",\"scope\":\"user\"}": "0.9.0+upstream.0.8.0",
+    "{\"source\":\"npm:pi-lsp-extension\",\"scope\":\"user\"}": "1.4.0"
+  }
 }
