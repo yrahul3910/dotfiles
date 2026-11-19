@@ -63,6 +63,7 @@ Here are the keybindings in tmux/tmux-sessionizer:
 * `<C-M-h>` and `<C-M-l>` lets you move to the left and right windows from where you are.
 * `<M-1>` through `<M-4>` let you go to the first (through fourth) window.
 * `<C-a>S` swaps your current window with another (based on input).
+* `<M-S-h>` and `<M-S-l>` switch between the left and right panes, if there's a split.
 
 ## Karabiner-Elements
 
