@@ -75,6 +75,7 @@ function update_stuff
     brew update -f && brew upgrade -y
     mise upgrade
     rustup self update
+    pi update --extensions
 
     command -q cargo-install-update; and cargo install-update -a
 end

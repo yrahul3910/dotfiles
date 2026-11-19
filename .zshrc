@@ -50,6 +50,7 @@ function update_stuff() {
     brew update -f && brew upgrade -y
     mise upgrade
     rustup self update
+    pi update --extensions
 
     command -v cargo-install-update >/dev/null && cargo install-update -a
 }
