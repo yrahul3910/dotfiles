@@ -48,7 +48,7 @@ function prdiff () {
 
 function update_stuff() {
     brew update -f && brew upgrade -y
-    mise upgrade
+    mise upgrade && mise prune -y
     rustup self update
 
     command -v cargo-install-update >/dev/null && cargo install-update -a

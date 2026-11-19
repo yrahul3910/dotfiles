@@ -73,7 +73,7 @@ end
 
 function update_stuff
     brew update -f && brew upgrade -y
-    mise upgrade
+    mise upgrade && mise prune -y
     rustup self update
 
     command -q cargo-install-update; and cargo install-update -a
