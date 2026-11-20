@@ -1,10 +1,10 @@
 {
   "mcpServers": {
-    "linear": {
-      "url": "https://mcp.linear.app/mcp"
-    },
     "firecrawl": {
-      "url": "https://mcp.firecrawl.dev/v2/mcp-oauth"
+      "url": "https://mcp.firecrawl.dev/v2/mcp-oauth",
+      "toolExposure": {
+        "people_company_enrich": "hidden"
+      }
     }
   }
 }
