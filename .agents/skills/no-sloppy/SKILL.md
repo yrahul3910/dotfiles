@@ -13,7 +13,7 @@ A deterministic slop check for Python code you just wrote, in two layers:
   - `SLOP002` `from __future__ import annotations`
   - `SLOP003` type aliases assigned without the `type` keyword
   - `SLOP004` str-keyed dict args/returns (error if `Any`/`object` values, warning otherwise; abstract `Mapping` types exempt)
-  - `SLOP005` inlineable functions: a pass-through that only forwards its own parameters to another call, or a function called once in its module with a body under 5 lines (warning; methods, decorated functions, dunders, and stubs exempt; a short function that does its own work is never flagged for being short)
+  - `SLOP005` inlineable functions: a pass-through that only forwards its own parameters to another call, or a function called once in its module with a body under 5 lines (warning; methods, decorated functions, dunders, `TypeIs`/`TypeGuard` predicates, and stubs exempt; a short function that does its own work is never flagged for being short)
   - `SLOP006` non-ASCII characters: emoji, smart punctuation, and Unicode decoration are errors; non-ASCII letters/digits (possibly legitimate text) are warnings; accented Latin letters are allowed outright
   - `SLOP007` changelog/diff-narration comments ("now uses", "previously", "kept for backwards compatibility") (heuristic)
   - `SLOP008` isinstance/type() checks made vacuous by the parameter annotation (warning; union narrowing is not flagged)

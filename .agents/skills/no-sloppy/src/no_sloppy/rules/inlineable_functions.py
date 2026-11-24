@@ -8,20 +8,22 @@ computation, is never flagged for being short: reuse or a name that documents in
 
 Methods are exempt: they are part of a class's interface, and their callers may live in other modules. Decorated
 functions are exempt too (a decorator means the function is registered or wrapped, not merely called), as are
-dunders and stub bodies (`...`, `pass`, bare `raise`).
+dunders, type-narrowing predicates (`-> TypeIs[...]` or `-> TypeGuard[...]`), and stub bodies (`...`, `pass`, bare
+`raise`).
 """
 
 import ast
 from collections import Counter
 from typing import TYPE_CHECKING
 
-from . import Finding, code_body, rule
+from . import Finding, code_body, rule, tail_name
 
 if TYPE_CHECKING:
     import tokenize
     from pathlib import Path
 
 MAX_TINY_BODY_LINES = 5
+TYPE_NARROWERS = frozenset({"TypeGuard", "TypeIs"})
 
 
 def _is_stub_stmt(stmt: ast.stmt) -> bool:
@@ -91,8 +93,9 @@ def inlineable_functions(
 
     for func in funcs:
         dunder = func.name.startswith("__") and func.name.endswith("__")
+        narrower = isinstance(func.returns, ast.Subscript) and tail_name(func.returns.value) in TYPE_NARROWERS
 
-        if func.decorator_list or dunder or func in methods:
+        if func.decorator_list or dunder or func in methods or narrower:
             continue
 
         stmts = code_body(func.body)

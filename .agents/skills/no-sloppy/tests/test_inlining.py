@@ -78,6 +78,30 @@ class InlineableTests(RuleCase):
         """
         assert [line for line, _ in self.findings(source, "SLOP005")] == [2]
 
+    def test_type_narrowing_predicates_are_exempt(self):
+        source = """
+            from collections.abc import Awaitable
+            from inspect import isawaitable
+            import typing
+            from typing import TypeGuard, TypeIs
+
+
+            def pending_int(value: int | Awaitable[int]) -> TypeIs[Awaitable[int]]:
+                return isawaitable(value)
+
+
+            def str_list(items: list[object]) -> TypeGuard[list[str]]:
+                return all(isinstance(item, str) for item in items)
+
+
+            def qualified(value: object) -> typing.TypeIs[int]:
+                return isinstance(value, int)
+
+
+            str_list([])
+        """
+        assert self.findings(source, "SLOP005") == []
+
 
 class WalrusTests(RuleCase):
     def test_assignment_that_sets_up_the_if(self):
