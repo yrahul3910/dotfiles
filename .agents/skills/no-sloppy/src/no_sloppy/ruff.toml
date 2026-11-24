@@ -14,6 +14,7 @@ select = ["ALL"]
 # flagging their noqa directives as unknown.
 external = ["SLOP"]
 ignore = [
+  "CPY001",  # allow no copyright notices
   "D203",    # conflicts with D211 (blank line before class docstring)
   "D213",    # conflicts with D212 (summary on first line)
   "D413",    # off in every pydocstyle convention; wants a blank line closing the docstring
